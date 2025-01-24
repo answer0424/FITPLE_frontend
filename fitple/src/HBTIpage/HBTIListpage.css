@@ -1,0 +1,27 @@
+.hbti-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid red; /* 디버깅용 */
+}
+
+.hbti-item {
+  border: 1px solid blue; /* 디버깅용 */
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s;
+  color: rgb(95, 23, 55); /* 텍스트 색상 변경 */
+}
+
+.hbti-item:hover {
+  transform: scale(1.05);
+}
+
+.hbti-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
