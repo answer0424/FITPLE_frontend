@@ -1,0 +1,31 @@
+/* Header.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+}
+
+.header-left {
+    color: white;
+    font-size: 24px;
+    margin-right: 50px;
+    text-decoration: none;
+    width: 100px;
+    text-align: center                ;
+}
+
+.header-right{
+    color: white;
+    font-size: 24px;
+    margin-left: 50px;
+    text-decoration: none;
+    width: 100px;
+    text-align: center;
+}
+
+.header-image {
+    height: 150px;
+    width: 100px;
+    margin-top: 75px;
+}
