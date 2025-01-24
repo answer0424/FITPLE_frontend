@@ -231,13 +231,13 @@ body {
 }
 
 #kakao-connect {
-    background: rgb(255, 255, 255) url('./img/kakaoBefore.png') no-repeat scroll -10px 0px / 70px 50px padding-box border-box;
+    background: rgb(255, 255, 255) url('../images/kakaoBefore.png') no-repeat scroll -10px 0px / 70px 50px padding-box border-box;
     border: 1px solid rgb(255, 235, 52);
 }
 
 #kakao-connect:hover {
     border-color: rgb(255, 235, 52);
-    background: rgb(255, 235, 52) url('./img/kakaoAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    background: rgb(255, 235, 52) url('../images/kakaoAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
     -webkit-transition: all .8s ease-out;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
@@ -309,13 +309,13 @@ body {
 }
 
 #naver-connect {
-    background: rgb(255, 255, 255) url('./img/naverBefore.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    background: rgb(255, 255, 255) url('../images/naverBefore.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
     border: 1px solid rgb(3, 199, 90);
 }
 
 #naver-connect:hover {
     border-color: rgb(3, 199, 90);
-    background: rgb(3, 199, 90) url('./img/naverAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    background: rgb(3, 199, 90) url('../images/naverAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
     -webkit-transition: all .8s ease-out;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
