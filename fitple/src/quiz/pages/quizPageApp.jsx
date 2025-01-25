@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import DogBone from '../components/DogBone';
+import LowPolyDog from '../components/LowPolyDog';
 
 function NPCOrb({ platformPosition }) {
     const orbRef = useRef();
@@ -16,10 +17,7 @@ function NPCOrb({ platformPosition }) {
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
-        // Orb hovering animation
         orbRef.current.position.y = platformPosition[1] + hoverHeight + Math.sin(time * 2) * 0.1;
-
-        // Rotate both orb and bone
         orbRef.current.rotation.y += 0.01;
         if (boneRef.current) {
             boneRef.current.rotation.y += 0.02;
@@ -28,7 +26,6 @@ function NPCOrb({ platformPosition }) {
 
     return (
         <group ref={orbRef} position={orbPosition}>
-            {/* Orb mesh */}
             <mesh>
                 <sphereGeometry args={[0.3, 32, 32]} />
                 <meshStandardMaterial
@@ -39,52 +36,70 @@ function NPCOrb({ platformPosition }) {
                     opacity={0.4}
                 />
             </mesh>
-            {/* Dog bone inside the orb */}
             <DogBone ref={boneRef} />
         </group>
     );
 }
 
-// Rest of your components remain the same
-function CameraController({ target }) {
+
+
+function DogCamera({ target }) {
+    const dogRef = useRef();
     const { camera } = useThree();
-    const controls = useRef();
-    const isMoving = useRef(false);
-    const lerpComplete = useRef(false);
-
-    useFrame(() => {
-        if (target && !lerpComplete.current) {
-            isMoving.current = true;
-            const targetVector = new THREE.Vector3(...target);
-            const currentPosition = new THREE.Vector3().copy(camera.position);
-            const targetPosition = targetVector.clone().add(new THREE.Vector3(2, 2, 2));
-
-            const distanceToTarget = currentPosition.distanceTo(targetPosition);
-
-            if (distanceToTarget < 0.1) {
-                lerpComplete.current = true;
-                isMoving.current = false;
-                return;
-            }
-
-            camera.position.lerp(targetPosition, 0.05);
-            controls.current.target.lerp(targetVector, 0.05);
+    const speed = 0.1;
+    const bounceHeight = 0.2;
+    const tiltAmount = 0.1;
+    const runningFrequency = 8;
+    const currentPosition = useRef(new THREE.Vector3());
+    const velocity = useRef(new THREE.Vector3());
+    
+    useFrame((state) => {
+        if (!target || !dogRef.current) return;
+        
+        const time = state.clock.getElapsedTime();
+        const targetVector = new THREE.Vector3(...target);
+        
+        // Calculate direction and distance
+        const direction = targetVector.clone().sub(currentPosition.current).normalize();
+        const distance = currentPosition.current.distanceTo(targetVector);
+        
+        if (distance > 0.1) {
+            // Accelerate towards target
+            velocity.current.lerp(direction.multiplyScalar(speed), 0.05);
+            currentPosition.current.add(velocity.current);
+            
+            // Running animation
+            const runCycle = time * runningFrequency;
+            const bounce = Math.sin(runCycle) * bounceHeight;
+            const tilt = Math.cos(runCycle) * tiltAmount;
+            
+            // Apply animations
+            dogRef.current.position.copy(currentPosition.current);
+            dogRef.current.position.y += bounce;
+            dogRef.current.rotation.z = tilt;
+            
+            // Face movement direction
+            const angle = Math.atan2(velocity.current.x, velocity.current.z);
+            dogRef.current.rotation.y = angle;
+            
+            // Camera follows with momentum
+            const cameraOffset = new THREE.Vector3(3, 2 + bounce * 0.5, 4);
+            const cameraTarget = currentPosition.current.clone().add(cameraOffset);
+            camera.position.lerp(cameraTarget, 0.05);
+            camera.lookAt(currentPosition.current);
         }
     });
 
+    // Initialize position
     React.useEffect(() => {
-        if (target) {
-            lerpComplete.current = false;
-        }
-    }, [target]);
+        if (!dogRef.current) return;
+        currentPosition.current.copy(dogRef.current.position);
+    }, []);
 
     return (
-        <OrbitControls
-            ref={controls}
-            enableRotate={!isMoving.current}
-            enableZoom={!isMoving.current}
-            enablePan={!isMoving.current}
-        />
+        <group ref={dogRef}>
+            <LowPolyDog scale={[0.4, 0.4, 0.4]} />
+        </group>
     );
 }
 
@@ -114,7 +129,7 @@ function RotatingPlatform({ position, onPlatformClick }) {
             >
                 <boxGeometry args={[2, 0.2, 2]} />
                 <meshStandardMaterial
-                    color="#ffffff"
+                    color="#FFFFFF"
                     emissive="#4fc3f7"
                     emissiveIntensity={0.5}
                     transparent
@@ -211,7 +226,7 @@ function MainApp() {
                 <pointLight position={[10, 10, 10]} intensity={1} />
                 <pointLight position={[-10, -10, -10]} intensity={0.5} />
                 <ConnectedPlatforms onPlatformClick={handlePlatformClick} />
-                <CameraController target={targetPosition} />
+                <DogCamera target={targetPosition} />
             </Canvas>
         </div>
     );
