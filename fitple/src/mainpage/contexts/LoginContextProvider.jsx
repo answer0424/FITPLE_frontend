@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -8,7 +8,7 @@ import * as auth from '../apis/auth';
 export const LoginContext = createContext();
 LoginContext.displayName = 'LoginContextName';
 
-const LoginContextProvider = () => {
+const LoginContextProvider = ({children}) => {
 
     const navigate = useNavigate();
 
@@ -115,7 +115,7 @@ const LoginContextProvider = () => {
     }
 
     // 로그아웃
-    const logout = (force = false){
+    const logout = (force = false) => {
         // confirm 없이 강제 로그아웃
         if(force) {
             // 로그아웃 세팅
@@ -123,7 +123,7 @@ const LoginContextProvider = () => {
 
             navigate('/');
             return;
-        }
+        };
 
         // confirm 받아서 로그아웃
         if (confirm('로그아웃 하시겠습니까?')) {
