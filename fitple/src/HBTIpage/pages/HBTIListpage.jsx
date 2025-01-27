@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "../../common/component/Header"; // Header.jsx의 경로
+import "../component/css/HBTIListpage.css"; // HBTIListpage 전용 CSS 경로
 function HBTIListpage() {
   const [hbtiData, setHbtiData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,27 +32,29 @@ function HBTIListpage() {
   }
 
   return (
-    <div className="container my-5">
-      <h1 className="text-center mb-4">HBTI 리스트 페이지</h1>
-      <div className="row g-4">
-        {hbtiData.map((item) => (
-          <div key={item.hbti} className="col-12 col-md-6 col-lg-3">
-            {/* col-lg-3으로 설정하면 한 줄에 4개씩 배치 */}
-            <div className="card h-100 shadow-sm">
-              <img
-                src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
-                className="card-img-top"
-                alt={item.label}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{item.label} ({item.hbti})</h5>
-                <p className="card-text">{item.shortDescription}</p>
+    <>
+      <Header /> {/* Header 컴포넌트를 페이지 상단에 추가 */}
+      <div className="container my-5">
+        <h1 className="text-center mb-4">HBTI 리스트 페이지</h1>
+        <div className="row g-4">
+          {hbtiData.map((item) => (
+            <div key={item.hbti} className="col-12 col-md-6 col-lg-3">
+              <div className="card h-100 shadow-sm">
+                <img
+                  src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
+                  className="card-img-top"
+                  alt={item.label}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{item.label} ({item.hbti})</h5>
+                  <p className="card-text">{item.shortDescription}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
   
   
