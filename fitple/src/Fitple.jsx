@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
-function App() {
-
+function Fitple() {
   return (
     <>
       <h1>FITPLE</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default Fitple;
