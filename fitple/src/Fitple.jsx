@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import HBTIListpage from "./HBTIpage/HBTIListpage";
+import HBTIListpage from "./HBTIpage/pages/HBTIListpage";
 
 function App() {
   return (
