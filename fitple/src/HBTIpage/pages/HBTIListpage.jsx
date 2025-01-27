@@ -63,7 +63,7 @@ function HBTIListpage() {
         setLoading(false);
       });
   }, []);
-  
+
   if (loading) {
     return <div className="text-center mt-5">데이터를 불러오는 중...</div>;
   }
@@ -99,25 +99,25 @@ const hbtiColors = ["#fe5efb", "#FF8C00", "#fa8080", "#2196F3", "#6A1B9A", "#E91
             {/* 카드 그룹 */}
             <div className="row justify-content-center g-4">
               {items.map((item) => (
-            <div key={item.hbti} className="col-12 col-md-6 col-lg-3">
+                <div key={item.hbti} className="col-12 col-md-6 col-lg-3">
                   <div className={`card h-100 shadow-sm card-${group}`}>
-                <img
-                  src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
-                  className="card-img-top"
-                  alt={item.label}
-                />
-                <div className="card-body">
+                    <img
+                      src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
+                      className="card-img-top"
+                      alt={item.label}
+                    />
+                    <div className="card-body">
                       <h5 className="card-title">{item.label}</h5>
                       <div className="card-hbti">
                         <ColorfulText text={item.hbti} colors={hbtiColors} />
                       </div>
-                  <p className="card-text">{item.shortDescription}</p>
+                      <p className="card-text">{item.shortDescription}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
         ))}
       </div>
     </>
