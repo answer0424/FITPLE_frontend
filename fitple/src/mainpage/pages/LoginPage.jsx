@@ -68,15 +68,6 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div>
-              <input 
-                type="checkbox" 
-                name="rememberId" 
-                checked={rememberUserId} 
-                onChange={(e) => setRememberUserId(e.target.checked)} 
-              />
-              <label>Remember ID</label>
-            </div>
             <div className="forgot-password-link">
               <button onClick={() => alert("Forgot Password?")}>
                 Forgot Password?

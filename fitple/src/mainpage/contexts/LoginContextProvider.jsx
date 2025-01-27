@@ -13,13 +13,13 @@ const LoginContextProvider = ({children}) => {
     const navigate = useNavigate();
 
     // 로그인 여부
-    const[isLogin, setIsLogin] = useState(JSON.parse(localStorage.getItem('isLogin')) || false);
+    const [isLogin, setIsLogin] = useState(JSON.parse(localStorage.getItem('isLogin')) || false);
 
     // 유저 정보
     const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')) || {});
 
     // 권한 정보
-    const [authority, setAuthority] = useState(JSON.parse(localStorage.getItem('authories')) || {isStudent: false, isTrainer: false, isAdmin: false})
+    const [authority, setAuthority] = useState(JSON.parse(localStorage.getItem('authority')) || {isStudent: false, isTrainer: false, isAdmin: false})
 
     // 로그인 확인
     const loginCheck = async (isAuthPage = false) => {
@@ -30,15 +30,15 @@ const LoginContextProvider = ({children}) => {
         let data;
 
         // 1-1. JWT(accessToken) 이 없고 인증이 필요 없다면
-        if(!accessToken) {
+        if (!accessToken) {
             console.log('쿠키에 accessToken이 없습니다.');
             logoutSetting();
             return;
         }
 
         // 1-2. 인증이 필요한 페이지라면 로그인 페이지로 이동
-        if(!accessToken && isAuthPage){
-            navigate("/login")
+        if (!accessToken && isAuthPage) {
+            navigate("/login");
         }
 
         // 2. accessToken이 있다면
@@ -47,30 +47,29 @@ const LoginContextProvider = ({children}) => {
 
         try {
             response = await auth.userInfo();
-        }catch (error) {
+        } catch (error) {
             console.log(`error: ${error}`);
-            console.log(`status: ${response.status}`);
             return;
         }
 
         // 응답 실패 시 
-        if(!response) return;
+        if (!response) return;
 
-        // user 정보 획득 설공
+        // user 정보 획득 성공
         console.log('JWT(accessToken)으로 사용자 인증 정보 요청 성공');
 
         data = response.data;
         console.log(`data: ${data}`);
 
         // 인증 실패
-        if(data == 'UNAUTHORIZED' || response.status === 401) {
+        if (data === 'UNAUTHORIZED' || response.status === 401) {
             console.error('accesstoken이 만료되었거나 인증에 실패하였습니다.');
             return;
         }
 
         // 인증 성공 로그인 정보 세팅
-        loginSetting(data, accessToken);
-
+        const currentUsername = localStorage.getItem('username') || userInfo.username;
+        loginSetting(data, accessToken, currentUsername);
     };
 
     // 로그인 요청
@@ -78,18 +77,18 @@ const LoginContextProvider = ({children}) => {
         console.log(`
             로그인 요청
             login(username:${username}, password:${password}, rememberId:${rememberId});
-            `);
+        `);
 
         // username 저장
-        if(rememberId) Cookies.set('rememberId', username);
+        if (rememberId) Cookies.set('rememberId', username);
         else Cookies.remove('rememberId');
 
         try {
             const response = await auth.login(username, password);
-            const {data, status, headers} = response;
-            const {authroization} = headers;
-            
-            const accessToken = authorization.replace('Bearer ', '') // JWT 추출
+            const { data, status, headers } = response;
+            const { authorization } = headers; // 여기서 authorization 변수명을 제대로 입력
+
+            const accessToken = authorization.replace('Bearer ', ''); // JWT 추출
 
             console.log(`
                 -- login 요청응답 --
@@ -97,18 +96,19 @@ const LoginContextProvider = ({children}) => {
                   status : ${status}
                   headers : ${headers}
                   jwt : ${accessToken}
-                `);
+            `);
 
-            if(status === 200) {
+            if (status === 200) {
                 Cookies.set('accessToken', accessToken);
 
                 // 로그인 세팅
-                loginCheck();
+                localStorage.setItem('username', username.toUpperCase());
+                loginCheck(false);  // username도 함께 전달
 
                 // 시작 페이지 이동
                 navigate('/');
             }
-        }catch (error) {
+        } catch (error) {
             console.log(`로그인 error: ${error}`);
             alert('로그인 실패 아이디 또는 비밀번호가 일치하지 않습니다.');
         }
@@ -117,7 +117,7 @@ const LoginContextProvider = ({children}) => {
     // 로그아웃
     const logout = (force = false) => {
         // confirm 없이 강제 로그아웃
-        if(force) {
+        if (force) {
             // 로그아웃 세팅
             logoutSetting();
 
@@ -129,47 +129,59 @@ const LoginContextProvider = ({children}) => {
         if (confirm('로그아웃 하시겠습니까?')) {
             logoutSetting();
             navigate('/');
-        } else {
-            // 아무 것도 하지 않음
         }
-        
     }
 
     // 로그인 세팅
-    const loginSetting = (userData, accessToken) => {
-        const {id, username, authority} = userData;
+    const loginSetting = (userData, accessToken, username) => {
+    console.log(userData);
+    const normalizedUsername = username.trim().toUpperCase();
+    const loggedInUser = userData.find(user => user.username.trim().toUpperCase() === normalizedUsername);
+
+    console.log('로그인한 유저 : ', loggedInUser); // 로그인한 유저 정보를 출력
+
+    if (loggedInUser) {
+        const { id, username } = loggedInUser;
+        // authorities 배열에서 authority 값을 추출
+        const authorities = loggedInUser.authority;
 
         console.log(`
             loginSetting() 
                id : ${id}
                username : ${username}
-               authority : ${authority}
-            `);
+               authority : ${authorities}
+        `);
 
-        // JWT  토큰을 header에 저장
+        // JWT 토큰을 header에 저장
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
         // 로그인 여부
         setIsLogin(true);
 
         // 유저 정보 세팅
-        const updateUserInfo = {id, username, authority};
+        const updateUserInfo = { id, username, authorities };
 
         setUserInfo(updateUserInfo);
 
         // 권한 정보 세팅
-        const updatedAuthority = {isStudent: false, isTrainer: false, isAdmin: false};
-        if(authority === 'ROLE_STUDENT') updatedAuthority.isStudent = true;
-        else if (authority === 'ROLE_TRAINER') updatedAuthority.isTrainer = true;
-        else if (authority === 'ROLE_ADMIN') updatedAuthority.isAdmin = true;
+        const updatedAuthority = { isStudent: false, isTrainer: false, isAdmin: false };
+        if (authorities.includes('ROLE_STUDENT')) updatedAuthority.isStudent = true;
+        else if (authorities.includes('ROLE_TRAINER')) updatedAuthority.isTrainer = true;
+        else if (authorities.includes('ROLE_ADMIN')) updatedAuthority.isAdmin = true;
 
         setAuthority(updatedAuthority);
 
-        // 새로고침 시 context로 리로딩되기 때문에 localStorage에 담신 상태 정보가 초기화되도록 설정
+        navigate('/');
+
+        // 새로고침 시 context로 리로딩되기 때문에 localStorage에 담긴 상태 정보가 초기화되도록 설정
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("userInfo", JSON.stringify(updateUserInfo));
         localStorage.setItem("authority", JSON.stringify(updatedAuthority));
+    } else {
+        console.error('로그인한 사용자 정보를 찾을 수 없습니다.');
     }
+};
+
 
     // 로그아웃 세팅
     const logoutSetting = () => {
@@ -180,23 +192,19 @@ const LoginContextProvider = ({children}) => {
 
         // 쿠키 지우기
         Cookies.remove('accessToken');
-        api.defaults.headers.common.Authroization = undefined;
+        api.defaults.headers.common.Authorization = undefined;
 
-        // 새로고침]
-        // localStorage 지우기
+        // 새로고침 시 localStorage 지우기
         localStorage.removeItem('isLogin');
         localStorage.removeItem('userInfo');
         localStorage.removeItem('authority');
+        localStorage.removeItem('username');
     }
 
-
-
     return (
-        <>
-            <LoginContext.Provider value={{isLogin, userInfo, authority, loginCheck, login, logout}}>
-                {children}
-            </LoginContext.Provider>
-        </>
+        <LoginContext.Provider value={{ isLogin, userInfo, authority, loginCheck, login, logout }}>
+            {children}
+        </LoginContext.Provider>
     );
 };
 

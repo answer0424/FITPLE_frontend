@@ -5,6 +5,7 @@ import UserRegister from './mainpage/pages/UserRegister';
 import TrainerRegister from './mainpage/pages/TrainerRegister';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginContextProvider from './mainpage/contexts/LoginContextProvider';
+import MainPage from './mainpage/pages/MainPage';
 
 
 
@@ -15,7 +16,7 @@ function App() {
       <BrowserRouter>
         <LoginContextProvider>
           <Routes>
-            <Route path="/" Component={LoginPage}></Route>
+            <Route path="/" Component={MainPage}></Route>
             <Route path="/login" Component={LoginPage}></Route>
             <Route path="/signUp/user" Component={UserRegister}></Route>
             <Route path="/signUp/trainer" Component={TrainerRegister}></Route>

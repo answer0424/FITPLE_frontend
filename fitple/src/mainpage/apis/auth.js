@@ -9,8 +9,8 @@ export const userInfo = () => api.get('register/users');
 export const authInfo = () => api.get('register/auth');
 
 // 회원가입 요청(학생 유저)
-export const registerStudent = () => api.post('register/student');
+export const registerStudent = (userData) => api.post('register/student', userData);
 
 // 회원가입 요청(트레이너 유저)
-export const registerTrainer = () => api.post('register/trainer');
+export const registerTrainer = (userData) => api.post('register/trainer', userData);
 
