@@ -2,9 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
-import App from './Fitple.jsx'
+
+import Fitple from './Fitple.jsx'
 
 createRoot(document.getElementById('root')).render(
   
-    <App />
+    <Fitple />
+
 )

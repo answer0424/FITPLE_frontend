@@ -1,27 +1,163 @@
-.hbti-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 20px;
-  border: 1px solid red; /* 디버깅용 */
-}
-
-.hbti-item {
-  border: 1px solid blue; /* 디버깅용 */
-  border-radius: 8px;
-  padding: 16px;
+/* HBTI 제목 스타일 */
+.hbti-header {
   text-align: center;
-  transition: transform 0.2s;
-  color: rgb(95, 23, 55); /* 텍스트 색상 변경 */
+  color: #87cefa;
+  font-size: 7rem;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
 }
 
-.hbti-item:hover {
-  transform: scale(1.05);
+/* 부제목 스타일 */
+.hbti-subtitle {
+  text-align: center;
+  color: #87cefa;
+  font-size: 3rem;
+  font-weight: normal;
+  font-family: "Arial", sans-serif;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
 }
 
-.hbti-item img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
+/* 성격유형 텍스트 스타일 */
+.hbti-description {
+  text-align: center;
+  color: #87cefa;
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+  margin-bottom: 5rem;
+}
+/* 그룹 섹션 스타일 */
+.group-section {
+  padding: 3rem 1rem;
+  position: relative;
+  border-radius: 0; /* 둥근 모서리를 직각으로 변경 */
+  overflow: visible;
+  box-shadow: none; /* 그림자가 필요 없다면 제거 */
+  margin-bottom: 0;
+}
+
+/* 그룹별 배경색 */
+.group-section.solo {
+  background: linear-gradient(to bottom, #4e79a7, #76a5d6); /* 솔로형 */
+}
+
+.group-section.active {
+  background: linear-gradient(to bottom, #76a5d6, #f28e2c); /* 솔로형과 산소형이 자연스럽게 연결되도록 수정 */
+}
+
+.group-section.strength {
+  background: linear-gradient(to bottom, #f28e2c, #59a14f); /* 산소형과 근육형 연결 */
+}
+
+.group-section.group {
+  background: linear-gradient(to bottom, #59a14f, #edc948); /* 근육형과 그룹형 연결 */
+}
+
+/* 그룹 제목 스타일 */
+.group-title {
+  position: absolute;
+  top: -2rem; /* 제목 위치 */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  color: #000000;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 1rem; /* 섹션 이름과 위 요소 사이 간격 */
+}
+
+/* 카드 스타일 */
+.card {
+  border-radius: 15px;
+  border: 5px solid #fff;
+  background-clip: padding-box;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  overflow: hidden;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* 카드 이미지 스타일 */
+.card-img-top {
+  width: 90%;
+  height: 180px;
+  object-fit: contain;
+  margin: 10px auto;
+ 
+  border-radius: 10px;
+}
+
+/* 카드 텍스트 색상 */
+.card-title,
+.card-text {
+  color: #000000;
+}
+
+/* 카드 제목 스타일 */
+.card-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* 카드 텍스트 스타일 */
+.card-text {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  padding: 0 1rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 카드 배경색 */
+.card-solo {
+  background: linear-gradient(to bottom, #e3f2fd, #64b5f6);
+}
+
+.card-active {
+  background: linear-gradient(to bottom, #fff3e0, #ffa726);
+}
+
+.card-strength {
+  background: linear-gradient(to bottom, #e8f5e9, #81c784);
+}
+
+.card-group {
+  background: linear-gradient(to bottom, #fffde7, #ffd54f);
+}
+
+/* 그룹 내부 카드 간격 제거 */
+.row.g-4 {
+  gap: 0; /* 카드 간 간격 제거 */
+}
+
+/* 그룹 간의 간격 제거 */
+.container {
+  padding: 0;
+  margin: 0;
+}
+
+.group-section + .group-section {
+  margin-top: 0; /* 그룹 섹션 간 간격 제거 */
 }
