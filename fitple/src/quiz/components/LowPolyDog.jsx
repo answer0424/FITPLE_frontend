@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
 const LowPolyDog = (props) => {
@@ -7,14 +7,20 @@ const LowPolyDog = (props) => {
   const { nodes, materials, animations } = useGLTF('/models/low_poly_dog_gltf/scene.gltf')
   const { actions } = useAnimations(animations, group)
 
+  const [isPlaying, setIsPlaying] = useState(true)
+
   useEffect(() => {
 
     const animation = actions['Take 01']
     if (animation) {
-      animation.reset().play()
+      if(isPlaying){
+        animation.reset().play()
       animation.timeScale = 1
+      }else{
+        animation.paused()
+      }
     }
-  }, [actions])
+  }, [actions, isPlaying])
 
   useEffect(() => {
     materials.Black.color.set('#FEC01F')
