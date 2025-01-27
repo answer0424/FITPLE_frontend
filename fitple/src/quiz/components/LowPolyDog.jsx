@@ -1,11 +1,20 @@
+import * as THREE from 'three'
 import React, { useRef, useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
 const LowPolyDog = (props) => {
-
-  const { nodes, materials, animations } = useGLTF('/models/low_poly_dog.glb')
   const group = useRef()
+  const { nodes, materials, animations } = useGLTF('/models/low_poly_dog_gltf/scene.gltf')
   const { actions } = useAnimations(animations, group)
+
+  useEffect(() => {
+
+    const animation = actions['Take 01']
+    if (animation) {
+      animation.reset().play()
+      animation.timeScale = 1
+    }
+  }, [actions])
 
   useEffect(() => {
     materials.Black.color.set('#FEC01F')
@@ -15,7 +24,7 @@ const LowPolyDog = (props) => {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
-        <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 6]}>
+        <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group name="Root">
             <group name="Lamp" position={[4.076, 1.005, 5.904]} rotation={[-0.268, 0.602, 1.931]}>
               <group name="Lamp_1" />
@@ -74,8 +83,6 @@ const LowPolyDog = (props) => {
   )
 }
 
-useGLTF.preload('/models/low_poly_dog.glb')
+useGLTF.preload('/models/low_poly_dog_gltf/scene.gltf')
 
 export default LowPolyDog;
-
-
