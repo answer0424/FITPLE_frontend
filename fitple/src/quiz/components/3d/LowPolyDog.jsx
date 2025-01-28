@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import React, { useRef, useEffect, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
