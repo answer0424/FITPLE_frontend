@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../common/component/Header";
+import { useNavigate } from "react-router-dom";
 import "../component/css/HBTIListpage.css";
 
 // HBTI 유형에 따른 그룹 분류 함수
@@ -30,7 +31,7 @@ const groupByType = (data) => {
   return groupedData;
 };
 
-// ColorfulText 컴포넌트: 한글자씩 색상을 다르게 적용
+// ColorfulText 컴포넌트: 한 글자씩 색상을 다르게 적용
 const ColorfulText = ({ text, colors }) => {
   return (
     <span>
@@ -43,9 +44,10 @@ const ColorfulText = ({ text, colors }) => {
   );
 };
 
-function HBTIListpage() {
+function HBTIListPage() {
   const [hbtiData, setHbtiData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -71,10 +73,13 @@ function HBTIListpage() {
   // 그룹화된 데이터
   const groupedData = groupByType(hbtiData);
 
-// HBTI 색상 배열 (수정된 조합)
-const hbtiColors = ["#fe5efb", "#FF8C00", "#fa8080", "#2196F3", "#6A1B9A", "#E91E63"];
+  // HBTI 색상 배열 (수정된 조합)
+  const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
-
+  // 카드 클릭 시 상세 페이지로 이동
+  const handleCardClick = (hbtiType) => {
+    navigate(`/hbti/detail`, { state: { hbtiType } });
+  };
 
   return (
     <>
@@ -86,7 +91,7 @@ const hbtiColors = ["#fe5efb", "#FF8C00", "#fa8080", "#2196F3", "#6A1B9A", "#E91
         <h3 className="hbti-description">성격유형</h3>
 
         {/* 그룹별 섹션 */}
-        {Object.entries(groupByType(hbtiData)).map(([group, items]) => (
+        {Object.entries(groupedData).map(([group, items]) => (
           <div key={group} className={`group-section ${group}`}>
             {/* 그룹 제목 */}
             <div className={`group-title ${group}`}>
@@ -99,7 +104,12 @@ const hbtiColors = ["#fe5efb", "#FF8C00", "#fa8080", "#2196F3", "#6A1B9A", "#E91
             {/* 카드 그룹 */}
             <div className="row justify-content-center g-4">
               {items.map((item) => (
-                <div key={item.hbti} className="col-12 col-md-6 col-lg-3">
+                <div
+                  key={item.hbti}
+                  className="col-12 col-md-6 col-lg-3"
+                  onClick={() => handleCardClick(item.hbti)} // 클릭 이벤트 추가
+                  style={{ cursor: "pointer" }}
+                >
                   <div className={`card h-100 shadow-sm card-${group}`}>
                     <img
                       src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
@@ -124,4 +134,4 @@ const hbtiColors = ["#fe5efb", "#FF8C00", "#fa8080", "#2196F3", "#6A1B9A", "#E91
   );
 }
 
-export default HBTIListpage;
+export default HBTIListPage;
