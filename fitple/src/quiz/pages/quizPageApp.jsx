@@ -5,22 +5,55 @@ import * as THREE from 'three';
 import DogBone from '../components/DogBone';
 import LowPolyDog from '../components/LowPolyDog';
 
-
 const quizData = [
-    "나는 무거운 덤벨을 들 때 살아있음을 느낀다.",
-    "나는 숨이 벅차오를 때 까지 달릴 때 성취감을 느낀다",
-    "나는 근육이 펌핑되는 기분보다 숨이 목끝까지 차오를 때 더 행복하다",
-    "나는 혼자 노래들으면서 운동하는 것보다 친구랑 \"누가 더 많이 하냐\" 내기할 때 운동이 더 재미있다",
-    "나는 쉬는시간에 친구들이랑 운동 얘기하는 것보다 조용이 물을 마시고 숨을 고른다",
-    "나는 운동이 끝나고 바로 집으로 가는 것보다 친구들이랑 운동 얘기를 더 하고 싶다",
-    "나는 여름의 가벼운 옷차림을 위해 몸을 만드는 것에 관심이 없다",
-    "나는 체형 개선을 통해 자신감을 얻기보다 체력이 느는 것이 가장 중요하다",
-    "나는 빼야 할 살이 없음에도 체력과 건강이 나빠졌다는 생각이 들면 운동을 해야겠다는 생각이든다.",
-    "나는 운동하기 전에 운동에 대한 정보를 찾아보는 편이다",
-    "나는 갑자기 친구랑 운동을 가게 되어도 내가 계획한 운동을 하는 편이다",
-    "나는 갑자기 생긴 일로 운동 가기 피곤한 상황 속에서도 계획한 운동을 해야하기 때문에 운동을 간다."
+    "나는 체형 개선을 통해 자신감을 얻는 일보다 체력이 느는 것이 가장 중요하다.",
+    "나는 여름의 가벼운 옷차림을 위해 몸을 만드는 것에 관심이 없다.",
+    "나는 빼야 할 살이 없음에도 체력과 건강이 나빠졌다는 생각이 들면 운동을 해야겠다고 생각한다.",
+    "나는 운동하기 전에 운동에 대한 정보를 찾아보는 편이다.",
+    "나는 갑자기 친구와 운동을 가게 되어도 내가 계획한 운동을 하는 편이다.",
+    "나는 갑작스럽게 생긴 일로 운동 가기 피곤한 상황 속에서도 계획한 운동을 해야 하기 때문에 운동을 간다.",
+    "나는 무거운 덤벨을 들 때 살아 있음을 느껴본 적이 없다.",
+    "나는 숨이 벅차오를 때까지 달리는 일에 성취감을 느낀다.",
+    "나는 근육이 펌핑되는 기분보다 숨이 목 끝까지 차오를 때 더 행복하다.",
+    "나는 친구와 '누가 더 많이 하냐' 내기할 때보다 혼자 노래 들으면서 운동하는 것이 더 재미있다.",
+    "나는 쉬는 시간에 친구들과 운동 이야기를 하기보다 조용히 물을 마시고 숨을 고른다.",
+    "나는 운동이 끝나면 친구들과 운동 이야기를 더 하기보다 바로 집으로 가고 싶다."
 ];
 
+function Modal({ isOpen, onClose, children }) {
+    if (!isOpen) return null;
+
+    return (
+        <div
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1000
+            }}
+            onClick={onClose}
+        >
+            <div 
+                style={{
+                    background: 'white',
+                    padding: '2rem',
+                    borderRadius: '0.5rem',
+                    maxWidth: '500px',
+                    width: '90%'
+                }}
+                onClick={e => e.stopPropagation()}
+            >
+                {children}
+            </div>
+        </div>
+    );
+}
 
 function NPCOrb({ platformPosition }) {
     const orbRef = useRef();
@@ -159,6 +192,64 @@ function OverlayButton({ text, onClick, position, visible = true }) {
     );
 }
 
+function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, onFinish, gameState }) {
+    return (
+        <div style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            pointerEvents: 'none' 
+        }}>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <OverlayButton
+                    text="START"
+                    position={{ 
+                        left: '50%', 
+                        top: '50%', 
+                        transform: 'translate(-50%, -50%)',
+                        pointerEvents: 'auto'
+                    }}
+                    onClick={onStart}
+                    visible={gameState === 'initial'}
+                />
+                <OverlayButton
+                    text="다음으로"
+                    position={{ 
+                        right: '40px', 
+                        bottom: '40px',
+                        pointerEvents: 'auto'
+                    }}
+                    onClick={onNext}
+                    visible={gameState === 'playing' && currentPlatform < totalPlatforms - 1}
+                />
+                <OverlayButton
+                    text="이전으로"
+                    position={{ 
+                        left: '40px', 
+                        bottom: '40px',
+                        pointerEvents: 'auto'
+                    }}
+                    onClick={onPrev}
+                    visible={gameState === 'playing' && currentPlatform > 0}
+                />
+                <OverlayButton
+                    text="결과보기"
+                    position={{ 
+                        left: '50%', 
+                        top: '40px', 
+                        transform: 'translate(-50%, 0)',
+                        pointerEvents: 'auto'
+                    }}
+                    onClick={onFinish}
+                    visible={gameState === 'playing' && currentPlatform === totalPlatforms - 1}
+                />
+            </div>
+        </div>
+    );
+}
+
 function FlowingConnections({ connections, currentPlatform, visibleConnections }) {
     const lineRefs = useRef([]);
 
@@ -166,7 +257,6 @@ function FlowingConnections({ connections, currentPlatform, visibleConnections }
         const time = state.clock.getElapsedTime();
         lineRefs.current.forEach((ref, index) => {
             if (ref) {
-                // Show the line if it's in the visibleConnections set or if it's the current active line
                 const isVisible = visibleConnections.has(index) || index === currentPlatform - 1;
                 if (isVisible) {
                     ref.material.dashOffset = -time * 0.5;
@@ -194,7 +284,6 @@ function FlowingConnections({ connections, currentPlatform, visibleConnections }
         />
     ));
 }
-
 
 function ConnectedPlatforms({ platformPositions, currentPlatform, visibleConnections }) {
     const connections = useMemo(() => {
@@ -258,60 +347,171 @@ function RotatingPlatform({ position, isActive }) {
     );
 }
 
-function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, onFinish, gameState }) {
+function QuizComponent({ currentPlatform, quizData, onAnswerSubmit }) {
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [hbtiResult, setHbtiResult] = useState(null);
+    const [userId, setUserId] = useState(null);
+
+    // Get user information when component mounts
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await fetch('/register/user');
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUserId(userData.id);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    const answerValues = [0, 20, 40, 60, 80, 100];
+
+    const handleAnswerSelect = (value) => {
+        setSelectedAnswer(value);
+        onAnswerSubmit(currentPlatform, value);
+    };
+
+    const handleResultsClick = async () => {
+        if (!userId) {
+            console.error('User ID not available');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/hbti/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    answers: Object.values(answers)
+                })
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                setHbtiResult(result);
+                setShowModal(true);
+            }
+        } catch (error) {
+            console.error('Error saving HBTI result:', error);
+        }
+    };
+
+    const handleViewDetails = () => {
+        if (userId) {
+            window.location.href = `/hbti-detail/${userId}`;
+        }
+    };
+
     return (
-        <div style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            width: '100%', 
-            height: '100%', 
-            pointerEvents: 'none' 
+        <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '600px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(8px)',
+            padding: '20px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
         }}>
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                <OverlayButton
-                    text="START"
-                    position={{ 
-                        left: '50%', 
-                        top: '50%', 
-                        transform: 'translate(-50%, -50%)',
-                        pointerEvents: 'auto'
-                    }}
-                    onClick={onStart}
-                    visible={gameState === 'initial'}
-                />
-                <OverlayButton
-                    text="다음으로"
-                    position={{ 
-                        right: '40px', 
-                        bottom: '40px',
-                        pointerEvents: 'auto'
-                    }}
-                    onClick={onNext}
-                    visible={gameState === 'playing' && currentPlatform < totalPlatforms - 1}
-                />
-                <OverlayButton
-                    text="이전으로"
-                    position={{ 
-                        left: '40px', 
-                        bottom: '40px',
-                        pointerEvents: 'auto'
-                    }}
-                    onClick={onPrev}
-                    visible={gameState === 'playing' && currentPlatform > 0}
-                />
-                <OverlayButton
-                    text="결과보기"
-                    position={{ 
-                        left: '50%', 
-                        top: '40px', 
-                        transform: 'translate(-50%, 0)',
-                        pointerEvents: 'auto'
-                    }}
-                    onClick={onFinish}
-                    visible={gameState === 'playing' && currentPlatform === totalPlatforms - 1}
-                />
+            <h3 style={{
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                marginBottom: '1rem',
+                color: '#333'
+            }}>
+                {quizData[currentPlatform]}
+            </h3>
+            
+            <div style={{
+                position: 'relative',
+                marginBottom: '2rem'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginBottom: '0.5rem'
+                }}>
+                    <span style={{ color: '#666' }}>그렇지 않다</span>
+                    <span style={{ color: '#666' }}>그렇다</span>
+                </div>
+                
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
+                    {answerValues.map((value, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleAnswerSelect(value)}
+                            style={{
+                                width: `${24 + index * 8}px`,
+                                height: `${24 + index * 8}px`,
+                                borderRadius: '50%',
+                                border: 'none',
+                                background: selectedAnswer === value ? '#4fc3f7' : '#e2e8f0',
+                                transition: 'all 0.2s',
+                                cursor: 'pointer'
+                            }}
+                        />
+                    ))}
+                </div>
             </div>
+
+            {currentPlatform === quizData.length - 1 && (
+                <button
+                    onClick={handleResultsClick}
+                    style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#4fc3f7',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    결과보기
+                </button>
+            )}
+
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                    <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>
+                        당신의 HBTI는...
+                    </h2>
+                    <p style={{ fontSize: '20px', marginBottom: '24px' }}>
+                        {hbtiResult?.hbtiType}
+                    </p>
+                    <button
+                        onClick={handleViewDetails}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#4fc3f7',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        내 HBTI 자세히 보기
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 }
@@ -322,6 +522,22 @@ function MainApp() {
     const [currentPath, setCurrentPath] = useState(null);
     const [visibleConnections, setVisibleConnections] = useState(new Set());
     const [answers, setAnswers] = useState({});
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await fetch('/register/user');
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUserId(userData.id);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const platformPositions = useMemo(() => {
         const positions = [];
@@ -373,12 +589,35 @@ function MainApp() {
         }
     };
 
-    const handleFinish = () => {
+    const handleFinish = async () => {
+        if (!userId) {
+            console.error('User ID not available');
+            return;
+        }
+
         if (Object.keys(answers).length < quizData.length) {
             alert('Please answer all questions before finishing.');
             return;
         }
-        setGameState('finished');
+        
+        try {
+            const response = await fetch('/api/hbti/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    answers: Object.values(answers)
+                })
+            });
+            
+            if (response.ok) {
+                setGameState('finished');
+            }
+        } catch (error) {
+            console.error('Error saving HBTI result:', error);
+        }
     };
 
     const handleAnswerChange = (questionIndex, value) => {
@@ -405,57 +644,12 @@ function MainApp() {
                 <DogCamera currentPath={currentPath} />
             </Canvas>
             
-            {/* Quiz Overlay */}
             {gameState === 'playing' && currentPlatform < quizData.length && (
-                <div 
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '90%',
-                        maxWidth: '600px',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        backdropFilter: 'blur(8px)',
-                        padding: '20px',
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                    }}
-                >
-                    <h3 style={{
-                        fontSize: '1.2rem',
-                        fontWeight: '600',
-                        marginBottom: '1rem',
-                        color: '#333'
-                    }}>
-                        {quizData[currentPlatform]}
-                    </h3>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        gap: '8px'
-                    }}>
-                        {[1, 2, 3, 4, 5].map((value) => (
-                            <button
-                                key={value}
-                                onClick={() => handleAnswerChange(currentPlatform, value)}
-                                style={{
-                                    padding: '8px 16px',
-                                    borderRadius: '8px',
-                                    border: 'none',
-                                    background: answers[currentPlatform] === value ? '#4fc3f7' : '#e2e8f0',
-                                    color: answers[currentPlatform] === value ? 'white' : '#333',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s',
-                                    flex: 1,
-                                    fontWeight: '500'
-                                }}
-                            >
-                                {value}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                <QuizComponent 
+                    currentPlatform={currentPlatform}
+                    quizData={quizData}
+                    onAnswerSubmit={handleAnswerChange}
+                />
             )}
             
             <UIOverlay
