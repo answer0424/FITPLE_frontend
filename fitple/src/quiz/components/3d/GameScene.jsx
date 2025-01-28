@@ -25,8 +25,9 @@ function GameScene({
                 visibleConnections={visibleConnections}
             />
             <DogCamera currentPath={currentPath} />
+            {/* adding to make commit */}
         </>
-    );
+    ); 
 }
 
 export default GameScene;
