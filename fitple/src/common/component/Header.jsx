@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/Header.css';
-import logo from './img/logo.png'; 
+import logo from '../../assets/logo.png'; 
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -11,7 +11,7 @@ const Header = () => {
                 <Link to={"/"}>
                     <img src={logo} alt="Logo" className='header-image'/>
                 </Link>
-                <Link to={"/"} className="header-right">MYPAGE</Link>
+                <Link to={"/login"} className="header-right">LOGIN</Link>
             </div>
         </div>
     );

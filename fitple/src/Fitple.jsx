@@ -4,7 +4,16 @@ import "./App.css";
 function Fitple() {
   return (
     <>
-      <h1>FITPLE</h1>
+      <BrowserRouter>
+        <LoginContextProvider>
+          <Routes>
+            <Route path="/" Component={MainPage}></Route>
+            <Route path="/login" Component={LoginPage}></Route>
+            <Route path="/register/user" Component={UserRegister}></Route>
+            <Route path="/register/trainer" Component={TrainerRegister}></Route>
+          </Routes>
+          </LoginContextProvider>
+      </BrowserRouter>
     </>
   );
 }
