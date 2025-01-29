@@ -3,15 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../assets/styles/App.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import KakaoSearch from "./KakaoSearch";
+import { registerStudent, registerTrainer } from '../apis/auth';
 
-const RegisterForm = ({ questions = [], onSubmit }) => {
+const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const [birthDate, setBirthDate] = useState(null);
-  const [isUserSignUp, setIsUserSignUp] = useState(true);
+  const navigate = useNavigate();
 
   const handleAnswerChange = (e, index) => {
     const newAnswers = [...answers];
@@ -25,7 +26,7 @@ const RegisterForm = ({ questions = [], onSubmit }) => {
     } else if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      onSubmit(answers);
+      handleSubmit();
     }
   };
 
@@ -47,14 +48,52 @@ const RegisterForm = ({ questions = [], onSubmit }) => {
   };
 
   const handlePlaceSelect = (place) => {
-    // 선택된 장소의 주소, 위도, 경도를 배열로 저장
-    const placeInfo = [place.address, place.lat, place.lng];
+    const placeInfo = { address: place.address, lat: place.lat, lng: place.lng, gymName: "Default Gym Name" };
 
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
-      newAnswers[6] = JSON.stringify(placeInfo); // 7번째 질문 인덱스에 선택한 장소 정보 저장
+      newAnswers[6] = JSON.stringify(placeInfo);
       return newAnswers;
     });
+  };
+
+  const handleSubmit = async () => {
+    const placeInfo = JSON.parse(answers[6]);
+    const userData = {
+      email: answers[0],
+      username: answers[1],
+      password: answers[2],
+      nickname: answers[4],
+      birth: answers[5],
+      address: placeInfo.address,
+      gymName: placeInfo.gymName,
+      latitude: placeInfo.lat,
+      longitude: placeInfo.lng,
+    };
+
+    try {
+      let response;
+      if (userType === 'student') {
+        response = await registerStudent(userData);
+      } else if (userType === 'trainer') {
+        response = await registerTrainer(userData);
+      }
+
+      if (response && response.status === 201) {
+        alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
+        navigate("/login");
+      } else {
+        alert("회원가입에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("There was an error registering the user:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        alert(`회원가입에 실패했습니다: ${error.response.data.message || '알 수 없는 오류'}`);
+      } else {
+        alert("An error occurred during registration. Please try again.");
+      }
+    }
   };
 
   const progressPercentage =
