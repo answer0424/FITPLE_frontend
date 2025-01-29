@@ -11,7 +11,7 @@ const Header = () => {
                 <Link to={"/"}>
                     <img src={logo} alt="Logo" className='header-image'/>
                 </Link>
-                <Link to={"/"} className="header-right">MYPAGE</Link>
+                <Link to={"/login"} className="header-right">LOGIN</Link>
             </div>
         </div>
     );

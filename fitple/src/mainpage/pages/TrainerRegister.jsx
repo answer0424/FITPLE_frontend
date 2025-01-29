@@ -19,7 +19,11 @@ const TrainerRegister = () => {
   };
 
   return (
-    <RegisterForm questions={trainerQuestions} onSubmit={handleTrainerSubmit} />
+    <RegisterForm 
+      questions={trainerQuestions} 
+      userType="trainer" // userType을 전달
+      onSubmit={handleTrainerSubmit} 
+    />
   );
 };
 

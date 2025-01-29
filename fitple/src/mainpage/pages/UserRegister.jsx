@@ -18,7 +18,13 @@ const UserRegister = () => {
     console.log("User Data:", answers);
   };
 
-  return <RegisterForm questions={userQuestions} onSubmit={handleUserSubmit} />;
+  return (
+    <RegisterForm 
+      questions={userQuestions} 
+      userType="student" // userType을 전달
+      onSubmit={handleUserSubmit} 
+    />
+  );
 };
 
 export default UserRegister;

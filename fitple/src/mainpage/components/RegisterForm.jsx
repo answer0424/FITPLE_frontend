@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,11 +13,26 @@ const RegisterForm = ({ questions = [], userType }) => {
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const [birthDate, setBirthDate] = useState(null);
   const navigate = useNavigate();
+  const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if(inputRefs.current[currentQuestionIndex]) {
+      inputRefs.current[currentQuestionIndex].focus();
+    }
+  }, [currentQuestionIndex]);
 
   const handleAnswerChange = (e, index) => {
     const newAnswers = [...answers];
     newAnswers[index] = e.target.value;
     setAnswers(newAnswers);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      if (currentQuestionIndex < questions.length - 1) {
+        handleNextQuestion();
+      }
+    }
   };
 
   const handleNextQuestion = () => {
@@ -48,7 +63,7 @@ const RegisterForm = ({ questions = [], userType }) => {
   };
 
   const handlePlaceSelect = (place) => {
-    const placeInfo = { address: place.address, lat: place.lat, lng: place.lng, gymName: "Default Gym Name" };
+    const placeInfo = { address: place.address, lat: place.lat, lng: place.lng, gymName: place.name };
 
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
@@ -74,23 +89,28 @@ const RegisterForm = ({ questions = [], userType }) => {
     try {
       let response;
       if (userType === 'student') {
+        console.log('student 권한으로 회원가입 요청')
         response = await registerStudent(userData);
       } else if (userType === 'trainer') {
+        console.log('trainer 권한으로 회원가입 요청')
         response = await registerTrainer(userData);
       }
 
-      if (response && response.status === 201) {
+      if (response && response.status === 200) {
         alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
         navigate("/login");
       } else {
+        console.log(response);
         alert("회원가입에 실패했습니다.");
       }
     } catch (error) {
       console.error("There was an error registering the user:", error);
       if (error.response) {
         console.error("Error response data:", error.response.data);
-        alert(`회원가입에 실패했습니다: ${error.response.data.message || '알 수 없는 오류'}`);
+        alert(`회원가입에 실패했습니다: ${error.response.data.message || '이미 등록된 회원입니다.'}`);
+        navigate(`/register/${userType}`)
       } else {
+        console.log(response)
         alert("An error occurred during registration. Please try again.");
       }
     }
@@ -103,11 +123,11 @@ const RegisterForm = ({ questions = [], userType }) => {
     <div className="App">
       <Header />
       <div>
-        <h2>User Sign up</h2>
-        <Link to={"/signUp/user"}>
-          <button>User</button>
+        <h2>{userType} Sign up</h2>
+        <Link to={"/register/user"}>
+          <button>Student</button>
         </Link>
-        <Link to={"/signUp/trainer"}>
+        <Link to={"/register/trainer"}>
           <button>Trainer</button>
         </Link>
       </div>
@@ -167,6 +187,7 @@ const RegisterForm = ({ questions = [], userType }) => {
                 placeholder="Type your answer here..."
                 value={answers[currentQuestionIndex]}
                 onChange={(e) => handleAnswerChange(e, currentQuestionIndex)}
+                onKeyPress={handleKeyPress} 
               />
             )}
 
