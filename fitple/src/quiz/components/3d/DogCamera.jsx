@@ -3,7 +3,6 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import LowPolyDog from './LowPolyDog';
 
-// 상수들을 객체로 분리하여 관리
 const CAMERA_SETTINGS = {
     speed: 0.004,
     bounceHeight: 0.1,
@@ -20,6 +19,7 @@ const CAMERA_SETTINGS = {
  * DogCamera - 3D 공간에서 강아지 모델과 카메라 움직임을 제어하는 컴포넌트
  * {Array} currentPath - 현재 이동 경로의 시작점과 끝점 좌표
  */
+
 function DogCamera({ currentPath }) {
     const dogRef = useRef();
     const { camera } = useThree();
@@ -34,6 +34,7 @@ function DogCamera({ currentPath }) {
         
         if (pathProgress.current > 1) {
             pathProgress.current = 1;
+            onPathComplete?.();
         }
 
         const point = new THREE.Vector3();
@@ -50,7 +51,6 @@ function DogCamera({ currentPath }) {
             const bounce = Math.sin(runCycle) * CAMERA_SETTINGS.bounceHeight;
             const tilt = Math.cos(runCycle) * CAMERA_SETTINGS.tiltAmount;
             
-            // Dog position and rotation update
             dogRef.current.position.copy(point);
             dogRef.current.position.y += CAMERA_SETTINGS.dogBaseHeight + bounce;
             dogRef.current.rotation.z = tilt;
@@ -59,7 +59,6 @@ function DogCamera({ currentPath }) {
             const angle = Math.atan2(direction.x, direction.z);
             dogRef.current.rotation.y = angle;
 
-            // Camera update
             const cameraTarget = point.clone().add(CAMERA_SETTINGS.cameraOffset.clone().setY(CAMERA_SETTINGS.cameraOffset.y + bounce * 0.5));
             camera.position.lerp(cameraTarget, CAMERA_SETTINGS.cameraLerpSpeed);
             camera.lookAt(point);

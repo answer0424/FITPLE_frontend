@@ -12,6 +12,7 @@ function QuizPageApp() {
     const [visibleConnections, setVisibleConnections] = useState(new Set());
     const [answers, setAnswers] = useState({});
     const [userId, setUserId] = useState(null);
+    const [showQuiz, setShowQuiz] = useState(true);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -54,11 +55,12 @@ function QuizPageApp() {
     };
 
     const handleNext = () => {
-        if (!answers[currentPlatform] && currentPlatform < quizData.length) {
-            alert('Please answer the current question before proceeding.');
+        if (answers[currentPlatform] === undefined) {
+            alert('다음 문제로 넘어가기 전에 해당 질문에 대한 답을 해주세요 .');
             return;
         }
         
+        setShowQuiz(false);
         const nextPlatform = currentPlatform + 1;
         if (nextPlatform < platformPositions.length) {
             setCurrentPlatform(nextPlatform);
@@ -68,14 +70,17 @@ function QuizPageApp() {
                 newSet.add(currentPlatform);
                 return newSet;
             });
+            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
     const handlePrev = () => {
+        setShowQuiz(false);
         const prevPlatform = currentPlatform - 1;
         if (prevPlatform >= 0) {
             setCurrentPlatform(prevPlatform);
             setCurrentPath([platformPositions[currentPlatform], platformPositions[prevPlatform]]);
+            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
@@ -139,6 +144,7 @@ function QuizPageApp() {
                     currentPlatform={currentPlatform}
                     quizData={quizData}
                     onAnswerSubmit={handleAnswerChange}
+                    shouldShow={showQuiz}
                 />
             )}
             

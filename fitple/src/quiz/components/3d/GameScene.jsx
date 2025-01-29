@@ -6,11 +6,13 @@ function GameScene({
     currentPlatform, 
     currentPath, 
     visibleConnections, 
-    platformPositions 
+    platformPositions,
+    onPathComplete 
 }) {
     
     return (
         <>
+            <DogCamera currentPath={currentPath} onPathComplete={onPathComplete} />
             {/* Scene Lighting */}
             <color attach="background" args={["#000000"]} />
             <fog attach="fog" args={["#000000", 30, 90]} />
