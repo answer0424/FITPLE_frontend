@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import LoginPage from './mainpage/pages/LoginPage';
 import UserRegister from './mainpage/pages/UserRegister';
 import TrainerRegister from './mainpage/pages/TrainerRegister';
