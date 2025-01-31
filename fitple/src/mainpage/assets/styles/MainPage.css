@@ -1,6 +1,7 @@
 /* 전체 페이지 스타일 */
 * {
     background-color: black;
+    
 }
 
 body {
@@ -10,6 +11,7 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 /* HBTI 테스트 컨테이너 */
@@ -61,6 +63,7 @@ body {
     border-radius: 50%;
     animation: rotate 30s linear infinite;
     z-index: -1;
+    
 }
 
 @keyframes rotate {
