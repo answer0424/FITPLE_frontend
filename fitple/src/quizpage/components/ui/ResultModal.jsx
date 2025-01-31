@@ -2,43 +2,70 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const ResultModal = ({ isOpen, onClose, userId }) => {
-    const [hbtiData, setHbtiData] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
+  const [hbtiData, setHbtiData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchHbtiData = async () => {
-            try {
-                console.log('Fetching from:', `${import.meta.env.VITE_SERVER}/api/hbti/type/MECP`);
-                const response = await axios.get(
-                    `${import.meta.env.VITE_SERVER}/api/hbti/type/MECP`
-                );
-                console.log()
-                setHbtiData(response.data);
-                setLoading(false);
-                console.log("HBTI 데이터 로드 성공:", response.data);
-            } catch (err) {
-                console.error("HBTI 데이터 로드 실패:", err);
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+      const fetchHbtiData = async () => {
+          if (!hbtiType) {
+              console.log("No hbtiType available");
+              return;
+          }
+          
+          try {
+              console.log("Fetching HBTI data for type:", hbtiType);
+              const response = await axios.get(
+                  `${import.meta.env.VITE_SERVER}/api/hbti/type/${hbtiType}`
+              );
+              setHbtiData(response.data);
+              setLoading(false);
+          } catch (err) {
+              console.error("HBTI 데이터 로드 실패:", err);
+              setError(err.message);
+              setLoading(false);
+          }
+      };
 
-        if (isOpen) {
-            fetchHbtiData();
-        }
-    }, [isOpen]);
+      if (isOpen && hbtiType) {
+          fetchHbtiData();
+      }
+  }, [isOpen, hbtiType]);
 
-    const handleViewDetails = () => {
-        if (!userId) {
-            alert('회원가입이 필요한 기능입니다. 회원가입 후 이용해주세요.');
-            return;
-        }
-        navigate(`/quiz/${userId}/result`);
-        onClose();
-    };
+  const handleViewDetails = async () => {
+      if (!userId) {
+          alert('회원가입이 필요한 기능입니다. 회원가입 후 이용해주세요.');
+          // TODO: Navigate to login/signup page
+          return;
+      }
+
+      try {
+          // Save HBTI result
+          const saveResponse = await fetch(`${import.meta.env.VITE_SERVER}/api/hbti/save`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  userId: userId,
+                  answers: Object.values(answers)  // Make sure to pass answers as prop
+              })
+          });
+
+          if (!saveResponse.ok) {
+              throw new Error('Failed to save results');
+          }
+
+          // Navigate to detailed view
+          navigate(`/quiz/${userId}/result`);
+          onClose();
+      } catch (error) {
+          console.error('Error saving HBTI result:', error);
+          alert('결과 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
+  };
 
     if (!isOpen) return null;
 
@@ -113,36 +140,38 @@ const ResultModal = ({ isOpen, onClose, userId }) => {
     };
 
     return (
-        <div style={modalStyle} onClick={onClose}>
-            <div style={contentStyle} onClick={e => e.stopPropagation()}>
-                {error ? (
-                    <div style={{ color: 'red', textAlign: 'center' }}>데이터를 불러오는데 실패했습니다: {error}</div>
-                ) : loading ? (
-                    <div style={{ textAlign: 'center' }}>Loading...</div>
-                ) : (
-                    <>
-                        <h2 style={titleStyle}>당신의 HBTI 결과</h2>
-                        {hbtiData?.dogImage && (
-                            <img
+      <div style={modalStyle} onClick={onClose}>
+          <div style={contentStyle} onClick={e => e.stopPropagation()}>
+              {error ? (
+                  <div style={{ color: 'red', textAlign: 'center' }}>
+                      데이터를 불러오는데 실패했습니다: {error}
+                  </div>
+              ) : loading ? (
+                  <div style={{ textAlign: 'center' }}>Loading...</div>
+              ) : (
+                  <>
+                      <h2 style={titleStyle}>나의 HBTI는</h2>
+                      <h1 style={titleStyle}>{hbtiData?.hbtiType}</h1>
+                      {hbtiData?.dogImage && (
+                          <img
                               src={`${import.meta.env.VITE_SERVER}${hbtiData.dogImage}`}
                               alt="HBTI Type"
                               style={imageStyle}
-                            />
-                        )}
-                        <h3 style={subtitleStyle}>{hbtiData?.label}</h3>
-                        <p style={descriptionStyle}>{hbtiData?.description}</p>
-                        <button
-                            onClick={handleViewDetails}
-                            style={buttonStyle}
-                        >
-                            내 HBTI 자세히 보기 
-                            {/* {!userId && '(회원가입 필요)'} */}
-                        </button>
-                    </>
-                )}
-            </div>
-        </div>
-    );
+                          />
+                      )}
+                      <h3 style={subtitleStyle}>{hbtiData?.label}</h3>
+                      <button
+                          onClick={handleViewDetails}
+                          style={buttonStyle}
+                      >
+                          내 HBTI 자세히 보기 
+                          {!userId && ' (회원가입 필요)'}
+                      </button>
+                  </>
+              )}
+          </div>
+      </div>
+  );
 };
 
 export default ResultModal;

@@ -15,6 +15,7 @@ function QuizPage() {
     const [userId, setUserId] = useState(null);
     const [showQuiz, setShowQuiz] = useState(true);
     const [showResultModal, setShowResultModal] = useState(false);
+    const [hbtiType, setHbtiType] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -87,38 +88,36 @@ function QuizPage() {
         }
     };
 
-    // In QuizPage.js, modify handleFinish:
+
     const handleFinish = async () => {
+        console.log("handleFinish called");
         if (Object.keys(answers).length < quizData.length) {
             alert('모든 문제를 해결 후, 결과보기 버튼을 클릭해주세요');
             return;
         }
-        
+    
         try {
-            // If user is logged in (has userId), save their results
-            if (userId) {
-                const response = await fetch('/api/hbti/save', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                        answers: Object.values(answers)
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Failed to save results');
-                }
+            // Calculate HBTI type
+            const response = await fetch(`${import.meta.env.VITE_SERVER}/api/hbti/calculate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.values(answers))
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to calculate HBTI type');
             }
-            
-            // Show modal regardless of userId
+    
+            const result = await response.json();
+            setHbtiType(result.hbtiType);
             setGameState('finished');
             setShowResultModal(true);
             
         } catch (error) {
-            console.error('Error saving HBTI result:', error);
+            console.error('Error calculating HBTI:', error);
+            alert('HBTI 계산 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
@@ -169,6 +168,7 @@ function QuizPage() {
                     isOpen={showResultModal}
                     onClose={() => setShowResultModal(false)}
                     userId={userId}
+                    hbtiType={hbtiType}
                 />
             )}
         </div>
