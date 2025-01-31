@@ -1,3 +1,220 @@
+/* 전체 페이지 스타일 */
 * {
     background-color: black;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* HBTI 테스트 컨테이너 */
+.HBTI-test-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.HBTI-test-container h1 {
+    font-size: 3rem;
+    color: #a1d0fc;
+}
+
+.HBTI-test-container p {
+    font-size: 1.5rem;
+    color: #a1d0fc;
+}
+
+.HBTI-test-container button {
+    background-color: #a1d0fc;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 20px;
+    height: 50px; /* 버튼 높이 고정 */
+    width: 200px; /* 버튼 너비 고정 */
+    display: block; /* flex 영향을 받지 않도록 */
+    text-align: center;
+}
+
+/* 배경 원 이미지 */
+.background-image {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px;
+    height: 1200px;
+    background-image: url('../images/MainPageBackgroundImg.png');
+    background-size: cover;
+    border-radius: 50%;
+    animation: rotate 30s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 메인 섹션 */
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    z-index: 5;
+    margin-top: -100px; /* section을 background-image의 중앙에 위치 */
+}
+
+/* about-HBTI */
+.about-HBTI-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-width: 1200px;
+    text-align: left;
+    min-height: 450px;
+    margin-top: 550px;
+}
+
+.about-HBTI-container h2 {
+    font-size: 2rem;
+    color: white;
+}
+
+.about-HBTI-container p {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.about-HBTI-container img {
+    width: 150px;
+    height: auto;
+}
+
+.about-HBTI-container button {
+    border-radius: 10px;
+}
+
+/* match-trainer-container */
+.match-trainer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-width: 1200px;
+    text-align: right;
+    flex-direction: row-reverse;
+    min-height: 450px;
+}
+
+.match-trainer-container h2 {
+    font-size: 2rem;
+    color: white;
+}
+
+.match-trainer-container p {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.match-trainer-container img {
+    width: 150px;
+    height: auto;
+}
+
+.match-trainer-container button {
+    border-radius: 10px;
+}
+
+/* 푸터 */
+/* 푸터 */
+/* 푸터 컨테이너 */
+.footer-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 600px;
+}
+
+/* 가로 선과 원을 포함하는 컨테이너 */
+.footer-line {
+    position: relative;
+    width: 90%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 양쪽 가로선 */
+.footer-line::before,
+.footer-line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 2px;
+    background-color: #a1d0fc;
+}
+
+.footer-line::before {
+    left: 0;
+}
+
+.footer-line::after {
+    right: 0;
+}
+
+/* 중앙 반원 */
+.footer-circle {
+    width: 170px;
+    height: 85px;
+    border: 2px solid #a1d0fc;
+    border-bottom: none;
+    border-radius: 170px 170px 0 0;
+    background-color: black;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 80px;
+}
+
+/* 가운데 텍스트 */
+.footer-text {
+    position: absolute;
+    bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    top: 0;
+    z-index: 5;
+
+}
+
+a {
+    z-index: 5;
 }
