@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import GameScene from '../3d/GameScene';
-import QuizComponent from './QuizComponent'
-import UIOverlay from '../ui/UIOverlay';
-import quizData from '../data/quizData';
+import GameScene from '../components/3d/GameScene';
+import QuizComponent from '../components/base/QuizComponent'
+import UIOverlay from '../components/ui/UIOverlay';
+import quizData from '../components/data/quizData';
+import { ResultModal} from '../components/ui/ResultModal';
 
-function QuizPageApp() {
+function QuizPage() {
     const [gameState, setGameState] = useState('initial');
     const [currentPlatform, setCurrentPlatform] = useState(0);
     const [currentPath, setCurrentPath] = useState(null);
@@ -13,6 +14,7 @@ function QuizPageApp() {
     const [answers, setAnswers] = useState({});
     const [userId, setUserId] = useState(null);
     const [showQuiz, setShowQuiz] = useState(true);
+    const [showResultModal, setShowResultModal] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -21,6 +23,7 @@ function QuizPageApp() {
                 if (response.ok) {
                     const userData = await response.json();
                     setUserId(userData.id);
+                    console.log('User ID:', userData.id); 
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -86,12 +89,12 @@ function QuizPageApp() {
 
     const handleFinish = async () => {
         if (!userId) {
-            console.error('User ID not available');
+            console.error('회원이 아닙니다. 회원가입 후 다시 시도해주세요.');
             return;
         }
 
         if (Object.keys(answers).length < quizData.length) {
-            alert('Please answer all questions before finishing.');
+            alert('모든 문제를 해결 후, 결과보기 버튼을 클릭해주세요');
             return;
         }
         
@@ -109,6 +112,7 @@ function QuizPageApp() {
             
             if (response.ok) {
                 setGameState('finished');
+                setShowResultModal(true);
             }
         } catch (error) {
             console.error('Error saving HBTI result:', error);
@@ -157,8 +161,15 @@ function QuizPageApp() {
                 onFinish={handleFinish}
                 gameState={gameState}
             />
+            {showResultModal && (
+                <ResultModal
+                    isOpen={showResultModal}
+                    onClose={() => setShowResultModal(false)}
+                    userId={userId}
+                />
+            )}
         </div>
     );
 }
 
-export default QuizPageApp;
+export default QuizPage;

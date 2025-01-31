@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Modal from './Modal';
 
 const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }) => {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
