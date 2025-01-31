@@ -59,9 +59,20 @@ const MainPage = () => {
                     <div class="footer-circle"></div>
                 </div>
                 <div class="footer-text">FITPLE</div>
-                <Link to={"/"}>HBTI TEST</Link>
-                <Link to={"/"}>About HBTI</Link>
-                <Link to={"/"}>MyPage</Link>
+                <div className='row'>
+                    <div className='footer-menu'>
+                        <Link to={"/"}>HBTI TEST</Link>
+                        <Link to={"/"}>About HBTI</Link>
+                        <Link to={"/"}>MyPage</Link>
+                    </div>
+                    <div className='github'>
+                        <a href="">이경원</a>
+                        <a href="">이동희</a>
+                        <a href="">김범순</a>
+                        <a href="">현지윤</a>
+                        <a href="">박준우</a>
+                    </div>
+                </div>
             </div>
         </>
     );

@@ -92,13 +92,15 @@ body {
     width: 80%;
     max-width: 1200px;
     text-align: left;
-    min-height: 450px;
+    min-height: 400px;
     margin-top: 550px;
 }
 
 .about-HBTI-container h2 {
     font-size: 2rem;
     color: white;
+    font-weight: 900;
+    margin-bottom: 50px;
 }
 
 .about-HBTI-container p {
@@ -124,12 +126,14 @@ body {
     max-width: 1200px;
     text-align: right;
     flex-direction: row-reverse;
-    min-height: 450px;
+    min-height: 400px;
 }
 
 .match-trainer-container h2 {
     font-size: 2rem;
     color: white;
+    font-weight: 900;
+    margin-bottom: 50px;
 }
 
 .match-trainer-container p {
@@ -217,6 +221,22 @@ body {
 
 a {
     z-index: 5;
-    color: white;
-    text-decoration: none;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between; /* 좌우로 분리 */
+    align-items: center; /* 세로로 중앙 정렬 */
+}
+
+.footer-menu {
+z-index: 6;
+display: flex;
+flex-direction: column;
+}
+
+.github {
+z-index: 6;
+display: flex;
+flex-direction: column;
 }
