@@ -51,7 +51,7 @@ body {
 /* 배경 원 이미지 */
 .background-image {
     position: absolute;
-    top: 80%;
+    top: 90%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1200px;
@@ -81,7 +81,7 @@ body {
     height: 100vh;
     position: relative;
     z-index: 5;
-    margin-top: -100px; /* section을 background-image의 중앙에 위치 */
+    
 }
 
 /* about-HBTI */
@@ -107,7 +107,7 @@ body {
 }
 
 .about-HBTI-container img {
-    width: 150px;
+    width: 250px;
     height: auto;
 }
 
@@ -138,7 +138,7 @@ body {
 }
 
 .match-trainer-container img {
-    width: 150px;
+    width: 250px;
     height: auto;
 }
 
@@ -157,7 +157,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 600px;
+    margin-top: 700px;
 }
 
 /* 가로 선과 원을 포함하는 컨테이너 */
@@ -217,4 +217,6 @@ body {
 
 a {
     z-index: 5;
+    color: white;
+    text-decoration: none;
 }
