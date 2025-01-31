@@ -6,7 +6,7 @@ function GameScene({
     currentPlatform, 
     currentPath, 
     visibleConnections, 
-    platformPositions 
+    platformPositions
 }) {
     
     return (
@@ -24,8 +24,8 @@ function GameScene({
                 currentPlatform={currentPlatform}
                 visibleConnections={visibleConnections}
             />
-            <DogCamera currentPath={currentPath} />
-            {/* adding to make commit */}
+            <DogCamera currentPath={currentPath} 
+            />
         </>
     ); 
 }

@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import GameScene from '../3d/GameScene';
-import QuizComponent from './QuizComponent'
-import UIOverlay from '../ui/UIOverlay';
-import quizData from '../data/quizData';
+import GameScene from '../components/3d/GameScene';
+import QuizComponent from '../components/base/QuizComponent'
+import UIOverlay from '../components/ui/UIOverlay';
+import quizData from '../components/data/quizData';
+import ResultModal from '../components/ui/ResultModal';
 
-function QuizPageApp() {
+function QuizPage() {
     const [gameState, setGameState] = useState('initial');
     const [currentPlatform, setCurrentPlatform] = useState(0);
     const [currentPath, setCurrentPath] = useState(null);
     const [visibleConnections, setVisibleConnections] = useState(new Set());
     const [answers, setAnswers] = useState({});
     const [userId, setUserId] = useState(null);
+    const [showQuiz, setShowQuiz] = useState(true);
+    const [showResultModal, setShowResultModal] = useState(false);
+    const [hbtiType, setHbtiType] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -20,6 +24,7 @@ function QuizPageApp() {
                 if (response.ok) {
                     const userData = await response.json();
                     setUserId(userData.id);
+                    console.log('User ID:', userData.id); 
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -54,11 +59,12 @@ function QuizPageApp() {
     };
 
     const handleNext = () => {
-        if (!answers[currentPlatform] && currentPlatform < quizData.length) {
-            alert('Please answer the current question before proceeding.');
+        if (answers[currentPlatform] === undefined) {
+            alert('다음 문제로 넘어가기 전에 해당 질문에 대한 답을 해주세요 .');
             return;
         }
         
+        setShowQuiz(false);
         const nextPlatform = currentPlatform + 1;
         if (nextPlatform < platformPositions.length) {
             setCurrentPlatform(nextPlatform);
@@ -68,45 +74,50 @@ function QuizPageApp() {
                 newSet.add(currentPlatform);
                 return newSet;
             });
+            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
     const handlePrev = () => {
+        setShowQuiz(false);
         const prevPlatform = currentPlatform - 1;
         if (prevPlatform >= 0) {
             setCurrentPlatform(prevPlatform);
             setCurrentPath([platformPositions[currentPlatform], platformPositions[prevPlatform]]);
+            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
-    const handleFinish = async () => {
-        if (!userId) {
-            console.error('User ID not available');
-            return;
-        }
 
+    const handleFinish = async () => {
+        console.log("handleFinish called");
         if (Object.keys(answers).length < quizData.length) {
-            alert('Please answer all questions before finishing.');
+            alert('모든 문제를 해결 후, 결과보기 버튼을 클릭해주세요');
             return;
         }
-        
+    
         try {
-            const response = await fetch('/api/hbti/save', {
+            // Calculate HBTI type
+            const response = await fetch(`${import.meta.env.VITE_SERVER}/api/hbti/calculate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    userId: userId,
-                    answers: Object.values(answers)
-                })
+                body: JSON.stringify(Object.values(answers))
             });
-            
-            if (response.ok) {
-                setGameState('finished');
+    
+            if (!response.ok) {
+                throw new Error('Failed to calculate HBTI type');
             }
+    
+            const result = await response.json();
+            setHbtiType(result.hbtiType);
+            setGameState('finished');
+            setShowResultModal(true);
+            
         } catch (error) {
-            console.error('Error saving HBTI result:', error);
+            console.error('Error calculating HBTI:', error);
+            alert('HBTI 계산 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
     };
 
@@ -139,6 +150,7 @@ function QuizPageApp() {
                     currentPlatform={currentPlatform}
                     quizData={quizData}
                     onAnswerSubmit={handleAnswerChange}
+                    shouldShow={showQuiz}
                 />
             )}
             
@@ -151,8 +163,16 @@ function QuizPageApp() {
                 onFinish={handleFinish}
                 gameState={gameState}
             />
+            {showResultModal && (
+                <ResultModal
+                    isOpen={showResultModal}
+                    onClose={() => setShowResultModal(false)}
+                    userId={userId}
+                    hbtiType={hbtiType}
+                />
+            )}
         </div>
     );
 }
 
-export default QuizPageApp;
+export default QuizPage;
