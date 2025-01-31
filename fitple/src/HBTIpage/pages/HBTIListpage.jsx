@@ -78,7 +78,7 @@ function HBTIListPage() {
 
   // 카드 클릭 시 상세 페이지로 이동
   const handleCardClick = (hbtiType) => {
-    navigate(`/hbti/detail`, { state: { hbtiType } });
+    navigate(`/hbti/detail?type=${hbtiType}`); 
   };
 
   return (
