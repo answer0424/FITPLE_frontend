@@ -34,7 +34,7 @@ function DogCamera({ currentPath }) {
         
         if (pathProgress.current > 1) {
             pathProgress.current = 1;
-            onPathComplete?.();
+            
         }
 
         const point = new THREE.Vector3();

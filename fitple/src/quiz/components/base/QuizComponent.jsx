@@ -11,7 +11,7 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
     };
 
     useEffect(() => {
-        setSelectedAnswer(null); // Reset selection when platform changes
+        setSelectedAnswer(null);
     }, [currentPlatform]);
 
     if (!shouldShow) return null;

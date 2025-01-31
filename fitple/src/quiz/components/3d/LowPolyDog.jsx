@@ -14,7 +14,7 @@ const LowPolyDog = (props) => {
     if (animation) {
       if(isPlaying){
         animation.reset().play()
-      animation.timeScale = 1
+        animation.timeScale = 1
       }else{
         animation.paused()
       }

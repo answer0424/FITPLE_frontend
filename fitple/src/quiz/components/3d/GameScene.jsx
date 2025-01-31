@@ -6,13 +6,11 @@ function GameScene({
     currentPlatform, 
     currentPath, 
     visibleConnections, 
-    platformPositions,
-    onPathComplete 
+    platformPositions
 }) {
     
     return (
         <>
-            <DogCamera currentPath={currentPath} onPathComplete={onPathComplete} />
             {/* Scene Lighting */}
             <color attach="background" args={["#000000"]} />
             <fog attach="fog" args={["#000000", 30, 90]} />
@@ -26,8 +24,8 @@ function GameScene({
                 currentPlatform={currentPlatform}
                 visibleConnections={visibleConnections}
             />
-            <DogCamera currentPath={currentPath} />
-            {/* adding to make commit */}
+            <DogCamera currentPath={currentPath} 
+            />
         </>
     ); 
 }
