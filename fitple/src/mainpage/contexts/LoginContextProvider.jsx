@@ -117,6 +117,16 @@ const LoginContextProvider = ({children}) => {
     // 로그아웃
     const logout = (force = false) => {
         // confirm 없이 강제 로그아웃
+        console.log('로그아웃');
+
+        // confirm 받아서 로그아웃
+        if (confirm('로그아웃 하시겠습니까?')) {
+            logoutSetting();
+            navigate('/');
+        } else{ 
+            return;
+        }
+
         if (force) {
             // 로그아웃 세팅
             logoutSetting();
@@ -125,11 +135,6 @@ const LoginContextProvider = ({children}) => {
             return;
         };
 
-        // confirm 받아서 로그아웃
-        if (confirm('로그아웃 하시겠습니까?')) {
-            logoutSetting();
-            navigate('/');
-        }
     }
 
     // 로그인 세팅
