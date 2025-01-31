@@ -4,7 +4,7 @@ import GameScene from '../components/3d/GameScene';
 import QuizComponent from '../components/base/QuizComponent'
 import UIOverlay from '../components/ui/UIOverlay';
 import quizData from '../components/data/quizData';
-import { ResultModal} from '../components/ui/ResultModal';
+import ResultModal from '../components/ui/ResultModal';
 
 function QuizPage() {
     const [gameState, setGameState] = useState('initial');
@@ -87,33 +87,36 @@ function QuizPage() {
         }
     };
 
+    // In QuizPage.js, modify handleFinish:
     const handleFinish = async () => {
-        if (!userId) {
-            console.error('회원이 아닙니다. 회원가입 후 다시 시도해주세요.');
-            return;
-        }
-
         if (Object.keys(answers).length < quizData.length) {
             alert('모든 문제를 해결 후, 결과보기 버튼을 클릭해주세요');
             return;
         }
         
         try {
-            const response = await fetch('/api/hbti/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    answers: Object.values(answers)
-                })
-            });
-            
-            if (response.ok) {
-                setGameState('finished');
-                setShowResultModal(true);
+            // If user is logged in (has userId), save their results
+            if (userId) {
+                const response = await fetch('/api/hbti/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        answers: Object.values(answers)
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save results');
+                }
             }
+            
+            // Show modal regardless of userId
+            setGameState('finished');
+            setShowResultModal(true);
+            
         } catch (error) {
             console.error('Error saving HBTI result:', error);
         }

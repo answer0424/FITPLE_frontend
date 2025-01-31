@@ -1,101 +1,100 @@
-import React from 'react';
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-// ResultModal component to show immediate results
-const ResultModal = ({ isOpen, onClose, userId }) => {
-  const [hbtiData, setHbtiData] = useState(null);
+const QuizResult = () => {
+  const [resultData, setResultData] = useState(null);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const userId = window.location.pathname.split('/')[2];
 
   useEffect(() => {
-    const fetchHbtiResult = async () => {
+    const fetchDetailedResults = async () => {
       try {
-        const response = await fetch(`/api/hbti/${userId}`);
-        if (!response.ok) throw new Error('Failed to fetch HBTI result');
+        const response = await fetch(`/api/hbti/${userId}/result`);
+        if (!response.ok) throw new Error('Failed to fetch detailed results');
         const data = await response.json();
-        setHbtiData(data);
+        setResultData(data);
       } catch (err) {
         setError(err.message);
       }
     };
 
-    if (userId && isOpen) {
-      fetchHbtiResult();
+    if (userId) {
+      fetchDetailedResults();
     }
-  }, [userId, isOpen]);
+  }, [userId]);
 
-  const handleViewDetails = () => {
-    navigate(`/quiz/${userId}/result`);
-    onClose();
-  };
+  if (error) return <div style={{ color: 'red', padding: '20px' }}>{error}</div>;
+  if (!resultData) return <div style={{ textAlign: 'center', padding: '20px' }}>Loading...</div>;
 
-  if (!isOpen) return null;
-
-  const modalStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    zIndex: 1000
-  };
-
-  const contentStyle = {
-    backgroundColor: 'white',
-    padding: '24px',
-    borderRadius: '8px',
-    maxWidth: '500px',
-    width: '90%',
-    maxHeight: '90vh',
-    overflowY: 'auto'
-  };
-
-  const buttonStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#4a90e2',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    width: '100%',
-    marginTop: '20px'
-  };
+  const { hbtiType, percentages, details, topMatches } = resultData;
 
   return (
-    <div style={modalStyle} onClick={onClose}>
-      <div style={contentStyle} onClick={e => e.stopPropagation()}>
-        {error ? (
-          <div style={{ color: 'red' }}>{error}</div>
-        ) : !hbtiData ? (
-          <div style={{ textAlign: 'center' }}>Loading...</div>
-        ) : (
-          <>
-            <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Your HBTI Result</h2>
-            {hbtiData.imageUrl && (
-              <div style={{ width: '100%', aspectRatio: '1', marginBottom: '20px' }}>
-                <img
-                  src={hbtiData.imageUrl}
-                  alt="HBTI Type"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                />
-              </div>
-            )}
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ marginBottom: '10px' }}>{hbtiData.type}</h3>
-              <p style={{ color: '#666' }}>{hbtiData.shortDescription}</p>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>
+        Your HBTI Type: {hbtiType}
+      </h1>
+
+      {/* Percentages Section */}
+      <div style={{ marginBottom: '40px' }}>
+        <h2 style={{ marginBottom: '20px' }}>Your Scores</h2>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
+          gap: '20px' 
+        }}>
+          {Object.entries(percentages).map(([trait, score]) => (
+            <div key={trait} style={{ 
+              textAlign: 'center',
+              padding: '15px',
+              backgroundColor: '#f5f5f5',
+              borderRadius: '8px'
+            }}>
+              <div style={{ fontWeight: 'bold' }}>{trait}</div>
+              <div style={{ fontSize: '24px' }}>{score.toFixed(1)}%</div>
             </div>
-            <button style={buttonStyle} onClick={handleViewDetails}>
-              View Detailed Results
-            </button>
-          </>
-        )}
+          ))}
+        </div>
+      </div>
+
+      {/* Type Details Section */}
+      <div style={{ marginBottom: '40px' }}>
+        <h2 style={{ marginBottom: '20px' }}>Your Type Details</h2>
+        <div style={{ backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
+          <img 
+            src={details.dogImage} 
+            alt={hbtiType}
+            style={{ maxWidth: '100%', height: 'auto', marginBottom: '20px' }}
+          />
+          <h3>{details.label}</h3>
+          <p>{details.description}</p>
+        </div>
+      </div>
+
+      {/* Matching Trainers Section */}
+      <div>
+        <h2 style={{ marginBottom: '20px' }}>Top Matching Trainers</h2>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '20px' 
+        }}>
+          {topMatches.map((match, index) => (
+            <div key={index} style={{ 
+              backgroundColor: '#f5f5f5', 
+              padding: '20px',
+              borderRadius: '8px',
+              textAlign: 'center'
+            }}>
+              <img 
+                src={match.details.dogImage} 
+                alt={match.hbtiType}
+                style={{ maxWidth: '100%', height: 'auto', marginBottom: '15px' }}
+              />
+              <h3 style={{ marginBottom: '10px' }}>{match.details.label}</h3>
+              <div>Match Score: {match.score}%</div>
+              <div>Type: {match.hbtiType}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
