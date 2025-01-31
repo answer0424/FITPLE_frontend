@@ -68,15 +68,15 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="forgot-password-link">
-              <button onClick={() => alert("Forgot Password?")}>
-                Forgot Password?
-              </button>
-            </div>
             <div className="button-container">
               <button type="submit">Login</button>
             </div>
           </form>
+          <div className="forgot-password-link">
+            <button onClick={() => alert("Forgot Password?")}>
+              Forgot Password?
+            </button>
+          </div>
           <div className="login-box">
             <button className="social-button" id="kakao-connect" onClick={onKakaoLogin}>
               <span>Connect with Kakao</span>
