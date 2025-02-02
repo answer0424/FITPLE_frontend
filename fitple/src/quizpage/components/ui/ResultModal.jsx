@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
+const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
   const [hbtiData, setHbtiData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,19 +42,20 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
           return;
       }
 
-      try {
+        try {
+            const token = Cookies.get('accessToken');
           // Save HBTI result
-          const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-              body: JSON.stringify({
-                  userId: userId,
-                  answers: Object.values(answers)
-              })
-          });
+            const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    answers: Object.values(answers)
+                })
+            });
 
           if (!saveResponse.ok) {
               throw new Error('Failed to save results');
