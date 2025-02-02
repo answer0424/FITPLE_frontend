@@ -18,7 +18,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
           try {
               console.log("Fetching HBTI data for type:", hbtiType);
               const response = await axios.get(
-                  `${import.meta.env.VITE_SERVER}/api/hbti/type/${hbtiType}`
+                  `${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`
               );
               setHbtiData(response.data);
               setLoading(false);
@@ -36,21 +36,22 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
 
   const handleViewDetails = async () => {
       if (!userId) {
-          alert('회원가입이 필요한 기능입니다. 회원가입 후 이용해주세요.');
+          alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요.');
           // TODO: Navigate to login/signup page
           return;
       }
 
       try {
           // Save HBTI result
-          const saveResponse = await fetch(`${import.meta.env.VITE_SERVER}/api/hbti/save`, {
+          const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
               method: 'POST',
               headers: {
-                  'Content-Type': 'application/json',
-              },
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
               body: JSON.stringify({
                   userId: userId,
-                  answers: Object.values(answers)  // Make sure to pass answers as prop
+                  answers: Object.values(answers)
               })
           });
 
@@ -154,7 +155,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType }) => {
                       <h1 style={titleStyle}>{hbtiData?.hbtiType}</h1>
                       {hbtiData?.dogImage && (
                           <img
-                              src={`${import.meta.env.VITE_SERVER}${hbtiData.dogImage}`}
+                              src={`${import.meta.env.VITE_Server}${hbtiData.dogImage}`}
                               alt="HBTI Type"
                               style={imageStyle}
                           />
