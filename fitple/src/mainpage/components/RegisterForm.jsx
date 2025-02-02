@@ -124,7 +124,7 @@ const RegisterForm = ({ questions = [], userType }) => {
       <Header />
       <div>
         <h2>{userType} Sign up</h2>
-        <Link to={"/register/user"}>
+        <Link to={"/register/student"}>
           <button>Student</button>
         </Link>
         <Link to={"/register/trainer"}>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
+import Cookies from 'js-cookie'; // 새로 추가: js-cookie import
 import GameScene from '../components/3d/GameScene';
-import QuizComponent from '../components/base/QuizComponent'
+import QuizComponent from '../components/base/QuizComponent';
 import UIOverlay from '../components/ui/UIOverlay';
 import quizData from '../components/data/quizData';
 import ResultModal from '../components/ui/ResultModal';
@@ -20,16 +21,43 @@ function QuizPage() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch('/register/user');
+                const token = Cookies.get('accessToken');
+                
+                if (!token) {
+                    console.log('No token found in cookies');
+                    return;
+                }
+         
+                const response = await fetch(`${import.meta.env.VITE_Server}/register/user`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+         
+                console.log('Response status:', response.status);
+                
                 if (response.ok) {
                     const userData = await response.json();
-                    setUserId(userData.id);
-                    console.log('User ID:', userData.id); 
+                    console.log('User data received:', userData);
+                    
+                    if (userData.id) {
+                        setUserId(userData.id);
+                        console.log('User ID set:', userData.id);
+                    }
+                } else {
+                    console.log('Response not OK:', response.statusText);
+                    if (response.status === 401 || response.status === 403) {
+                        Cookies.remove('accessToken');
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
+     
         fetchUser();
     }, []);
 
@@ -50,7 +78,6 @@ function QuizPage() {
         
         return positions.sort((a, b) => a[1] - b[1]);
     }, []);
-
 
     const handleStart = () => {
         setGameState('playing');
@@ -88,7 +115,6 @@ function QuizPage() {
         }
     };
 
-
     const handleFinish = async () => {
         console.log("handleFinish called");
         if (Object.keys(answers).length < quizData.length) {
@@ -96,21 +122,27 @@ function QuizPage() {
             return;
         }
     
+        const answersArray = Object.values(answers);
+        console.log('Sending answers:', answersArray);
+    
         try {
-            // Calculate HBTI type
-            const response = await fetch(`${import.meta.env.VITE_SERVER}/api/hbti/calculate`, {
+            const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/calculate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(Object.values(answers))
+                body: JSON.stringify(answersArray)
             });
+            console.log(response.headers.get('content-type'));
     
             if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response:', errorText);
                 throw new Error('Failed to calculate HBTI type');
             }
     
             const result = await response.json();
+            console.log('Received result:', result); // Add this log
             setHbtiType(result.hbtiType);
             setGameState('finished');
             setShowResultModal(true);
@@ -164,12 +196,13 @@ function QuizPage() {
                 gameState={gameState}
             />
             {showResultModal && (
-                <ResultModal
-                    isOpen={showResultModal}
-                    onClose={() => setShowResultModal(false)}
-                    userId={userId}
-                    hbtiType={hbtiType}
-                />
+            <ResultModal
+                isOpen={showResultModal}
+                onClose={() => setShowResultModal(false)}
+                userId={userId}
+                hbtiType={hbtiType}
+                answers={answers}
+            />
             )}
         </div>
     );
