@@ -43,19 +43,29 @@ function TrainerDetailPage() {
         const total = reviews.reduce((acc, review) => acc + review.rating, 0);
         return (total / reviews.length).toFixed(1); // 소수점 첫째 자리까지 계산
     };
-
-    // 별점 컴포넌트
     const renderStars = (averageRating) => {
-        const fullStars = Math.floor(averageRating);
-        const halfStar = averageRating - fullStars >= 0.5;
-        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+        const fullStars = Math.floor(averageRating); // 꽉 찬 별 개수
+        const decimalPart = averageRating - fullStars; // 소수점 부분 추출
+        const halfStar = decimalPart >= 0.5 ? 1 : 0; // 반 별 여부 체크
+        const emptyStars = 5 - fullStars - halfStar; // 빈 별 개수
 
         return (
             <div className="rating">
-                {Array(fullStars).fill("⭐️")}
-                {halfStar && "⭐️"}
-                {Array(emptyStars).fill("☆")}
-            </div>
+            {/* 꽉 찬 별 */}
+            {Array(fullStars)
+                .fill(null)
+                .map((_, i) => (
+                    <span key={`full-${i}`} className="full-star">★</span>
+                ))}
+            {/* 반 별 (0.5 이상일 때 추가) */}
+            {halfStar === 1 && <span className="half-star">★</span>}
+            {/* 빈 별 */}
+            {Array(emptyStars)
+                .fill(null)
+                .map((_, i) => (
+                    <span key={`empty-${i}`} className="empty-star">☆</span>
+                ))}
+        </div>
         );
     };
 

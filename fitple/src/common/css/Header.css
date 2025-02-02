@@ -1,27 +1,12 @@
-
 /* Header.css */
-
-body {
-    font-family: Arial, sans-serif;
-    position: relative;
-    height: auto;
-    min-height: 100vh;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: black;
-    color: white;
-    padding: 0 20px;
-    padding-bottom: 50px;
-    z-index: -1;
-}
 
 .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     background-color: black;
+    margin-top: -70px;
+    
 }
 
 .header-left {
@@ -29,7 +14,7 @@ body {
     font-size: 24px;
     margin-right: 50px;
     text-decoration: none;
-    width: 100px;
+    width: 300px;
     text-align: center                ;
 }
 
@@ -38,7 +23,7 @@ body {
     font-size: 24px;
     margin-left: 50px;
     text-decoration: none;
-    width: 100px;
+    width: 300px;
     text-align: center;
 }
 
@@ -47,4 +32,3 @@ body {
     width: 100px;
     margin-top: 75px;
 }
-

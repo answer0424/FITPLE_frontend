@@ -1,14 +1,22 @@
 /* TrainerDetailPage.css */
 
+body {
+    overflow-x: hidden; 
+    background: linear-gradient(180deg, #000000, #1b2735, #2c2c2c); /* 헤더와 연결되는 어두운 그라데이션 */
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+}
 
+/* trainer-container 스타일 */
 .trainer-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #1e1e1e;
+    min-height: calc(100vh - 150px);
     padding: 40px;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 /* trainer-card 스타일 */
@@ -46,9 +54,34 @@
     flex: 1;
 }
 
+/* 별점 스타일 */
 .rating {
-    font-size: 20px; 
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* 꽉 찬 별 */
+.full-star {
     color: #ffc107;
+    font-size: 20px;
+}
+
+/* 반 별 */
+.half-star {
+    color: #ffc107;
+    font-size: 20px;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    width: 10px; /* 반 별 크기 */
+}
+
+/* 빈 별 */
+.empty-star {
+    color: #444;
+    font-size: 20px;
 }
 
 /* 탭 스타일 */
