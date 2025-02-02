@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "react-quill": "^2.0.0"
+  }
+}
