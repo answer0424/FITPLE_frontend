@@ -12,6 +12,7 @@ import QuizResult from './quizpage/pages/QuizResult';
 import HBTIListpage from "./HBTIpage/pages/HBTIListpage";
 import HBTIListDetailPage from "./HBTIpage/pages/HBTIListDetailPage";
 import TrainerDetailPage from "./trainerpage/pages/TrainerDetailPage";
+import MyPage from "./mypage/pages/MyPage";
 
 
 
@@ -35,8 +36,9 @@ function App() {
             <Route path="/quiz" Component={QuizPage}></Route>
             <Route path="/quiz/:userId/result" Component={QuizResult}> </Route>
             <Route path="/hbti" element={<HBTIListpage />} />
-             <Route path="/hbti/detail" element={<HBTIListDetailPage />} /> 
+            <Route path="/hbti/detail" element={<HBTIListDetailPage />} /> 
             <Route path="/trainer/:trainerId/detail" element={<TrainerDetailPage />} />
+            <Route path="/member" element={<MyPage />} />
           </Routes>
           </LoginContextProvider>
       </BrowserRouter>

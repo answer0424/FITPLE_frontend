@@ -27,9 +27,9 @@ const MyPage = () => {
       <Container>
       <NoPermissionModal show={showModal} onClose={handleCloseModal} />
         <Routes>
-          {role === 'trainer' ? (
+          {role === 'ROLE_TRAINER' ? (
             <Route path='/member' element={<TrainerComponent />} />
-          ) : role === 'student' ? (
+          ) : role === 'ROLE_STUDENT' ? (
             <Route path='/member' element={<StudentComponent />} />
           ) : (
             <Route path='/member' element={handleNoPermission()} />
