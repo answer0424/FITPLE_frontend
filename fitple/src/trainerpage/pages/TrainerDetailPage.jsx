@@ -13,7 +13,7 @@ function TrainerDetailPage() {
     const [reviews, setReviews] = useState([]);
     const [activeTab, setActiveTab] = useState("home");
 
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_Server;
 
     useEffect(() => {
         if (!trainerId) return;

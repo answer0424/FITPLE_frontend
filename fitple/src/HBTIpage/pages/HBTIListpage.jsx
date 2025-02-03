@@ -51,7 +51,7 @@ function HBTIListPage() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/hbti/data`)
+      .get(`${import.meta.env.VITE_Server}/api/hbti/data`)
       .then((response) => {
         const formattedData = Object.entries(response.data).map(([key, value]) => ({
           hbti: key,
