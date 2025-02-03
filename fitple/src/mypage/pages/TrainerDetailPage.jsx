@@ -34,6 +34,7 @@ const TrainerProfilePage = () => {
       .then((response) => {
         setUser(response.data);
         console.log("가져온 사용자 정보:", response.data);
+        console.log(response.data.authority);
       })
       .catch((error) => {
         console.error("사용자 정보 가져오기 오류:", error);
@@ -99,7 +100,7 @@ const TrainerProfilePage = () => {
         ?.split("=")[1];
 
       const res = await axios.post(
-        "http://localhost:8081/member/detail",
+        `${import.meta.env.VITE_Server}/member/detail`,
         formData,
         {
           withCredentials: true,
