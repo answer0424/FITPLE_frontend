@@ -2,6 +2,22 @@ import React from 'react';
 import OverlayButton from './OverlayButton';
 
 function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, onFinish, gameState }) {
+    
+    const StartBtnStyle = {
+        width: '100%',
+        padding: '14px 20px',
+        backgroundColor: '#4a90e2',
+        color: 'white',
+        border: 'none',
+        borderRadius: '8px',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
+        marginTop: '16px',
+        marginBottom: '16px'
+    };
+
     return (
         <div style={{ 
             position: 'fixed', 
@@ -13,13 +29,14 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
         }}>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <OverlayButton
-                    text="START"
+                    text="HBTI 퀴즈 풀기"
                     position={{ 
                         left: '50%', 
                         top: '50%', 
                         transform: 'translate(-50%, -50%)',
                         pointerEvents: 'auto'
                     }}
+                    style={StartBtnStyle}
                     onClick={onStart}
                     visible={gameState === 'initial'}
                 />
