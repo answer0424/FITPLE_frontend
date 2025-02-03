@@ -25,7 +25,7 @@ const TrainerProfilePage = () => {
     }
 
     axios
-      .get(`${import.meta.env.VITE_Server}/member/detail`, {
+      .get(`${import.meta.env.VITE_Server}/member/id`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -38,24 +38,24 @@ const TrainerProfilePage = () => {
       .catch((error) => {
         console.error("사용자 정보 가져오기 오류:", error);
       });
+
+    axios
+      .get(`${import.meta.env.VITE_Server}/member/update-detail`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setPerPrice(res.data.perPrice || "");
+        setCareer(res.data.career || "");
+        setContent(res.data.content || "");
+        setSkills(res.data.skills || []);
+      })
+      .catch((error) => {
+        console.error("기존 프로필 정보 가져오기 오류:", error);
+      });
   }, []);
-
-  const handleAddSkill = () => {
-    if (!newSkill.name || !newSkill.imageFile) {
-      alert("스킬 이름과 자격증 이미지를 선택해 주세요.");
-      return;
-    }
-    setSkills([...skills, newSkill]);
-    setNewSkill({ name: "", imageFile: null });
-  };
-
-  const handleDeleteSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
-  };
-
-  const handleFileChange = (e) => {
-    setNewSkill({ ...newSkill, imageFile: e.target.files[0] });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,28 +69,19 @@ const TrainerProfilePage = () => {
     }
 
     const formData = new FormData();
-
-    // 필수 필드 추가
     formData.append("trainerId", user.id);
     formData.append("content", content);
     formData.append("perPrice", perPrice);
     formData.append("career", career);
 
-    // 스킬 정보 추가
     const skillNames = skills.map((skill) => skill.name);
     formData.append("skills", JSON.stringify(skillNames));
 
-    // 이미지 파일들 추가
     skills.forEach((skill) => {
       if (skill.imageFile) {
         formData.append("image", skill.imageFile);
       }
     });
-
-    // FormData 내용 확인을 위한 로깅
-    for (let pair of formData.entries()) {
-      console.log("FormData 내용:", pair[0], pair[1]);
-    }
 
     try {
       const accessToken = document.cookie
@@ -98,25 +89,22 @@ const TrainerProfilePage = () => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_Server}/member/detail`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const method = user.hasProfile ? "patch" : "post";
+      const url = `${import.meta.env.VITE_Server}/member/detail`;
 
-      console.log("서버 응답:", res);
-      console.log("서버 응답 ID:", res.data.id);
+      const res = await axios({
+        method,
+        url,
+        data: formData,
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (res.status === 200) {
         alert("트레이너 프로필이 등록되었습니다.");
-        // 성공 후 필요한 페이지로 리다이렉션
-        // window.location.href = '/success-page';
       }
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
@@ -162,52 +150,6 @@ const TrainerProfilePage = () => {
             onChange={(e) => setCareer(e.target.value)}
             required
           />
-        </div>
-        <div className="mb-4">
-          <label className="form-label">스킬 추가:</label>
-          <div className="d-flex align-items-center">
-            <input
-              type="text"
-              placeholder="스킬 이름"
-              className="form-control me-2"
-              value={newSkill.name}
-              onChange={(e) =>
-                setNewSkill({ ...newSkill, name: e.target.value })
-              }
-            />
-            <input
-              type="file"
-              className="form-control me-2"
-              onChange={handleFileChange}
-            />
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={handleAddSkill}
-            >
-              추가
-            </button>
-          </div>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">선택한 스킬:</label>
-          <ul className="list-group">
-            {skills.map((skill, index) => (
-              <li
-                key={index}
-                className="list-group-item d-flex align-items-center"
-              >
-                <span className="me-2">{skill.name}</span>
-                <button
-                  type="button"
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDeleteSkill(index)}
-                >
-                  삭제
-                </button>
-              </li>
-            ))}
-          </ul>
         </div>
         <div className="mb-4">
           <label className="form-label">상세 내용 작성:</label>
