@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
+import Header from "../../common/component/Header";
 
-const ForgotPasswordComponent = ({ onResetRequested }) => {
+const ForgotPasswordPage = ({ onResetRequested }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +17,7 @@ const ForgotPasswordComponent = ({ onResetRequested }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/member/send-reset-email",
+        "http://localhost:8081/send-reset-email",
         {
           to: email,
         },
@@ -52,13 +53,13 @@ const ForgotPasswordComponent = ({ onResetRequested }) => {
     <Container
       className="bg-dark text-white p-4 rounded shadow-lg mt-5"
       style={{
-        maxWidth: "500px",
         width: "100%",
         height: "100vh",
         background: "black",
         color: "white",
       }}
     >
+      <Header />
       <h3 className="text-center mb-4">비밀번호 재설정</h3>
       {message && (
         <Alert variant="success" className="text-white bg-success">
@@ -96,4 +97,4 @@ const ForgotPasswordComponent = ({ onResetRequested }) => {
   );
 };
 
-export default ForgotPasswordComponent;
+export default ForgotPasswordPage;

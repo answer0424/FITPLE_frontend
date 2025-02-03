@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginContextProvider from "./mainpage/contexts/LoginContextProvider";
 import MainPage from "./mainpage/pages/MainPage";
 import ResetPasswordPage from "./mainpage/pages/ResetPasswordPage";
+import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 
 function App() {
   return (
@@ -19,6 +20,10 @@ function App() {
             <Route path="/register/user" Component={UserRegister}></Route>
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
             <Route path="/reset-password" Component={ResetPasswordPage}></Route>
+            <Route
+              path="/forgot-password"
+              Component={ForgotPasswordPage}
+            ></Route>
           </Routes>
         </LoginContextProvider>
       </BrowserRouter>
