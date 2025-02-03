@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-const TrainerMatchList = ({ userId, hbtiTypes }) => {
+const TrainerMatchList = ({ userId }) => {  // hbtiTypes prop 제거됨
   const [trainers, setTrainers] = useState(null);
   const [error, setError] = useState(null);
 
@@ -14,7 +14,7 @@ const TrainerMatchList = ({ userId, hbtiTypes }) => {
         }
 
         const response = await fetch(
-          `${import.meta.env.VITE_Server}/api/quiz/${userId}/result/match?hbti=${hbtiTypes.join(',')}`,
+          `${import.meta.env.VITE_Server}/api/quiz/${userId}/result/match`,  // URL 단순화
           {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -22,6 +22,11 @@ const TrainerMatchList = ({ userId, hbtiTypes }) => {
             }
           }
         );
+
+        if (response.status === 204) {
+          setTrainers([]);
+          return;
+        }
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -35,10 +40,10 @@ const TrainerMatchList = ({ userId, hbtiTypes }) => {
       }
     };
 
-    if (userId && hbtiTypes.length > 0) {
+    if (userId) {
       fetchMatchingTrainers();
     }
-  }, [userId, hbtiTypes]);
+  }, [userId]);  // hbtiTypes 의존성 제거됨
 
   if (error) return (
     <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>
