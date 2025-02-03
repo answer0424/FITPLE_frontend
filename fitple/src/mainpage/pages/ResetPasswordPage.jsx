@@ -25,7 +25,7 @@ const ResetPasswordPage = ({ onResetSuccess }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8081/reset-password?id=${email}&uuid=${uuid}`,
+        `http://localhost:8081/member/reset-password?id=${email}&uuid=${uuid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
