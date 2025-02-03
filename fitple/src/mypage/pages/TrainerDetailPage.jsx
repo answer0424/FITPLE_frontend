@@ -25,23 +25,18 @@ const TrainerProfilePage = () => {
     }
 
     axios
-      .get("http://localhost:8081/register/user", {
+      .get(`${import.meta.env.VITE_Server}/member/detail`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => {
-        setUser(response.data);
-        console.log("가져온 사용자 정보:", response.data);
-        console.log(response.data.authority);
+      .then((res) => {
+        setUser(res.data);
+        console.log("가져온 사용자 정보:", res.data);
       })
       .catch((error) => {
         console.error("사용자 정보 가져오기 오류:", error);
-        if (error.response?.status === 401) {
-          alert("로그인이 필요합니다.");
-          window.location.href = "/login";
-        }
       });
   }, []);
 
@@ -64,6 +59,10 @@ const TrainerProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      alert("사용자 정보를 가져오는 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
     if (!perPrice || !career) {
       alert("가격과 경력을 입력해주세요.");
       return;
@@ -72,7 +71,7 @@ const TrainerProfilePage = () => {
     const formData = new FormData();
 
     // 필수 필드 추가
-    formData.append("trainerId", user.id); // 트레이너 ID 추가
+    formData.append("trainerId", user.id);
     formData.append("content", content);
     formData.append("perPrice", perPrice);
     formData.append("career", career);
@@ -82,9 +81,9 @@ const TrainerProfilePage = () => {
     formData.append("skills", JSON.stringify(skillNames));
 
     // 이미지 파일들 추가
-    skills.forEach((skill, index) => {
+    skills.forEach((skill) => {
       if (skill.imageFile) {
-        formData.append(`image`, skill.imageFile);
+        formData.append("image", skill.imageFile);
       }
     });
 
@@ -112,6 +111,7 @@ const TrainerProfilePage = () => {
       );
 
       console.log("서버 응답:", res);
+      console.log("서버 응답 ID:", res.data.id);
 
       if (res.status === 200) {
         alert("트레이너 프로필이 등록되었습니다.");
@@ -127,8 +127,6 @@ const TrainerProfilePage = () => {
     }
   };
 
-  // ... 나머지 렌더링 코드는 동일
-
   return (
     <div className="container mt-4">
       <h2 className="text-primary mb-4">트레이너 프로필 작성</h2>
@@ -141,7 +139,7 @@ const TrainerProfilePage = () => {
             width={60}
             height={60}
           />
-          <p className="mb-0 fs-5">안녕하세요, {user.username}님!</p>
+          <p className="mb-0 fs-5">안녕하세요, {user.nickname}님!</p>
         </div>
       )}
       <form onSubmit={handleSubmit} className="needs-validation" noValidate>
