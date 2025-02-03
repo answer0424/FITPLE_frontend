@@ -1,9 +1,12 @@
 /* Header.css */
+
 .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     background-color: black;
+    margin-top: -70px;
+    
 }
 
 .header-left {
