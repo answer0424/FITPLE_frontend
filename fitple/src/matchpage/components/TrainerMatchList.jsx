@@ -84,9 +84,9 @@ const TrainerMatchList = ({ userId }) => {  // hbtiTypes prop 제거됨
             />
           )}
           <h3 style={{ marginBottom: '10px' }}>{trainer.trainerName}</h3>
-          <p>Nickname: {trainer.nickname}</p>
-          <p>HBTI: {trainer.hbti}</p>
-          <p>Gym: {trainer.gymName}</p>
+          <p>{trainer.nickname}</p>
+          <p>{trainer.hbti}</p>
+          <p>{trainer.gymName}</p>
         </div>
       ))}
     </div>
