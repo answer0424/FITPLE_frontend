@@ -139,6 +139,30 @@ const QuizResult = () => {
           </div>
         </div>
       )}
+
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        marginTop: '40px' 
+      }}>
+        <button
+          onClick={() => navigate(`/quiz/${userId}/result/match`, {
+            state: { hbtiTypes: [hbtiType] }
+          })}
+          style={{
+            padding: '15px 30px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '16px'
+          }}
+        >
+          트레이너 매칭하기
+        </button>
+      </div>
+
     </div>
   );
 };
