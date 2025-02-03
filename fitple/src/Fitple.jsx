@@ -14,7 +14,7 @@ function Fitple() {
           <Routes>
             <Route path="/" Component={MainPage}></Route>
             <Route path="/login" Component={LoginPage}></Route>
-            <Route path="/register/user" Component={UserRegister}></Route>
+            <Route path="/register/student" Component={UserRegister}></Route>
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
           </Routes>
           </LoginContextProvider>
