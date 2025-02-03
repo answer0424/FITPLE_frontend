@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import { useState } from 'react'
 import './App.css'
@@ -20,6 +21,17 @@ import TrainerDetailPage from "./trainerpage/pages/TrainerDetailPage";
 
 
 
+=======
+import { useState } from "react";
+import "./App.css";
+import LoginPage from "./mainpage/pages/LoginPage";
+import UserRegister from "./mainpage/pages/UserRegister";
+import TrainerRegister from "./mainpage/pages/TrainerRegister";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginContextProvider from "./mainpage/contexts/LoginContextProvider";
+import MainPage from "./mainpage/pages/MainPage";
+import TrainerDetailPage from "./mypage/pages/TrainerDetailPage";
+>>>>>>> TrainerDetailPage
 
 function App() {
   return (
@@ -32,18 +44,32 @@ function App() {
             <Route path="/login" Component={LoginPage}></Route>
             <Route path="/register/user" Component={UserRegister}></Route>
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
+<<<<<<< HEAD
             <Route path="/quiz" Component={QuizPage}></Route>
             <Route path="/quiz/:userId/result" Component={QuizResult}> </Route>
             <Route path="/hbti" element={<HBTIListpage />} />
              <Route path="/hbti/detail" element={<HBTIListDetailPage />} /> 
             <Route path="/trainer/:trainerId/detail" element={<TrainerDetailPage />} />
+=======
+            <Route
+              path="/member/detail/write"
+              Component={TrainerDetailPage}
+            ></Route>
+>>>>>>> TrainerDetailPage
           </Routes>
-          </LoginContextProvider>
+        </LoginContextProvider>
       </BrowserRouter>
     </>
+<<<<<<< HEAD
   )
 
 }
 
 export default App;
 
+=======
+  );
+}
+
+export default App;
+>>>>>>> TrainerDetailPage
