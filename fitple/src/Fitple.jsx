@@ -1,5 +1,3 @@
-
-import { useState } from 'react'
 import './App.css'
 import LoginPage from './mainpage/pages/LoginPage';
 import UserRegister from './mainpage/pages/UserRegister';
@@ -12,14 +10,10 @@ import QuizResult from './quizpage/pages/QuizResult';
 import HBTIListpage from "./HBTIpage/pages/HBTIListpage";
 import HBTIListDetailPage from "./HBTIpage/pages/HBTIListDetailPage";
 import TrainerDetailPage from "./trainerpage/pages/TrainerDetailPage";
-
-
-
-
-
-
-
-
+import ResetPasswordPage from "./mainpage/pages/ResetPasswordPage";
+import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
+import TrainerDetailPageWrite from './mypage/pages/TrainerDetailPage';
+import MatchPage from './matchpage/pages/MatchPage';
 
 function App() {
   return (
@@ -30,15 +24,20 @@ function App() {
           <Routes>
             <Route path="/" Component={MainPage}></Route>
             <Route path="/login" Component={LoginPage}></Route>
-            <Route path="/register/user" Component={UserRegister}></Route>
+            <Route path="/register/student" Component={UserRegister}></Route>
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
             <Route path="/quiz" Component={QuizPage}></Route>
             <Route path="/quiz/:userId/result" Component={QuizResult}> </Route>
             <Route path="/hbti" Component={HBTIListpage} />
              <Route path="/hbti/detail" Component={HBTIListDetailPage} /> 
             <Route path="/trainer/:trainerId/detail" Component={TrainerDetailPage} />
+            <Route path="/member/detail/write" Component={TrainerDetailPageWrite}></Route>
+            <Route path="/reset-password" Component={ResetPasswordPage}></Route>
+            <Route path="/forgot-password" Component={ForgotPasswordPage}></Route>
+            <Route path="/quiz/:userId/result/match" Component={MatchPage}></Route>
+
           </Routes>
-          </LoginContextProvider>
+        </LoginContextProvider>
       </BrowserRouter>
     </>
   )

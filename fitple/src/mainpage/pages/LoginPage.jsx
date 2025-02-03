@@ -1,12 +1,13 @@
 // LoginForm.js
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import "../assets/styles/App.css";
 import { LoginContext } from "../contexts/LoginContextProvider";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
@@ -15,15 +16,15 @@ const LoginPage = () => {
 
   const onLogin = (e) => {
     e.preventDefault();
-    
-    login(username, password, rememberUserId);  // 로그인 진행
-  }
+
+    login(username, password, rememberUserId); // 로그인 진행
+  };
 
   useEffect(() => {
     // 쿠키에 저장된 아이디 가져오기
-    const rememberId = Cookies.get('rememberId');
+    const rememberId = Cookies.get("rememberId");
     console.log(`쿠키 rememberId : ${rememberId}`);
-    setRememberUserId(rememberId)    
+    setRememberUserId(rememberId);
   }, []);
 
   const handleLogin = () => {
@@ -33,18 +34,29 @@ const LoginPage = () => {
 
   // oauth
   const onKakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/kakao`;
-    console.log('kakao oauth 로그인');
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/kakao`;
+    console.log("kakao oauth 로그인");
   };
 
   const onGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
-    console.log('google oauth 로그인');
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/google`;
+    console.log("google oauth 로그인");
   };
 
   const onNaverLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
-    console.log('naver oauth 로그인');
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/naver`;
+    console.log("naver oauth 로그인");
+  };
+
+  const handleClick = () => {
+    alert("Forgot Password?");
+    navigate("/reset-password");
   };
 
   return (
@@ -69,27 +81,37 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="forgot-password-link">
-              <button onClick={() => alert("Forgot Password?")}>
-                Forgot Password?
-              </button>
+              <button onClick={handleClick}>Forgot Password?</button>
             </div>
             <div className="button-container">
               <button type="submit">Login</button>
             </div>
           </form>
           <div className="login-box">
-            <button className="social-button" id="kakao-connect" onClick={onKakaoLogin}>
+            <button
+              className="social-button"
+              id="kakao-connect"
+              onClick={onKakaoLogin}
+            >
               <span>Connect with Kakao</span>
             </button>
-            <button className="social-button" id="google-connect" onClick={onGoogleLogin}>
+            <button
+              className="social-button"
+              id="google-connect"
+              onClick={onGoogleLogin}
+            >
               <span>Connect with Google</span>
             </button>
-            <button className="social-button" id="naver-connect" onClick={onNaverLogin}>
+            <button
+              className="social-button"
+              id="naver-connect"
+              onClick={onNaverLogin}
+            >
               <span>Connect with Naver</span>
             </button>
           </div>
           <div className="signup-link">
-            <Link to="/register/user">
+            <Link to="/register/student">
               <button>Don't have an account? Sign Up</button>
             </Link>
           </div>

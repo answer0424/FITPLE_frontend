@@ -55,7 +55,9 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
                     userId: userId,
                     answers: Object.values(answers)
                 })
+                
             });
+            console.log(saveResponse.headers.get('content-type'));
 
           if (!saveResponse.ok) {
               throw new Error('Failed to save results');
