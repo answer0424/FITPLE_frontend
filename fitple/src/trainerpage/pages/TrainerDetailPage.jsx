@@ -41,25 +41,34 @@ function TrainerDetailPage() {
     const calculateAverageRating = (reviews) => {
         if (!reviews.length) return 0;
         const total = reviews.reduce((acc, review) => acc + review.rating, 0);
-        return (total / reviews.length).toFixed(1); // 소수점 첫째 자리까지 계산
+        return (total / reviews.length).toFixed(1); 
     };
+
+    // 연차 계산 함수
+    const calculateYears = (careerStartDate) => {
+        if (!careerStartDate) return "정보 없음";
+        const startYear = new Date(careerStartDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        return `${currentYear - startYear}년`;
+    };
+
     const renderStars = (averageRating) => {
-        const fullStars = Math.floor(averageRating); // 꽉 찬 별 개수
-        const decimalPart = averageRating - fullStars; // 소수점 부분 추출
-        const halfStar = decimalPart >= 0.5 ? 1 : 0; // 반 별 여부 체크
-        const emptyStars = 5 - fullStars - halfStar; // 빈 별 개수
+        const fullStars = Math.floor(averageRating); 
+        const decimalPart = averageRating - fullStars; 
+        const halfStar = decimalPart >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar; 
 
         return (
             <div className="rating">
-            {/* 꽉 찬 별 */}
+         
             {Array(fullStars)
                 .fill(null)
                 .map((_, i) => (
                     <span key={`full-${i}`} className="full-star">★</span>
                 ))}
-            {/* 반 별 (0.5 이상일 때 추가) */}
+           
             {halfStar === 1 && <span className="half-star">★</span>}
-            {/* 빈 별 */}
+        
             {Array(emptyStars)
                 .fill(null)
                 .map((_, i) => (
@@ -77,38 +86,54 @@ function TrainerDetailPage() {
         <>
             <Header />
 
-            {/* 메인 컨텐츠 */}
             <div className="trainer-container">
-                <div className="trainer-card">
-                    {/* 상단 트레이너 정보 */}
-                    <div className="trainer-header">
-                        <div className="profile-section">
-                            <img
-                                src={`${BASE_URL}${trainer.trainerProfileImage}`}
-                                alt={`${trainer.trainerName} 프로필`}
-                                className="profile-image"
-                            />
-                            <h1 className="trainer-name">{trainer.trainerName}</h1>
-                            {renderStars(averageRating)}
-                            <p className="rating-text">{averageRating}점</p>
-                        </div>
-                        <div className="info-section">
-                            <p>
-                                <strong>1회 PT 가격:</strong> {trainer.perPrice.toLocaleString()}원
-                            </p>
-                            <p>
-                                <strong>헬스장:</strong> {trainer.gymName || "정보 없음"}
-                            </p>
-                            <p>
-                                <strong>연차:</strong> 2년
-                            </p>
-                            <p>
-                                <strong>HBTI:</strong> {trainer.hbti || "정보 없음"}
-                            </p>
-                        </div>
-                    </div>
+    <div className="trainer-card">
+      
+        <div className="trainer-header">
+          
+            <div className="profile-section">
+                <img
+                    src={`${BASE_URL}${trainer.trainerProfileImage}`}
+                    alt={`${trainer.trainerName} 프로필`}
+                    className="profile-image"
+                />
+            </div>
 
-                    {/* 탭 네비게이션 */}
+            
+            <div className="info-section">
+                <h1 className="trainer-name">{trainer.trainerName}</h1>
+                {renderStars(averageRating)}
+                <p className="rating-text">{averageRating}점</p>
+
+             
+                <div className="extra-info">
+                    <div className="info-box">
+                        <p><strong>연차:</strong> {calculateYears(trainer.career)}</p>
+                    </div>
+                    <div className="info-box">
+                        <p><strong>HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div className="details-section">
+                <div className="detail-box">
+                    <p><strong>1회 PT 가격:</strong></p>
+                    <p>{trainer.perPrice.toLocaleString()}원</p>
+                </div>
+                <div className="detail-box">
+                    <p><strong>헬스장:</strong></p>
+                    <p>{trainer.gymName || "정보 없음"}</p>
+                </div>
+                <div className="detail-box">
+                    <p><strong>문의:</strong></p>
+                    <p>채팅문의</p>
+                </div>
+            </div>
+        </div>
+
+              
                     <div className="trainer-tabs">
                         <button
                             className={`tab-button ${activeTab === "home" ? "active" : ""}`}
@@ -130,7 +155,7 @@ function TrainerDetailPage() {
                         </button>
                     </div>
 
-                    {/* 탭 컨텐츠 */}
+      
                     <div className="tab-content">
                         {activeTab === "home" && (
                             <TrainerHome

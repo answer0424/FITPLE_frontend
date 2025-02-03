@@ -1,4 +1,13 @@
 /* HBTI 제목 스타일 */
+body {
+  overflow-x: hidden; 
+  background: linear-gradient(180deg, #000000, #1b2735, #1b2735); /* 헤더와 연결되는 어두운 그라데이션 */
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
 .hbti-header {
   text-align: center;
   color: #87cefa;
