@@ -19,15 +19,18 @@ const ResetPasswordComponent = ({ email, onResetSuccess }) => {
     }
 
     try {
-      const response = await fetch("/member/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          email,
-          code,
-          newPassword,
-        }),
-      });
+      const response = await fetch(
+        "http://loacalhost:8081/member/reset-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            email,
+            code,
+            newPassword,
+          }),
+        }
+      );
 
       const result = await response.text();
 
