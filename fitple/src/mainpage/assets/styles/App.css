@@ -1,0 +1,385 @@
+.App {
+    font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    min-height: 100vh;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 0 20px;
+    padding-bottom: 50px;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+.progress-bar-container {
+    width: 70%;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 0, 255, 0.7), rgba(0, 255, 255, 0.7));
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.answers {
+    width: 70%;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow-y: hidden; /* 내부 스크롤을 숨깁니다 */
+    max-height: 50%;
+    text-align: center;
+    position: relative;
+    overflow-y: auto; /* 외부에서 스크롤을 제어합니다 */
+}
+
+
+.answer-item {
+    margin-bottom: 10px;
+}
+
+.answer-item strong {
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.answer-item p {
+    margin: 5px 0;
+    color: #FFF;
+}
+
+.question-container {
+    text-align: center;
+    z-index: 1;
+    color: white;
+    margin-top: 20px;
+}
+
+.input-container {
+    margin-top: 20px;
+}
+
+input,
+.date-picker-input {
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid white;
+  border-radius: 5px;
+  background: transparent;
+  color: white;
+  outline: none;
+  width: 100%;
+  max-width: 700px;
+  transition: border-color 0.3s ease;
+  font-size: 24px; /* 크기를 30텍스트로 통일 */
+}
+
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 700px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #A1D0FC;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 10px;
+}
+
+button:hover {
+    background-color: #5aaefc;
+}
+
+button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.signup-link {
+    margin-top: 20px;
+}
+
+.signup-link button {
+    background: none;
+    border: none;
+    color: #A1D0FC;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.signup-link button:hover {
+    color: #5aaefc;
+}
+
+.signup-toggle {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.signup-toggle button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #A1D0FC;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signup-toggle button:hover {
+    background-color: #5aaefc;
+}
+
+.signup-toggle button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.back-to-login {
+    background-color: #FFC107; /* 새로운 버튼 색상 */
+}
+
+.back-to-login:hover {
+    background-color: #FFA000; /* 새로운 버튼 색상 */
+}
+html * {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.login-box {
+    background: #000;
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.login-box:hover {
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.login-box h2 {
+    margin: 20px 0 20px;
+    padding: 0;
+    text-transform: uppercase;
+    color: #4688F1;
+}
+
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* If you also want to center the text horizontally */
+    background-position: 25px 0px;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    height: 50px;
+    text-align: left;
+    text-decoration: none;
+    text-transform: uppercase;
+    vertical-align: middle;
+    width: 80%;
+    border-radius: 3px;
+    margin: 20px auto;
+    outline: rgb(255, 255, 255) none 0px;
+    padding-left: 20%;
+    transition: all 0.2s cubic-bezier(0.72, 0.01, 0.56, 1) 0s;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+
+#kakao-connect {
+    background: rgb(255, 255, 255) url('../images/kakaoBefore.png') no-repeat scroll -10px 0px / 70px 50px padding-box border-box;
+    border: 1px solid rgb(255, 235, 52);
+}
+
+#kakao-connect:hover {
+    border-color: rgb(255, 235, 52);
+    background: rgb(255, 235, 52) url('../images/kakaoAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    -webkit-transition: all .8s ease-out;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease-out;
+}
+
+#kakao-connect span {
+    box-sizing: border-box;
+    color: rgb(255, 235, 52);
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    border: 0px none rgb(255, 255, 255);
+    outline: rgb(255, 255, 255) none 0px;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+#kakao-connect:hover span {
+    color: #FFF;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+#google-connect {
+    background: rgb(255, 255, 255) url('https://raw.githubusercontent.com/eswarasai/social-login/master/img/google-plus.png') no-repeat scroll 5px 0px / 50px 50px padding-box border-box;
+    border: 1px solid rgb(220, 74, 61);
+}
+
+#google-connect:hover {
+    border-color: rgb(220, 74, 61);
+    background: rgb(220, 74, 61) url('https://raw.githubusercontent.com/eswarasai/social-login/master/img/google-plus-white.png') no-repeat scroll 5px 0px / 50px 50px padding-box border-box;
+    -webkit-transition: all .8s ease-out;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease-out;
+}
+
+#google-connect span {
+    box-sizing: border-box;
+    color: rgb(220, 74, 61);
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    border: 0px none rgb(220, 74, 61);
+    outline: rgb(255, 255, 255) none 0px;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+#google-connect:hover span {
+    color: #FFF;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+#naver-connect {
+    background: rgb(255, 255, 255) url('../images/naverBefore.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    border: 1px solid rgb(3, 199, 90);
+}
+
+#naver-connect:hover {
+    border-color: rgb(3, 199, 90);
+    background: rgb(3, 199, 90) url('../images/naverAfter.png') no-repeat scroll 10px 10px / 30px 30px padding-box border-box;
+    -webkit-transition: all .8s ease-out;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease-out;
+}
+
+#naver-connect span {
+    box-sizing: border-box;
+    color: rgb(3, 199, 90);
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    border: 0px none rgb(220, 74, 61);
+    outline: rgb(255, 255, 255) none 0px;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+#naver-connect:hover span {
+    color: #FFF;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.forgot-password-link {
+    text-align: right;
+    margin: 10px 0;
+  }
+  
+  .forgot-password-link button {
+    background: none;
+    border: none;
+    color: #A1D0FC;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .forgot-password-link button:hover {
+    color: #5aaefc;
+  }
+  
+  .date-picker-input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid white;
+    border-radius: 5px;
+    background: transparent;
+    color: white;
+    outline: none;
+    width: 100%;
+    max-width: 400px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .date-picker-input:hover,
+  .date-picker-input:focus {
+    border-color: #FFD700;
+  }
+  
