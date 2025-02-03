@@ -25,7 +25,7 @@ const TrainerProfilePage = () => {
     }
 
     axios
-      .get(`${import.meta.env.VITE_Server}/member/id`, {
+      .get(`${import.meta.env.VITE_Server}/member/detail`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -57,6 +57,23 @@ const TrainerProfilePage = () => {
       });
   }, []);
 
+  const handleFileChange = (e) => {
+    setNewSkill({ ...newSkill, imageFile: e.target.files[0] });
+  };
+
+  const handleAddSkill = () => {
+    if (!newSkill.name || !newSkill.imageFile) {
+      alert("스킬 이름과 이미지를 모두 입력하세요.");
+      return;
+    }
+    setSkills([...skills, newSkill]);
+    setNewSkill({ name: "", imageFile: null });
+  };
+
+  const handleRemoveSkill = (index) => {
+    setSkills(skills.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
@@ -74,9 +91,12 @@ const TrainerProfilePage = () => {
     formData.append("perPrice", perPrice);
     formData.append("career", career);
 
-    const skillNames = skills.map((skill) => skill.name);
-    formData.append("skills", JSON.stringify(skillNames));
+    // 스킬을 개별 파라미터로 추가
+    skills.forEach((skill) => {
+      formData.append("skills", skill.name);
+    });
 
+    // 이미지 파일 추가
     skills.forEach((skill) => {
       if (skill.imageFile) {
         formData.append("image", skill.imageFile);
@@ -103,9 +123,7 @@ const TrainerProfilePage = () => {
         },
       });
 
-      if (res.status === 200) {
-        alert("트레이너 프로필이 등록되었습니다.");
-      }
+      alert("트레이너 프로필이 등록되었습니다.");
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
       alert(
@@ -152,13 +170,50 @@ const TrainerProfilePage = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="form-label">상세 내용 작성:</label>
-          <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            value={content}
-            onChange={setContent}
-          />
+          <label className="form-label">스킬 추가:</label>
+          <div className="d-flex align-items-center">
+            <input
+              type="text"
+              placeholder="스킬 이름"
+              className="form-control me-2"
+              value={newSkill.name}
+              onChange={(e) =>
+                setNewSkill({ ...newSkill, name: e.target.value })
+              }
+            />
+            <input
+              type="file"
+              className="form-control me-2"
+              onChange={handleFileChange}
+            />
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={handleAddSkill}
+            >
+              추가
+            </button>
+          </div>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">선택한 스킬:</label>
+          <ul className="list-group">
+            {skills.map((skill, index) => (
+              <li
+                key={index}
+                className="list-group-item d-flex align-items-center"
+              >
+                <span className="me-2">{skill.name}</span>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleRemoveSkill(index)}
+                >
+                  삭제
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
         <button type="submit" className="btn btn-primary w-100 mt-3">
           등록하기
