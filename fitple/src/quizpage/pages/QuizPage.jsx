@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import Cookies from 'js-cookie'; // 새로 추가: js-cookie import
+import Cookies from 'js-cookie';
 import GameScene from '../components/3d/GameScene';
 import QuizComponent from '../components/base/QuizComponent';
 import UIOverlay from '../components/ui/UIOverlay';
