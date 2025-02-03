@@ -34,9 +34,9 @@ function App() {
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
             <Route path="/quiz" Component={QuizPage}></Route>
             <Route path="/quiz/:userId/result" Component={QuizResult}> </Route>
-            <Route path="/hbti" element={<HBTIListpage />} />
-             <Route path="/hbti/detail" element={<HBTIListDetailPage />} /> 
-            <Route path="/trainer/:trainerId/detail" element={<TrainerDetailPage />} />
+            <Route path="/hbti" Component={HBTIListpage} />
+             <Route path="/hbti/detail" Component={HBTIListDetailPage} /> 
+            <Route path="/trainer/:trainerId/detail" Component={TrainerDetailPage} />
           </Routes>
           </LoginContextProvider>
       </BrowserRouter>

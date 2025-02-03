@@ -5,7 +5,7 @@ import "./css/TrainerCertifications.css";
 function TrainerCertifications({ certifications, BASE_URL }) {
     const [selectedImage, setSelectedImage] = useState(null);
 
-    const handleImageClick = (imageUrl) => {
+    const handleItemClick = (imageUrl) => {
         setSelectedImage(imageUrl);
     };
 
@@ -13,67 +13,46 @@ function TrainerCertifications({ certifications, BASE_URL }) {
         setSelectedImage(null);
     };
 
-    // 고정된 아이콘 경로 (public 폴더 기반 경로)
-    const fixedIconPath = "/icons/certificate-icon.png";
+    const fixedIconPath = "/icons/certificate-icon.png"; // 고정된 아이콘 경로
 
     return (
-        <div>
+        <div className="certifications-container">
             <h3 className="text-center mb-4">검증된 자격 사항</h3>
-            <ul style={{ listStyle: "none", padding: 0 }}>
+            <ul className="certifications-list">
                 {certifications.map((cert, index) => (
                     <li
                         key={index}
-                        className="d-flex align-items-center mb-3 bg-dark text-light p-2 rounded"
+                        className="certification-item"
+                        onClick={() => handleItemClick(cert.imageUrl)} // 리스트 아이템 클릭 핸들러
                     >
                         <img
-                            src={fixedIconPath} // 고정된 아이콘 경로
+                            src={fixedIconPath}
                             alt="자격증 아이콘"
-                            style={{
-                                width: "50px",
-                                height: "50px",
-                                marginRight: "15px",
-                                objectFit: "contain",
-                            }}
+                            className="certification-icon"
                         />
-                        <span className="flex-grow-1">{cert.skills}</span>
-                        <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleImageClick(cert.imageUrl)}
-                        >
-                            사진보기
-                        </button>
+                        <span className="certification-skill">{cert.skills}</span>
                     </li>
                 ))}
             </ul>
 
             {/* 모달 */}
             {selectedImage && (
-                <div
-                    className="modal fade show"
-                    style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-                    onClick={closeModal}
-                >
+                <div className="modal-overlay" onClick={closeModal}>
                     <div
-                        className="modal-dialog modal-dialog-centered"
+                        className="modal-content"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">자격증 사진</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    onClick={closeModal}
-                                ></button>
-                            </div>
-                            <div className="modal-body text-center">
-                                <img
-                                    src={`${BASE_URL}${selectedImage}`}
-                                    alt="자격증 사진"
-                                    className="img-fluid rounded"
-                                />
-                            </div>
-                        </div>
+                        <img
+                            src={`${BASE_URL}${selectedImage}`}
+                            alt="자격증 사진"
+                            className="modal-image"
+                        />
+                        <button
+                            className="close-button"
+                            onClick={closeModal}
+                        >
+                            닫기
+                        </button>
                     </div>
                 </div>
             )}
