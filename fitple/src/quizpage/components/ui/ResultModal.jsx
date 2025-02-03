@@ -38,7 +38,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
   const handleViewDetails = async () => {
       if (!userId) {
           alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요.');
-          // TODO: Navigate to login/signup page
+          navigate('/login');
           return;
       }
 
