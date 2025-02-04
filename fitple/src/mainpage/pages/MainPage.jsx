@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import sectionImg from './../assets/images/sectionImg.png'
 import Footer from '../../common/component/Footer';
+import ChatIcon from '../../common/component/ChatIcon';
 
 const MainPage = () => {
 
@@ -55,6 +56,7 @@ const MainPage = () => {
                     <img src={sectionImg} alt="Trainer Match Image"/>
                 </div>
                 <Footer/>
+                <ChatIcon/>
             </div>
         </>
     );
