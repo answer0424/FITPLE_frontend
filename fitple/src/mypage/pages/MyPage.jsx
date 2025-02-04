@@ -21,6 +21,8 @@
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
+      // console.log(`${import.meta.env.VITE_Server}/register/user`);
+
       axios.get(`${import.meta.env.VITE_Server}/register/user`, {
         withCredentials: true,
         headers: {
@@ -28,8 +30,10 @@
         },
       })
       .then((response) => {
-        setUser(response.data.authority);
+        setUser(response.data);
         // console.log("가져온 사용자 정보:", response.data);
+        // console.log("가져온 사용자 정보:", typeof(user));
+        // console.log("가져온 사용자 정보:", user);
       })
       .catch((error) => {
         // console.error("사용자 정보 가져오기 오류:", error);
@@ -41,39 +45,48 @@
       }
     }, []);
 
+    useEffect(() => {
+      if (user) {
+        // console.log("가져온 사용자:", user.authority);
+      }
+    }, [user]); // user가 변경될 때마다 해당 값을 출력
+
     const handleNoPermission = () => {
       if (!showModal) {  setShowModal(true);  }
     };
 
     const handleCloseModal = () => {
       setShowModal(false);
-      navigate(-1);
+      navigate('/login');
     };
 
-    //아직 불러오지 못했을 때 보여줄 부분. 차후 수정
-    if (user === null) {
-      return <div>로딩 중...</div>;
-    }
-
-    return (
+    return(
+      <div>
+      {user ? (
         <>
-        <ProfileComponent/>
-        <Container>
-        <NoPermissionModal show={showModal} onClose={handleCloseModal} />
-          <Routes>
-            {user === 'ROLE_TRAINER' ? (
-              <Route path='/member' element={<TrainerComponent />} />
-            ) : user === 'ROLE_STUDENT' ? (
-              <Route path='/member' element={<StudentComponent />} />
-            ) : user === 'ROLE_ADMIN' ? (
-              <Route path='/admin' element={<StudentComponent />} /> //차후 어드민 페이지 연결
-            ) : (
-              <Route path='/member' element={handleNoPermission()} />
-            )}
-        </Routes>
-        </Container>
+          <ProfileComponent user={user} />
+          <Container>
+            <NoPermissionModal show={showModal} onClose={handleCloseModal} />
+            <Routes>
+              {/* {user.authority === 'ROLE_TRAINER' ? (
+                <Route path='/member' element={<TrainerComponent user={user} />} />) : 
+              user.authority === 'ROLE_STUDENT' ? (
+                <Route path='/member' element={<StudentComponent user={user} />} />
+              ) : user.authority === 'ROLE_ADMIN' ? (
+                <Route path='/admin' element={<StudentComponent />} /> //차후 어드민 페이지 연결
+              ) : (
+                <Route path='/member' element={handleNoPermission()} />
+              )} */}
+              <Route path='/membe' element={<StudentComponent user={user} />} />
+            </Routes>
+          </Container>
         </>
-    );
-  };
+      ) : (
+        <p>사용자 정보를 불러오는 중...</p>
+      )}
+    </div>
+  )
+  
+}
 
   export default MyPage;

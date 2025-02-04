@@ -31,11 +31,8 @@ function App() {
             <Route path="/hbti" element={<HBTIListpage />} />
             <Route path="/hbti/detail" element={<HBTIListDetailPage />} /> 
             <Route path="/trainer/:trainerId/detail" element={<TrainerDetailPage />} />
-            <Route path="/member" element={<MyPage />} />
-            <Route
-              path="/member/detail/write"
-              Component={TrainerDetailPageWrite}
-            ></Route>
+            <Route path="/member/*" element={<MyPage />} />
+            <Route path="/member/detail/write" Component={TrainerDetailPageWrite}></Route>
             <Route path="/reset-password" Component={ResetPasswordPage}></Route>
             <Route
               path="/forgot-password"

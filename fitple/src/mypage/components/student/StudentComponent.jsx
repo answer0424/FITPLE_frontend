@@ -5,21 +5,20 @@ import ProfileComponent from '../ProfileComponent';
 import CalenderComponent from '../CalenderComponent';
 import CouponComponent from '../CouponComponent';
 
-const StudentComponent = () => {
-
-
-
+const StudentComponent = ({ user }) => {
     return (
         <>
-        <ProfileComponent/>
+        <div>dasdasdasd</div>
+        {/* <ProfileComponent/>
         <BrowserRouter>
         <Container>
             <Routes>
                 <Route path='/Calender' Component={CalenderComponent}></Route>
                 <Route path='/Coupon' Component={CouponComponent}></Route>
+                <Route index element={<CalenderComponent />} />
             </Routes>
         </Container>
-        </BrowserRouter>
+        </BrowserRouter> */}
         </>
     );
 };
