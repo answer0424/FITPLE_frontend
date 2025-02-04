@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 
 const LINE_SETTINGS = {
-    color: "#4fc3f7",
+    color: "#3B82F6",
     lineWidth: 80,
     dashScale: 50,
     dashSize: 3,
