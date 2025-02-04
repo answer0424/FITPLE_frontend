@@ -4,6 +4,7 @@ import '../assets/styles/MainPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import sectionImg from './../assets/images/sectionImg.png'
+import Footer from '../../common/component/Footer';
 
 const MainPage = () => {
 
@@ -53,26 +54,7 @@ const MainPage = () => {
                     </div>
                     <img src={sectionImg} alt="Trainer Match Image"/>
                 </div>
-            </div>
-            <div class="footer-container">
-                <div class="footer-line">
-                    <div class="footer-circle"></div>
-                </div>
-                <div class="footer-text">FITPLE</div>
-                <div className='row'>
-                    <div className='footer-menu'>
-                        <Link to={"/"}>HBTI TEST</Link>
-                        <Link to={"/"}>About HBTI</Link>
-                        <Link to={"/"}>MyPage</Link>
-                    </div>
-                    <div className='github'>
-                        <a href="">이경원</a>
-                        <a href="">이동희</a>
-                        <a href="">김범순</a>
-                        <a href="">현지윤</a>
-                        <a href="">박준우</a>
-                    </div>
-                </div>
+                <Footer/>
             </div>
         </>
     );
