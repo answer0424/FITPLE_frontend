@@ -68,16 +68,15 @@
           <Container>
             <NoPermissionModal show={showModal} onClose={handleCloseModal} />
             <Routes>
-              {/* {user.authority === 'ROLE_TRAINER' ? (
-                <Route path='/member' element={<TrainerComponent user={user} />} />) : 
+              {user.authority === 'ROLE_TRAINER' ? (
+                <Route index element={<TrainerComponent user={user} />} />) : 
               user.authority === 'ROLE_STUDENT' ? (
-                <Route path='/member' element={<StudentComponent user={user} />} />
+                <Route index element={<StudentComponent user={user} />} />
               ) : user.authority === 'ROLE_ADMIN' ? (
                 <Route path='/admin' element={<StudentComponent />} /> //차후 어드민 페이지 연결
               ) : (
-                <Route path='/member' element={handleNoPermission()} />
-              )} */}
-              <Route path='/membe' element={<StudentComponent user={user} />} />
+                <Route index element={handleNoPermission()} />
+              )}
             </Routes>
           </Container>
         </>

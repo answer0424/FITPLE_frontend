@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileComponent = ({ user }) => {
 
   const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -22,13 +23,14 @@ const ProfileComponent = ({ user }) => {
       },
     })
     .then((response) => {
-      console.log(response.data);
-      console.log(typeof(response.data));
+      console.log(response.data.hbti);
+      // console.log(typeof(response.data));
       setUserInfo(response.data);
     })
     .catch((error) => {
       console.log("에러");
       console.error(error.message);
+      navigate('/')
     })
   }, [user])
 
@@ -41,7 +43,7 @@ const ProfileComponent = ({ user }) => {
         <p><strong>User ID:</strong> {userInfo.userId}</p>
         <p><strong>Nickname:</strong> {userInfo.nickname}</p>
         <p><strong>Profile Image:</strong> <img src={userInfo.profileImage} alt="Profile" width="100" /></p>
-        <p><strong>HBTI:</strong> {userInfo.HBTI}</p>
+        <p><strong>HBTI:</strong> {userInfo.hbti}</p>
         <p><strong>Address:</strong> {userInfo.address}</p>
         <p><strong>Email:</strong> {userInfo.email}</p>
         <p><strong>Birth:</strong> {userInfo.birth}</p>

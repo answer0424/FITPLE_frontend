@@ -9,16 +9,13 @@ const StudentComponent = ({ user }) => {
     return (
         <>
         <div>dasdasdasd</div>
-        {/* <ProfileComponent/>
-        <BrowserRouter>
         <Container>
             <Routes>
-                <Route path='/Calender' Component={CalenderComponent}></Route>
-                <Route path='/Coupon' Component={CouponComponent}></Route>
+                <Route path='Calender' Component={CalenderComponent}></Route>
+                <Route path='Coupon' Component={CouponComponent}></Route>
                 <Route index element={<CalenderComponent />} />
             </Routes>
         </Container>
-        </BrowserRouter> */}
         </>
     );
 };
