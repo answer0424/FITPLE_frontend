@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
 function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     const [reviews, setReviews] = useState([]); // 리뷰 목록
@@ -11,6 +11,11 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     const [sortOption, setSortOption] = useState("latest"); // 정렬 옵션
     const token = Cookies.get("accessToken"); // JWT 토큰
 
+    // ✅ 유효한 리뷰만 필터링
+    const filteredReviews = useMemo(() => {
+        return reviews.filter((review) => review.rating && review.content);
+    }, [reviews]);
+
     // ✅ 리뷰 목록 불러오기
     const fetchReviews = async () => {
         try {
@@ -19,11 +24,8 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
             });
             if (!response.ok) throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
             const data = await response.json();
-
-            // 유효한 리뷰만 필터링
-            const validReviews = data.filter((review) => review.rating && review.content);
-            setReviews(validReviews);
-            console.log("리뷰 데이터:", validReviews);
+            setReviews(data);
+            console.log("리뷰 데이터:", data);
         } catch (err) {
             console.error("리뷰 불러오기 에러:", err.message);
         }
@@ -31,7 +33,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
 
     // ✅ 리뷰 정렬 함수
     const getSortedReviews = () => {
-        const sortedReviews = [...reviews];
+        const sortedReviews = [...filteredReviews];
         if (sortOption === "latest") {
             sortedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // 최신순
         } else if (sortOption === "highest") {
@@ -65,6 +67,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
             });
 
             if (!response.ok) throw new Error("리뷰 작성에 실패했습니다.");
+            window.location.reload();
 
             const newReview = await response.json();
             setReviews((prevReviews) => [newReview, ...prevReviews]); // UI 업데이트
@@ -72,15 +75,15 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
             setReviewContent(""); // 리뷰 내용 초기화
             setRating(5); // 평점 초기화
             setError(""); // 에러 메시지 초기화
-            console.log("트레이닝 ID:", trainingId);
+            console.log("작성된 리뷰 데이터:", newReview);
         } catch (err) {
             console.error("리뷰 작성 에러:", err.message);
             setError("리뷰 작성 중 문제가 발생했습니다. 다시 시도해주세요.");
         }
     };
 
-     // ✅ 리뷰 삭제 (SweetAlert2 추가)
-     const handleDeleteReview = async (reviewId) => {
+    // ✅ 리뷰 삭제 (SweetAlert2 추가)
+    const handleDeleteReview = async (reviewId) => {
         Swal.fire({
             title: "정말 삭제하시겠습니까?",
             text: "삭제 후에는 복구할 수 없습니다.",
@@ -100,8 +103,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
 
                     if (!response.ok) throw new Error("리뷰 삭제에 실패했습니다.");
 
-                    // 삭제 성공 후 UI 업데이트
-                    setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+                    window.location.reload();
 
                     Swal.fire("삭제 완료", "리뷰가 삭제되었습니다.", "success");
                 } catch (err) {
@@ -136,7 +138,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                     onClick={() => setIsModalOpen(true)}
                     disabled={!trainingId} // 트레이닝 ID가 없으면 버튼 비활성화
                 >
-                    {trainingId ? "리뷰 작성" : "리뷰 작성"}
+                    리뷰 작성
                 </button>
 
                 {/* 정렬 옵션 */}
@@ -152,12 +154,12 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                 </select>
             </div>
 
-            {reviews.length > 0 ? (
+            {filteredReviews.length > 0 ? (
                 <ul>
                     {getSortedReviews().map((review) => (
                         <li key={review.id} style={{ marginBottom: "15px", display: "flex", alignItems: "center", gap: "10px" }}>
                             <img
-                                src={`${BASE_URL}${review.userProfileImage}`} // BASE_URL 추가
+                                src={`${BASE_URL}${review.userProfileImage}`}
                                 alt={`${review.username} 프로필`}
                                 style={{
                                     width: "50px",
@@ -165,7 +167,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                                     borderRadius: "50%",
                                     objectFit: "cover",
                                 }}
-                                onError={(e) => (e.target.src = "/src/assets/logo.png")} // 기본 이미지 처리
+                                onError={(e) => (e.target.src = "/src/assets/logo.png")}
                             />
                             <div>
                                 <p>
