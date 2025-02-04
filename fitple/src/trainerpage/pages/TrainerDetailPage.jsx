@@ -4,9 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TrainerCertifications from "../components/TrainerCertifications";
 import TrainerReviews from "../components/TrainerReviews";
 import TrainerHome from "../components/TrainerHome"; 
+import TrainerStatusModal from "../components/TrainerStatusModal"; // 모달 컴포넌트 추가
 import "../components/css/TrainerDetailPage.css";
 import Header from "../../common/component/Header";
 import Cookies from "js-cookie";
+import { FaCommentDots } from "react-icons/fa"; // FontAwesome 채팅 아이콘
 
 function TrainerDetailPage() {
     const { trainerId } = useParams();
@@ -15,16 +17,12 @@ function TrainerDetailPage() {
     const [reviews, setReviews] = useState([]);
     const [activeTab, setActiveTab] = useState("home");
     const [error, setError] = useState(null);
- 
-
+    const [user, setUser] = useState(null);
 
     const BASE_URL = import.meta.env.VITE_Server;
-  
-        
 
     const fetchTrainerDetails = async (token) => {
         try {
-            // Fetch trainer details
             const trainerResponse = await fetch(`${BASE_URL}/quiz/trainers/${trainerId}/detail`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -35,9 +33,9 @@ function TrainerDetailPage() {
             if (!trainerResponse.ok) throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
 
             const trainerData = await trainerResponse.json();
+            console.log("트레이너의 받아온 정보", trainerData);
             setTrainer(trainerData);
 
-            // Fetch reviews
             const reviewsResponse = await fetch(`${BASE_URL}/api/reviews/training/${trainerId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -45,10 +43,17 @@ function TrainerDetailPage() {
                 },
             });
 
-            if (!reviewsResponse.ok) throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
+         if(reviewsResponse.status === 404){
+            console.warn("리뷰 없음: 빈 배열로 설정");
+            setReviews([]);
 
+         }else if (!reviewsResponse.ok){
+            throw new Error("리뷰 데이터를 불러오는 데 실패했습니다");
+
+         }else{
             const reviewsData = await reviewsResponse.json();
             setReviews(reviewsData);
+         }
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -63,18 +68,30 @@ function TrainerDetailPage() {
                     navigate("/login");
                     return;
                 }
+                console.log("사용하는 JWT 토큰", token);
 
-                // Optional: Refresh token if accessToken is expired
+                const userResponse = await fetch(`${BASE_URL}/register/user`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    setUser(userData);
+                    console.log(userData);
+                } else {
+                    console.error("사용자 정보를 가져오는 데 실패했습니다.");
+                    navigate("/login");
+                    return;
+                }
+
                 const tokenValidationResponse = await fetch(`${BASE_URL}/auth/validate-token`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
 
                 if (tokenValidationResponse.status === 401) {
                     const refreshResponse = await fetch(`${BASE_URL}/auth/refresh-token`, {
                         method: "POST",
-                        credentials: "include", // For cookies
+                        credentials: "include",
                     });
 
                     if (refreshResponse.ok) {
@@ -141,89 +158,91 @@ function TrainerDetailPage() {
     return (
         <>
             <Header />
-            <div className="trainer-container">
-                <div className="trainer-card">
-                    <div className="trainer-header">
-                        <div className="profile-section">
-                            <img
-                                src={`${BASE_URL}${trainer.trainerProfileImage}`}
-                                alt={`${trainer.trainerName} 프로필`}
-                                className="profile-image"
-                                onError={(e) => (e.target.src = "/icons/certificate-icon.png")}
-                            />
-                        </div>
-                        <div className="info-section">
-                            <h1 className="trainer-name">{trainer.trainerName}</h1>
-                            {renderStars(averageRating)}
-                            <p className="rating-text">{averageRating}점</p>
-                            <div className="extra-info">
-                                <div className="info-box">
-                                    <p><strong>연차:</strong> {calculateYears(trainer.career)}</p>
+            {/* 상태가 대기나 거절일 경우 모달 표시 */}
+            {trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
+                <TrainerStatusModal isAccess={trainer.isAccess} trainerId={trainer.id} />
+            ) : (
+                <div className="trainer-container">
+                    <div className="trainer-card">
+                        <div className="trainer-header">
+                            <div className="profile-section">
+                                <img
+                                    src={`${BASE_URL}${trainer.trainerProfileImage}`}
+                                    alt={`${trainer.trainerName} 프로필`}
+                                    className="profile-image"
+                                    onError={(e) => (e.target.src = "/icons/certificate-icon.png")}
+                                />
+                            </div>
+                            <div className="info-section">
+                                <h1 className="trainer-name">{trainer.trainerName}</h1>
+                                {renderStars(averageRating)}
+                                <p className="rating-text">{averageRating}점</p>
+                                <div className="extra-info">
+                                    <div className="info-box">
+                                        <p><strong>연차:</strong> {calculateYears(trainer.career)}</p>
+                                    </div>
+                                    <div className="info-box">
+                                        <p><strong>HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
+                                    </div>
                                 </div>
-                                <div className="info-box">
-                                    <p><strong>HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
+                            </div>
+                            <div className="details-section">
+                                <div className="detail-box">
+                                    <p><strong>1회 PT 가격:</strong></p>
+                                    <p>{trainer.perPrice.toLocaleString()}원</p>
+                                </div>
+                                <div className="detail-box">
+                                    <p><strong>헬스장:</strong></p>
+                                    <p>{trainer.gymName || "정보 없음"}</p>
+                                </div>
+                                <div className="detail-box">
+                                     <button
+                                            className="btn btn-primary chat-button"
+                                            onClick={() => navigate(`/chat/${trainerId}`)}
+                                        >
+                                            <FaCommentDots style={{ marginRight: "10px" }} /> 채팅문의
+                                        </button>
                                 </div>
                             </div>
                         </div>
-                        <div className="details-section">
-                            <div className="detail-box">
-                                <p><strong>1회 PT 가격:</strong></p>
-                                <p>{trainer.perPrice.toLocaleString()}원</p>
-                            </div>
-                            <div className="detail-box">
-                                <p><strong>헬스장:</strong></p>
-                                <p>{trainer.gymName || "정보 없음"}</p>
-                            </div>
-                            <div className="detail-box">
-                                <button
-                                    className="btn btn-primary chat-button"
-                                    onClick={() => navigate(`/chat/${trainerId}`)}
-                                >
-                                    채팅문의
-                                </button>
-                            </div>
+                        <div className="trainer-tabs">
+                            <button
+                                className={`tab-button ${activeTab === "home" ? "active" : ""}`}
+                                onClick={() => setActiveTab("home")}
+                            >
+                                홈
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === "career" ? "active" : ""}`}
+                                onClick={() => setActiveTab("career")}
+                            >
+                                경력
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === "review" ? "active" : ""}`}
+                                onClick={() => setActiveTab("review")}
+                            >
+                              리뷰 ({reviews.length})
+                            </button>
                         </div>
-                    </div>
-                    <div className="trainer-tabs">
-                        <button
-                            className={`tab-button ${activeTab === "home" ? "active" : ""}`}
-                            onClick={() => setActiveTab("home")}
-                        >
-                            홈
-                        </button>
-                        <button
-                            className={`tab-button ${activeTab === "career" ? "active" : ""}`}
-                            onClick={() => setActiveTab("career")}
-                        >
-                            경력
-                        </button>
-                        <button
-                            className={`tab-button ${activeTab === "review" ? "active" : ""}`}
-                            onClick={() => setActiveTab("review")}
-                        >
-                          리뷰 ({reviews.length}) {/* ✅ 총 리뷰 개수 추가 */}
-                        </button>
-                    </div>
-                    <div className="tab-content">
-                        {activeTab === "home" && (
-                            <TrainerHome
-                                content={trainer.content}
-                                galleryImages={trainer.galleryImages}
-                                gymName={trainer.gymName}
-                                gymAddress={trainer.gymAddress}
-                                gymLatitude={trainer.gymLatitude}
-                                gymLongitude={trainer.gymLongitude}
-                            />
-                        )}
-                        {activeTab === "career" && (
-                            <TrainerCertifications certifications={trainer.certifications} BASE_URL={BASE_URL} />
-                        )}
-                        {activeTab === "review" && (
-                            <TrainerReviews reviews={reviews} BASE_URL={BASE_URL} />
-                        )}
+                        <div className="tab-content">
+                            {activeTab === "home" && <TrainerHome {...trainer} />}
+                            {activeTab === "career" && (
+                                <TrainerCertifications certifications={trainer.certifications} BASE_URL={BASE_URL} />
+                            )}
+                            {activeTab === "review" && (
+                                <TrainerReviews
+                                    reviews={reviews}
+                                    setReviews={setReviews}
+                                    BASE_URL={BASE_URL}
+                                    user={user}
+                                    trainerId={trainerId}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }
