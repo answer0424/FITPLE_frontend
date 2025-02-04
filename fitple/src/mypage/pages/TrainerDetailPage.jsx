@@ -10,7 +10,10 @@ const TrainerProfilePage = () => {
   const [perPrice, setPerPrice] = useState("");
   const [career, setCareer] = useState("");
   const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState({ name: "", imageFile: null });
+  const [newSkill, setNewSkill] = useState({
+    name: "",
+    imageFile: null,
+  });
   const quillRef = useRef(null);
 
   useEffect(() => {
@@ -27,13 +30,11 @@ const TrainerProfilePage = () => {
     axios
       .get(`${import.meta.env.VITE_Server}/member/detail`, {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
+        console.log("현재 로그인한 유저 : ", res.data);
         setUser(res.data);
-        console.log("가져온 사용자 정보:", res.data);
       })
       .catch((error) => {
         console.error("사용자 정보 가져오기 오류:", error);
@@ -42,36 +43,50 @@ const TrainerProfilePage = () => {
     axios
       .get(`${import.meta.env.VITE_Server}/member/update-detail`, {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
         setPerPrice(res.data.perPrice || "");
         setCareer(res.data.career || "");
         setContent(res.data.content || "");
-        setSkills(res.data.skills || []);
+
+        // 자격증 데이터 처리 (NullPointerException 방지)
+        const parsedSkills =
+          res.data.certifications?.map((cert) => ({
+            name: Array.isArray(cert.skills)
+              ? cert.skills[0]
+              : typeof cert.skills === "string"
+              ? JSON.parse(cert.skills)[0]
+              : "",
+            imageFile: null, // 이미지 파일을 나중에 업로드할 수 있도록 처리
+          })) || [];
+
+        setSkills(parsedSkills);
       })
       .catch((error) => {
         console.error("기존 프로필 정보 가져오기 오류:", error);
       });
   }, []);
 
+  const handleDeleteSkill = (index) => {
+    setSkills(skills.filter((_, i) => i !== index));
+  };
+
   const handleFileChange = (e) => {
-    setNewSkill({ ...newSkill, imageFile: e.target.files[0] });
+    setNewSkill({
+      ...newSkill,
+      imageFile: e.target.files[0],
+    });
   };
 
   const handleAddSkill = () => {
-    if (!newSkill.name || !newSkill.imageFile) {
-      alert("스킬 이름과 이미지를 모두 입력하세요.");
+    if (!newSkill.name) {
+      alert("스킬 이름을 입력해 주세요.");
       return;
     }
-    setSkills([...skills, newSkill]);
-    setNewSkill({ name: "", imageFile: null });
-  };
 
-  const handleRemoveSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
+    setSkills([...skills, { ...newSkill }]);
+    setNewSkill({ name: "", imageFile: null });
   };
 
   const handleSubmit = async (e) => {
@@ -91,12 +106,12 @@ const TrainerProfilePage = () => {
     formData.append("perPrice", perPrice);
     formData.append("career", career);
 
-    // 스킬을 개별 파라미터로 추가
-    skills.forEach((skill) => {
-      formData.append("skills", skill.name);
-    });
+    const skillData = skills.map((skill) => ({
+      name: skill.name,
+    }));
 
-    // 이미지 파일 추가
+    formData.append("skills", JSON.stringify(skillData));
+
     skills.forEach((skill) => {
       if (skill.imageFile) {
         formData.append("image", skill.imageFile);
@@ -109,26 +124,23 @@ const TrainerProfilePage = () => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
-      const method = user.hasProfile ? "patch" : "post";
-      const url = `${import.meta.env.VITE_Server}/member/detail`;
-
-      const res = await axios({
-        method,
-        url,
-        data: formData,
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_Server}/member/detail`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       alert("트레이너 프로필이 등록되었습니다.");
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
       alert(
-        error.response?.data?.message ||
-          "프로필 등록 중 오류가 발생했습니다. 다시 시도해주세요."
+        error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
       );
     }
   };
@@ -140,12 +152,12 @@ const TrainerProfilePage = () => {
         <div className="d-flex align-items-center mb-3">
           <img
             src={user.profileImage}
-            alt="Profile"
+            alt="프로필"
             className="rounded-circle me-3"
             width={60}
             height={60}
           />
-          <p className="mb-0 fs-5">안녕하세요, {user.nickname}님!</p>
+          <p className="mb-0 fs-5">{user.nickname}님, 안녕하세요!</p>
         </div>
       )}
       <form onSubmit={handleSubmit} className="needs-validation" noValidate>
@@ -160,7 +172,7 @@ const TrainerProfilePage = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">경력 (연도):</label>
+          <label className="form-label">경력 시작 날짜:</label>
           <input
             type="date"
             className="form-control shadow-sm"
@@ -185,6 +197,7 @@ const TrainerProfilePage = () => {
               type="file"
               className="form-control me-2"
               onChange={handleFileChange}
+              accept="image/*"
             />
             <button
               type="button"
@@ -206,14 +219,23 @@ const TrainerProfilePage = () => {
                 <span className="me-2">{skill.name}</span>
                 <button
                   type="button"
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleRemoveSkill(index)}
+                  className="btn btn-danger btn-sm ms-auto"
+                  onClick={() => handleDeleteSkill(index)}
                 >
                   삭제
                 </button>
               </li>
             ))}
           </ul>
+        </div>
+        <div className="mb-4">
+          <label className="form-label">상세 내용 작성:</label>
+          <ReactQuill
+            ref={quillRef}
+            theme="snow"
+            value={content}
+            onChange={setContent}
+          />
         </div>
         <button type="submit" className="btn btn-primary w-100 mt-3">
           등록하기
