@@ -3,21 +3,6 @@ import OverlayButton from './OverlayButton';
 
 function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, onFinish, gameState }) {
     
-    const StartBtnStyle = {
-        width: '100%',
-        padding: '14px 20px',
-        backgroundColor: '#4a90e2',
-        color: 'white',
-        border: 'none',
-        borderRadius: '8px',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s',
-        marginTop: '16px',
-        marginBottom: '16px'
-    };
-
     return (
         <div style={{ 
             position: 'fixed', 
@@ -36,7 +21,6 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         transform: 'translate(-50%, -50%)',
                         pointerEvents: 'auto'
                     }}
-                    style={StartBtnStyle}
                     onClick={onStart}
                     visible={gameState === 'initial'}
                 />
