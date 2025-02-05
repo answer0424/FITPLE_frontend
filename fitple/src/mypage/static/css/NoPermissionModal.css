@@ -1,0 +1,27 @@
+.modal-header {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #66b2ff;
+    color: white;
+  }
+  
+  .modal-body {
+    background-color: #000;
+    color: white;
+  }
+  
+  .modal-footer {
+    background-color: #1a1a1a;
+    border-top: 1px solid #66b2ff;
+  }
+  
+  .modal-button-secondary {
+    background-color: #444;
+    border: none;
+    color: white;
+  }
+  
+  .modal-button-primary {
+    background-color: #66b2ff;
+    border: none;
+    color: black;
+  }

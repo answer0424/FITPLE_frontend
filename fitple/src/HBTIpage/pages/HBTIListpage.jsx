@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import Header from "../../common/component/Header";
 import { useNavigate } from "react-router-dom";
 import "../component/css/HBTIListpage.css";
@@ -24,8 +24,8 @@ const groupByType = (data) => {
   };
 
   data.forEach((item) => {
-    const group = getGroup(item.hbti);
-    groupedData[group].push(item);
+    const group = getGroup(item.hbti); 
+    groupedData[group].push(item); 
   });
 
   return groupedData;
@@ -49,14 +49,16 @@ function HBTIListPage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // API 데이터를 가져오는 useEffect
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/hbti/data`)
+      .get(`${import.meta.env.VITE_Server}/api/hbti/data`)
       .then((response) => {
         const formattedData = Object.entries(response.data).map(([key, value]) => ({
           hbti: key,
           ...value,
         }));
+        console.log("Formatted Data:", formattedData); // 데이터 확인
         setHbtiData(formattedData);
         setLoading(false);
       })
@@ -65,6 +67,7 @@ function HBTIListPage() {
         setLoading(false);
       });
   }, []);
+  
 
   if (loading) {
     return <div className="text-center mt-5">데이터를 불러오는 중...</div>;
@@ -73,7 +76,7 @@ function HBTIListPage() {
   // 그룹화된 데이터
   const groupedData = groupByType(hbtiData);
 
-  // HBTI 색상 배열 (수정된 조합)
+  // HBTI 색상 배열
   const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
   // 카드 클릭 시 상세 페이지로 이동
@@ -112,7 +115,7 @@ function HBTIListPage() {
                 >
                   <div className={`card h-100 shadow-sm card-${group}`}>
                     <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
+                      src={`${import.meta.env.VITE_Server}${item.dogImage}`}
                       className="card-img-top"
                       alt={item.label}
                     />
