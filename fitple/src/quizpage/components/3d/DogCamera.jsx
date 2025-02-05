@@ -11,7 +11,7 @@ const CAMERA_SETTINGS = {
     waveAmplitude: 0.02,
     waveFrequency: 0,
     dogBaseHeight: 0.3,
-    cameraOffset: new THREE.Vector3(3, 2, 4),
+    cameraOffset: new THREE.Vector3(3, 2, 3),
     cameraLerpSpeed: 0.1
 };
 
@@ -76,7 +76,7 @@ function DogCamera({ currentPath }) {
 
     return (
         <group ref={dogRef}>
-            <LowPolyDog scale={[0.2, 0.2, 0.2]} />
+            <LowPolyDog scale={[0.3, 0.3, 0.3]} />
         </group>
     );
 }
