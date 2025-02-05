@@ -15,7 +15,7 @@ const ORB_SETTINGS = {
     opacity: 0.4
 };
 
-function NPCOrb({ platformPosition }) {
+function NPCOrb({ platformPosition, isActive = true }) {
     const orbRef = useRef();
     const boneRef = useRef();
     const orbPosition = [
@@ -47,7 +47,7 @@ function NPCOrb({ platformPosition }) {
                     opacity={ORB_SETTINGS.opacity}
                 />
             </mesh>
-            <DogBone ref={boneRef} />
+            {isActive && <DogBone ref={boneRef} />}
         </group>
     );
 }

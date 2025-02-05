@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import RotatingPlatform from './RotatingPlatform';
 import FlowingConnections from './FlowingConnections';
+import NPCOrb from './NpcOrb';
 
 
 /**
@@ -10,7 +11,13 @@ import FlowingConnections from './FlowingConnections';
  * {Set} visibleConnections - 보여질 연결선들의 인덱스 집합
  */
 
-function ConnectedPlatforms({ platformPositions, currentPlatform, visibleConnections }) {
+function ConnectedPlatforms({ 
+    platformPositions, 
+    currentPlatform, 
+    visibleConnections, 
+    completedPlatforms 
+}) {
+    
     const connections = useMemo(() => {
         const lines = [];
         for (let i = 0; i < platformPositions.length - 1; i++) {
@@ -25,11 +32,18 @@ function ConnectedPlatforms({ platformPositions, currentPlatform, visibleConnect
     return (
         <group name="connected-platforms">
             {platformPositions.map((pos, index) => (
+                <group key={index}>
                 <RotatingPlatform
-                    key={index}
                     position={pos}
                     isActive={index === currentPlatform}
                 />
+                {!completedPlatforms?.has(index) && (
+                    <NPCOrb 
+                        platformPosition={pos}
+                        isActive={!completedPlatforms?.has(index)}
+                    />
+                )}
+            </group>
             ))}
             <FlowingConnections 
                 connections={connections} 
