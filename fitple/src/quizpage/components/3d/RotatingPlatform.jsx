@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import NPCOrb from './NpcOrb';
 
 const PLATFORM_SETTINGS = {
-    size: [2, 0.2, 2],
+    size: [2.3, 0.2, 2.3],
     activeColor: "#3B82F6",
     inactiveColor: "#828080",
     activeEmissiveIntensity: 0.8,

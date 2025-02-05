@@ -22,7 +22,7 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
         transform: 'translate(-50%, -50%)',
         width: '90%',
         maxWidth: '600px',
-        background: 'rgba(255, 255, 255, 0.7)',
+        background: 'rgba(205, 205, 205, 0.86)',
         backdropFilter: 'blur(8px)',
         padding: '40px',
         borderRadius: '12px',
