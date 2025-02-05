@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import './ResultModal.css';
+import HBTIResultDisplay from '../quiz_common/HbtiResultDisplay';
 
 const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
     const [hbtiData, setHbtiData] = useState(null);
@@ -86,20 +87,8 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
                     <div className="loading-message">Loading...</div>
                 ) : (
                     <>
-                        <h2 className="modal-text">나의 <span>HBTI</span>는</h2>
-                        <h1 className="modal-title">
-    {hbtiData?.hbtiType?.split('').map((letter, index) => (
-        <span key={index}>{letter}</span>
-    ))}
-</h1>
-                        {hbtiData?.dogImage && (
-                            <img
-                                src={`${import.meta.env.VITE_Server}${hbtiData.dogImage}`}
-                                alt="HBTI Type"
-                                className="modal-image"
-                            />
-                        )}
-                        <h3 className="modal-subtitle">{hbtiData?.label}</h3>
+                        <HBTIResultDisplay hbtiData={hbtiData} />
+                        
                         <button
                             onClick={handleViewDetails}
                             className="modal-button"
