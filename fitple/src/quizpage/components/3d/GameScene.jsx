@@ -7,10 +7,9 @@ function GameScene({
     currentPath, 
     visibleConnections, 
     platformPositions,
-    completedPlatforms,
+    npcCompletedPlatforms,
     onDogArrival
 }) {
-    
     return (
         <>
             {/* Scene Lighting */}
@@ -25,7 +24,7 @@ function GameScene({
                 platformPositions={platformPositions}
                 currentPlatform={currentPlatform}
                 visibleConnections={visibleConnections}
-                completedPlatforms={completedPlatforms}
+                npcCompletedPlatforms={npcCompletedPlatforms}
             />
             <DogCamera 
                 currentPath={currentPath} 
