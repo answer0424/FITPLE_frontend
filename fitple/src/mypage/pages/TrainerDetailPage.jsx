@@ -54,12 +54,24 @@ const TrainerProfilePage = () => {
                 if (!cert.skills) return [];
 
                 let cleanedSkills = cert.skills;
-                if (typeof cert.skills === "string") {
-                  cleanedSkills = cert.skills
-                    .replace(/'/g, '"')
-                    .replace(/\[\[/g, "[")
-                    .replace(/\]\]/g, "]")
-                    .replace(/\]+$/, "]");
+
+                if (typeof cleanedSkills === "string") {
+                  cleanedSkills = cleanedSkills
+                    .replace(/'/g, '"') // 작은 따옴표 → 큰 따옴표 변환
+                    .replace(/\[\[/g, "[") // 중첩된 대괄호 수정
+                    .replace(/\]\]/g, "]") // 중첩된 대괄호 수정
+                    .replace(/\]+$/, "]") // 마지막 닫는 대괄호 정리
+                    .replace(/,$/, ""); // 마지막 쉼표 제거
+                }
+
+                // ✅ JSON 배열이 제대로 닫혀 있는지 확인
+                if (!cleanedSkills.endsWith("]")) {
+                  cleanedSkills += "]"; // 닫는 대괄호 추가
+                }
+
+                // ✅ JSON이 제대로 시작하는지 확인
+                if (!cleanedSkills.startsWith("[")) {
+                  cleanedSkills = "[" + cleanedSkills; // 여는 대괄호 추가
                 }
 
                 const parsedSkillsArray =
@@ -67,7 +79,6 @@ const TrainerProfilePage = () => {
                     ? JSON.parse(cleanedSkills)
                     : cleanedSkills;
 
-                // 각 스킬에 대해 해당 cert의 imageUrl 사용
                 return parsedSkillsArray.map((skill) => ({
                   certificationId: cert.certificationId,
                   name: skill.name,
@@ -157,9 +168,10 @@ const TrainerProfilePage = () => {
     formData.append("career", career);
 
     if (deletedSkillsId.length > 0) {
-      formData.append("deletedSkillsId", JSON.stringify(deletedSkillsId));
+      deletedSkillsId.forEach((id) => {
+        formData.append("deletedSkillsId", Number(id)); // ✅ 숫자로 변환
+      });
     }
-
     const newSkills = skills.filter((skill) => !skill.certificationId);
     const skillData = newSkills.map((skill) => ({ name: skill.name }));
     formData.append("skills", JSON.stringify(skillData));
