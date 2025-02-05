@@ -10,6 +10,7 @@ const TrainerProfilePage = () => {
   const [perPrice, setPerPrice] = useState("");
   const [career, setCareer] = useState("");
   const [skills, setSkills] = useState([]);
+  const [deletedSkillsId, setDeletedSkillsId] = useState("");
   const [newSkill, setNewSkill] = useState({ name: "", imageFile: null });
   const quillRef = useRef(null);
 
@@ -25,35 +26,104 @@ const TrainerProfilePage = () => {
     }
 
     axios
-      .get("http://localhost:8081/register/user", {
+      .get(`${import.meta.env.VITE_Server}/member/detail`, {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
-      .then((response) => {
-        setUser(response.data);
-        console.log("가져온 사용자 정보:", response.data);
+      .then((res) => {
+        setUser(res.data), console.log("현재 사용자 : ", res.data);
       })
-      .catch((error) => {
-        console.error("사용자 정보 가져오기 오류:", error);
-        if (error.response?.status === 401) {
-          alert("로그인이 필요합니다.");
-          window.location.href = "/login";
-        }
-      });
+      .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
+
+    axios
+      .get(`${import.meta.env.VITE_Server}/member/update-detail`, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        console.log("데이터 : ", res.data);
+        console.log("certification : ", res.data.certificationId);
+        setPerPrice(res.data.perPrice || "");
+        setCareer(res.data.career || "");
+        setContent(res.data.content || "");
+
+        const parsedSkills =
+          res.data.certifications
+            ?.flatMap((cert) => {
+              try {
+                if (!cert.skills) return [];
+
+                let cleanedSkills = cert.skills;
+
+                if (typeof cleanedSkills === "string") {
+                  cleanedSkills = cleanedSkills
+                    .replace(/'/g, '"') // 작은 따옴표 → 큰 따옴표 변환
+                    .replace(/\[\[/g, "[") // 중첩된 대괄호 수정
+                    .replace(/\]\]/g, "]") // 중첩된 대괄호 수정
+                    .replace(/\]+$/, "]") // 마지막 닫는 대괄호 정리
+                    .replace(/,$/, ""); // 마지막 쉼표 제거
+                }
+
+                // ✅ JSON 배열이 제대로 닫혀 있는지 확인
+                if (!cleanedSkills.endsWith("]")) {
+                  cleanedSkills += "]"; // 닫는 대괄호 추가
+                }
+
+                // ✅ JSON이 제대로 시작하는지 확인
+                if (!cleanedSkills.startsWith("[")) {
+                  cleanedSkills = "[" + cleanedSkills; // 여는 대괄호 추가
+                }
+
+                const parsedSkillsArray =
+                  typeof cleanedSkills === "string"
+                    ? JSON.parse(cleanedSkills)
+                    : cleanedSkills;
+
+                return parsedSkillsArray.map((skill) => ({
+                  certificationId: cert.certificationId,
+                  name: skill.name,
+                  imageUrl: cert.imageUrl || "",
+                }));
+              } catch (error) {
+                console.error("스킬 데이터 파싱 오류:", {
+                  원본데이터: cert.skills,
+                  에러메시지: error.message,
+                });
+                return [
+                  {
+                    certificationId: cert.certificationId,
+                    name: "",
+                    imageUrl: cert.imageUrl || "",
+                  },
+                ];
+              }
+            })
+            .flat() || [];
+
+        console.log("최종 파싱된 전체 스킬:", parsedSkills);
+        setSkills(parsedSkills);
+      })
+      .catch((error) =>
+        console.error("기존 프로필 정보 가져오기 오류:", error)
+      );
   }, []);
 
-  const handleAddSkill = () => {
-    if (!newSkill.name || !newSkill.imageFile) {
-      alert("스킬 이름과 자격증 이미지를 선택해 주세요.");
-      return;
-    }
-    setSkills([...skills, newSkill]);
-    setNewSkill({ name: "", imageFile: null });
-  };
-
   const handleDeleteSkill = (index) => {
+    const skillToDelete = skills[index];
+    console.log("삭제하려는 스킬 정보:", skillToDelete);
+
+    if (skillToDelete?.certificationId) {
+      const newDeletedSkillsId = [
+        ...deletedSkillsId,
+        skillToDelete.certificationId,
+      ];
+      setDeletedSkillsId(newDeletedSkillsId);
+      console.log("삭제될 certificationId:", skillToDelete.certificationId);
+      console.log("현재까지 삭제될 certificationId 목록:", newDeletedSkillsId);
+    } else {
+      console.log("새로 추가된 스킬이라 certificationId가 없습니다.");
+    }
+
     setSkills(skills.filter((_, i) => i !== index));
   };
 
@@ -61,36 +131,56 @@ const TrainerProfilePage = () => {
     setNewSkill({ ...newSkill, imageFile: e.target.files[0] });
   };
 
+  const handleAddSkill = () => {
+    if (!newSkill.name) {
+      alert("스킬 이름을 입력해 주세요.");
+      return;
+    }
+
+    setSkills([...skills, { ...newSkill }]);
+
+    setNewSkill({ name: "", imageFile: null });
+    console.log("newSkill : ", newSkill.name, newSkill.imageFile);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formDatas = new FormData(e.target); // 폼 데이터 가져오기
+    const entries = Object.fromEntries(formDatas.entries()); // 객체로 변환
+    console.log("entries : ", entries);
+    if (!user) {
+      alert("사용자 정보를 가져오는 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
     if (!perPrice || !career) {
       alert("가격과 경력을 입력해주세요.");
       return;
     }
 
-    const formData = new FormData();
+    const editorContent = quillRef.current
+      ? quillRef.current.getEditor().root.innerHTML
+      : content;
 
-    // 필수 필드 추가
-    formData.append("trainerId", user.id); // 트레이너 ID 추가
-    formData.append("content", content);
+    const formData = new FormData();
+    formData.append("trainerId", user.id);
+    formData.append("content", editorContent);
     formData.append("perPrice", perPrice);
     formData.append("career", career);
 
-    // 스킬 정보 추가
-    const skillNames = skills.map((skill) => skill.name);
-    formData.append("skills", JSON.stringify(skillNames));
+    if (deletedSkillsId.length > 0) {
+      deletedSkillsId.forEach((id) => {
+        formData.append("deletedSkillsId", Number(id)); // ✅ 숫자로 변환
+      });
+    }
+    const newSkills = skills.filter((skill) => !skill.certificationId);
+    const skillData = newSkills.map((skill) => ({ name: skill.name }));
+    formData.append("skills", JSON.stringify(skillData));
 
-    // 이미지 파일들 추가
-    skills.forEach((skill, index) => {
+    newSkills.forEach((skill) => {
       if (skill.imageFile) {
-        formData.append(`image`, skill.imageFile);
+        formData.append("image", skill.imageFile);
       }
     });
-
-    // FormData 내용 확인을 위한 로깅
-    for (let pair of formData.entries()) {
-      console.log("FormData 내용:", pair[0], pair[1]);
-    }
 
     try {
       const accessToken = document.cookie
@@ -98,8 +188,8 @@ const TrainerProfilePage = () => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
-      const res = await axios.post(
-        "http://localhost:8081/member/detail",
+      await axios.post(
+        `${import.meta.env.VITE_Server}/member/detail`,
         formData,
         {
           withCredentials: true,
@@ -109,24 +199,24 @@ const TrainerProfilePage = () => {
           },
         }
       );
+      console.log("전송 전 deletedSkillsId:", deletedSkillsId);
 
-      console.log("서버 응답:", res);
+      // if (deletedSkillsId.length > 0) {
+      //   if (deletedSkillsId.length > 0) {
+      //     deletedSkillsId.forEach((id) => {
+      //       formData.append("deletedSkillsId", id);
+      //     });
+      //   }
+      // }
 
-      if (res.status === 200) {
-        alert("트레이너 프로필이 등록되었습니다.");
-        // 성공 후 필요한 페이지로 리다이렉션
-        // window.location.href = '/success-page';
-      }
+      alert("트레이너 프로필이 등록되었습니다.");
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
       alert(
-        error.response?.data?.message ||
-          "프로필 등록 중 오류가 발생했습니다. 다시 시도해주세요."
+        error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
       );
     }
   };
-
-  // ... 나머지 렌더링 코드는 동일
 
   return (
     <div className="container mt-4">
@@ -135,12 +225,12 @@ const TrainerProfilePage = () => {
         <div className="d-flex align-items-center mb-3">
           <img
             src={user.profileImage}
-            alt="Profile"
+            alt="프로필"
             className="rounded-circle me-3"
             width={60}
             height={60}
           />
-          <p className="mb-0 fs-5">안녕하세요, {user.username}님!</p>
+          <p className="mb-0 fs-5">{user.nickname}님, 안녕하세요!</p>
         </div>
       )}
       <form onSubmit={handleSubmit} className="needs-validation" noValidate>
@@ -155,7 +245,7 @@ const TrainerProfilePage = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">경력 (연도):</label>
+          <label className="form-label">경력 시작 날짜:</label>
           <input
             type="date"
             className="form-control shadow-sm"
@@ -165,12 +255,21 @@ const TrainerProfilePage = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="form-label">스킬 추가:</label>
-          <div className="d-flex align-items-center">
+          <label className="form-label">상세 내용 작성:</label>
+          <ReactQuill
+            ref={quillRef}
+            theme="snow"
+            value={content}
+            onChange={setContent}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="form-label">스킬 등록:</label>
+          <div className="input-group mb-3">
             <input
               type="text"
+              className="form-control"
               placeholder="스킬 이름"
-              className="form-control me-2"
               value={newSkill.name}
               onChange={(e) =>
                 setNewSkill({ ...newSkill, name: e.target.value })
@@ -178,8 +277,9 @@ const TrainerProfilePage = () => {
             />
             <input
               type="file"
-              className="form-control me-2"
+              className="form-control"
               onChange={handleFileChange}
+              accept="image/*"
             />
             <button
               type="button"
@@ -190,15 +290,25 @@ const TrainerProfilePage = () => {
             </button>
           </div>
         </div>
-        <div className="mb-3">
-          <label className="form-label">선택한 스킬:</label>
+        <div className="mb-4">
+          <label className="form-label">보유 스킬:</label>
           <ul className="list-group">
             {skills.map((skill, index) => (
               <li
                 key={index}
-                className="list-group-item d-flex align-items-center"
+                className="list-group-item d-flex justify-content-between align-items-center"
               >
-                <span className="me-2">{skill.name}</span>
+                <div className="d-flex align-items-center">
+                  {skill.imageUrl && (
+                    <img
+                      src={skill.imageUrl}
+                      alt={skill.name}
+                      className="me-2"
+                      style={{ width: "30px", height: "30px" }}
+                    />
+                  )}
+                  {skill.name}
+                </div>
                 <button
                   type="button"
                   className="btn btn-danger btn-sm"
@@ -209,15 +319,6 @@ const TrainerProfilePage = () => {
               </li>
             ))}
           </ul>
-        </div>
-        <div className="mb-4">
-          <label className="form-label">상세 내용 작성:</label>
-          <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            value={content}
-            onChange={setContent}
-          />
         </div>
         <button type="submit" className="btn btn-primary w-100 mt-3">
           등록하기

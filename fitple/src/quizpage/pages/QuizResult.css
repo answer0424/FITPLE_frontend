@@ -40,11 +40,13 @@
   padding: 20px;
   text-align: center;
   font-size: 1.125rem;
+
 }
 
 .loading {
   text-align: center;
   padding: 20px;
+
   font-size: 1.125rem;
 }
 
@@ -135,10 +137,12 @@
   font-weight: bold;
   margin-bottom: 2rem;
   color: #333;
+
 }
 
 .percentages-grid {
   display: grid;
+
   gap: 1.5rem;
 }
 
@@ -193,6 +197,7 @@
   font-weight: bold;
   margin-bottom: 2rem;
   color: #333;
+
 }
 
 .matches-grid {
@@ -388,4 +393,5 @@
     width: 100px;
     height: 100px;
   }
+
 }

@@ -235,7 +235,6 @@ const QuizResult = () => {
     }
   }, [userId]);
 
-  // Loading and error states
   if (error) return <div className="error-message">Error: {error}</div>;
   if (!resultData) return <div className="loading">Loading...</div>;
 
@@ -308,6 +307,7 @@ const QuizResult = () => {
             )}
           </div>
         </div>
+
       </div>
     </div>
   );
