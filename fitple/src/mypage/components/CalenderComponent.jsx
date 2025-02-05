@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import styled, { withTheme } from "styled-components";
 import moment from "moment";
-// import "./Calendar.css";
-// import Profile from "./profile";
 import '../static/css/CalenderStyle.css';
-import { Modal, Button, Form, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import axios from "axios";
+import RegisterSceduleModal from "../modal/RegisterSceduleModal";
 
 
 const CalenderComponent = ({user}) => {
@@ -19,10 +18,7 @@ const CalenderComponent = ({user}) => {
   const [eventInput, setEventInput] = useState(""); // 일정 제목 입력 상태
   const [timeInput, setTimeInput] = useState(""); // 일정 시간 입력 상태
   const [selectedMember, setSelectedMember] = useState(null);
-  const [members, setMembers] = useState([
-    { name: "John Doe", completed: false },
-    { name: "Jane Smith", completed: true },
-  ]); // 회원 리스트 샘플 데이터
+  const [members, setMembers] = useState([]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -68,6 +64,29 @@ const CalenderComponent = ({user}) => {
     return events.filter((event) => event.date === formattedDate);
   };
 
+  useEffect(() => {
+    const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        ?.split("=")[1];
+    //일정 불러오기
+    axios.get(`${import.meta.env.VITE_Server}/member/${user.id}/calendar`, {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+      }
+    })
+    .then((response) => {
+      console.log(response.headers['content-type']);
+      console.log(response.data);
+      setEvents(response.data);
+    })
+  }, []);
+
   
   return  (
     <>
@@ -100,41 +119,16 @@ const CalenderComponent = ({user}) => {
       </Container>
 
       {/* 일정 추가 모달 */}
-      <Modal show={isModalOpen} onHide={closeModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>일정 추가</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>선택된 날짜: {selectedDate}</p>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>일정 제목</Form.Label>
-              <Form.Control
-                type="text"
-                value={eventInput}
-                onChange={(e) => setEventInput(e.target.value)}
-                placeholder="일정 제목을 입력하세요"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>시간</Form.Label>
-              <Form.Control
-                type="time"
-                value={timeInput}
-                onChange={(e) => setTimeInput(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            닫기
-          </Button>
-          <Button variant="primary" onClick={addEvent}>
-            추가
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <RegisterSceduleModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        addEvent={addEvent}
+        selectedDate={selectedDate}
+        eventInput={eventInput}
+        setEventInput={setEventInput}
+        timeInput={timeInput}
+        setTimeInput={setTimeInput}
+      />
 
       {/* 일정 리스트 보기 */}
       {/* <EventList>
