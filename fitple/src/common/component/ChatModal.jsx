@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ChatMessage from './ChatMessage'; // ChatMessage 컴포넌트 추가
 
-const ChatModal = ({ isOpen, onClose, chatRooms, userId }) => {
+const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
     const [rooms, setRooms] = useState(chatRooms);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
@@ -18,6 +18,7 @@ const ChatModal = ({ isOpen, onClose, chatRooms, userId }) => {
     const handleLeaveChat = async (chatId) => {
         if (window.confirm('정말로 이 채팅방을 나가시겠습니까?')) {
             try {
+                console.log(`Leaving chat: ${chatId}, userId: ${userId}`); 
                 await leaveChat(chatId, userId);
                 // 나간 채팅방을 목록에서 제거
                 const updatedRooms = rooms.filter(room => room.chatId !== chatId);

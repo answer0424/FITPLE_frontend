@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import { getChatMessages } from '../../mainpage/apis/chat';
-import '../css/ChatMessage.css'; // CSS 파일 import
+import '../css/ChatMessage.css';
+import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 
-const ChatMessage = ({ chatId, onBack, currentUser }) => {
+const ChatMessage = ({ chatId, onBack }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [stompClient, setStompClient] = useState(null);
+    const { userInfo } = useContext(LoginContext);
+    const stompClient = useRef(null); // useState 대신 useRef 사용
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -21,37 +23,41 @@ const ChatMessage = ({ chatId, onBack, currentUser }) => {
         fetchMessages();
 
         const client = new Client({
-            brokerURL: 'ws://localhost:8081/ws-chat',  // STOMP 서버 주소
+            brokerURL: 'ws://localhost:8081/ws-chat', // WebSocket 서버 주소
             connectHeaders: {},
             debug: (str) => console.log(str),
+            reconnectDelay: 5000, // 자동 재연결 (5초)
             onConnect: () => {
                 console.log('WebSocket Connected');
 
-                // 채팅방 메시지 구독
                 client.subscribe(`/topic/chat/${chatId}`, (message) => {
                     const receivedMessage = JSON.parse(message.body);
                     setMessages((prevMessages) => [...prevMessages, receivedMessage]);
                 });
             },
-            onDisconnect: () => console.log('WebSocket Disconnected'),
+            onDisconnect: (error) => console.log('WebSocket Disconnected', error),
         });
 
         client.activate();
-        setStompClient(client);
+        stompClient.current = client; // useRef에 저장
 
-        return () => client.deactivate();
+        return () => {
+            if (stompClient.current) {
+                stompClient.current.deactivate();
+            }
+        };
     }, [chatId]);
 
     const handleSendMessage = () => {
-        if (newMessage.trim() && stompClient) {
+        if (newMessage.trim() && stompClient.current) {
             const messageData = {
                 content: newMessage,
                 chatId: chatId,
-                userId: 1, // 현재 로그인한 유저의 ID
+                userId: userInfo.id,
             };
 
-            stompClient.publish({
-                destination: `/app/chat/${chatId}/send`, // 서버 메시지 처리 엔드포인트
+            stompClient.current.publish({
+                destination: `/app/chat/${chatId}/send`, // 메시지 전송 경로
                 body: JSON.stringify(messageData),
             });
 
@@ -59,7 +65,6 @@ const ChatMessage = ({ chatId, onBack, currentUser }) => {
         }
     };
 
-    // 엔터 키 입력 시 메시지 전송
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleSendMessage();
@@ -74,7 +79,7 @@ const ChatMessage = ({ chatId, onBack, currentUser }) => {
                     <li
                         key={index}
                         className={`message-item ${
-                            message.userId === 1 ? 'self-message' : 'other-message'
+                            message.userId === userInfo.id ? 'self-message' : 'other-message'
                         }`}
                     >
                         {message.content}
@@ -87,7 +92,7 @@ const ChatMessage = ({ chatId, onBack, currentUser }) => {
                     className="message-input"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={handleKeyPress} // 엔터 키 이벤트 추가
+                    onKeyPress={handleKeyPress}
                     placeholder="Type your message..."
                 />
                 <button className="message-send-button" onClick={handleSendMessage}>
