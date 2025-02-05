@@ -194,8 +194,27 @@ body {
     border-radius: 5px;
 }
 
-
-body {
-    overflow-x: hidden; 
+/* 탭 버튼 호버 상태 - 파란색 제거 */
+.tab-button:hover {
+    background-color: transparent;
+    color: #ffc107; 
+    border-bottom: 4px solid #ffc107;
 }
 
+
+.chat-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chat-button:hover {
+    background-color: #eae319;
+}

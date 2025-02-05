@@ -8,7 +8,7 @@ const ORB_SETTINGS = {
     oscillationAmplitude: 0.1,
     rotationSpeed: 0.01,
     boneRotationSpeed: 0.02,
-    size: 0.3,
+    size: 0.5,
     segments: 32,
     color: "#00ffff",
     emissiveIntensity: 0.5,
