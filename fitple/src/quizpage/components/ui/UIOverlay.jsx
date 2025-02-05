@@ -16,7 +16,7 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         }}
                         onClick={onStart}
                     >
-                        <h1 className="start-Text">START</h1>
+                        <h1 className="start-Text">➡ START</h1>
                     </button>
                 )}
                 
@@ -82,12 +82,12 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         style={{ 
                             position: 'absolute',
                             left: '50%', 
-                            top: '40px', 
+                            top: '50%', 
                             transform: 'translateX(-50%)'
                         }}
                         onClick={onFinish}
                     >
-                        결과보기
+                        ➡ 결과보기
                     </button>
                 )}
             </div>

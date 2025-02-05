@@ -7,7 +7,8 @@ function ConnectedPlatforms({
     platformPositions, 
     currentPlatform, 
     visibleConnections,
-    npcCompletedPlatforms
+    npcCompletedPlatforms,
+    currentNPCVisibility
 }) {
     const connections = useMemo(() => {
         const lines = [];
@@ -30,10 +31,11 @@ function ConnectedPlatforms({
                         position={pos}
                         isActive={index === currentPlatform}
                     />
-                    {!npcCompletedPlatforms.has(index) && (
+                    {!npcCompletedPlatforms.has(index) && 
+                     index !== platformPositions.length - 1 && (
                         <NPCOrb 
                             platformPosition={pos}
-                            isActive={true}
+                            isActive={index === currentPlatform ? currentNPCVisibility : true}
                         />
                     )}
                 </group>

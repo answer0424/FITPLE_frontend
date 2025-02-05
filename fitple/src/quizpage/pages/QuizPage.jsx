@@ -30,18 +30,17 @@ function QuizPage() {
     };
 
     const handleQuizComplete = () => {
-        setCurrentNPCVisibility(false);
-        setNpcCompletedPlatforms(prev => {
-            const newCompleted = new Set(prev);
-            newCompleted.add(currentPlatform);
-            return newCompleted;
-        });
+        
+        setTimeout(() => {
+            setCurrentNPCVisibility(false);
 
-        setPathCompleted(prev => {
-            const newPathCompleted = new Set(prev);
-            newPathCompleted.add(currentPlatform);
-            return newPathCompleted;
-        });
+            setNpcCompletedPlatforms(prev => {
+                const newCompleted = new Set(prev);
+                newCompleted.add(currentPlatform);
+                return newCompleted;
+            });
+        },1500);
+
     };
 
 
@@ -119,19 +118,23 @@ function QuizPage() {
         }
 
         setShowQuiz(false);
-        setIsMoving(true);
-    
-        const nextPlatform = currentPlatform + 1;
-        if (nextPlatform < platformPositions.length) {
-            setCurrentPlatform(nextPlatform);
-            setCurrentPath([platformPositions[currentPlatform], platformPositions[nextPlatform]]);
-            setVisibleConnections(prev => {
-                const newSet = new Set(prev);
-                newSet.add(currentPlatform);
-                return newSet;
-            });
-            setCurrentNPCVisibility(true);
-        }
+
+        setTimeout(() => {
+            setIsMoving(true);
+        
+            const nextPlatform = currentPlatform + 1;
+            if (nextPlatform < platformPositions.length) {
+                setCurrentPlatform(nextPlatform);
+                setCurrentPath([platformPositions[currentPlatform], platformPositions[nextPlatform]]);
+                setVisibleConnections(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(currentPlatform);
+                    return newSet;
+                });
+                setCurrentNPCVisibility(true);
+            }
+        },1000);   
+
     };
 
     const handlePrev = () => {
