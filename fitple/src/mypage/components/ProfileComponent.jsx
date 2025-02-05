@@ -23,7 +23,7 @@ const ProfileComponent = ({ user }) => {
       },
     })
     .then((response) => {
-      console.log(response.data.hbti);
+      console.log(response.data);
       // console.log(typeof(response.data));
       setUserInfo(response.data);
     })

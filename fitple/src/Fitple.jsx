@@ -1,4 +1,5 @@
 import './App.css'
+import "bootstrap/dist/css/bootstrap.min.css";
 import LoginPage from './mainpage/pages/LoginPage';
 import UserRegister from './mainpage/pages/UserRegister';
 import TrainerRegister from './mainpage/pages/TrainerRegister';

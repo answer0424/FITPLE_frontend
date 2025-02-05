@@ -1,18 +1,20 @@
   import React, { useEffect, useState } from 'react';
   import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
-  import { Container } from 'react-bootstrap';
+  import { Container, Row, Col } from "react-bootstrap";
   import TrainerComponent from '../components/trainer/TrainerComponent';
   import StudentComponent from '../components/student/StudentComponent';
   import NoPermissionModal from '../modal/NoPermissionModal';
   import ProfileComponent from '../components/ProfileComponent';
   import { authInfo } from '../../mainpage/apis/auth';
   import axios from 'axios';
+import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
   // import { getRole } from '../utill';
 
   const MyPage = () => {
     // const role = authInfo();
     const [user, setUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
 
     useEffect(() => {      
@@ -45,11 +47,9 @@
       }
     }, []);
 
-    useEffect(() => {
-      if (user) {
-        // console.log("가져온 사용자:", user.authority);
-      }
-    }, [user]); // user가 변경될 때마다 해당 값을 출력
+    const handleCurrentPage = (page) => {
+      setCurrentPage(page); // 버튼 클릭에 따라 currentPage 상태 변경
+    };
 
     const handleNoPermission = () => {
       if (!showModal) {  setShowModal(true);  }
@@ -64,20 +64,31 @@
       <div>
       {user ? (
         <>
-          <ProfileComponent user={user} />
-          <Container>
-            <NoPermissionModal show={showModal} onClose={handleCloseModal} />
-            <Routes>
-              {user.authority === 'ROLE_TRAINER' ? (
-                <Route index element={<TrainerComponent user={user} />} />) : 
-              user.authority === 'ROLE_STUDENT' ? (
-                <Route index element={<StudentComponent user={user} />} />
-              ) : user.authority === 'ROLE_ADMIN' ? (
-                <Route path='/admin' element={<StudentComponent />} /> //차후 어드민 페이지 연결
-              ) : (
-                <Route index element={handleNoPermission()} />
-              )}
-            </Routes>
+          <Container fluid className="vh-100">
+            <Row>
+              <Col md={4} className="flex-column p-3 d-flex justify-content-center align-items-center">
+                <div className="vh-60">
+                  <ProfileComponent user={user} />
+                </div>
+                <div className="vh-40">
+                  <MypagePathButtenComponent user={user} onClick={handleCurrentPage}/>
+                </div>
+              </Col>
+              <Col md={8} className="vh-100 p-3 d-flex justify-content-center align-items-center">
+                <NoPermissionModal show={showModal} onClose={handleCloseModal} />
+                <Routes>
+                  {user.authority === "ROLE_TRAINER" ? (
+                    <Route index element={<TrainerComponent user={user} currentPage={currentPage} />} />
+                  ) : user.authority === "ROLE_STUDENT" ? (
+                    <Route index element={<StudentComponent user={user} currentPage={currentPage} />} />
+                  ) : user.authority === "ROLE_ADMIN" ? (
+                    <Route path="/admin" element={<StudentComponent />} /> // 어드민 페이지 연결 예정
+                  ) : (
+                    <Route index element={handleNoPermission()} />
+                  )}
+                </Routes>
+              </Col>
+            </Row>
           </Container>
         </>
       ) : (
