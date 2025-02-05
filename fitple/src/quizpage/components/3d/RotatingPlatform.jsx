@@ -1,6 +1,5 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import NPCOrb from './NpcOrb';
 
 const PLATFORM_SETTINGS = {
     size: [2.3, 0.2, 2.3],
@@ -45,7 +44,6 @@ function RotatingPlatform({ position, isActive }) {
                     opacity={1}
                 />
             </mesh>
-            <NPCOrb platformPosition={position} />
         </group>
     );
 }

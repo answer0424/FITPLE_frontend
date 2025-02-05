@@ -19,14 +19,31 @@ function QuizPage() {
     const [hbtiType, setHbtiType] = useState(null);
     const [isMoving, setIsMoving] = useState(false);
     const [pathCompleted, setPathCompleted] = useState(new Set());
+    const [npcCompletedPlatforms, setNpcCompletedPlatforms] = useState(new Set());
+    const [currentNPCVisibility, setCurrentNPCVisibility] = useState(true);
 
     const handleDogArrival = () => {
-        
         setIsMoving(false);
         setTimeout(() => {
             setShowQuiz(true);
         }, 100);
     };
+
+    const handleQuizComplete = () => {
+        setCurrentNPCVisibility(false);
+        setNpcCompletedPlatforms(prev => {
+            const newCompleted = new Set(prev);
+            newCompleted.add(currentPlatform);
+            return newCompleted;
+        });
+
+        setPathCompleted(prev => {
+            const newPathCompleted = new Set(prev);
+            newPathCompleted.add(currentPlatform);
+            return newPathCompleted;
+        });
+    };
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -100,7 +117,7 @@ function QuizPage() {
             alert('다음 문제로 넘어가기 전에 해당 질문에 대한 답을 해주세요 .');
             return;
         }
-        
+
         setShowQuiz(false);
         setIsMoving(true);
     
@@ -113,6 +130,7 @@ function QuizPage() {
                 newSet.add(currentPlatform);
                 return newSet;
             });
+            setCurrentNPCVisibility(true);
         }
     };
 
@@ -170,6 +188,7 @@ function QuizPage() {
             ...prev,
             [questionIndex]: value
         }));
+        handleQuizComplete();
     };
 
     return (
@@ -187,6 +206,8 @@ function QuizPage() {
                     visibleConnections={visibleConnections}
                     platformPositions={platformPositions}
                     pathCompleted={pathCompleted}
+                    npcCompletedPlatforms={npcCompletedPlatforms}
+                    currentNPCVisibility={currentNPCVisibility}
                     onDogArrival={handleDogArrival}
                 />
             </Canvas>

@@ -25,12 +25,19 @@ function NPCOrb({ platformPosition, isActive = true }) {
     ];
 
     useFrame((state) => {
+        if (!orbRef.current) return;
+        
         const time = state.clock.getElapsedTime();
+        // 오브 떠다니는 애니메이션
         orbRef.current.position.y = platformPosition[1] + 
             ORB_SETTINGS.hoverHeight + 
             Math.sin(time * ORB_SETTINGS.oscillationSpeed) * ORB_SETTINGS.oscillationAmplitude;
+        
+        // 오브 회전 애니메이션
         orbRef.current.rotation.y += ORB_SETTINGS.rotationSpeed;
-        if (boneRef.current) {
+        
+        // 뼈다귀 회전 애니메이션
+        if (boneRef.current && isActive) {
             boneRef.current.rotation.y += ORB_SETTINGS.boneRotationSpeed;
         }
     });
