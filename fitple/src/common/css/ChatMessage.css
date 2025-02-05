@@ -1,0 +1,91 @@
+.chat-message-container {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px; /* 최대 너비 지정 */
+    margin: 0 auto;
+    height: 80vh; /* 화면 높이에 맞게 조절 */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message-container button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    align-self: flex-start;
+}
+
+.chat-message-container button:hover {
+    background-color: #777;
+}
+
+.message-list {
+    list-style-type: none;
+    padding: 0;
+    flex-grow: 1; /* 남은 공간을 차지하도록 설정 */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 40vh;
+}
+
+/* 메시지 기본 스타일 */
+.message-item {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 75%; /* 메시지가 너무 길어지지 않도록 제한 */
+    word-wrap: break-word;
+    display: inline-block;
+}
+
+/* 본인 메시지 스타일 */
+.self-message {
+    background-color: #4CAF50;
+    color: white;
+    align-self: flex-end;
+    text-align: right;
+}
+
+/* 상대방 메시지 스타일 */
+.other-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.message-input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #555;
+    width: 100%;
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    margin-right: 10px;
+}
+
+.message-send-button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.message-send-button:hover {
+    background-color: #777;
+}

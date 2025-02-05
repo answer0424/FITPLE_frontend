@@ -1,4 +1,3 @@
-// LoginForm.js
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
@@ -12,15 +11,28 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
 
-  const { login } = useContext(LoginContext);
+  const { login, loginCheck} = useContext(LoginContext);
 
   const onLogin = (e) => {
     e.preventDefault();
 
+<<<<<<< HEAD
     login(username, password, rememberUserId); // 로그인 진행
   };
+=======
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    
+    
+    login(username, password);  // 로그인 진행
+  }
+>>>>>>> 05d2bd953d465278320255115434acb511e06933
 
   useEffect(() => {
+    console.log('LoginContextProvider 마운트 됨')
+
+    
+
     // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get("rememberId");
     console.log(`쿠키 rememberId : ${rememberId}`);
@@ -34,6 +46,7 @@ const LoginPage = () => {
 
   // oauth
   const onKakaoLogin = () => {
+<<<<<<< HEAD
     window.location.href = `${
       import.meta.env.VITE_Server
     }/oauth2/authorization/kakao`;
@@ -57,6 +70,23 @@ const LoginPage = () => {
   const handleClick = () => {
     alert("Forgot Password?");
     navigate("/reset-password");
+=======
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/kakao`;
+    console.log('kakao oauth 로그인');
+    
+  };
+
+  const onGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
+    console.log('google oauth 로그인');
+    
+  };
+
+  const onNaverLogin = () => {
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
+    console.log('naver oauth 로그인');
+    
+>>>>>>> 05d2bd953d465278320255115434acb511e06933
   };
 
   return (
@@ -80,13 +110,21 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+<<<<<<< HEAD
             <div className="forgot-password-link">
               <button onClick={handleClick}>Forgot Password?</button>
             </div>
+=======
+>>>>>>> 05d2bd953d465278320255115434acb511e06933
             <div className="button-container">
               <button type="submit">Login</button>
             </div>
           </form>
+          <div className="forgot-password-link">
+            <button onClick={() => alert("Forgot Password?")}>
+              Forgot Password?
+            </button>
+          </div>
           <div className="login-box">
             <button
               className="social-button"

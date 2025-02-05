@@ -23,6 +23,7 @@ const LoginContextProvider = ({children}) => {
 
     // 로그인 확인
     const loginCheck = async (isAuthPage = false) => {
+        console.log('login Check gogo')
         const accessToken = Cookies.get('accessToken');
 
         console.log(`accessToken: ${accessToken}`);
@@ -47,6 +48,7 @@ const LoginContextProvider = ({children}) => {
 
         try {
             response = await auth.userInfo();
+            console.log(response);
         } catch (error) {
             console.log(`error: ${error}`);
             return;
@@ -60,6 +62,7 @@ const LoginContextProvider = ({children}) => {
 
         data = response.data;
         console.log(`data: ${data}`);
+        console.log("🔍 userData (JSON 변환):", JSON.stringify(data, null, 2));
 
         // 인증 실패
         if (data === 'UNAUTHORIZED' || response.status === 401) {
@@ -73,15 +76,11 @@ const LoginContextProvider = ({children}) => {
     };
 
     // 로그인 요청
-    const login = async (username, password, rememberId) => {
+    const login = async (username, password) => {
         console.log(`
             로그인 요청
-            login(username:${username}, password:${password}, rememberId:${rememberId});
+            login(username:${username}, password:${password});
         `);
-
-        // username 저장
-        if (rememberId) Cookies.set('rememberId', username);
-        else Cookies.remove('rememberId');
 
         try {
             const response = await auth.login(username, password);
@@ -104,6 +103,7 @@ const LoginContextProvider = ({children}) => {
                 // 로그인 세팅
                 localStorage.setItem('username', username.toUpperCase());
                 loginCheck(false);  // username도 함께 전달
+                console.log('여기로 왔다...')
 
                 // 시작 페이지 이동
                 navigate('/');
@@ -117,6 +117,16 @@ const LoginContextProvider = ({children}) => {
     // 로그아웃
     const logout = (force = false) => {
         // confirm 없이 강제 로그아웃
+        console.log('로그아웃');
+
+        // confirm 받아서 로그아웃
+        if (confirm('로그아웃 하시겠습니까?')) {
+            logoutSetting();
+            navigate('/');
+        } else{ 
+            return;
+        }
+
         if (force) {
             // 로그아웃 세팅
             logoutSetting();
@@ -125,62 +135,64 @@ const LoginContextProvider = ({children}) => {
             return;
         };
 
-        // confirm 받아서 로그아웃
-        if (confirm('로그아웃 하시겠습니까?')) {
-            logoutSetting();
-            navigate('/');
+    }
+    
+
+    const loginSetting = (userData, accessToken, username, provider, providerId) => {
+        console.log("📌 loginSetting() params:", username, provider, providerId);
+    
+        if (!userData || userData.length === 0) {
+            console.error("🚨 userData가 비어있음!");
+            return;
         }
-    }
-
-    // 로그인 세팅
-    const loginSetting = (userData, accessToken, username) => {
-    console.log(userData);
-    const normalizedUsername = username.trim().toUpperCase();
-    const loggedInUser = userData.find(user => user.username.trim().toUpperCase() === normalizedUsername);
-
-    console.log('로그인한 유저 : ', loggedInUser); // 로그인한 유저 정보를 출력
-
-    if (loggedInUser) {
-        const { id, username } = loggedInUser;
-        // authorities 배열에서 authority 값을 추출
-        const authorities = loggedInUser.authority;
-
-        console.log(`
-            loginSetting() 
-               id : ${id}
-               username : ${username}
-               authority : ${authorities}
+    
+        // OAuth 로그인 시 username이 없을 수도 있으므로 provider 기반으로 찾기
+        if (!username) {
+            const foundUser = userData.find(user => user.provider === provider && user.providerId === providerId);
+            if (foundUser) {
+                username = foundUser.username;
+            }
+        }
+    
+        const normalizedUsername = username
+            ? username.trim().toUpperCase()
+            : (provider && providerId) ? `${provider}_${providerId}`.toUpperCase() 
+            : "UNKNOWN_USER";
+    
+        console.log("✅ 최종 username:", normalizedUsername);
+    
+        const loggedInUser = userData.find(user => user.username.trim().toUpperCase() === normalizedUsername);
+    
+        if (!loggedInUser) {
+            console.error('❌ 로그인한 사용자 정보를 찾을 수 없습니다.');
+            return;
+        }
+    
+        const { id, username: finalUsername, authority } = loggedInUser;
+    
+        console.log(`✅ 로그인 성공!
+            ID: ${id}
+            Username: ${finalUsername}
+            Authority: ${authority}
         `);
-
-        // JWT 토큰을 header에 저장
+    
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-        // 로그인 여부
         setIsLogin(true);
-
-        // 유저 정보 세팅
-        const updateUserInfo = { id, username, authorities };
-
-        setUserInfo(updateUserInfo);
-
-        // 권한 정보 세팅
-        const updatedAuthority = { isStudent: false, isTrainer: false, isAdmin: false };
-        if (authorities.includes('ROLE_STUDENT')) updatedAuthority.isStudent = true;
-        else if (authorities.includes('ROLE_TRAINER')) updatedAuthority.isTrainer = true;
-        else if (authorities.includes('ROLE_ADMIN')) updatedAuthority.isAdmin = true;
-
+        setUserInfo({ id, username: finalUsername, authority });
+    
+        const updatedAuthority = {
+            isStudent: authority.includes('ROLE_STUDENT'),
+            isTrainer: authority.includes('ROLE_TRAINER'),
+            isAdmin: authority.includes('ROLE_ADMIN'),
+        };
         setAuthority(updatedAuthority);
-
+    
         navigate('/');
-
-        // 새로고침 시 context로 리로딩되기 때문에 localStorage에 담긴 상태 정보가 초기화되도록 설정
         localStorage.setItem("isLogin", "true");
-        localStorage.setItem("userInfo", JSON.stringify(updateUserInfo));
+        localStorage.setItem("userInfo", JSON.stringify({ id, username: finalUsername, authority }));
         localStorage.setItem("authority", JSON.stringify(updatedAuthority));
-    } else {
-        console.error('로그인한 사용자 정보를 찾을 수 없습니다.');
-    }
-};
+    };
+    
 
 
     // 로그아웃 세팅
