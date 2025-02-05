@@ -5,11 +5,11 @@ import * as THREE from 'three';
 
 const LINE_SETTINGS = {
     color: "#3B82F6",
-    lineWidth: 120,
+    lineWidth: 100,
     defaultOpacity: 0.8,
     segments: 50,
-    dashSize: 0.03,
-    gapSize: 0.05
+    dashSize: 0.05,
+    gapSize: 0.03
 };
 
 function FlowingConnections({ connections, currentPlatform, visibleConnections }) {
