@@ -16,8 +16,8 @@
 body {
   margin: 0;
   display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center;
+  align-items: center;
   min-width: 100vw;
   min-height: 100vh;
 }
@@ -26,4 +26,6 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
   text-align: center;
-} */
+} 
+
+*/

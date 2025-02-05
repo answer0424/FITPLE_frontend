@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import './QuizResult.css';
 
 const QuizResult = () => {
   const [resultData, setResultData] = useState(null);
@@ -52,26 +53,19 @@ const QuizResult = () => {
     }
   }, [userId]);
 
-  if (error) return (
-    <div style={{ color: 'red', padding: '20px', textAlign: 'center' }}>
-      Error: {error}
-    </div>
-  );
-  
-  if (!resultData) return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      Loading...
-    </div>
-  );
+  if (error) return <div className="error-message">Error: {error}</div>;
+  if (!resultData) return <div className="loading">Loading...</div>;
 
   const { hbtiType, percentages, details, topMatches } = resultData;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+    <div className="quiz-result-container">
       {details && (
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
-            <h1 style={{ marginBottom: '30px' }}>
+        <div className="details-section">
+          
+          {/* [1] */}
+          <div className="hbti-header">
+            <h1>
               나의 HBTI는<br />
               {hbtiType}
             </h1>
@@ -79,90 +73,63 @@ const QuizResult = () => {
               <img 
                 src={`${import.meta.env.VITE_Server}${details.dogImage}`}
                 alt={hbtiType}
-                style={{ maxWidth: '100%', height: 'auto', marginBottom: '20px' }}
+                className="dog-image"
               />
             )}
           </div>
 
-          <div>
-            <h2 style={{ marginBottom: '20px' }}>Percentage</h2>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
-              gap: '20px' 
-            }}>
+          <div className="result-content">
+
+            {/* [2] */}
+            <h2>Percentage</h2>
+            <div className="percentages-grid">
               {Object.entries(percentages || {}).map(([trait, score]) => (
-                <div key={trait} style={{ 
-                  textAlign: 'center',
-                  padding: '15px',
-                  backgroundColor: '#f5f5f5',
-                  borderRadius: '8px'
-                }}>
-                  <div style={{ fontWeight: 'bold' }}>{trait}</div>
-                  <div style={{ fontSize: '24px' }}>{score.toFixed(1)}%</div>
+                <div key={trait} className="percentage-card">
+                  <div className="trait">{trait}</div>
+                  <div className="score">{score.toFixed(1)}%</div>
                 </div>
               ))}
             </div>
-            <h2 style={{ marginBottom: '20px' }}>{details.label}</h2>
+
+            {/* [3] */}
+            <h2>{details.label}</h2>
             <h4>{details.fullDescription}</h4>
           </div>
         </div>
       )}
 
       {topMatches && topMatches.length > 0 && (
-        <div>
-          <h2 style={{ marginBottom: '20px' }}>Top Matching Trainers</h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '20px' 
-          }}>
+        <div className="matches-section">
+          <h2>Top Matching Trainers</h2>
+          <div className="matches-grid">
             {topMatches.map((match, index) => (
-              <div key={index} style={{ 
-                backgroundColor: '#f5f5f5', 
-                padding: '20px',
-                borderRadius: '8px',
-                textAlign: 'center'
-              }}>
+              <div key={index} className="match-card">
                 {match.details?.dogImage && (
                   <img 
                     src={`${import.meta.env.VITE_Server}${match.details.dogImage}`}
                     alt={match.hbtiType}
-                    style={{ maxWidth: '100%', height: 'auto', marginBottom: '15px' }}
+                    className="match-image"
                   />
                 )}
-                <h3 style={{ marginBottom: '10px' }}>{match.details?.label} 선생님과 함께 운동을 시작해보아요!</h3>
-                <div>{match.score}%</div>
-                <div>{match.hbtiType}</div>
+                <h3>{match.details?.label} 선생님과 함께 운동을 시작해보아요!</h3>
+                <div className="match-score">{match.score}%</div>
+                <div className="match-type">{match.hbtiType}</div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        marginTop: '40px' 
-      }}>
+      <div className="action-button-container">
         <button
           onClick={() => navigate(`/quiz/${userId}/result/match`, {
             state: { hbtiTypes: [hbtiType] }
           })}
-          style={{
-            padding: '15px 30px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}
+          className="match-button"
         >
           트레이너 매칭하기
         </button>
       </div>
-
     </div>
   );
 };
