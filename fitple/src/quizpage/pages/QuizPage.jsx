@@ -17,6 +17,16 @@ function QuizPage() {
     const [showQuiz, setShowQuiz] = useState(true);
     const [showResultModal, setShowResultModal] = useState(false);
     const [hbtiType, setHbtiType] = useState(null);
+    const [isMoving, setIsMoving] = useState(false);
+    const [pathCompleted, setPathCompleted] = useState(new Set());
+
+    const handleDogArrival = () => {
+        
+        setIsMoving(false);
+        setTimeout(() => {
+            setShowQuiz(true);
+        }, 100);
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -57,7 +67,7 @@ function QuizPage() {
                 console.error('Error fetching user data:', error);
             }
         };
-     
+        
         fetchUser();
     }, []);
 
@@ -92,6 +102,8 @@ function QuizPage() {
         }
         
         setShowQuiz(false);
+        setIsMoving(true);
+    
         const nextPlatform = currentPlatform + 1;
         if (nextPlatform < platformPositions.length) {
             setCurrentPlatform(nextPlatform);
@@ -101,17 +113,17 @@ function QuizPage() {
                 newSet.add(currentPlatform);
                 return newSet;
             });
-            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
     const handlePrev = () => {
         setShowQuiz(false);
+        setIsMoving(true);
+
         const prevPlatform = currentPlatform - 1;
         if (prevPlatform >= 0) {
             setCurrentPlatform(prevPlatform);
             setCurrentPath([platformPositions[currentPlatform], platformPositions[prevPlatform]]);
-            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
@@ -174,15 +186,17 @@ function QuizPage() {
                     currentPath={currentPath}
                     visibleConnections={visibleConnections}
                     platformPositions={platformPositions}
+                    pathCompleted={pathCompleted}
+                    onDogArrival={handleDogArrival}
                 />
             </Canvas>
             
-            {gameState === 'playing' && currentPlatform < quizData.length && (
+            {!isMoving && showQuiz && gameState === 'playing' && currentPlatform < quizData.length && (
                 <QuizComponent 
                     currentPlatform={currentPlatform}
                     quizData={quizData}
                     onAnswerSubmit={handleAnswerChange}
-                    shouldShow={showQuiz}
+                    shouldShow={true}
                 />
             )}
             

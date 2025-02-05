@@ -20,11 +20,12 @@ const CAMERA_SETTINGS = {
  * {Array} currentPath - 현재 이동 경로의 시작점과 끝점 좌표
  */
 
-function DogCamera({ currentPath }) {
+function DogCamera({ currentPath, onArrival }) {
     const dogRef = useRef();
     const { camera } = useThree();
     const currentPosition = useRef(new THREE.Vector3());
     const pathProgress = useRef(0);
+    const arrived = useRef(false);
     
     useFrame((state) => {
         if (!currentPath || !dogRef.current) return;
@@ -32,9 +33,13 @@ function DogCamera({ currentPath }) {
         const time = state.clock.getElapsedTime();
         pathProgress.current += CAMERA_SETTINGS.speed;
         
-        if (pathProgress.current > 1) {
+        if (pathProgress.current >= 1) {
             pathProgress.current = 1;
-            
+
+            if (!arrived.current) {
+                arrived.current = true;
+                onArrival && onArrival();
+            }
         }
 
         const point = new THREE.Vector3();
@@ -66,6 +71,10 @@ function DogCamera({ currentPath }) {
     });
 
     useEffect(() => {
+        arrived.current = false;
+    }, [currentPath]);
+
+    useEffect(() => {
         pathProgress.current = 0;
         if (dogRef.current && currentPath?.[0]) {
             const startPoint = new THREE.Vector3(...currentPath[0]);
@@ -76,7 +85,7 @@ function DogCamera({ currentPath }) {
 
     return (
         <group ref={dogRef}>
-            <LowPolyDog scale={[0.3, 0.3, 0.3]} />
+            <LowPolyDog scale={[0.27, 0.27, 0.27]} />
         </group>
     );
 }
