@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "overrides": {
+    "pubhub": {
+      "minimatch": "^3.0.5"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
