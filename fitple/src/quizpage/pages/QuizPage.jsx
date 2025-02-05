@@ -17,6 +17,32 @@ function QuizPage() {
     const [showQuiz, setShowQuiz] = useState(true);
     const [showResultModal, setShowResultModal] = useState(false);
     const [hbtiType, setHbtiType] = useState(null);
+    const [isMoving, setIsMoving] = useState(false);
+    const [pathCompleted, setPathCompleted] = useState(new Set());
+    const [npcCompletedPlatforms, setNpcCompletedPlatforms] = useState(new Set());
+    const [currentNPCVisibility, setCurrentNPCVisibility] = useState(true);
+
+    const handleDogArrival = () => {
+        setIsMoving(false);
+        setTimeout(() => {
+            setShowQuiz(true);
+        }, 100);
+    };
+
+    const handleQuizComplete = () => {
+        
+        setTimeout(() => {
+            setCurrentNPCVisibility(false);
+
+            setNpcCompletedPlatforms(prev => {
+                const newCompleted = new Set(prev);
+                newCompleted.add(currentPlatform);
+                return newCompleted;
+            });
+        },1500);
+
+    };
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -57,7 +83,7 @@ function QuizPage() {
                 console.error('Error fetching user data:', error);
             }
         };
-     
+        
         fetchUser();
     }, []);
 
@@ -90,28 +116,35 @@ function QuizPage() {
             alert('다음 문제로 넘어가기 전에 해당 질문에 대한 답을 해주세요 .');
             return;
         }
-        
+
         setShowQuiz(false);
-        const nextPlatform = currentPlatform + 1;
-        if (nextPlatform < platformPositions.length) {
-            setCurrentPlatform(nextPlatform);
-            setCurrentPath([platformPositions[currentPlatform], platformPositions[nextPlatform]]);
-            setVisibleConnections(prev => {
-                const newSet = new Set(prev);
-                newSet.add(currentPlatform);
-                return newSet;
-            });
-            setTimeout(() => setShowQuiz(true), 100);
-        }
+
+        setTimeout(() => {
+            setIsMoving(true);
+        
+            const nextPlatform = currentPlatform + 1;
+            if (nextPlatform < platformPositions.length) {
+                setCurrentPlatform(nextPlatform);
+                setCurrentPath([platformPositions[currentPlatform], platformPositions[nextPlatform]]);
+                setVisibleConnections(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(currentPlatform);
+                    return newSet;
+                });
+                setCurrentNPCVisibility(true);
+            }
+        },1000);   
+
     };
 
     const handlePrev = () => {
         setShowQuiz(false);
+        setIsMoving(true);
+
         const prevPlatform = currentPlatform - 1;
         if (prevPlatform >= 0) {
             setCurrentPlatform(prevPlatform);
             setCurrentPath([platformPositions[currentPlatform], platformPositions[prevPlatform]]);
-            setTimeout(() => setShowQuiz(true), 100);
         }
     };
 
@@ -158,6 +191,7 @@ function QuizPage() {
             ...prev,
             [questionIndex]: value
         }));
+        handleQuizComplete();
     };
 
     return (
@@ -174,15 +208,19 @@ function QuizPage() {
                     currentPath={currentPath}
                     visibleConnections={visibleConnections}
                     platformPositions={platformPositions}
+                    pathCompleted={pathCompleted}
+                    npcCompletedPlatforms={npcCompletedPlatforms}
+                    currentNPCVisibility={currentNPCVisibility}
+                    onDogArrival={handleDogArrival}
                 />
             </Canvas>
             
-            {gameState === 'playing' && currentPlatform < quizData.length && (
+            {!isMoving && showQuiz && gameState === 'playing' && currentPlatform < quizData.length && (
                 <QuizComponent 
                     currentPlatform={currentPlatform}
                     quizData={quizData}
                     onAnswerSubmit={handleAnswerChange}
-                    shouldShow={showQuiz}
+                    shouldShow={true}
                 />
             )}
             

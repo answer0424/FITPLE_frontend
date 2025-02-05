@@ -1,9 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 const DogBone = (props) => {
     const { nodes, materials } = useGLTF('/models/dog_treat.glb');
     const meshRef = useRef();
+
+    useEffect(() => {
+        materials.lambert1.color.set('#FFF')
+    }, [materials])
 
     return (
         <group {...props} dispose={null} ref={meshRef}>

@@ -15,7 +15,7 @@ const ORB_SETTINGS = {
     opacity: 0.4
 };
 
-function NPCOrb({ platformPosition }) {
+function NPCOrb({ platformPosition, isActive = true }) {
     const orbRef = useRef();
     const boneRef = useRef();
     const orbPosition = [
@@ -25,12 +25,16 @@ function NPCOrb({ platformPosition }) {
     ];
 
     useFrame((state) => {
+        if (!orbRef.current) return;
+        
         const time = state.clock.getElapsedTime();
         orbRef.current.position.y = platformPosition[1] + 
             ORB_SETTINGS.hoverHeight + 
             Math.sin(time * ORB_SETTINGS.oscillationSpeed) * ORB_SETTINGS.oscillationAmplitude;
+        
         orbRef.current.rotation.y += ORB_SETTINGS.rotationSpeed;
-        if (boneRef.current) {
+        
+        if (boneRef.current && isActive) {
             boneRef.current.rotation.y += ORB_SETTINGS.boneRotationSpeed;
         }
     });
@@ -47,7 +51,7 @@ function NPCOrb({ platformPosition }) {
                     opacity={ORB_SETTINGS.opacity}
                 />
             </mesh>
-            <DogBone ref={boneRef} />
+            {isActive && <DogBone ref={boneRef} />}
         </group>
     );
 }
