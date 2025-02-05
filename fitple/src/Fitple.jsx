@@ -52,15 +52,15 @@ function App() {
               path="/member/detail/write"
               Component={TrainerDetailPageWrite}
             ></Route>
-            <Route path="/reset-password" Component={ResetPasswordPage}></Route>
             <Route
-              path="/forgot-password"
-              Component={ForgotPasswordPage}
+              path="member/reset-password/:userId/:uuid"
+              Component={ResetPasswordPage}
             ></Route>
             <Route
               path="/forgot-password"
               Component={ForgotPasswordPage}
             ></Route>
+
             <Route
               path="/quiz/:userId/result/match"
               Component={MatchPage}
