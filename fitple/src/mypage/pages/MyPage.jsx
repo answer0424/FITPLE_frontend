@@ -8,7 +8,6 @@ import ProfileComponent from '../components/ProfileComponent';
 import axios from 'axios';
 import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
-  // import { getRole } from '../utill';
 
   const MyPage = () => {
     // const role = authInfo();
@@ -18,8 +17,28 @@ import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
     const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
 
-    useEffect(() => {
-      console.log(userInfo.authorities);
+    useEffect(() => {      
+      const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        ?.split("=")[1];
+
+      // console.log(`${import.meta.env.VITE_Server}/register/user`);
+
+      axios.get(`${import.meta.env.VITE_Server}/register/user`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        // console.log(response.data.id);
+        setUser(response.data);
+      })
+
+      if (!accessToken) {
+        return;
+      }
     }, []);
 
     const handleCurrentPage = (page) => {
@@ -37,26 +56,26 @@ import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 
     return(
       <div>
-      {userInfo ? (
+      {user ? (
         <>
-          <Container fluid className="vh-100">
+          <Container className="vh-100">
             <Row>
               <Col md={4} className="flex-column p-3 d-flex justify-content-center align-items-center">
                 <div className="vh-60">
-                  <ProfileComponent user={userInfo} />
+                  <ProfileComponent user={user} />
                 </div>
                 <div className="vh-40">
-                  <MypagePathButtenComponent user={userInfo} onClick={handleCurrentPage}/>
+                  <MypagePathButtenComponent user={user} onClick={handleCurrentPage}/>
                 </div>
               </Col>
               <Col md={8} className="vh-100 p-3 d-flex justify-content-center align-items-center">
                 <NoPermissionModal show={showModal} onClose={handleCloseModal} />
                 <Routes>
-                  {userInfo.authorities === "ROLE_TRAINER" ? (
-                    <Route index element={<TrainerComponent user={userInfo} currentPage={currentPage} />} />
-                  ) : userInfo.authorities === "ROLE_STUDENT" ? (
-                    <Route index element={<StudentComponent user={userInfo} currentPage={currentPage} />} />
-                  ) : userInfo.authorities === "ROLE_ADMIN" ? (
+                  {user.authority === "ROLE_TRAINER" ? (
+                    <Route index element={<TrainerComponent user={user} currentPage={currentPage} />} />
+                  ) : user.authority === "ROLE_STUDENT" ? (
+                    <Route index element={<StudentComponent user={user} currentPage={currentPage} />} />
+                  ) : user.authority === "ROLE_ADMIN" ? (
                     <Route path="/admin" element={<StudentComponent />} /> // 어드민 페이지 연결 예정
                   ) : (
                     <Route index element={handleNoPermission()} />

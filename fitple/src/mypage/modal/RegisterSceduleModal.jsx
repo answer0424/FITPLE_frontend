@@ -1,7 +1,11 @@
 import React from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
 
-const RegisterSceduleModal = ({ isModalOpen, closeModal, addEvent, selectedDate, eventInput, setEventInput, timeInput, setTimeInput }) => {
+const RegisterSceduleModal = ({ isModalOpen, closeModal, addEvent, selectedDate, timeInput, setTimeInput }) => {
+
+    // const [eventInput, setEventInput] = useState(""); // 일정 제목 입력 상태
+    // const [timeInput, setTimeInput] = useState(""); // 일정 시간 입력 상태
+
     return (
       <Modal show={isModalOpen} onHide={closeModal} centered>
         <Modal.Header closeButton>

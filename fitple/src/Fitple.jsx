@@ -1,16 +1,10 @@
-<<<<<<< HEAD
-import './App.css'
 import "bootstrap/dist/css/bootstrap.min.css";
-=======
-import { useState } from 'react'
->>>>>>> 05d2bd953d465278320255115434acb511e06933
 import LoginPage from './mainpage/pages/LoginPage';
 import UserRegister from './mainpage/pages/UserRegister';
 import TrainerRegister from './mainpage/pages/TrainerRegister';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginContextProvider from './mainpage/contexts/LoginContextProvider';
 import MainPage from './mainpage/pages/MainPage';
-<<<<<<< HEAD
 import QuizPage from './quizpage/pages/QuizPage';
 import QuizResult from './quizpage/pages/QuizResult';
 import HBTIListpage from "./HBTIpage/pages/HBTIListpage";
@@ -21,11 +15,7 @@ import ResetPasswordPage from "./mainpage/pages/ResetPasswordPage";
 import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 import TrainerDetailPageWrite from './mypage/pages/TrainerDetailPage';
 
-function App() {
-=======
-
 function Fitple() {
->>>>>>> 05d2bd953d465278320255115434acb511e06933
   return (
 
     <>
@@ -56,5 +46,5 @@ function Fitple() {
 
 }
 
-export default App;
+export default Fitple;
 

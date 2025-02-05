@@ -5,7 +5,7 @@ import moment from "moment";
 import '../static/css/CalenderStyle.css';
 import { Container } from "react-bootstrap";
 import axios from "axios";
-import RegisterSceduleModal from "../modal/RegisterSceduleModal";
+import DailyScheduleModal from "../modal/DailyScheduleModal";
 
 
 const CalenderComponent = ({user}) => {
@@ -14,26 +14,31 @@ const CalenderComponent = ({user}) => {
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState([]); // 일정 데이터를 저장하는 상태
-  const [eventInput, setEventInput] = useState(""); // 일정 제목 입력 상태
-  const [timeInput, setTimeInput] = useState(""); // 일정 시간 입력 상태
   const [selectedMember, setSelectedMember] = useState(null);
   const [members, setMembers] = useState([]);
+  const [events, setEvents] = useState([]); // 일정 데이터를 저장하는 상태
+  const [dailyEvents, setDailyEvents] = useState([])
 
+  //달력 제어
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleDayClick = (clickedDate) => {
-    setSelectedDate(moment(clickedDate).format("YYYY-MM-DD"));
+
+    const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
+    const selectedDay = formattedDate.slice(8, 10);
+
+    setSelectedDate(formattedDate);
+    setDailyEvents(events.filter(event => event.date.slice(8, 10) === selectedDay));
     setIsModalOpen(true);
   };
+  //달력 제어
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
-    setEventInput("");
-    setTimeInput("");
+    setDailyEvents([]);
   };
 
   const addEvent = () => {
@@ -81,13 +86,12 @@ const CalenderComponent = ({user}) => {
       }
     })
     .then((response) => {
-      console.log(response.headers['content-type']);
+      // console.log(response.headers['content-type']);
       console.log(response.data);
       setEvents(response.data);
     })
   }, []);
 
-  
   return  (
     <>
       <Container>
@@ -119,15 +123,12 @@ const CalenderComponent = ({user}) => {
       </Container>
 
       {/* 일정 추가 모달 */}
-      <RegisterSceduleModal
+      <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         addEvent={addEvent}
         selectedDate={selectedDate}
-        eventInput={eventInput}
-        setEventInput={setEventInput}
-        timeInput={timeInput}
-        setTimeInput={setTimeInput}
+        dailyEvents={dailyEvents}
       />
 
       {/* 일정 리스트 보기 */}
