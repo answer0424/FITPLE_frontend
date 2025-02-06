@@ -5,7 +5,7 @@ import TrainerComponent from '../components/trainer/TrainerComponent';
 import StudentComponent from '../components/student/StudentComponent';
 import NoPermissionModal from '../modal/NoPermissionModal';
 import ProfileComponent from '../components/ProfileComponent';
-import axios from 'axios';
+import api from '../../mainpage/apis/api';
 import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import { EventProvider } from '../context/EventContext';
@@ -27,12 +27,7 @@ import { EventProvider } from '../context/EventContext';
       // console.log(`${import.meta.env.VITE_Server}/register/user`);
 
       //TODO 유저 정보 읽어오기. useContext 정상화 시 삭제
-      axios.get(`${import.meta.env.VITE_Server}/register/user`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      api.get('/register/user', {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`},})
       .then((response) => {
         // console.log(response.data.id);
         setUser(response.data);

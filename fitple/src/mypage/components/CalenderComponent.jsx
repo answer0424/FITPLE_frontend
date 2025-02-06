@@ -7,6 +7,7 @@ import { Container } from "react-bootstrap";
 import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from '../context/EventContext'
+import api from "../../mainpage/apis/api";
 
 
 const CalenderComponent = ({user}) => {
@@ -62,19 +63,19 @@ const CalenderComponent = ({user}) => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
     //일정 불러오기
-    axios.get(`${import.meta.env.VITE_Server}/member/${user.id}/calendar`, {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    api.get(`/member/${user.id}/calendar`, {
       params: {
         year: date.getFullYear(),
         month: date.getMonth(),
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       }
     })
     .then((response) => {
       // console.log(response.headers['content-type']);
-      // console.log(response.data);
+      console.log(response.data);
       updateEvents(response.data);
     })
   }, []);
@@ -115,7 +116,7 @@ const CalenderComponent = ({user}) => {
         />
       </Container>
 
-      {/* 일정 추가 모달 */}
+      {/* 일정 모달 */}
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
