@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
@@ -6,6 +6,7 @@ import '../static/css/CalenderStyle.css';
 import { Container } from "react-bootstrap";
 import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
+import { useEventContext } from '../context/EventContext'
 
 
 const CalenderComponent = ({user}) => {
@@ -16,8 +17,9 @@ const CalenderComponent = ({user}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMember, setSelectedMember] = useState(null);
   const [members, setMembers] = useState([]);
-  const [events, setEvents] = useState([]); // 일정 데이터를 저장하는 상태
   const [dailyEvents, setDailyEvents] = useState([])
+  // const [events, setEvent] = useState([]); // 일정 데이터를 저장하는 상태
+  const { events, updateEvents } = useEventContext();
 
   //달력 제어
   const handleDateChange = (newDate) => {
@@ -34,35 +36,20 @@ const CalenderComponent = ({user}) => {
     setIsModalOpen(true);
   };
   //달력 제어
-
+  
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
     setDailyEvents([]);
   };
 
-  const addEvent = () => {
-    if (!eventInput.trim() || !timeInput.trim()) return;
-    setEvents((prev) => [
-      ...prev,
-      {
-        date: selectedDate,
-        time: timeInput,
-        title: eventInput.trim(),
-        isCompleted: false,
-        member: selectedMember,
-      },
-    ]);
-    closeModal();
-  };
-
-  const toggleCompletion = (index) => {
-    setEvents((prev) =>
-      prev.map((event, i) =>
-        i === index ? { ...event, isCompleted: !event.isCompleted } : event
-      )
-    );
-  };
+  // const toggleCompletion = (index) => {
+  //   setEvent((prev) =>
+  //     prev.map((event, i) =>
+  //       i === index ? { ...event, isCompleted: !event.isCompleted } : event
+  //     )
+  //   );
+  // };
 
   const getEventsForDate = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
@@ -87,13 +74,19 @@ const CalenderComponent = ({user}) => {
     })
     .then((response) => {
       // console.log(response.headers['content-type']);
-      console.log(response.data);
-      setEvents(response.data);
+      // console.log(response.data);
+      updateEvents(response.data);
     })
   }, []);
 
+  useEffect(() => {
+    console.log("컨텍스트 사용")
+    console.log(events);
+  }, [events])
+
   return  (
     <>
+    
       <Container>
         <Calendar
           value={date}
@@ -126,9 +119,9 @@ const CalenderComponent = ({user}) => {
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
-        addEvent={addEvent}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
+        user={user}
       />
 
       {/* 일정 리스트 보기 */}

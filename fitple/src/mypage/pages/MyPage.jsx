@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
+import { Route, Routes, useNavigate} from 'react-router-dom'
 import { Container, Row, Col } from "react-bootstrap";
 import TrainerComponent from '../components/trainer/TrainerComponent';
 import StudentComponent from '../components/student/StudentComponent';
@@ -8,11 +8,12 @@ import ProfileComponent from '../components/ProfileComponent';
 import axios from 'axios';
 import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
+import { EventProvider } from '../context/EventContext';
 
   const MyPage = () => {
     // const role = authInfo();
     const [user, setUser] = useState(null);
-    const { userInfo } = useContext(LoginContext);
+    const { userI } = useContext(LoginContext);
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 
       // console.log(`${import.meta.env.VITE_Server}/register/user`);
 
+      //TODO 유저 정보 읽어오기. useContext 정상화 시 삭제
       axios.get(`${import.meta.env.VITE_Server}/register/user`, {
         withCredentials: true,
         headers: {
@@ -55,7 +57,7 @@ import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
     };
 
     return(
-      <div>
+      <EventProvider>
       {user ? (
         <>
           <Container className="vh-100">
@@ -88,7 +90,7 @@ import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
       ) : (
         <p>사용자 정보를 불러오는 중...</p>
       )}
-    </div>
+    </EventProvider>
   )
   
 }

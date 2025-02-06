@@ -1,18 +1,30 @@
 import React from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
 
-const RegisterSceduleModal = ({ isModalOpen, closeModal, addEvent, selectedDate, timeInput, setTimeInput }) => {
+const RegisterSceduleModal = ({ isModalOpen, closeModal, selectedDate, timeInput, setTimeInput }) => {
 
     // const [eventInput, setEventInput] = useState(""); // 일정 제목 입력 상태
     // const [timeInput, setTimeInput] = useState(""); // 일정 시간 입력 상태
 
+    const addEvent = () => {
+        if (!eventInput.trim() || !timeInput.trim()) return;
+        setEvents((prev) => [
+          ...prev,
+          {
+            date: selectedDate,
+            time: timeInput,
+            title: eventInput.trim(),
+            isCompleted: false,
+            member: selectedMember,
+          },
+        ]);
+        closeModal();
+      };
+
     return (
-      <Modal show={isModalOpen} onHide={closeModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>일정 추가</Modal.Title>
-        </Modal.Header>
+      <>
         <Modal.Body>
-          <p>선택된 날짜: {selectedDate}</p>
+          {/* <p>선택된 날짜: {selectedDate}</p>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>일정 제목</Form.Label>
@@ -31,17 +43,10 @@ const RegisterSceduleModal = ({ isModalOpen, closeModal, addEvent, selectedDate,
                 onChange={(e) => setTimeInput(e.target.value)}
               />
             </Form.Group>
-          </Form>
+          </Form> */}
+          <div>일정 추가</div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            닫기
-          </Button>
-          <Button variant="primary" onClick={addEvent}>
-            추가
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        </>
     );
   };
 
