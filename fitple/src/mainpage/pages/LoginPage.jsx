@@ -25,8 +25,6 @@ const LoginPage = () => {
   useEffect(() => {
     console.log('LoginContextProvider 마운트 됨')
 
-    
-
     // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get('rememberId');
     console.log(`쿠키 rememberId : ${rememberId}`);
@@ -44,13 +42,13 @@ const LoginPage = () => {
     console.log('kakao oauth 로그인');
     
   };
-
+  
   const onGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
     console.log('google oauth 로그인');
     
   };
-
+  
   const onNaverLogin = () => {
     window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
     console.log('naver oauth 로그인');
