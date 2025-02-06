@@ -11,6 +11,8 @@ const MainPage = () => {
 
     const navigate = useNavigate();
 
+    
+
     // HBTI test로 이동
     const gotoTest = () => {
         navigate('/');
@@ -26,8 +28,10 @@ const MainPage = () => {
         navigate('/');
     }
 
+    const isLogin = localStorage.getItem("isLogin") === "true";
+
     return (
-        <>
+        <div className='mainPage'>
             <Header />
             <div className="HBTI-test-container">
                 <h1>HBTI</h1>
@@ -56,9 +60,9 @@ const MainPage = () => {
                     <img src={sectionImg} alt="Trainer Match Image"/>
                 </div>
                 <Footer/>
-                <ChatIcon/>
+                {isLogin && <ChatIcon/>}
             </div>
-        </>
+        </div>
     );
 };
 

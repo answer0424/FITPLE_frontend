@@ -56,7 +56,7 @@ const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
                                     }}
                                     className="leave-button"
                                 >
-                                    <FontAwesomeIcon icon={faSignOutAlt} />
+                                    <FontAwesomeIcon icon={faSignOutAlt} className='FontAwesomeIcon'/>
                                 </button>
                             </li>
                         ))}

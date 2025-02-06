@@ -1,16 +1,6 @@
 /* 전체 페이지 스타일 */
-* {
+.mainPage {
     background-color: black;
-    
-}
-
-body {
-    background-color: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
 }
 
@@ -20,7 +10,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 20vh;
+    height: 20%;
     margin-top: 100px;
     margin-bottom:300px;
     width: 100%;
@@ -54,7 +44,7 @@ body {
 /* 배경 원 이미지 */
 .background-image {
     position: absolute;
-    top: 500px;
+    top: 70vh;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1200px;
@@ -64,6 +54,7 @@ body {
     border-radius: 50%;
     animation: rotate 30s linear infinite;
     z-index: -1;
+    overflow: hidden;
 }
 
 @keyframes rotate {
@@ -85,6 +76,7 @@ body {
     position: relative;
     z-index: 5;
     margin-top: 200px;
+    background-color: black;
 }
 
 /* about-HBTI */
@@ -98,6 +90,7 @@ body {
     text-align: left;
     min-height: 400px;
     margin-top: 1100px;
+    background-color: black;
 }
 
 .about-HBTI-container h2 {
@@ -133,6 +126,7 @@ body {
     flex-direction: row-reverse;
     min-height: 400px;
     margin-bottom: 400px;
+    background-color: black;
 }
 
 .match-trainer-container h2 {
@@ -155,5 +149,3 @@ body {
 .match-trainer-container button {
     border-radius: 10px;
 }
-
-
