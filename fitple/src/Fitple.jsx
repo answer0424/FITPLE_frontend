@@ -72,4 +72,4 @@ function Fitple() {
   );
 }
 
-export default App;
+export default Fitple;

@@ -86,7 +86,6 @@ const TrainerMatchList = ({ userId }) => {
                   bottom: "0",
                   width: "60%",
                   left: "30px",
-                  bottom: "5px",
                   backgroundColor: "rgba(255, 255, 255, 0.8)", // 반투명 흰색
                   color: "black",
                   padding: "10px",

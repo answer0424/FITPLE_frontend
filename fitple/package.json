@@ -16,9 +16,12 @@
   },
   "proxy": "http://localhost:8081",
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-three/drei": "^9.121.4",
     "@react-three/fiber": "^8.17.14",
+    "@stomp/stompjs": "^7.0.0",
     "@xmldom/xmldom": "^0.9.7",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
