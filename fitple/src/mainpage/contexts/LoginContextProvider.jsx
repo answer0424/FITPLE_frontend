@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -23,7 +23,7 @@ const LoginContextProvider = ({children}) => {
 
     // 로그인 확인
     const loginCheck = async (isAuthPage = false) => {
-        console.log('login Check gogo')
+        console.log('여기 와야 돼 제발!!!!!!!');
         const accessToken = Cookies.get('accessToken');
 
         console.log(`accessToken: ${accessToken}`);
@@ -48,7 +48,7 @@ const LoginContextProvider = ({children}) => {
 
         try {
             response = await auth.userInfo();
-            console.log(response);
+            console.log('response 뭐임??' ,response);
         } catch (error) {
             console.log(`error: ${error}`);
             return;
@@ -74,6 +74,8 @@ const LoginContextProvider = ({children}) => {
         const currentUsername = localStorage.getItem('username') || userInfo.username;
         loginSetting(data, accessToken, currentUsername);
     };
+
+    useEffect(() => {loginCheck()} , []);
 
     // 로그인 요청
     const login = async (username, password) => {
@@ -140,35 +142,30 @@ const LoginContextProvider = ({children}) => {
 
     const loginSetting = (userData, accessToken, username, provider, providerId) => {
         console.log("📌 loginSetting() params:", username, provider, providerId);
+        console.log("📝 userData:", userData);
     
-        if (!userData || userData.length === 0) {
+        if (!userData) {
             console.error("🚨 userData가 비어있음!");
             return;
         }
     
         // OAuth 로그인 시 username이 없을 수도 있으므로 provider 기반으로 찾기
-        if (!username) {
-            const foundUser = userData.find(user => user.provider === provider && user.providerId === providerId);
-            if (foundUser) {
-                username = foundUser.username;
-            }
+        if (!username && userData.provider === provider && userData.providerId === providerId) {
+            username = userData.username;
         }
     
-        const normalizedUsername = username
-            ? username.trim().toUpperCase()
-            : (provider && providerId) ? `${provider}_${providerId}`.toUpperCase() 
-            : "UNKNOWN_USER";
+        const normalizedUsername = userData.username;
     
         console.log("✅ 최종 username:", normalizedUsername);
     
-        const loggedInUser = userData.find(user => user.username.trim().toUpperCase() === normalizedUsername);
+        const normalizedUserDataUsername = userData.username ? userData.username.trim().toUpperCase() : null;
     
-        if (!loggedInUser) {
+        if (normalizedUsername !== normalizedUserDataUsername) {
             console.error('❌ 로그인한 사용자 정보를 찾을 수 없습니다.');
             return;
         }
     
-        const { id, username: finalUsername, authority } = loggedInUser;
+        const { id, username: finalUsername, authority } = userData;
     
         console.log(`✅ 로그인 성공!
             ID: ${id}
@@ -180,10 +177,14 @@ const LoginContextProvider = ({children}) => {
         setIsLogin(true);
         setUserInfo({ id, username: finalUsername, authority });
     
-        const updatedAuthority = {
+        const updatedAuthority = authority ? {
             isStudent: authority.includes('ROLE_STUDENT'),
             isTrainer: authority.includes('ROLE_TRAINER'),
             isAdmin: authority.includes('ROLE_ADMIN'),
+        } : {
+            isStudent: false,
+            isTrainer: false,
+            isAdmin: false,
         };
         setAuthority(updatedAuthority);
     
@@ -192,6 +193,7 @@ const LoginContextProvider = ({children}) => {
         localStorage.setItem("userInfo", JSON.stringify({ id, username: finalUsername, authority }));
         localStorage.setItem("authority", JSON.stringify(updatedAuthority));
     };
+    
     
 
 
