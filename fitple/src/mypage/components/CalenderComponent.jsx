@@ -31,8 +31,12 @@ const CalenderComponent = ({user}) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
     const selectedDay = formattedDate.slice(8, 10);
 
+    if(events) {
+      setDailyEvents(events.filter(event => {
+        if(event.date) event.date.slice(8, 10) === selectedDay
+      }));
+    }
     setSelectedDate(formattedDate);
-    setDailyEvents(events.filter(event => event.date.slice(8, 10) === selectedDay));
     setIsModalOpen(true);
   };
   //달력 제어
@@ -74,15 +78,15 @@ const CalenderComponent = ({user}) => {
     })
     .then((response) => {
       // console.log(response.headers['content-type']);
-      console.log(response.data);
+      // console.log(response.data);
       updateEvents(response.data);
     })
   }, []);
 
-  useEffect(() => {
-    console.log("컨텍스트 사용")
-    console.log(events);
-  }, [events])
+  // useEffect(() => {
+  //   // console.log("컨텍스트 사용")
+  //   // console.log(events);
+  // }, [events])
 
   return  (
     <>

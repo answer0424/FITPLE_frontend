@@ -39,7 +39,8 @@ const ProfileComponent = ({ user }) => {
         <p><strong>User ID:</strong> {userInfo.userId}</p>
         <p><strong>Nickname:</strong> {userInfo.nickname}</p>
         <p><strong>Profile Image:</strong> <img src={userInfo.profileImage} alt="Profile" width="100" /></p>
-        <p><strong>HBTI:</strong> {userInfo.hbti}</p>
+        (userInfo.hbti ? () : ())
+        {/* <p><strong>HBTI:</strong> {userInfo.hbti}</p> */}
         <p><strong>Address:</strong> {userInfo.address}</p>
         <p><strong>Email:</strong> {userInfo.email}</p>
         <p><strong>Birth:</strong> {userInfo.birth}</p>

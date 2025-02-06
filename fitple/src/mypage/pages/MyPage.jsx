@@ -13,17 +13,17 @@ import { EventProvider } from '../context/EventContext';
   const MyPage = () => {
     // const role = authInfo();
     const [user, setUser] = useState(null);
-    const { authority } = useContext(LoginContext);
+    const { authority, isLogin } = useContext(LoginContext);
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
 
-    //관리자 이동 페이지
+    //관리자 이동
     useEffect(() => {
-      if (authority.isAdmin) {
+      if (isLogin && authority.isAdmin) {
         navigate("/admin");
       }
-    }, [navigate]);
+    }, []);
 
     useEffect(() => {      
       const accessToken = document.cookie
