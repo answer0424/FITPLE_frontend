@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../../mainpage/apis/api";
 
 const ProfileComponent = ({ user }) => {
 
@@ -16,12 +17,7 @@ const ProfileComponent = ({ user }) => {
     // console.log("유저 정보 " + JSON.stringify(user));
     // console.log("유저 아이디 " + JSON.stringify(user.id));
     // console.log("url " + `${import.meta.env.VITE_Server}/member/${user.id}/info`);
-    axios.get(`${import.meta.env.VITE_Server}/member/${user.id}/info`, {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
+    api.get(`/member/${user.id}/info`, {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`,},})
     .then((response) => {
       console.log(response.data);
       // console.log(typeof(response.data));

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
 import RegisterSceduleModal from "../modal/RegisterSceduleModal";
+import DailyItem from '../items/DailyItem';
 
 const DailyScheduleModal = ({ isModalOpen, closeModal, selectedDate, dailyEvents, user }) => {
 
     const [modalChange, setModalChange] = useState(true);
-
-    useEffect(() => {
-        console.log(dailyEvents)
-    }, [dailyEvents]);
     
     //모달 변경
     const handleModalChange= () => {
@@ -36,7 +33,9 @@ const DailyScheduleModal = ({ isModalOpen, closeModal, selectedDate, dailyEvents
         {user ? (
             modalChange ? (
                 <Modal.Body>
-                    <div>오늘의 스케줄 목록</div>
+                    {dailyEvents.map((event, index) => (
+                        <DailyItem event={event} key={index}/>
+                    ))}
                 </Modal.Body>
             ) : (
                 <RegisterSceduleModal />

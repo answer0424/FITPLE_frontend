@@ -5,7 +5,7 @@ import TrainerComponent from '../components/trainer/TrainerComponent';
 import StudentComponent from '../components/student/StudentComponent';
 import NoPermissionModal from '../modal/NoPermissionModal';
 import ProfileComponent from '../components/ProfileComponent';
-import axios from 'axios';
+import api from '../../mainpage/apis/api';
 import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import { EventProvider } from '../context/EventContext';
@@ -13,10 +13,17 @@ import { EventProvider } from '../context/EventContext';
   const MyPage = () => {
     // const role = authInfo();
     const [user, setUser] = useState(null);
-    const { userI } = useContext(LoginContext);
+    const { authority } = useContext(LoginContext);
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
+
+    //관리자 이동 페이지
+    useEffect(() => {
+      if (authority.isAdmin) {
+        navigate("/admin");
+      }
+    }, [navigate]);
 
     useEffect(() => {      
       const accessToken = document.cookie
@@ -24,23 +31,18 @@ import { EventProvider } from '../context/EventContext';
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
+      if (!accessToken) {
+        return;
+      }
       // console.log(`${import.meta.env.VITE_Server}/register/user`);
 
       //TODO 유저 정보 읽어오기. useContext 정상화 시 삭제
-      axios.get(`${import.meta.env.VITE_Server}/register/user`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      api.get('/register/user', {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`},})
       .then((response) => {
         // console.log(response.data.id);
         setUser(response.data);
       })
 
-      if (!accessToken) {
-        return;
-      }
     }, []);
 
     const handleCurrentPage = (page) => {
@@ -73,12 +75,10 @@ import { EventProvider } from '../context/EventContext';
               <Col md={8} className="vh-100 p-3 d-flex justify-content-center align-items-center">
                 <NoPermissionModal show={showModal} onClose={handleCloseModal} />
                 <Routes>
-                  {user.authority === "ROLE_TRAINER" ? (
+                  {authority.isTrainer ? (
                     <Route index element={<TrainerComponent user={user} currentPage={currentPage} />} />
-                  ) : user.authority === "ROLE_STUDENT" ? (
+                  ) : authority.isStudent ? (
                     <Route index element={<StudentComponent user={user} currentPage={currentPage} />} />
-                  ) : user.authority === "ROLE_ADMIN" ? (
-                    <Route path="/admin" element={<StudentComponent />} /> // 어드민 페이지 연결 예정
                   ) : (
                     <Route index element={handleNoPermission()} />
                   )}

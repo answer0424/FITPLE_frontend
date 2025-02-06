@@ -7,6 +7,7 @@ import { Container } from "react-bootstrap";
 import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from '../context/EventContext'
+import api from "../../mainpage/apis/api";
 
 
 const CalenderComponent = ({user}) => {
@@ -17,9 +18,8 @@ const CalenderComponent = ({user}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMember, setSelectedMember] = useState(null);
   const [members, setMembers] = useState([]);
-  const [dailyEvents, setDailyEvents] = useState([])
-  // const [events, setEvent] = useState([]); // 일정 데이터를 저장하는 상태
-  const { events, updateEvents } = useEventContext();
+  const [dailyEvents, setDailyEvents] = useState([]); //오늘 일정 리스트
+  const { events, updateEvents } = useEventContext(); //이 달의 일정
 
   //달력 제어
   const handleDateChange = (newDate) => {
@@ -62,19 +62,19 @@ const CalenderComponent = ({user}) => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
     //일정 불러오기
-    axios.get(`${import.meta.env.VITE_Server}/member/${user.id}/calendar`, {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    api.get(`/member/${user.id}/calendar`, {
       params: {
         year: date.getFullYear(),
         month: date.getMonth(),
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       }
     })
     .then((response) => {
       // console.log(response.headers['content-type']);
-      // console.log(response.data);
+      console.log(response.data);
       updateEvents(response.data);
     })
   }, []);
@@ -86,7 +86,6 @@ const CalenderComponent = ({user}) => {
 
   return  (
     <>
-    
       <Container>
         <Calendar
           value={date}
@@ -115,7 +114,7 @@ const CalenderComponent = ({user}) => {
         />
       </Container>
 
-      {/* 일정 추가 모달 */}
+      {/* 일정 모달 */}
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
