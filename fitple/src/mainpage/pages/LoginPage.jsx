@@ -87,6 +87,11 @@ const LoginPage = () => {
               <button type="submit">Login</button>
             </div>
           </form>
+          <div className="forgot-password-link">
+            <button onClick={() => alert("Forgot Password?")}>
+              Forgot Password?
+            </button>
+          </div>
           <div className="login-box">
             <button
               className="social-button"
@@ -111,6 +116,7 @@ const LoginPage = () => {
             </button>
           </div>
           <div className="signup-link">
+            <Link to="/register/student">
             <Link to="/register/student">
               <button>Don't have an account? Sign Up</button>
             </Link>
