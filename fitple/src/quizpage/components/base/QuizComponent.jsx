@@ -22,9 +22,9 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
         transform: 'translate(-50%, -50%)',
         width: '90%',
         maxWidth: '600px',
-        background: 'rgba(255, 255, 255, 0.9)',
+        background: 'rgba(205, 205, 205, 0.86)',
         backdropFilter: 'blur(8px)',
-        padding: '20px',
+        padding: '40px',
         borderRadius: '12px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     };
@@ -33,7 +33,7 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
         fontSize: '1.2rem',
         fontWeight: '600',
         marginBottom: '1rem',
-        color: '#333'
+        color: '#272626'
     };
 
     const labelContainerStyle = {
@@ -43,7 +43,8 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
     };
 
     const labelStyle = {
-        color: '#666'
+        color: '#272626',
+        fontWeight: '550'
     };
 
     const stairsContainerStyle = {
@@ -58,8 +59,8 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
     const getStairStyle = (index, isSelected) => ({
         width: '64px',
         height: `${(index + 1) * 20}px`,
-        backgroundColor: isSelected ? '#4fc3f7' : '#e2e8f0',
-        border: 'none',
+        backgroundColor: isSelected ? '#60A5FA' : '#fff',
+        borderRadius:'4px',
         cursor: 'pointer',
         transition: 'all 0.2s'
     });
@@ -71,10 +72,6 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
             </h3>
             
             <div>
-                <div style={labelContainerStyle}>
-                    <span style={labelStyle}>그렇지 않다</span>
-                    <span style={labelStyle}>그렇다</span>
-                </div>
                 
                 <div style={stairsContainerStyle}>
                     {answerValues.map((value, index) => (
@@ -84,6 +81,10 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
                             style={getStairStyle(index, selectedAnswer === value)}
                         />
                     ))}
+                </div>
+                <div style={labelContainerStyle}>
+                    <span style={labelStyle}>그렇지 않다</span>
+                    <span style={labelStyle}>그렇다</span>
                 </div>
             </div>
         </div>

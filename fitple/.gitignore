@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 
 # .env 추가
-.env
+.envnode_modules.backup/
+package-lock.json.backup
+.DS_Store
