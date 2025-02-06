@@ -83,7 +83,6 @@ const TrainerMatchList = ({ userId }) => {
               <Card.Body
                 style={{
                   position: "absolute",
-                  bottom: "0",
                   width: "60%",
                   left: "30px",
                   bottom: "5px",
