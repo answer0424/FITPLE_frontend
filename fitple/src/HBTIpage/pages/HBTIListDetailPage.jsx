@@ -10,7 +10,7 @@ function HBTIListDetailPage() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/hbti/type/${hbtiType}`) 
+      .get(`${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`) 
       
       .then((response) => {
         setHbtiDetail(response.data);
