@@ -59,7 +59,6 @@ function Fitple() {
                 <MatchPage />
               </ProtectedRoute>
             } />
-
             <Route path="/hbti" Component={HBTIListpage} />
             <Route path="/hbti/detail" Component={HBTIListDetailPage} />
             <Route path="member/reset-password/:userId/:uuid" Component={ResetPasswordPage}></Route>
