@@ -2,6 +2,8 @@
 .mainPage {
     background-color: black;
     overflow-x: hidden;
+    overflow-y: hidden;
+    height: 300vh;
 }
 
 /* HBTI 테스트 컨테이너 */
@@ -10,9 +12,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 20%;
-    margin-top: 100px;
-    margin-bottom:300px;
+    margin-top: 10vh;
+    margin-bottom:20vh;
     width: 100%;
 }
 
@@ -35,7 +36,7 @@
     cursor: pointer;
     border-radius: 10px;
     margin-top: 20px;
-    height: 50px; /* 버튼 높이 고정 */
+    max-height: 50px; /* 버튼 높이 고정 */
     width: 200px; /* 버튼 너비 고정 */
     display: block; /* flex 영향을 받지 않도록 */
     text-align: center;
@@ -44,7 +45,7 @@
 /* 배경 원 이미지 */
 .background-image {
     position: absolute;
-    top: 70vh;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1200px;
@@ -89,7 +90,7 @@
     max-width: 1200px;
     text-align: left;
     min-height: 400px;
-    margin-top: 1100px;
+    margin-top: 800px;
     background-color: black;
 }
 
