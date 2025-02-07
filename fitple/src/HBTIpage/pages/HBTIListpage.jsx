@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import Header from "../../common/component/Header";
 import { useNavigate } from "react-router-dom";
 import "../component/css/HBTIListpage.css";
@@ -49,14 +49,17 @@ function HBTIListPage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // API 데이터를 가져오는 useEffect
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/hbti/data`)
+      .get(`${import.meta.env.VITE_Server}/api/hbti/data`)
       .then((response) => {
-        const formattedData = Object.entries(response.data).map(([key, value]) => ({
-          hbti: key,
-          ...value,
-        }));
+        const formattedData = Object.entries(response.data).map(
+          ([key, value]) => ({
+            hbti: key,
+            ...value,
+          })
+        );
         setHbtiData(formattedData);
         setLoading(false);
       })
@@ -73,18 +76,20 @@ function HBTIListPage() {
   // 그룹화된 데이터
   const groupedData = groupByType(hbtiData);
 
-  // HBTI 색상 배열 (수정된 조합)
-  const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
+  // HBTI 색상 배열
+  const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
   // 카드 클릭 시 상세 페이지로 이동
   const handleCardClick = (hbtiType) => {
+
     navigate(`/hbti/detail?type=${hbtiType}`); 
+
   };
 
   return (
     <>
       <Header />
-      <div className="container my-5">
+      <div className="container1 my-5">
         {/* 페이지 제목 */}
         <h1 className="hbti-header">HBTI</h1>
         <h2 className="hbti-subtitle">(HEALTH BEHAVIOR TYPE INDICATOR)</h2>
@@ -102,17 +107,17 @@ function HBTIListPage() {
             </div>
 
             {/* 카드 그룹 */}
-            <div className="row justify-content-center g-4">
+            <div className="hbti-row g-4">
               {items.map((item) => (
                 <div
                   key={item.hbti}
                   className="col-12 col-md-6 col-lg-3"
-                  onClick={() => handleCardClick(item.hbti)} // 클릭 이벤트 추가
+                  onClick={() => handleCardClick(item.hbti)}
                   style={{ cursor: "pointer" }}
                 >
                   <div className={`card h-100 shadow-sm card-${group}`}>
                     <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}${item.dogImage}`}
+                      src={`${import.meta.env.VITE_Server}${item.dogImage}`}
                       className="card-img-top"
                       alt={item.label}
                     />

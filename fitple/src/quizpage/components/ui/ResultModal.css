@@ -1,0 +1,136 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 20px;
+  padding-right:10px;
+  padding-right:10px;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #242424;
+  border:#A1D0FC;
+  padding: 32px;
+  border-radius: 20px;
+  max-width:50px;
+  width:50%;
+  max-height: 120vh;
+  height: 90%;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.modal-text {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #FFF;
+}
+
+.modal-text span {
+  color: #A1D0FC;
+}
+
+.modal-title {
+  font-size: 75px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  gap: 2px;
+}
+
+.modal-title span:nth-child(1) {
+  color: #B4AFFF;
+}
+
+.modal-title span:nth-child(2) {
+  color: white;
+}
+
+.modal-title span:nth-child(3) {
+  color: #C5C823;
+}
+
+.modal-title span:nth-child(4) {
+  color: #EE8989;
+}
+
+.modal-image {
+  max-width: 300px;
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+
+.modal-subtitle {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #FFF;
+  text-align: center;
+}
+
+.modal-button {
+  width: 30%;
+  padding: 14px 19px;
+  background-color: #A1D0FC;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top:60px;
+  margin-bottom:10px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.modal-button:hover{
+  background-color: #60A5FA;
+  transform: scale(1.05);
+}
+
+
+.retake-text {
+  display: block;
+  text-align: center;
+  color: #FFF;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.retake-text:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}
+
+.loading-message {
+  text-align: center;
+  color: #FFF;
+}
