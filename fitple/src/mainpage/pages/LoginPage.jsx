@@ -26,7 +26,7 @@ const LoginPage = () => {
     setRememberUserId(rememberId);
   }, []);
 
-  const handleLogin = () => {
+  const handleClick = () => {
     alert("Login submitted successfully!");
     console.log("User Data:", { email: username, password });
   };
