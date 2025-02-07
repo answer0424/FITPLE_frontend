@@ -56,7 +56,7 @@ const LoginPage = () => {
 
   const handleClick = () => {
     alert("Forgot Password?");
-    navigate("/reset-password");
+    navigate("/forgot-password");
   };
 
   return (
