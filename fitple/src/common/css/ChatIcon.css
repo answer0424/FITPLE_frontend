@@ -1,0 +1,12 @@
+.chat-icon-container {
+    position: fixed;
+    bottom: 20px; /* 아래에서 20px 위로 */
+    right: 20px; /* 오른쪽에서 20px 왼쪽으로 */
+    z-index: 1000; /* 다른 요소보다 위에 위치하도록 z-index 설정 */
+}
+
+.chat-icon {
+    width: 70px; /* 아이콘의 너비 */
+    height: 70px; /* 아이콘의 높이 */
+    cursor: pointer; /* 마우스 포인터 모양 변경 */
+}

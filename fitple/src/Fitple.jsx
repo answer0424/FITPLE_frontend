@@ -17,7 +17,9 @@ import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 import TrainerDetailPageWrite from "./mypage/pages/TrainerDetailPage";
 import MatchPage from "./matchpage/pages/MatchPage";
 
-function App() {
+
+function Fitple() {
+
   return (
     <>
       <BrowserRouter>
@@ -72,4 +74,4 @@ function App() {
   );
 }
 
-export default App;
+export default Fitple;
