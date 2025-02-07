@@ -77,7 +77,7 @@
 }
 
 /* 모달 이미지 */
-.modal-image {
+.modal-images {
     width: 100%;
     max-height: 500px; /* 최대 높이 설정 */
     object-fit: contain; /* 이미지 비율 유지 */
