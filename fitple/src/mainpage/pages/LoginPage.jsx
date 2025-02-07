@@ -13,15 +13,16 @@ const LoginPage = () => {
 
   const { login, loginCheck} = useContext(LoginContext);
 
-  const onLogin = (e) => {
+  const onLogin = async (e) => {
     e.preventDefault();
 
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    
-    
-    login(username, password);  // 로그인 진행
-  }
+
+    const success = await login(username, password);
+    if (success) {
+        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
+    }
+  };
+
 
   useEffect(() => {
     console.log('LoginContextProvider 마운트 됨')
@@ -32,10 +33,12 @@ const LoginPage = () => {
     setRememberUserId(rememberId);
   }, []);
 
-  const handleLogin = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
-  };
+
+  // const handleClick = () => {
+  //   alert("Login submitted successfully!");
+  //   console.log("User Data:", { email: username, password });
+  // };
+
 
   // oauth
   const onKakaoLogin = () => {
