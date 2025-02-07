@@ -11,7 +11,7 @@ const MainPage = () => {
 
     // HBTI test로 이동
     const gotoTest = () => {
-        navigate('/');
+        navigate('/quiz');
     }
 
     // HBTI detail로 이동
@@ -30,7 +30,7 @@ const MainPage = () => {
             <div className="HBTI-test-container">
                 <h1>HBTI</h1>
                 <p>나의 운동 성향 확인하기</p>
-                <button onClink={gotoTest}>Test</button>
+                <button onClick={gotoTest}>Test</button>
             </div>
             <div className='section'>
             <div className='background-image'></div>
