@@ -3,7 +3,7 @@ import api from './api';
 export const login = (username, password) => api.post('login', {username, password}, {headers: {"Content-Type" : "application/x-www-form-urlencoded"}})
 
 // 모든 user 정보 요청
-export const userInfo = () => api.get('register/users');
+export const userInfo = () => api.get('register/user');
 
 // auth 정보 요청 
 export const authInfo = () => api.get('register/auth');
