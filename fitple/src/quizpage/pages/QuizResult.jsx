@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import HBTIResultDisplay from '../components/quiz_common/HbtiResultDisplay';
+import PanelNavigation from '../components/ui/PanelNavigation';
 import './QuizResult.css';
 
 // Progress Bar Component
@@ -53,7 +54,7 @@ const CircleProgress = ({ percentage }) => {
   );
 };
 
-// Updated PercentageDisplay component
+// Trait pairs configuration
 const traitPairs = {
   'M': { opposite: 'B', label: '의료적/미용적' },
   'E': { opposite: 'I', label: '계획형/즉흥형' },
@@ -151,7 +152,6 @@ const MatchCard = ({ match }) => (
   </div>
 );
 
-// Matches Display Component
 const MatchesDisplay = ({ topMatches }) => (
   <div className="matches-section">
     <h2>나랑 가장 잘 맞는 트레이너 HBTI는?</h2>
@@ -163,23 +163,13 @@ const MatchesDisplay = ({ topMatches }) => (
   </div>
 );
 
-// Navigation Button Component
-const NavigationButton = ({ direction, onClick, children }) => (
-  <button
-    onClick={onClick}
-    className={`nav-button ${direction}-button`}
-  >
-    {children}
-  </button>
-);
-
-// Main Component
 const QuizResult = () => {
   const [resultData, setResultData] = useState(null);
   const [error, setError] = useState(null);
-  const [currentPanel, setCurrentPanel] = useState(1); // 1: Percentage, 2: Description, 3: Matches
+  const [currentPanel, setCurrentPanel] = useState(1);
   const { userId } = useParams();
   const navigate = useNavigate();
+  const TOTAL_PANELS = 3;
 
   // Check authentication
   useEffect(() => {
@@ -227,19 +217,18 @@ const QuizResult = () => {
     }
   }, [userId]);
 
-  if (error) return <div className="error-message">Error: {error}</div>;
-  if (!resultData) return <div className="loading">Loading...</div>;
-
-  const { hbtiType, percentages, details, topMatches } = resultData;
-
-  // Navigation handlers
   const handleNext = () => {
-    setCurrentPanel(prev => Math.min(prev + 1, 3));
+    setCurrentPanel(prev => Math.min(prev + 1, TOTAL_PANELS));
   };
 
   const handlePrevious = () => {
     setCurrentPanel(prev => Math.max(prev - 1, 1));
   };
+
+  if (error) return <div className="error-message">Error: {error}</div>;
+  if (!resultData) return <div className="loading">Loading...</div>;
+
+  const { hbtiType, percentages, details, topMatches } = resultData;
 
   return (
     <div className="quiz-result-container">
@@ -263,25 +252,35 @@ const QuizResult = () => {
             {currentPanel === 1 && (
               <>
                 <PercentageDisplay percentages={percentages} />
-                <NavigationButton direction="next" onClick={handleNext}>
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onNext={handleNext}
+                  showPrevious={false}
+                />
               </>
             )}
             
             {currentPanel === 2 && (
               <>
-                <NavigationButton direction="prev" onClick={handlePrevious}>
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onNext={handleNext}
+                  onPrevious={handlePrevious}
+                />
                 <DescriptionDisplay details={details} />
-                <NavigationButton direction="next" onClick={handleNext}>
-                </NavigationButton>
               </>
             )}
             
             {currentPanel === 3 && (
               <>
-                <NavigationButton direction="prev" onClick={handlePrevious}>
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onPrevious={handlePrevious}
+                  showNext={false}
+                />
                 <MatchesDisplay topMatches={topMatches} />
                 <div className="match-button-container">
                   <button
@@ -297,7 +296,6 @@ const QuizResult = () => {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );
