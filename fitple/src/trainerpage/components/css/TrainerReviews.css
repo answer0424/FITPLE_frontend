@@ -141,7 +141,7 @@ button.delete-btn:hover {
 
 
 /* 모달 배경 */
-.modal {
+.modal1 {
   position: fixed;
   top: 0;
   left: 0;
@@ -155,7 +155,7 @@ button.delete-btn:hover {
 }
 
 /* 모달 콘텐츠 */
-.modal-content {
+.modal-content1 {
   background: #ffffff;
   padding: 30px;
   border-radius: 10px;
@@ -268,7 +268,7 @@ textarea {
 
 /* 제출 버튼 */
 .submit-button {
-  width: 100%;
+  width: 95%;
   padding: 12px 20px;
   font-size: 1rem;
   color: white;
@@ -277,7 +277,7 @@ textarea {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
+ 
 }
 
 .submit-button:disabled {
