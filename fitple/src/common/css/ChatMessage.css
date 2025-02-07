@@ -1,5 +1,5 @@
 .chat-message-container {
-    background-color: rgba(18, 18, 18, 0.95);
+    background-color: rgba(25, 25, 25, 0.95);
     color: #fff;
     padding: 20px;
     border-radius: 16px;
@@ -9,6 +9,7 @@
     flex-direction: column;
     gap: 16px;
     max-height: 90%;
+    border: 1px #a1d0fc29 solid;
 }
 
 /* Back button */
@@ -95,6 +96,11 @@
 .self-message .message-info {
     right: 0px;
     color: rgb(233, 253, 178);
+    align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
+    text-align: right;
 }
 
 .other-message .message-info {
@@ -102,9 +108,24 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-.message-time {
+.my-message-time {
     font-weight: 300;
     background-color: rgba(0, 0, 0, 0);
+    align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
+    text-align: right;
+    
+}
+.your-message-time {
+    font-weight: 300;
+    background-color: rgba(0, 0, 0, 0);
+    align-self: flex-end;
+    max-width: unset;
+    margin-right: auto;
+    padding-right: auto;
+    text-align: left;
 }
 
 .read-status {
@@ -120,6 +141,7 @@
 
 /* Self message */
 .self-message {
+    display: flex;
     background-color: #A1D0FC;
     color: #000;
     align-self: flex-end;
@@ -128,6 +150,19 @@
 
 .self-message .read-status {
     color: rgba(0, 0, 0, 0.7);
+    align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
+    text-align: right;
+}
+
+.self-message .your-read-status {
+    align-self: flex-end;
+    max-width: unset;
+    margin-right: auto;
+    padding-right: auto;
+    text-align: left;
 }
 
 /* Other message */
@@ -175,13 +210,26 @@
     background-color: #A1D0FC;
     color: #000;
     border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 50%; /* 버튼 모양을 원으로 만들기 */
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    max-width: 80px;
+    width: 50px; /* 너비와 높이를 동일하게 설정 */
+    height: 50px;
+    display: flex; /* Flexbox를 사용하여 내용 정렬 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 정렬 */
+    max-width: 50px;
 }
+
+.message-send-button i {
+    font-size: 1rem; /* 아이콘 크기 조정 */
+    color: #000;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 */
+}
+
+
 
 .message-send-button:hover {
     background-color: #8bbde9;
