@@ -34,10 +34,10 @@ const LoginPage = () => {
   }, []);
 
 
-  // const handleClick = () => {
-  //   alert("Login submitted successfully!");
-  //   console.log("User Data:", { email: username, password });
-  // };
+  const handleClick = () => {
+    alert("Login submitted successfully!");
+    console.log("User Data:", { email: username, password });
+  };
 
 
   // oauth
@@ -81,7 +81,7 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="forgot-password-link">
-              <button onClick={handleLogin}>Forgot Password?</button>
+              <button onClick={handleClick}>Forgot Password?</button>
             </div>
             <div className="button-container">
               <button type="submit">Login</button>
