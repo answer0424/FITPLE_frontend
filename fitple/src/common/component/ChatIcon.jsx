@@ -3,12 +3,12 @@ import '../css/ChatIcon.css';
 import chatIcon from '../../assets/chatIcon.png'; // 파일 경로 수정
 import ChatModal from './ChatModal';
 import { getUserChats } from '../../mainpage/apis/chat';
-import { userInfo } from '../../mainpage/apis/auth';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 
 
 const ChatIcon = () => {
-    const {userInfo} = useContext(LoginContext);
+    
+    const { userInfo } = useContext(LoginContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [chatRooms, setChatRooms] = useState([]);
     const userId = userInfo ? userInfo.id : null; // userInfo에서 로그인한 유저 id 가져오기
@@ -21,7 +21,7 @@ const ChatIcon = () => {
 
     const fetchChatRooms = async () => {
         try {
-            console.log('현재 로그인한 유저', userId);
+            console.log('현재 로그인한 유저', userId, userInfo.id);
             const data = await getUserChats(userId);
             console.log('Fetched chat rooms:', data); // 데이터 로그 출력
             setChatRooms(data);

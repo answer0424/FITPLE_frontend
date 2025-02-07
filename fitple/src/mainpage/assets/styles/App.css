@@ -351,21 +351,21 @@ body {
 .forgot-password-link {
     text-align: right;
     margin: 10px 0;
-  }
+}
   
-  .forgot-password-link button {
+.forgot-password-link button {
     background: none;
     border: none;
     color: #A1D0FC;
     cursor: pointer;
     text-decoration: underline;
-  }
+}
   
-  .forgot-password-link button:hover {
+.forgot-password-link button:hover {
     color: #5aaefc;
-  }
-  
-  .date-picker-input {
+}
+
+.date-picker-input {
     padding: 10px;
     margin: 10px 0;
     border: 2px solid white;
@@ -376,10 +376,38 @@ body {
     width: 100%;
     max-width: 400px;
     transition: border-color 0.3s ease;
-  }
+}
   
-  .date-picker-input:hover,
-  .date-picker-input:focus {
+.date-picker-input:hover,
+.date-picker-input:focus {
     border-color: #FFD700;
-  }
+}
+
+.id-input {
+    margin-bottom: 10px;
+}
   
+
+.login-button {
+    border-radius: 5px;
+}
+
+.reg-student{
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.reg-trainer {
+    border-radius: 10px;
+    margin-left: 50px;
+}
+
+.back-button {
+    border-radius: 10px;
+    max-width: 150px;
+}
+
+.next-button {
+    border-radius: 10px;
+    max-width: 150px;
+}

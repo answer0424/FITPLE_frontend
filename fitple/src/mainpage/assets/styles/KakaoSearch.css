@@ -1,0 +1,79 @@
+.kakao-search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .kakao-search-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #A1D0FC;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  .kakao-search-button {
+    background-color: #A1D0FC;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .kakao-search-button:hover {
+    background-color: #7BB6E9;
+  }
+  
+  .kakao-search-results {
+    width: 100%;
+    background-color: #222;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .kakao-search-results h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  .kakao-search-results ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .kakao-search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .kakao-search-results li:hover {
+    background-color: #333;
+  }
+  
+  .kakao-load-more {
+    width: 100%;
+    padding: 10px;
+    background-color: #A1D0FC;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .kakao-load-more:hover {
+    background-color: #7BB6E9;
+  }
+  
