@@ -1,40 +1,44 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import "../assets/styles/App.css";
 import { LoginContext } from "../contexts/LoginContextProvider";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
 
   const { login, loginCheck} = useContext(LoginContext);
 
-  const onLogin = (e) => {
+  const onLogin = async (e) => {
     e.preventDefault();
 
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    
-    
-    login(username, password);  // 로그인 진행
-  }
+
+    const success = await login(username, password);
+    if (success) {
+        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
+    }
+  };
+
 
   useEffect(() => {
     console.log('LoginContextProvider 마운트 됨')
 
     // 쿠키에 저장된 아이디 가져오기
-    const rememberId = Cookies.get('rememberId');
+    const rememberId = Cookies.get("rememberId");
     console.log(`쿠키 rememberId : ${rememberId}`);
     setRememberUserId(rememberId);
   }, []);
 
-  const handleLogin = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
-  };
+
+  // const handleClick = () => {
+  //   alert("Login submitted successfully!");
+  //   console.log("User Data:", { email: username, password });
+  // };
+
 
   // oauth
   const onKakaoLogin = () => {
@@ -76,6 +80,9 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className="forgot-password-link">
+              <button onClick={handleLogin}>Forgot Password?</button>
+            </div>
             <div className="button-container">
               <button type="submit">Login</button>
             </div>
@@ -86,13 +93,25 @@ const LoginPage = () => {
             </button>
           </div>
           <div className="login-box">
-            <button className="social-button" id="kakao-connect" onClick={onKakaoLogin}>
+            <button
+              className="social-button"
+              id="kakao-connect"
+              onClick={onKakaoLogin}
+            >
               <span>Connect with Kakao</span>
             </button>
-            <button className="social-button" id="google-connect" onClick={onGoogleLogin}>
+            <button
+              className="social-button"
+              id="google-connect"
+              onClick={onGoogleLogin}
+            >
               <span>Connect with Google</span>
             </button>
-            <button className="social-button" id="naver-connect" onClick={onNaverLogin}>
+            <button
+              className="social-button"
+              id="naver-connect"
+              onClick={onNaverLogin}
+            >
               <span>Connect with Naver</span>
             </button>
           </div>
