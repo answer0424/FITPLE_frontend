@@ -183,6 +183,9 @@ function TrainerDetailPage() {
     if (!trainer) return <p className="text-center">로딩 중...</p>;
 
     const averageRating = calculateAverageRating(filteredReviews);
+    const handleEditClick = () => {
+        navigate(`/trainer/${trainerId}/edit`);
+    };
 
     return (
         <>
@@ -234,6 +237,16 @@ function TrainerDetailPage() {
                                 </div>
                             </div>
                         </div>
+                        {/* 수정하기 버튼 (조건부 렌더링) */}
+                        {user && user.id === trainer.id && (
+                            <button
+                                className="btn btn-warning edit-button"
+                                onClick={handleEditClick}
+                            >
+                                수정하기
+                            </button>
+                        )}
+                        
                         <div className="trainer-tabs">
                             <button
                                 className={`tab-button ${activeTab === "home" ? "active" : ""}`}

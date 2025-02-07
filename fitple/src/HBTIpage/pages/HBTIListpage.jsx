@@ -14,6 +14,7 @@ const getGroup = (hbti) => {
   return "default";
 };
 
+
 // 데이터를 그룹화하는 함수
 const groupByType = (data) => {
   const groupedData = {
@@ -48,6 +49,10 @@ function HBTIListPage() {
   const [hbtiData, setHbtiData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+ // HBTI detail로 이동
+ const goHBTI = () => {
+  navigate('/quiz');
+}
 
   // API 데이터를 가져오는 useEffect
   useEffect(() => {
@@ -131,7 +136,13 @@ function HBTIListPage() {
               ))}
             </div>
           </div>
+          
         ))}
+     <div className="center-container">
+  <button onClick={goHBTI} className="center-button">
+    테스트 하러가기
+  </button>
+</div>
       </div>
     </>
   );
