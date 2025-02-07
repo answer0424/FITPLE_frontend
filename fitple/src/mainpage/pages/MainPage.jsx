@@ -1,34 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Header from '../../common/component/Header';
 import '../assets/styles/MainPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../contexts/LoginContextProvider';
 import sectionImg from './../assets/images/sectionImg.png'
 import Footer from '../../common/component/Footer';
 import ChatIcon from '../../common/component/ChatIcon';
 
 const MainPage = () => {
-
     const navigate = useNavigate();
-
-    
+    const { isLogin } = useContext(LoginContext);
 
     // HBTI test로 이동
     const gotoTest = () => {
-        navigate('/');
+        navigate('/quiz');
     }
 
     // HBTI detail로 이동
     const goHBTI = () => {
-        navigate('/');
+        navigate('/hbti');
     }
 
     // matchPage로 이동
     const goMatching = () => {
+        if (!isLogin) {  // matchPage도 로그인 필요하다면 이렇게 추가
+            alert('로그인이 필요한 서비스입니다.');
+            navigate('/login');
+            return;
+        }
         navigate('/');
     }
-
-    const isLogin = localStorage.getItem("isLogin") === "true";
 
     return (
         <div className='mainPage'>
@@ -39,7 +41,7 @@ const MainPage = () => {
                 <button onClick={gotoTest}>Test</button>
             </div>
             <div className='section'>
-            <div className='background-image'></div>
+                <div className='background-image'></div>
                 <div className="about-HBTI-container">
                     <div>
                         <h2>Learn About HBTI</h2>
