@@ -51,6 +51,7 @@ const ChatMessage = ({ chatId, onBack, rooms }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        console.log(userInfo.id);
         const data = await getChatMessages(chatId, userInfo.id); // ✅ userId 전달
         setMessages(data);
       } catch (error) {
