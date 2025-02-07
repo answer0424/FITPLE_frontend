@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import Cookies from 'js-cookie';
@@ -9,6 +10,7 @@ import quizData from '../components/data/quizData';
 import ResultModal from '../components/ui/ResultModal';
 
 function QuizPage() {
+    const { userInfo } = useContext(LoginContext);
     const [gameState, setGameState] = useState('initial');
     const [currentPlatform, setCurrentPlatform] = useState(0);
     const [currentPath, setCurrentPath] = useState(null);
@@ -45,47 +47,11 @@ function QuizPage() {
 
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const token = Cookies.get('accessToken');
-                
-                if (!token) {
-                    console.log('No token found in cookies');
-                    return;
-                }
-         
-                const response = await fetch(`${import.meta.env.VITE_Server}/register/user`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                });
-         
-                console.log('Response status:', response.status);
-                
-                if (response.ok) {
-                    const userData = await response.json();
-                    console.log('User data received:', userData);
-                    
-                    if (userData.id) {
-                        setUserId(userData.id);
-                        console.log('User ID set:', userData.id);
-                    }
-                } else {
-                    console.log('Response not OK:', response.statusText);
-                    if (response.status === 401 || response.status === 403) {
-                        Cookies.remove('accessToken');
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-        
-        fetchUser();
-    }, []);
+        if (userInfo && userInfo.id) {
+            setUserId(userInfo.id);
+            console.log('User ID set from context:', userInfo.id);
+        }
+    }, [userInfo]);
 
     const platformPositions = useMemo(() => {
         const positions = [];
@@ -174,7 +140,7 @@ function QuizPage() {
             }
     
             const result = await response.json();
-            console.log('Received result:', result); // Add this log
+            console.log('Received result:', result);
             setHbtiType(result.hbtiType);
             setGameState('finished');
             setShowResultModal(true);

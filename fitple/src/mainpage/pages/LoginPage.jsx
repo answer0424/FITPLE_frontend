@@ -13,10 +13,13 @@ const LoginPage = () => {
 
   const { login } = useContext(LoginContext);
 
-  const onLogin = (e) => {
+  const onLogin = async (e) => {
     e.preventDefault();
 
-    login(username, password, rememberUserId); // 로그인 진행
+    const success = await login(username, password);
+    if (success) {
+        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
+    }
   };
 
   useEffect(() => {
@@ -26,10 +29,10 @@ const LoginPage = () => {
     setRememberUserId(rememberId);
   }, []);
 
-  const handleClick = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
-  };
+  // const handleClick = () => {
+  //   alert("Login submitted successfully!");
+  //   console.log("User Data:", { email: username, password });
+  // };
 
   // oauth
   const onKakaoLogin = () => {
