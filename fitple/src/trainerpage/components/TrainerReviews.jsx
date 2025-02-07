@@ -217,8 +217,8 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
  
 
                 {isModalOpen && (
-                    <div className="modal">
-                        <div className="modal-content">
+                    <div className="modal1">
+                        <div className="modal-content1">
                             <button className="close-modal" onClick={() => setIsModalOpen(false)}>X</button>
                             <h3 className="modal-title">솔직한 후기를 남겨주세요!</h3>
                             <p className="modal-description">
