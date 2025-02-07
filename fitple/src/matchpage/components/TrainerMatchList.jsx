@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { Carousel, Card, Spinner, Alert, Button } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 
 const TrainerMatchList = ({ userId }) => {
   const [trainers, setTrainers] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMatchingTrainers = async () => {
@@ -60,7 +62,7 @@ const TrainerMatchList = ({ userId }) => {
       controls={trainers.length > 1} // 트레이너가 1명 이하일 때 화살표 숨김
       wrap={trainers.length > 1} // 트레이너가 1명 이하이면 넘기기 불가능
     >
-      {trainers.map((trainer, index) => (
+      {trainers.map((trainer) => (
         <Carousel.Item key={trainer.trainerId} className="carousel-item-custom">
           <Card
             className="text-center shadow-lg mx-auto position-relative"
@@ -74,7 +76,7 @@ const TrainerMatchList = ({ userId }) => {
             <div style={{ position: "relative", height: "100%" }}>
               <Card.Img
                 variant="top"
-                src={`${import.meta.env.VITE_Server}/${trainer.profileImage}`}
+                src={`${import.meta.env.VITE_Server}${trainer.profileImage}`}
                 alt={trainer.trainerName}
                 style={{ height: "100%", objectFit: "cover" }}
               />
@@ -97,7 +99,13 @@ const TrainerMatchList = ({ userId }) => {
                   <strong>HBTI:</strong> {trainer.hbti} <br />
                   <strong>헬스장:</strong> {trainer.gymName}
                 </Card.Text>
-                <Button variant="dark">상세페이지</Button>
+                {/* 상세 페이지 버튼 */}
+                <Button
+                  onClick={() => navigate(`/trainer/${trainer.trainerId}/detail`)}
+                  variant="dark"
+                >
+                  상세페이지
+                </Button>
               </Card.Body>
             </div>
           </Card>

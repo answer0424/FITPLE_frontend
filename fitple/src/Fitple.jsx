@@ -33,12 +33,6 @@ function Fitple() {
             <Route path="/quiz/:userId/result" Component={QuizResult}>
               {" "}
             </Route>
-            <Route path="/hbti" element={<HBTIListpage />} />
-            <Route path="/hbti/detail" element={<HBTIListDetailPage />} />
-            <Route
-              path="/trainer/:trainerId/detail"
-              element={<TrainerDetailPage />}
-            />
             <Route path="/member/*" element={<MyPage />} />
             <Route
               path="/member/detail/write"
