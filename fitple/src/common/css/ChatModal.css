@@ -1,0 +1,149 @@
+/* 모달 오버레이 */
+.chat-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    z-index: 1050;
+    padding: 20px;
+}
+
+/* 채팅 모달 */
+.chat-modal {
+    background-color: rgba(18, 18, 18, 0.95);
+    color: #fff;
+    padding: 24px;
+    border-radius: 16px;
+    width: 380px;
+    height: 80vh;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(161, 208, 252, 0.2);
+}
+
+/* 닫기 버튼 */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #A1D0FC;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    
+}
+
+.close-button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0);
+}
+
+/* 채팅방 제목 */
+.chat-name {
+    color: #A1D0FC;
+    font-size: 24px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 10px;
+    background-color: rgba(0,0,0,0);
+}
+
+/* 채팅방 리스트 */
+.chat-room-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: rgba(30, 30, 30, 0.6);
+    padding: 8px;
+    margin-top: 10px;
+}
+
+/* 스크롤바 스타일링 */
+.chat-room-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-room-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.chat-room-list::-webkit-scrollbar-thumb {
+    background: rgba(161, 208, 252, 0.3);
+    border-radius: 3px;
+}
+
+/* 채팅방 아이템 */
+.chat-room-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    background-color: rgba(40, 40, 40, 0.6);
+    border: 1px solid rgba(161, 208, 252, 0.1);
+    transition: all 0.3s ease;
+}
+
+.chat-room-item:hover {
+    background-color: rgba(161, 208, 252, 0.1);
+    transform: translateX(5px);
+}
+
+/* 나가기 버튼 */
+.leave-button {
+    background: none;
+    border: none;
+    color: #A1D0FC;
+    cursor: pointer;
+    padding: 8px;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    max-width: 40px;
+}
+
+.leave-button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0);
+}
+
+/* FontAwesome 아이콘 스타일링 */
+.FontAwesomeIcon {
+    background-color: transparent;
+    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    margin-left: 12px;
+    color: #A1D0FC;
+}
+
+/* 리스트 아이템 스타일링 */
+.list-group-item {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    padding: 12px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.list-group-item:hover {
+    color: #A1D0FC;
+}

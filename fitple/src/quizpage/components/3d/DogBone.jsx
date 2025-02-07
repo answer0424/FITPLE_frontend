@@ -1,9 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 const DogBone = (props) => {
     const { nodes, materials } = useGLTF('/models/dog_treat.glb');
     const meshRef = useRef();
+
+    useEffect(() => {
+        materials.lambert1.color.set('#FFF')
+    }, [materials])
 
     return (
         <group {...props} dispose={null} ref={meshRef}>
@@ -12,9 +16,9 @@ const DogBone = (props) => {
                 receiveShadow
                 geometry={nodes.pPlane1_lambert1_0.geometry}
                 material={materials.lambert1}
-                position={[-0.1, -0.2, -0.1]}
+                position={[-0.2, -0.28, -0.15]}
                 rotation={[0, 0, -2.016]}
-                scale={0.1} // Reduced scale to fit inside the orb
+                scale={0.15} // Reduced scale to fit inside the orb
             />
         </group>
     );

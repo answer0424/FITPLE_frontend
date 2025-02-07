@@ -1,0 +1,41 @@
+.calendar-wrapper {
+    background: linear-gradient(180deg, #0c0c0c 50%, #192536 100%);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+    position: relative;
+    padding-bottom: 20px;
+  }
+  
+  /* 모달 오버레이 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* 일정 스타일 */
+  .event-item {
+    background-color: #f0f8ff;
+    display: block;
+    padding: 2px 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: black;
+  }
+  
+  .event-item.completed {
+    text-decoration: line-through;
+  }
+  

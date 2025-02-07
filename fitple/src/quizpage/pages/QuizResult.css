@@ -1,0 +1,424 @@
+.quiz-result-container {
+  min-height: 100vh;
+  padding: 3rem 1rem;
+}
+
+.result-content-box {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.panel-layout {
+  display: flex;
+  min-height: 600px;
+  position: relative;
+}
+
+.panel-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #FAFAFA;
+  opacity: 0.2;
+  z-index: 1;
+}
+
+.panel-layout > * {
+  position: relative;
+  z-index: 2;
+}
+
+.left-panel {
+  width: 30%;
+  padding: 2rem;
+}
+
+.hbtiResult {
+  padding-left:3rem;
+  padding-top:0.6rem;
+}
+
+.right-panel {
+  width: 70%;
+  padding: 2rem;
+  position: relative;
+}
+
+.error-message {
+  color: #dc2626;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.125rem;
+}
+
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background-color: hsl(0, 0%, 96%);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #EE8989;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Circle Progress Styles */
+.circle-progress {
+  position: relative;
+  width: 128px;
+  height: 128px;
+}
+
+.circle-progress-svg {
+  transform: rotate(-90deg);
+  width: 128px;
+  height: 128px;
+}
+
+.circle-progress-bar {
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.circle-progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #EE8989;
+}
+
+/* Navigation Button Styles */
+.nav-button {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #EE8989;
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  width: 100px;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.nav-button:hover {
+  background-color: #D97070;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.next-button {
+  right: 2rem;
+}
+
+.prev-button {
+  left: 2rem;
+}
+
+/* Percentages Section Styles */
+.percentages-section {
+  padding: 1.5rem;
+}
+
+.percentages-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #FFF;
+}
+
+.percentages-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.percentage-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.percentage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.trait-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.trait-score {
+  color: #666;
+  font-weight: 500;
+}
+
+/* Description Section Styles */
+.description-section {
+  padding: 1.5rem;
+}
+
+.description-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #FFF;
+}
+
+.description-section p {
+  font-size: 1.07rem;
+  line-height: 1.7;
+  color: #FFF;
+}
+
+/* Matches Section Styles */
+.matches-section {
+  padding: 1.5rem 1rem;
+  width:100%;
+}
+
+.matches-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  color: #FFF;
+  text-align: center;
+}
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.match-card {
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.match-image {
+  width: 80%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.match-type {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #FFF;
+}
+
+/* Match Button Styles */
+.match-button-container {
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.match-button {
+  width: 33%;
+  background-color: #A1D0FC;
+  color: #000;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-right: 1rem;
+}
+
+.match-button:hover {
+  background-color: #60A5FA;
+  transform: scale(1.02);
+}
+
+/* Trait Bar Styles */
+.trait-bar-container {
+  padding: 1.2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.trait-scores {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.trait-score {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.trait-score.dominant {
+  color: #EE8989;
+  font-weight: 600;
+}
+
+.trait-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.trait-label {
+  font-size: 1rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.trait-bar {
+  flex-grow: 1;
+  height: 12px;
+  background-color: #f5f5f5;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.trait-progress {
+  position: absolute;
+  height: 100%;
+  background-color: #EE8989;
+  transition: width 0.3s ease;
+  border-radius: 999px;
+}
+
+.trait-progress.left {
+  left: 0;
+}
+
+.trait-progress.right {
+  right: 0;
+}
+
+.trait-letters {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.trait-letter {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #666;
+}
+
+.trait-letter.dominant {
+  color: #EE8989;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .result-content-box {
+    margin: 1rem;
+  }
+  
+  .panel-layout {
+    flex-direction: column;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+  
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .nav-button {
+    position: static;
+    transform: none;
+    margin: 1rem auto;
+  }
+  
+  .next-button,
+  .prev-button {
+    position: static;
+    margin: 1rem auto;
+  }
+
+  .matches-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .matches-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .match-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .percentage-card {
+    padding: 1rem;
+  }
+  
+  .circle-progress {
+    width: 100px;
+    height: 100px;
+  }
+}

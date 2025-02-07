@@ -17,7 +17,7 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/send-reset-email",
+        "http://localhost:8081/member/send-reset-email",
         {
           to: email,
         },
@@ -25,6 +25,7 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true, // 자격 증명을 포함하도록 설정
         }
       );
 
