@@ -31,7 +31,6 @@ function QuizPage() {
 
     const handleQuizComplete = () => {
         
-        setTimeout(() => {
             setCurrentNPCVisibility(false);
 
             setNpcCompletedPlatforms(prev => {
@@ -39,7 +38,7 @@ function QuizPage() {
                 newCompleted.add(currentPlatform);
                 return newCompleted;
             });
-        },1500);
+
 
     };
 
@@ -119,7 +118,6 @@ function QuizPage() {
 
         setShowQuiz(false);
 
-        setTimeout(() => {
             setIsMoving(true);
         
             const nextPlatform = currentPlatform + 1;
@@ -133,7 +131,7 @@ function QuizPage() {
                 });
                 setCurrentNPCVisibility(true);
             }
-        },1000);   
+ 
 
     };
 
