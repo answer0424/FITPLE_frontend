@@ -79,14 +79,43 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                 if (!response.ok) throw new Error("리뷰 작성에 실패했습니다.");
     
                 const newReview = await response.json();
-                
-                // ✅ UI 즉시 업데이트
+    
+                // ✅ `reviews`에서 매칭된 `trainingId` 찾기
+                console.log("현재 trainingId:", trainingId);
+                console.log("현재 reviews 데이터:", reviews);
+    
+                const matchingReview = reviews.find(
+                    (review) => Number(review.trainingId) === Number(trainingId)
+                );
+    
+                if (matchingReview) {
+                    newReview.userId = matchingReview.userId;
+                    newReview.username = matchingReview.username;
+                    newReview.userProfileImage = matchingReview.userProfileImage;
+    
+                    console.log("매칭된 트레이닝 ID로 가져온 username:", matchingReview.username);
+                    console.log("매칭된 트레이닝 ID로 가져온 userProfileImage:", matchingReview.userProfileImage);
+                } else {
+                    // 기본값 설정 (로그인된 유저 정보 사용)
+                    newReview.userId = user.id;
+                    newReview.username = user.username;
+                    newReview.userProfileImage = user.profileImage;
+    
+                    console.warn("매칭된 트레이닝 ID가 없어서 기본값으로 설정");
+                    console.log("기본값 username:", user.username);
+                    console.log("기본값 userProfileImage:", user.profileImage);
+                }
+    
+                // ✅ 상태 업데이트 (새 리뷰 추가)
                 setReviews((prevReviews) => [newReview, ...prevReviews]);
     
+                console.log("업데이트된 리뷰 목록:", [newReview, ...reviews]);
+    
                 // ✅ 입력 필드 초기화
+            
                 setReviewContent("");
                 setRating(5);
-                setIsModalOpen(false); // 모달 닫기
+                setIsModalOpen(false);
     
                 await Swal.fire({
                     title: "리뷰 작성 완료!",
@@ -102,9 +131,13 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                 icon: "error",
             });
     
-            setError("리뷰는 한 개만 작성할 수 있습니다.");
+            setError("리뷰는 한 개만 작성할 수 없습니다.");
         }
     };
+    
+    
+    
+    
     
     
 
@@ -130,7 +163,12 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
 
                     if (!response.ok) throw new Error("리뷰 삭제에 실패했습니다.");
 
-                    window.location.reload();
+                       // 부모 상태 업데이트
+                setReviews((prevReviews) =>
+                    prevReviews.filter((review) => review.id !== reviewId)
+                );
+
+               
 
                     Swal.fire("삭제 완료", "리뷰가 삭제되었습니다.", "success");
                 } catch (err) {
