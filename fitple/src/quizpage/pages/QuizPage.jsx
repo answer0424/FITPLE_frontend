@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
+import { Stars } from '@react-three/drei';
 import Cookies from 'js-cookie';
 import GameScene from '../components/3d/GameScene';
 import QuizComponent from '../components/base/QuizComponent';
@@ -31,7 +32,6 @@ function QuizPage() {
 
     const handleQuizComplete = () => {
         
-        setTimeout(() => {
             setCurrentNPCVisibility(false);
 
             setNpcCompletedPlatforms(prev => {
@@ -39,7 +39,7 @@ function QuizPage() {
                 newCompleted.add(currentPlatform);
                 return newCompleted;
             });
-        },1500);
+
 
     };
 
@@ -119,7 +119,6 @@ function QuizPage() {
 
         setShowQuiz(false);
 
-        setTimeout(() => {
             setIsMoving(true);
         
             const nextPlatform = currentPlatform + 1;
@@ -133,7 +132,7 @@ function QuizPage() {
                 });
                 setCurrentNPCVisibility(true);
             }
-        },1000);   
+ 
 
     };
 
@@ -199,6 +198,15 @@ function QuizPage() {
             <Canvas camera={{ position: [0, 3, 8], fov: 45 }}>
                 <color attach="background" args={["#000000"]} />
                 <fog attach="fog" args={["#000000", 30, 90]} />
+                <Stars 
+                    radius={100} // 별들이 분포할 구의 반지름
+                    depth={70} // 별들의 깊이 감
+                    count={6000} // 별의 개수
+                    factor={19} // 별들의 크기 factor
+                    saturation={0.7} // 채도 (0: 흰색, 1: 컬러풀)
+                    fade // 별들이 카메라 움직임에 따라 페이드 효과
+                    speed={1.4} // 별들의 움직임 속도
+                />
                 <ambientLight intensity={0.8} />
                 <pointLight position={[10, 10, 10]} intensity={1} />
                 <pointLight position={[-10, -10, -10]} intensity={0.5} />
