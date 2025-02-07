@@ -21,10 +21,13 @@ export const getUserChats = async (userId) => {
 };
 
 // 특정 채팅방 메시지 목록 가져오는 url
-export const getChatMessages = async (chatId) => {
-    const response = await axios.get(`${CHAT_BASE_URL}/chat/${chatId}/messages`);
+export const getChatMessages = async (chatId, userId) => {
+    const response = await axios.get(`${CHAT_BASE_URL}/chat/${chatId}/messages`, {
+        params: { userId } // ✅ userId를 백엔드에 전달
+    });
     return response.data;
 };
+
 
 // 메시지 읽음 여부
 export const readMessage = async (chatId) => {

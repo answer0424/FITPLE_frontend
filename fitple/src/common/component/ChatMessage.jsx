@@ -4,17 +4,17 @@ import '../css/ChatMessage.css';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
 
-const ChatMessage = ({ chatId, onBack }) => {
+const ChatMessage = ({ chatId, onBack, rooms }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const { userInfo, stompClient } = useContext(LoginContext); // LoginContext에서 웹소켓 클라이언트 가져오기
   const messageEndRef = useRef(null);
+  const [room, setRoom] = useState(null);
 
   const formatMessageTime = (timestamp) => {
     const messageDate = new Date(timestamp);
     const now = new Date();
   
-    // "연, 월, 일"만 비교하여 날짜 차이를 계산
     const messageYear = messageDate.getFullYear();
     const messageMonth = messageDate.getMonth();
     const messageDay = messageDate.getDate();
@@ -23,7 +23,6 @@ const ChatMessage = ({ chatId, onBack }) => {
     const nowMonth = now.getMonth();
     const nowDay = now.getDate();
   
-    // 같은 날이면 시간만 표시
     if (messageYear === nowYear && messageMonth === nowMonth && messageDay === nowDay) {
       return messageDate.toLocaleTimeString('ko-KR', {
         hour: '2-digit',
@@ -32,13 +31,11 @@ const ChatMessage = ({ chatId, onBack }) => {
       });
     }
   
-    // 어제 날짜인지 확인
-    now.setDate(nowDay - 1); // 현재 날짜에서 하루 빼기
+    now.setDate(nowDay - 1);
     if (messageYear === now.getFullYear() && messageMonth === now.getMonth() && messageDay === now.getDate()) {
       return '어제';
     }
   
-    // 그 외의 경우, YYYY년 MM월 DD일 형식으로 표시
     return messageDate.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: 'long',
@@ -46,32 +43,35 @@ const ChatMessage = ({ chatId, onBack }) => {
     });
   };
   
-
+  
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
+  
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const data = await getChatMessages(chatId);
+        const data = await getChatMessages(chatId, userInfo.id); // ✅ userId 전달
         setMessages(data);
-        
-        // 채팅방에 입장했을 때, 상대방 메시지 읽음 처리
-        data.forEach(message => {
-          if (message.userId !== userInfo.id && !message.checked) {
-            readMessage(message.messageId);
-          }
-        });
       } catch (error) {
         console.error('Error fetching chat messages:', error);
       }
     };
 
     fetchMessages();
-  }, [chatId, userInfo.id]);
+}, [chatId, userInfo.id]);
 
-  // ✅ 웹소켓 메시지 수신 로직 유지 (LoginContext에서 웹소켓을 가져와 사용)
+
+  // 메시지 목록이 변경될 때마다 읽음 상태를 업데이트
+  useEffect(() => {
+    messages.forEach(message => {
+      if (message.userId !== userInfo.id && !message.checked) {
+        readMessage(message.messageId);
+      }
+    });
+  }, [messages, userInfo.id]);
+  
+
   useEffect(() => {
     if (!stompClient || !stompClient.connected) return;
 
@@ -79,7 +79,6 @@ const ChatMessage = ({ chatId, onBack }) => {
       const receivedMessage = JSON.parse(message.body);
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
-      // 수신된 메시지가 내 것이 아니라면 읽음 처리
       if (receivedMessage.userId !== userInfo.id) {
         readMessage(receivedMessage.messageId);
       }
@@ -94,6 +93,12 @@ const ChatMessage = ({ chatId, onBack }) => {
     scrollToBottom();
   }, [messages]);
 
+  // 특정 chatId에 대한 room 정보 가져오기
+  useEffect(() => {
+    const currentRoom = rooms.find(room => room.chatId === chatId);
+    setRoom(currentRoom);
+  }, [chatId, rooms]);
+
   const handleSendMessage = () => {
     if (newMessage.trim() && stompClient && stompClient.connected) {
       const messageData = {
@@ -101,7 +106,7 @@ const ChatMessage = ({ chatId, onBack }) => {
         chatId: chatId,
         userId: userInfo.id,
         createdAt: new Date().toISOString(),
-        checked: false, // 메시지를 보낼 때 checked 상태 설정
+        checked: false,
       };
 
       stompClient.publish({
@@ -123,7 +128,7 @@ const ChatMessage = ({ chatId, onBack }) => {
   return (
     <div className="chat-message-container">
       <button onClick={onBack}>
-        Back to Chat Rooms
+        <i className="bi bi-arrow-left"></i> {room && room.otherNickname}
       </button>
 
       <ul className="message-list">
