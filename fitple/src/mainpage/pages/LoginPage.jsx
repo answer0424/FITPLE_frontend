@@ -6,124 +6,103 @@ import { LoginContext } from "../contexts/LoginContextProvider";
 import Cookies from "js-cookie";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberUserId, setRememberUserId] = useState();
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberUserId, setRememberUserId] = useState();
 
-  const { login, loginCheck} = useContext(LoginContext);
+    const { login, loginCheck, handleOAuthLogin } = useContext(LoginContext);
 
-  const onLogin = async (e) => {
-    e.preventDefault();
+    const onLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const success = await login(username, password);
+            console.log("Login success:", success); // 디버깅용
+            if (success === true) {
+                navigate('/');
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+        }
+    };
 
+    useEffect(() => {
+        console.log('LoginContextProvider 마운트 됨')
+        const rememberId = Cookies.get("rememberId");
+        console.log(`쿠키 rememberId : ${rememberId}`);
+        setRememberUserId(rememberId);
+    }, []);
 
-    const success = await login(username, password);
-    if (success) {
-        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
-    }
-  };
+    const handleClick = () => {
+        alert("Login submitted successfully!");
+        console.log("User Data:", { email: username, password });
+    };
 
+    // OAuth 로그인 핸들러
+    const onKakaoLogin = () => handleOAuthLogin('kakao');
+    const onGoogleLogin = () => handleOAuthLogin('google');
+    const onNaverLogin = () => handleOAuthLogin('naver');
 
-  useEffect(() => {
-    console.log('LoginContextProvider 마운트 됨')
-
-    // 쿠키에 저장된 아이디 가져오기
-    const rememberId = Cookies.get("rememberId");
-    console.log(`쿠키 rememberId : ${rememberId}`);
-    setRememberUserId(rememberId);
-  }, []);
-
-
-  const handleClick = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
-  };
-
-
-  // oauth
-  const onKakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/kakao`;
-    console.log('kakao oauth 로그인');
-    
-  };
-  
-  const onGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
-    console.log('google oauth 로그인');
-    
-  };
-  
-  const onNaverLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
-    console.log('naver oauth 로그인');
-    
-  };
-
-  return (
-    <div className="App">
-      <Header />
-      <div className="question-container">
-        <h2>Login</h2>
-        <div className="input-container">
-          <form onSubmit={onLogin}>
-            <input
-              type="text"
-              name="username"
-              placeholder="Enter your id"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div className="forgot-password-link">
-              <button onClick={handleClick}>Forgot Password?</button>
+    return (
+        <div className="App">
+            <Header />
+            <div className="question-container">
+                <h2>Login</h2>
+                <div className="input-container">
+                    <form onSubmit={onLogin}>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your id"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <div className="forgot-password-link">
+                            <button type="button" onClick={handleClick}>Forgot Password?</button>
+                        </div>
+                        <div className="button-container">
+                            <button type="submit">Login</button>
+                        </div>
+                    </form>
+                    <div className="login-box">
+                        <button
+                            className="social-button"
+                            id="kakao-connect"
+                            onClick={onKakaoLogin}
+                        >
+                            <span>Connect with Kakao</span>
+                        </button>
+                        <button
+                            className="social-button"
+                            id="google-connect"
+                            onClick={onGoogleLogin}
+                        >
+                            <span>Connect with Google</span>
+                        </button>
+                        <button
+                            className="social-button"
+                            id="naver-connect"
+                            onClick={onNaverLogin}
+                        >
+                            <span>Connect with Naver</span>
+                        </button>
+                    </div>
+                    <div className="signup-link">
+                        <Link to="/register/student">
+                            <button>Don't have an account? Sign Up</button>
+                        </Link>
+                    </div>
+                </div>
             </div>
-            <div className="button-container">
-              <button type="submit">Login</button>
-            </div>
-          </form>
-          <div className="forgot-password-link">
-            <button onClick={() => alert("Forgot Password?")}>
-              Forgot Password?
-            </button>
-          </div>
-          <div className="login-box">
-            <button
-              className="social-button"
-              id="kakao-connect"
-              onClick={onKakaoLogin}
-            >
-              <span>Connect with Kakao</span>
-            </button>
-            <button
-              className="social-button"
-              id="google-connect"
-              onClick={onGoogleLogin}
-            >
-              <span>Connect with Google</span>
-            </button>
-            <button
-              className="social-button"
-              id="naver-connect"
-              onClick={onNaverLogin}
-            >
-              <span>Connect with Naver</span>
-            </button>
-          </div>
-          <div className="signup-link">
-            <Link to="/register/student">
-              <button>Don't have an account? Sign Up</button>
-            </Link>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default LoginPage;
