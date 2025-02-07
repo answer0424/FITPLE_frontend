@@ -20,7 +20,7 @@ const MainPage = () => {
 
     // HBTI detail로 이동
     const goHBTI = () => {
-        navigate('/');
+        navigate('/hbti');
     }
 
     // matchPage로 이동

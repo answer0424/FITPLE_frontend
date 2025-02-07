@@ -24,8 +24,8 @@ const groupByType = (data) => {
   };
 
   data.forEach((item) => {
-    const group = getGroup(item.hbti); 
-    groupedData[group].push(item); 
+    const group = getGroup(item.hbti);
+    groupedData[group].push(item);
   });
 
   return groupedData;
@@ -54,11 +54,12 @@ function HBTIListPage() {
     axios
       .get(`${import.meta.env.VITE_Server}/api/hbti/data`)
       .then((response) => {
-        const formattedData = Object.entries(response.data).map(([key, value]) => ({
-          hbti: key,
-          ...value,
-        }));
-        console.log("Formatted Data:", formattedData); // 데이터 확인
+        const formattedData = Object.entries(response.data).map(
+          ([key, value]) => ({
+            hbti: key,
+            ...value,
+          })
+        );
         setHbtiData(formattedData);
         setLoading(false);
       })
@@ -67,7 +68,6 @@ function HBTIListPage() {
         setLoading(false);
       });
   }, []);
-  
 
   if (loading) {
     return <div className="text-center mt-5">데이터를 불러오는 중...</div>;
@@ -77,7 +77,7 @@ function HBTIListPage() {
   const groupedData = groupByType(hbtiData);
 
   // HBTI 색상 배열
-  const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
+  const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
   // 카드 클릭 시 상세 페이지로 이동
   const handleCardClick = (hbtiType) => {
@@ -87,7 +87,7 @@ function HBTIListPage() {
   return (
     <>
       <Header />
-      <div className="container my-5">
+      <div className="container1 my-5">
         {/* 페이지 제목 */}
         <h1 className="hbti-header">HBTI</h1>
         <h2 className="hbti-subtitle">(HEALTH BEHAVIOR TYPE INDICATOR)</h2>
@@ -105,12 +105,12 @@ function HBTIListPage() {
             </div>
 
             {/* 카드 그룹 */}
-            <div className="row justify-content-center g-4">
+            <div className="hbti-row g-4">
               {items.map((item) => (
                 <div
                   key={item.hbti}
                   className="col-12 col-md-6 col-lg-3"
-                  onClick={() => handleCardClick(item.hbti)} // 클릭 이벤트 추가
+                  onClick={() => handleCardClick(item.hbti)}
                   style={{ cursor: "pointer" }}
                 >
                   <div className={`card h-100 shadow-sm card-${group}`}>
