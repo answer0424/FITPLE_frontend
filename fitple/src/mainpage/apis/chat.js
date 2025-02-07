@@ -25,3 +25,9 @@ export const getChatMessages = async (chatId) => {
     const response = await axios.get(`${CHAT_BASE_URL}/chat/${chatId}/messages`);
     return response.data;
 };
+
+// 메시지 읽음 여부
+export const readMessage = async (chatId) => {
+    const response = await axios.post(`${CHAT_BASE_URL}/chat/${chatId}/read`);
+    return response.data;
+};

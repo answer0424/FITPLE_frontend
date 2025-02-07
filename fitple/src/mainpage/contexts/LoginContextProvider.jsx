@@ -1,9 +1,10 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import api from '../apis/api';
 import * as auth from '../apis/auth';
+import { Client } from '@stomp/stompjs';
 
 export const LoginContext = createContext();
 LoginContext.displayName = 'LoginContextName';
@@ -21,9 +22,47 @@ const LoginContextProvider = ({children}) => {
     // 권한 정보
     const [authority, setAuthority] = useState(JSON.parse(localStorage.getItem('authority')) || {isStudent: false, isTrainer: false, isAdmin: false})
 
+    // 웹소켓
+    const stompClient = useRef(null);
+
+    // 웹소켓 연결 함수
+    const connectWebSocket = () => {
+        if(stompClient.current) return; // 이미 연결되어 있을 경우를 방지
+
+        const client = new Client({
+            brokerURL: 'ws://localhost:8081/ws-chat',
+            reconnectDelay: 5000,
+            debug: (str) => console.log(str),
+            onConnect: () => {
+                console.log('🔗 WebSocket Connected');
+            },
+            onDisconnect: () => {
+                console.log('❌ WebSocket Disconnected', error);
+            }
+        });
+        client.activate();
+        stompClient.current = client;
+    }
+
+    // 웹소켓 해제 함수
+    const disconnectWebSocket = () => {
+        if(stompClient.current) {
+            stompClient.current.deactivate();
+            stompClient.current = null;
+            console.log('🛑 WebSocket Disconnected');
+        }
+    }
+
+    useEffect(() => {
+        if(isLogin) {
+            connectWebSocket(); // 로그인 시 웹소켓 연결
+        } else {
+            disconnectWebSocket();  // 로그 아웃 시 웹소켓 해제
+        }
+    }, [isLogin]);
+
     // 로그인 확인
     const loginCheck = async (isAuthPage = false) => {
-        console.log('여기 와야 돼 제발!!!!!!!');
         const accessToken = Cookies.get('accessToken');
 
         console.log(`accessToken: ${accessToken}`);
@@ -216,7 +255,7 @@ const LoginContextProvider = ({children}) => {
     }
 
     return (
-        <LoginContext.Provider value={{ isLogin, userInfo, authority, loginCheck, login, logout }}>
+        <LoginContext.Provider value={{ isLogin, userInfo, authority, loginCheck, login, logout, stompClient: stompClient.current }}>
             {children}
         </LoginContext.Provider>
     );

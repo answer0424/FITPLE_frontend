@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Client } from '@stomp/stompjs';
-import { getChatMessages } from '../../mainpage/apis/chat';
+import { getChatMessages, readMessage } from '../../mainpage/apis/chat';
 import '../css/ChatMessage.css';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
@@ -8,33 +7,45 @@ import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
 const ChatMessage = ({ chatId, onBack }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const { userInfo } = useContext(LoginContext);
-  const stompClient = useRef(null);
+  const { userInfo, stompClient } = useContext(LoginContext); // LoginContext에서 웹소켓 클라이언트 가져오기
   const messageEndRef = useRef(null);
-
-  
 
   const formatMessageTime = (timestamp) => {
     const messageDate = new Date(timestamp);
     const now = new Date();
-    const diffDays = Math.floor((now - messageDate) / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) {
+  
+    // "연, 월, 일"만 비교하여 날짜 차이를 계산
+    const messageYear = messageDate.getFullYear();
+    const messageMonth = messageDate.getMonth();
+    const messageDay = messageDate.getDate();
+  
+    const nowYear = now.getFullYear();
+    const nowMonth = now.getMonth();
+    const nowDay = now.getDate();
+  
+    // 같은 날이면 시간만 표시
+    if (messageYear === nowYear && messageMonth === nowMonth && messageDay === nowDay) {
       return messageDate.toLocaleTimeString('ko-KR', {
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      });
-    } else if (diffDays === 1) {
-      return '어제';
-    } else {
-      return messageDate.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        hour12: true,
       });
     }
+  
+    // 어제 날짜인지 확인
+    now.setDate(nowDay - 1); // 현재 날짜에서 하루 빼기
+    if (messageYear === now.getFullYear() && messageMonth === now.getMonth() && messageDay === now.getDate()) {
+      return '어제';
+    }
+  
+    // 그 외의 경우, YYYY년 MM월 DD일 형식으로 표시
+    return messageDate.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
+  
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -45,10 +56,11 @@ const ChatMessage = ({ chatId, onBack }) => {
       try {
         const data = await getChatMessages(chatId);
         setMessages(data);
-        console.log(data)
+        
+        // 채팅방에 입장했을 때, 상대방 메시지 읽음 처리
         data.forEach(message => {
-          if (!message.readBy?.includes(userInfo.id)) {
-            // updateMessageReadStatus(message.id);
+          if (message.userId !== userInfo.id && !message.checked) {
+            readMessage(message.messageId);
           }
         });
       } catch (error) {
@@ -57,49 +69,42 @@ const ChatMessage = ({ chatId, onBack }) => {
     };
 
     fetchMessages();
-    const client = new Client({
-      brokerURL: 'ws://localhost:8081/ws-chat',
-      connectHeaders: {},
-      debug: (str) => console.log(str),
-      reconnectDelay: 5000,
-      onConnect: () => {
-        console.log('WebSocket Connected');
-        client.subscribe(`/topic/chat/${chatId}`, (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-          if (receivedMessage.userId !== userInfo.id) {
-            // updateMessageReadStatus(receivedMessage.id);
-          }
-        });
-      },
-      onDisconnect: (error) => console.log('WebSocket Disconnected', error),
+  }, [chatId, userInfo.id]);
+
+  // ✅ 웹소켓 메시지 수신 로직 유지 (LoginContext에서 웹소켓을 가져와 사용)
+  useEffect(() => {
+    if (!stompClient || !stompClient.connected) return;
+
+    const subscription = stompClient.subscribe(`/topic/chat/${chatId}`, (message) => {
+      const receivedMessage = JSON.parse(message.body);
+      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+
+      // 수신된 메시지가 내 것이 아니라면 읽음 처리
+      if (receivedMessage.userId !== userInfo.id) {
+        readMessage(receivedMessage.messageId);
+      }
     });
 
-    client.activate();
-    stompClient.current = client;
-
     return () => {
-      if (stompClient.current) {
-        stompClient.current.deactivate();
-      }
+      subscription.unsubscribe();
     };
-  }, [chatId, userInfo.id]);
+  }, [chatId, stompClient, userInfo.id]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() && stompClient.current) {
+    if (newMessage.trim() && stompClient && stompClient.connected) {
       const messageData = {
         content: newMessage,
         chatId: chatId,
         userId: userInfo.id,
         createdAt: new Date().toISOString(),
-        readBy: [userInfo.id],
+        checked: false, // 메시지를 보낼 때 checked 상태 설정
       };
 
-      stompClient.current.publish({
+      stompClient.publish({
         destination: `/app/chat/${chatId}/send`,
         body: JSON.stringify(messageData),
       });
@@ -131,20 +136,12 @@ const ChatMessage = ({ chatId, onBack }) => {
           >
             <div className="message-content">{message.content}</div>
             <div className="message-info">
-              {/* {message.userId === userInfo.id && (
-                <span className="read-status">
-                {message.readBy?.length > 1 ? (
-                  // <i className="bi check-all text-primary"></i> // ✔✔ (읽음)
-                  <div>읽음</div>
-                ) : (
-                  <div></div>
-                )}
-              </span>
-              )} */}
-              {message.checked === true && (
+              {message.userId === userInfo.id && message.checked && (
                 <span className='read-status'><i className="bi check-all text-primary">✔</i></span>// ✔ (읽음)
               )}
-              <span className="message-time">
+              <span className={` ${
+              message.userId === userInfo.id ? 'my-message-time' : 'your-message-time'
+            }`}>
                 {formatMessageTime(message.createdAt)}
               </span>
             </div>
@@ -166,7 +163,7 @@ const ChatMessage = ({ chatId, onBack }) => {
           onClick={handleSendMessage} 
           className="message-send-button"
         >
-          Send
+          <i className="bi bi-send"></i> {/* Bootstrap Send 아이콘 */}
         </button>
       </div>
     </div>
