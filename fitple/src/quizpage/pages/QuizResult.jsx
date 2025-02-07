@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import HBTIResultDisplay from '../components/quiz_common/HbtiResultDisplay';
 import PanelNavigation from '../components/ui/PanelNavigation';
 import './QuizResult.css';
+import Header from '../../common/component/Header';
 
 // Progress Bar Component
 const ProgressBar = ({ progress }) => (
@@ -231,6 +232,8 @@ const QuizResult = () => {
   const { hbtiType, percentages, details, topMatches } = resultData;
 
   return (
+    <>
+    <Header />
     <div className="quiz-result-container">
       <div className="result-content-box">
         <div className="panel-layout">
@@ -298,6 +301,8 @@ const QuizResult = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 

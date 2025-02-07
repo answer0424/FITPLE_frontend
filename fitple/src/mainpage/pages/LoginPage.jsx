@@ -34,10 +34,10 @@ const LoginPage = () => {
   }, []);
 
 
-  // const handleClick = () => {
-  //   alert("Login submitted successfully!");
-  //   console.log("User Data:", { email: username, password });
-  // };
+  const handleLogin = () => {
+    alert("Login submitted successfully!");
+    console.log("User Data:", { email: username, password });
+  };
 
 
   // oauth
