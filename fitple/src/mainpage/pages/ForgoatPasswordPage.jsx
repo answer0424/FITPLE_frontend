@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Alert, Container } from "react-bootstrap";
+import { Form, Button, Alert, Container, Card } from "react-bootstrap";
 import axios from "axios";
 import Header from "../../common/component/Header";
 
@@ -51,50 +51,108 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
   };
 
   return (
-    <Container
-      className="bg-dark text-white p-4 rounded shadow-lg mt-5"
+    <div
       style={{
-        width: "100%",
-        height: "100vh",
-        background: "black",
-        color: "white",
+        minHeight: "100vh",
+        background: "transparent",
+        position: "relative",
       }}
     >
       <Header />
-      <h3 className="text-center mb-4">비밀번호 재설정</h3>
-      {message && (
-        <Alert variant="success" className="text-white bg-success">
-          {message}
-        </Alert>
-      )}
-      {error && (
-        <Alert variant="danger" className="text-white bg-danger">
-          {error}
-        </Alert>
-      )}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label className="text-white">이메일 주소</Form.Label>
-          <Form.Control
-            type="email"
-            className="bg-secondary text-white"
-            placeholder="이메일을 입력하세요"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isLoading}
-          />
-        </Form.Group>
-        <Button
-          variant="outline-light"
-          type="submit"
-          className="mt-3 w-100"
-          disabled={isLoading}
+      <Container
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "calc(100vh - 76px)" }}
+      >
+        <Card
+          className="shadow-lg"
+          style={{
+            maxWidth: "450px",
+            width: "100%",
+            background: "rgba(33, 37, 41, 0.85)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+          }}
         >
-          {isLoading ? "전송 중..." : "이메일 전송"}
-        </Button>
-      </Form>
-    </Container>
+          <Card.Body className="p-4">
+            <h3 className="text-center mb-4 text-white">비밀번호 재설정</h3>
+
+            {message && (
+              <Alert
+                variant="success"
+                className="mb-4"
+                style={{
+                  background: "rgba(25, 135, 84, 0.9)",
+                  border: "none",
+                  color: "white",
+                }}
+              >
+                {message}
+              </Alert>
+            )}
+
+            {error && (
+              <Alert
+                variant="danger"
+                className="mb-4"
+                style={{
+                  background: "rgba(220, 53, 69, 0.9)",
+                  border: "none",
+                  color: "white",
+                }}
+              >
+                {error}
+              </Alert>
+            )}
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-4">
+                <Form.Label className="text-white">이메일 주소</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="이메일을 입력하세요"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isLoading}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "white",
+                    padding: "12px",
+                  }}
+                  className="rounded-3"
+                />
+              </Form.Group>
+
+              <Button
+                variant="outline-light"
+                type="submit"
+                className="w-100 py-2 mt-2"
+                disabled={isLoading}
+                style={{
+                  borderRadius: "6px",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = "transparent";
+                }}
+              >
+                {isLoading ? (
+                  <span>
+                    <i className="fas fa-spinner fa-spin me-2"></i>전송 중...
+                  </span>
+                ) : (
+                  "이메일 전송"
+                )}
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Container>
+    </div>
   );
 };
 
