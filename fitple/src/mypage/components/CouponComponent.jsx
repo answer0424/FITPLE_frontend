@@ -13,6 +13,7 @@ const CouponComponent = () => {
         ?.split("=")[1];
     //페이지 최초 진입 시 트레이너 페이지 표시
     console.log(userInfo);
+    
     api.get(`/member/${userInfo.id}/stamp`, {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`},})
     .then((response) => {
       console.log(response.data);
