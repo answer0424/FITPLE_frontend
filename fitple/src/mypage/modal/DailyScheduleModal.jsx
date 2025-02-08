@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import RegisterSceduleModal from "../modal/RegisterSceduleModal";
+import RegisterScheduleModal from "../modal/RegisterSceduleModal";
 import DailyItem from "../items/DailyItem";
 
 const DailyScheduleModal = ({
@@ -11,6 +11,7 @@ const DailyScheduleModal = ({
   user,
 }) => {
   const [modalChange, setModalChange] = useState(true);
+  const [timeInput, setTimeInput] = useState("");
 
   //모달 변경
   const handleModalChange = () => {
@@ -19,6 +20,7 @@ const DailyScheduleModal = ({
   //모달 닫히면 스케줄 창 보여주도록 변경
   useEffect(() => {
     if (!isModalOpen) setModalChange(true);
+    setTimeInput("");
   }, [isModalOpen]);
 
   return (
@@ -34,19 +36,32 @@ const DailyScheduleModal = ({
           <div></div>
         )}
       </Modal.Header>
-      {user ? (
-        modalChange ? (
-          <Modal.Body>
-            {dailyEvents.map((event, index) => (
+      <Modal.Body>
+        {!user ? (
+          <div className="text-center">잠시만 기다리세요...</div>
+        ) : modalChange ? (
+          dailyEvents.length > 0 ? (
+            dailyEvents.map((event, index) => (
               <DailyItem event={event} key={index} />
-            ))}
-          </Modal.Body>
+            ))
+          ) : (
+            <div className="text-center">일정이 없습니다.</div>
+          )
         ) : (
-          <RegisterSceduleModal />
-        )
-      ) : (
-        <div>잠시만 기다리세요...</div>
-      )}
+          <RegisterScheduleModal
+            isModalOpen={isModalOpen}
+            closeModal={() => {
+              handleModalChange(); // 스케줄 화면으로 전환
+              closeModal(); // 모달 닫기
+            }}
+            selectedDate={selectedDate}
+            timeInput={timeInput}
+            setTimeInput={setTimeInput}
+            user={user}
+          />
+        )}
+      </Modal.Body>
+
       <Modal.Footer>
         <Button variant="secondary" onClick={closeModal}>
           닫기

@@ -43,12 +43,12 @@ const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
                 <button className="close-button" onClick={onClose}>X</button>
                 <h2 className='text-align chat-name'>채팅방</h2>
                 {selectedChatId ? (
-                    <ChatMessage chatId={selectedChatId} onBack={handleBack} />
+                    <ChatMessage chatId={selectedChatId} onBack={handleBack} rooms={rooms}/>
                 ) : (
                     <ul className='list-group chat-room-list'>
                         {rooms.map((room) => (
                             <li key={room.chatId} className='list-group-item chat-room-item' onClick={() => handleChatClick(room.chatId)}>
-                                Chat Room {room.chatId}
+                                {room.otherNickname}
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -56,7 +56,7 @@ const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
                                     }}
                                     className="leave-button"
                                 >
-                                    <FontAwesomeIcon icon={faSignOutAlt} />
+                                    <FontAwesomeIcon icon={faSignOutAlt} className='FontAwesomeIcon'/>
                                 </button>
                             </li>
                         ))}
