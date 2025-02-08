@@ -28,10 +28,21 @@ const CalenderComponent = ({ user }) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
     const selectedDay = formattedDate.slice(8, 10);
 
+    console.log(selectedDay);
+
     if (events) {
       setDailyEvents(
         events.filter((event) => {
-          if (event.date) return event.date.slice(8, 10) === selectedDay;
+          if (
+            event.date &&
+            typeof event.date === "string" &&
+            event.date.length >= 10
+          ) {
+            const eventDay = event.date.slice(8, 10);
+            // console.log(eventDay);
+            return eventDay === selectedDay;
+          }
+          return false;
         })
       );
     }
@@ -55,6 +66,11 @@ const CalenderComponent = ({ user }) => {
   // };
 
   const getEventsForDate = (date) => {
+    if (!events || !Array.isArray(events)) {
+      console.error("Events data is not loaded properly.");
+      return []; // 데이터를 반환하지 않고 빈 배열로 처리
+    }
+
     const formattedDate = moment(date).format("YYYY-MM-DD");
     return events.filter((event) => event.date === formattedDate);
   };
