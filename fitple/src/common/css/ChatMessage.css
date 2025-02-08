@@ -1,91 +1,241 @@
 .chat-message-container {
-    background-color: #333;
+    background-color: rgba(25, 25, 25, 0.95);
     color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px; /* 최대 너비 지정 */
-    margin: 0 auto;
-    height: 80vh; /* 화면 높이에 맞게 조절 */
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    max-height: 90%;
+    border: 1px #a1d0fc29 solid;
 }
 
-.chat-message-container button {
-    background-color: #555;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+/* Back button */
+.chat-message-container > button {
+    background-color: transparent;
+    color: #A1D0FC;
+    border: 1px solid rgba(161, 208, 252, 0.3);
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 10px;
-    align-self: flex-start;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    width: fit-content;
+    max-height: 50px;
 }
 
-.chat-message-container button:hover {
-    background-color: #777;
+.chat-message-container > button:hover {
+    background-color: rgba(161, 208, 252, 0.1);
+    transform: translateX(-5px);
 }
 
+/* Message list container */
 .message-list {
     list-style-type: none;
-    padding: 0;
-    flex-grow: 1; /* 남은 공간을 차지하도록 설정 */
+    padding: 16px;
+    margin: 0;
+    flex-grow: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    height: 40vh;
+    gap: 12px;
+    background-color: rgba(30, 30, 30, 0.6);
+    border-radius: 12px;
 }
 
-/* 메시지 기본 스타일 */
+/* Scrollbar styling */
+.message-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: rgba(161, 208, 252, 0.3);
+    border-radius: 3px;
+}
+
+/* Message items */
 .message-item {
-    padding: 10px 15px;
-    border-radius: 15px;
-    max-width: 75%; /* 메시지가 너무 길어지지 않도록 제한 */
+    padding: 12px 16px;
+    border-radius: 16px;
+    max-width: 70%;
     word-wrap: break-word;
-    display: inline-block;
+    line-height: 1.4;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
+    position: relative;
+    margin-bottom: 5px;
 }
 
-/* 본인 메시지 스타일 */
-.self-message {
-    background-color: #4CAF50;
-    color: white;
+/* Message content */
+.message-content {
+    
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Message info (time and read status) */
+.message-info {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    opacity: 0.7;
+    position: absolute;
+    bottom: -20px;
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 5px;
+    width: 80px;
+}
+
+.self-message .message-info {
+    right: 0px;
+    color: rgb(233, 253, 178);
     align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
     text-align: right;
 }
 
-/* 상대방 메시지 스타일 */
-.other-message {
-    background-color: #007bff;
-    color: white;
-    align-self: flex-start;
+.other-message .message-info {
+    left: 4px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.my-message-time {
+    font-weight: 300;
+    background-color: rgba(0, 0, 0, 0);
+    align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
+    text-align: right;
+    
+}
+.your-message-time {
+    font-weight: 300;
+    background-color: rgba(0, 0, 0, 0);
+    align-self: flex-end;
+    max-width: unset;
+    margin-right: auto;
+    padding-right: auto;
     text-align: left;
 }
 
+.read-status {
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0);
+
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Self message */
+.self-message {
+    display: flex;
+    background-color: #A1D0FC;
+    color: #000;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.self-message .read-status {
+    color: rgba(0, 0, 0, 0.7);
+    align-self: flex-end;
+    max-width: unset;
+    margin-left: auto;
+    padding-left: auto;
+    text-align: right;
+}
+
+.self-message .your-read-status {
+    align-self: flex-end;
+    max-width: unset;
+    margin-right: auto;
+    padding-right: auto;
+    text-align: left;
+}
+
+/* Other message */
+.other-message {
+    background-color: rgba(40, 40, 40, 0.9);
+    color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+/* Input container */
 .message-input-container {
     display: flex;
-    padding: 10px;
-    border-top: 1px solid #555;
-    width: 100%;
+    gap: 12px;
+    padding: 16px;
+    background-color: rgba(30, 30, 30, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(161, 208, 252, 0.1);
 }
 
+/* Message input */
 .message-input {
     flex: 1;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    margin-right: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(161, 208, 252, 0.2);
+    background-color: rgba(18, 18, 18, 0.95);
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-.message-send-button {
-    background-color: #555;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.message-input:focus {
+    outline: none;
+    border-color: rgba(161, 208, 252, 0.5);
+    background-color: rgba(25, 25, 25, 0.95);
 }
+
+.message-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Send button */
+.message-send-button {
+    background-color: #A1D0FC;
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 50%; /* 버튼 모양을 원으로 만들기 */
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 50px; /* 너비와 높이를 동일하게 설정 */
+    height: 50px;
+    display: flex; /* Flexbox를 사용하여 내용 정렬 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 정렬 */
+    max-width: 50px;
+}
+
+.message-send-button i {
+    font-size: 1rem; /* 아이콘 크기 조정 */
+    color: #000;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 */
+}
+
+
 
 .message-send-button:hover {
-    background-color: #777;
+    background-color: #8bbde9;
+    transform: translateY(-2px);
+}
+
+.message-send-button:active {
+    transform: translateY(0);
 }
