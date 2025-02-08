@@ -1,0 +1,39 @@
+.mypage-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 800px;
+  height: 50px;
+  position: absolute;
+  left: 40px;
+  /* padding: 10px 20px; */
+}
+
+.mypage-label {
+  color: white;
+  font-size: 14px;
+}
+
+.mypage-button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.mypage-button {
+  background-color: rgba(255, 255, 255, 0.2); /* 반투명 버튼 */
+  border: none;
+  color: white;
+  width: 170px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.mypage-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.mypage-button.active {
+  background-color: rgba(255, 255, 255, 0.5); /* 클릭 시 더 밝게 */
+}

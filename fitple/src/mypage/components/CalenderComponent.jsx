@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
-import '../static/css/CalenderStyle.css';
+import "../static/css/CalenderStyle.css";
 import { Container } from "react-bootstrap";
 import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
-import { useEventContext } from '../context/EventContext'
+import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 
-
-const CalenderComponent = ({user}) => {
-
+const CalenderComponent = ({ user }) => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,20 +25,21 @@ const CalenderComponent = ({user}) => {
   };
 
   const handleDayClick = (clickedDate) => {
-
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
     const selectedDay = formattedDate.slice(8, 10);
 
-    if(events) {
-      setDailyEvents(events.filter(event => {
-        if(event.date) event.date.slice(8, 10) === selectedDay
-      }));
+    if (events) {
+      setDailyEvents(
+        events.filter((event) => {
+          if (event.date) return event.date.slice(8, 10) === selectedDay;
+        })
+      );
     }
     setSelectedDate(formattedDate);
     setIsModalOpen(true);
   };
   //달력 제어
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
@@ -62,25 +61,27 @@ const CalenderComponent = ({user}) => {
 
   useEffect(() => {
     const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        ?.split("=")[1];
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
     //일정 불러오기
-    api.get(`/member/${user.id}/calendar`, {
-      params: {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-      },
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      }
-    })
-    .then((response) => {
-      // console.log(response.headers['content-type']);
-      // console.log(response.data);
-      updateEvents(response.data);
-    })
+    api
+      .get(`/member/${user.id}/calendar`, {
+        params: {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+        },
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        // console.log(response.headers['content-type']);
+        // console.log(response.data);
+        console.log("일정입니다 : ", response.data);
+        updateEvents(response.data);
+      });
   }, []);
 
   // useEffect(() => {
@@ -88,7 +89,7 @@ const CalenderComponent = ({user}) => {
   //   // console.log(events);
   // }, [events])
 
-  return  (
+  return (
     <>
       <Container>
         <Calendar
@@ -106,7 +107,12 @@ const CalenderComponent = ({user}) => {
               return (
                 <>
                   {eventsForDay.map((event, index) => (
-                    <div key={index} className={`event-item ${event.isCompleted ? "completed" : ""}`}>
+                    <div
+                      key={index}
+                      className={`event-item ${
+                        event.isCompleted ? "completed" : ""
+                      }`}
+                    >
                       {event.time} {event.title}
                     </div>
                   ))}

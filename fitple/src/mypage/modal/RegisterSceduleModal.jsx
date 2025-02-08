@@ -20,6 +20,14 @@ const RegisterScheduleModal = ({
     .split("; ")
     .find((row) => row.startsWith("accessToken="))
     ?.split("=")[1];
+  // 날짜 형식을 "YYYY-MM-DD HH:mm:ss.SSSSSS"로 변환
+  const formatToLocalDateTime = (date, time) => {
+    const scheduleDateTime = new Date(date);
+    const [hours, minutes] = time.split(":");
+    scheduleDateTime.setHours(parseInt(hours), parseInt(minutes));
+
+    return scheduleDateTime.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss" 형식 유지
+  };
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -33,6 +41,7 @@ const RegisterScheduleModal = ({
         const response = await axios.get(
           `http://localhost:8081/member/${user.id}/register`,
           {
+            withCredentials: true,
             headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
@@ -81,47 +90,39 @@ const RegisterScheduleModal = ({
     setError(null);
 
     try {
-      const scheduleDateTime = new Date(selectedDate);
-      const [hours, minutes] = timeInput.split(":");
-      scheduleDateTime.setHours(parseInt(hours), parseInt(minutes));
+      // LocalDateTime 형식 변환 (YYYY-MM-DDTHH:mm:ss)
+      const formattedDate = formatToLocalDateTime(selectedDate, timeInput);
 
       // 선택된 학생의 Training ID 찾기
       const selectedTraining = trainingList.find(
         (t) => t.studentId === parseInt(selectedStudent)
       );
-      console.log("선택된회원 : ", selectedStudent);
+
       if (!selectedTraining) {
         throw new Error("선택된 학생의 트레이닝 정보를 찾을 수 없습니다.");
       }
 
       const scheduleData = {
-        date: scheduleDateTime.toISOString(),
-        studentId: parseInt(selectedStudent), // 선택한 회원 ID
-        trainingId: selectedTraining.trainingId, //  // 현재 트레이너 ID (user 객체에서 가져오기)
+        date: formattedDate, // "YYYY-MM-DDTHH:mm:ss" 형식 유지
+        trainingId: selectedTraining.trainingId,
       };
-      console.log("선택된 트레이닝 정보:", selectedTraining);
-      console.log("선택된 트레이닝 ID:", selectedTraining?.trainingId);
 
-      // 전송할 데이터 로깅
-      console.log("전송할 일정 데이터:", {
-        날짜: new Date(scheduleData.date).toLocaleString("ko-KR"),
-        트레이닝ID: scheduleData.trainingId,
-        학생ID: parseInt(selectedStudent),
-        // 학생이름: selectedTraining.nickname,
-      });
+      console.log("전송할 일정 데이터:", scheduleData);
 
       const response = await axios.post(
-        `http://localhost:8081/member/schedule/add-schedule/${user.id}`,
+        `http://localhost:8081/member/register/add-schedule/${user.id}`,
         scheduleData,
         {
+          withCredentials: true,
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
 
       if (response.status === 200) {
         console.log("일정 등록 성공:", response.data);
+        alert("일정이 등록되었습니다");
         if (onScheduleUpdate) {
-          onScheduleUpdate(response.data);
+          onScheduleUpdate(scheduleData);
         }
         setSelectedStudent("");
         setTimeInput("");

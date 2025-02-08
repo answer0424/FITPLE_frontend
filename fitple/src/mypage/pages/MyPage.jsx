@@ -9,6 +9,8 @@ import api from "../../mainpage/apis/api";
 import MypagePathButtenComponent from "../components/MypagePathButtenComponent";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { EventProvider } from "../context/EventContext";
+import Headers from "../../common/component/Header";
+import "../../mypage/static/css/Reset.css";
 
 const MyPage = () => {
   // const role = authInfo();
@@ -66,6 +68,7 @@ const MyPage = () => {
 
   return (
     <EventProvider>
+      <Headers />
       {user ? (
         <>
           <Container className="vh-100">
