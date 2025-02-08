@@ -179,8 +179,9 @@ const LoginContextProvider = ({ children }) => {
     console.log("✅ 최종 username:", normalizedUsername);
 
     const normalizedUserDataUsername = userData.username
-      ? userData.username.trim().toUpperCase()
-      : null;
+      ? userData.username.trim()
+      : //   .toUpperCase()
+        null;
 
     if (normalizedUsername !== normalizedUserDataUsername) {
       console.error("❌ 로그인한 사용자 정보를 찾을 수 없습니다.");

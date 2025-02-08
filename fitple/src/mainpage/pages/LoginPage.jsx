@@ -11,21 +11,19 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
 
-  const { login, loginCheck} = useContext(LoginContext);
+  const { login, loginCheck } = useContext(LoginContext);
 
   const onLogin = (e) => {
     e.preventDefault();
 
     const username = e.target.username.value;
     const password = e.target.password.value;
-    
-    
-    login(username, password);  // 로그인 진행
-  }
 
+    login(username, password); // 로그인 진행
+  };
 
   useEffect(() => {
-    console.log('LoginContextProvider 마운트 됨')
+    console.log("LoginContextProvider 마운트 됨");
 
     // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get("rememberId");
@@ -45,14 +43,14 @@ const LoginPage = () => {
     }/oauth2/authorization/kakao`;
     console.log("kakao oauth 로그인");
   };
-  
+
   const onGoogleLogin = () => {
     window.location.href = `${
       import.meta.env.VITE_Server
     }/oauth2/authorization/google`;
     console.log("google oauth 로그인");
   };
-  
+
   const onNaverLogin = () => {
     window.location.href = `${
       import.meta.env.VITE_Server
@@ -92,9 +90,7 @@ const LoginPage = () => {
             </div>
           </form>
           <div className="forgot-password-link">
-            <button onClick={() => alert("Forgot Password?")}>
-              Forgot Password?
-            </button>
+            <button onClick={handleClick}>Forgot Password?</button>
           </div>
           <div className="login-box">
             <button
