@@ -119,7 +119,7 @@ const TrainerStudentsDropdown = ({
         <option>로딩 중...</option>
       </Form.Select>
     );
-  if (error) return <div className="text-danger">{error}</div>;
+  // if (error) return <div className="text-danger">{error}</div>;
 
   return (
     <Form.Select

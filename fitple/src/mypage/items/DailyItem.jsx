@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Card } from "react-bootstrap";
 import api from "../../mainpage/apis/api";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
-import TrainerButtonItem from "../items/TrainerButtonItem"; // 올바른 import
+import TrainerButtonItem from "../items/TrainerButtonItem";
+import "../static/css/DailyItem.css"; // CSS 파일 추가
 
 const DailyItem = ({ event }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,20 +42,39 @@ const DailyItem = ({ event }) => {
 
   return (
     <>
-      <div className="event-item">
-        <Button onClick={openModal}>
-          {`Date: ${new Date(event.date).toLocaleString()} | Nickname: ${
-            event.nickname
-          } | Reservation ID: ${event.reservationId} | User ID: ${
-            event.userId
-          }`}
-        </Button>
-      </div>
+      <Card
+        className="event-item"
+        style={{ color: "black" }}
+        onClick={openModal}
+      >
+        <Card.Body className="event-body">
+          <div className="event-left">
+            <div className="profile-placeholder"></div>
+            <div>
+              <Card.Title className="nickname">
+                {event.nickname} 회원님
+              </Card.Title>
+            </div>
+          </div>
+          <div className="event-right">
+            {event.status === "운동완료" ? (
+              <Button className="status-button" onClick={openModal}>
+                완료됨
+              </Button>
+            ) : null}
+            <span className="event-time">
+              {new Date(event.date).toLocaleTimeString()}
+            </span>
+          </div>
+        </Card.Body>
+      </Card>
+
+      {/* Modal */}
       <Modal show={isModalOpen} onHide={closeModal} centered>
         <Modal.Header>
           <Modal.Title>Event Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ color: "black" }}>
           {`Date: ${new Date(event.date).toLocaleString()} | Nickname: ${
             event.nickname
           } | Reservation ID: ${event.reservationId} | User ID: ${

@@ -53,7 +53,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
       onRegister(user.id, selectedStudent.id, times);
       onClose();
     } catch (error) {
-      alert("회원 등록 중 오류가 발생했습니다.");
+      alert("이미존재하는 회원입니다.");
     }
   };
 
@@ -91,7 +91,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
                   key={student.userId}
                   className="list-group-item"
                 >
-                  <span>{student.nickname}</span>
+                  <span style={{ color: "black" }}>{student.nickname}</span>
                   <Button
                     className="add-btn"
                     onClick={() => setSelectedStudent(student)}

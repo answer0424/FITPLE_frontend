@@ -54,7 +54,7 @@ const DailyScheduleModal = ({
           </Button>
         )}
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ color: "black" }}>
         {!user ? (
           <div className="text-center">잠시만 기다리세요...</div>
         ) : modalChange ? (

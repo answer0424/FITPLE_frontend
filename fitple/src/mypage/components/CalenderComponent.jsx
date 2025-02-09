@@ -9,6 +9,7 @@ import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
+import "../static/css/ModalReset.css";
 
 const CalenderComponent = ({ user }) => {
   const today = new Date();

@@ -6,18 +6,22 @@ import {
   Alert,
   Button,
   Modal,
+  Form,
 } from "react-bootstrap";
 import axios from "axios";
-import "../static/css/StudentsList.css"; // CSS 파일 import
+import "../static/css/StudentsList.css";
 import SearchStudentItem from "../items/SerchStudentItem";
 
 const StudentsList = ({ user }) => {
-  const [studentList, setStudentList] = useState([]); // 전체 데이터
-  const [displayList, setDisplayList] = useState([]); // 렌더링할 데이터
+  const [studentList, setStudentList] = useState([]);
+  const [displayList, setDisplayList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(8); // 한 번에 보여줄 개수
-  const [showModal, setShowModal] = useState(false); // 모달 상태 추가
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [newTimes, setNewTimes] = useState(0);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const observer = useRef();
 
   const accessToken = document.cookie
@@ -25,7 +29,6 @@ const StudentsList = ({ user }) => {
     .find((row) => row.startsWith("accessToken="))
     ?.split("=")[1];
 
-  // 전체 학생 목록 불러오기
   useEffect(() => {
     const fetchStudents = async () => {
       if (!user?.id) return;
@@ -35,23 +38,21 @@ const StudentsList = ({ user }) => {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/member/${user.id}/register`, // 전체 데이터 한 번에 가져옴
+          `http://localhost:8081/member/${user.id}/register`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
 
         if (response.status === 200 && response.data.length > 0) {
-          console.log("전체 회원 리스트:", response.data);
           setStudentList(response.data);
-          setDisplayList(response.data.slice(0, visibleCount)); // 초기 렌더링
+          setDisplayList(response.data.slice(0, visibleCount));
         } else {
           setStudentList([]);
           setDisplayList([]);
           setError("학생 목록을 불러올 수 없습니다.");
         }
       } catch (error) {
-        console.error("학생 목록 불러오기 실패:", error);
         setError("학생 목록을 불러오는 중 오류가 발생했습니다.");
       } finally {
         setIsLoading(false);
@@ -61,7 +62,6 @@ const StudentsList = ({ user }) => {
     fetchStudents();
   }, [user]);
 
-  // 마지막 요소 감지하여 더 보여줌
   const lastStudentRef = useCallback(
     (node) => {
       if (isLoading) return;
@@ -73,7 +73,7 @@ const StudentsList = ({ user }) => {
           displayList.length < studentList.length
         ) {
           setTimeout(() => {
-            setVisibleCount((prev) => prev + 8); // 8개씩 추가
+            setVisibleCount((prev) => prev + 8);
             setDisplayList(studentList.slice(0, visibleCount + 8));
           }, 500);
         }
@@ -84,7 +84,38 @@ const StudentsList = ({ user }) => {
     [isLoading, displayList, studentList, visibleCount]
   );
 
-  // 회원 추가 함수
+  const handleCardClick = (student) => {
+    setSelectedStudent(student);
+    setNewTimes(student.times);
+    setShowModal(true);
+  };
+
+  const handleUpdateTimes = async () => {
+    if (!selectedStudent) return;
+
+    try {
+      await axios.patch(
+        "http://localhost:8081/pt-count",
+        {
+          studentId: selectedStudent.userId,
+          trainerId: user.id,
+          times: newTimes,
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      setStudentList((prev) =>
+        prev.map((s) =>
+          s.userId === selectedStudent.userId ? { ...s, times: newTimes } : s
+        )
+      );
+      setShowModal(false);
+    } catch (error) {
+      alert("횟수 변경 중 오류 발생");
+    }
+  };
+
   const addMember = (studentId, nickname, times) => {
     if (studentList.some((student) => student.userId === studentId)) {
       alert("이미 존재하는 회원입니다.");
@@ -104,7 +135,8 @@ const StudentsList = ({ user }) => {
             <Card
               key={student.userId}
               className="student-card"
-              ref={index === displayList.length - 1 ? lastStudentRef : null} // 마지막 요소 감지
+              ref={index === displayList.length - 1 ? lastStudentRef : null}
+              onClick={() => handleCardClick(student)}
             >
               <div className="student-info">
                 <img
@@ -129,20 +161,63 @@ const StudentsList = ({ user }) => {
 
       <Button
         variant="dark"
-        onClick={() => setShowModal(true)}
+        onClick={() => setShowRegisterModal(true)}
         style={{ width: "100px" }}
       >
         회원 등록
       </Button>
 
-      {showModal && (
+      {showRegisterModal && (
         <SearchStudentItem
-          showModal={showModal}
-          onClose={() => setShowModal(false)}
+          showModal={showRegisterModal}
+          onClose={() => setShowRegisterModal(false)}
           user={user}
           onRegister={addMember}
         />
       )}
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>PT 횟수 변경</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>
+                {selectedStudent?.nickname} 회원님의 남은 PT 횟수
+              </Form.Label>
+              <div className="d-flex align-items-center">
+                <Button
+                  variant="danger"
+                  onClick={() => setNewTimes((prev) => Math.max(prev - 1, 0))}
+                >
+                  -1
+                </Button>
+                <Form.Control
+                  type="number"
+                  value={newTimes}
+                  onChange={(e) => setNewTimes(Number(e.target.value))}
+                  className="mx-2 text-center"
+                />
+                <Button
+                  variant="success"
+                  onClick={() => setNewTimes((prev) => prev + 1)}
+                >
+                  +1
+                </Button>
+              </div>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleUpdateTimes}>
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

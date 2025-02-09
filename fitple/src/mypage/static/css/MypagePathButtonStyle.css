@@ -20,7 +20,7 @@
 }
 
 .mypage-button {
-  background-color: rgba(255, 255, 255, 0.2); /* 반투명 버튼 */
+  background-color: rgba(255, 255, 255, 0.2) !important; /* 반투명 버튼 */
   border: none;
   color: white;
   width: 170px;
@@ -31,9 +31,9 @@
 }
 
 .mypage-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .mypage-button.active {
-  background-color: rgba(255, 255, 255, 0.5); /* 클릭 시 더 밝게 */
+  background-color: rgba(255, 255, 255, 0.5) !important; /* 클릭 시 더 밝게 */
 }

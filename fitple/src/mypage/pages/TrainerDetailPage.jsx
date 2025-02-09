@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/css/TrainerDetailWrite.css";
+import Headers from "../../common/component/Header";
 
 const TrainerProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -224,7 +225,8 @@ const TrainerProfilePage = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-primary mb-4">트레이너 프로필 작성</h2>
+      <Headers />
+      {/* <h2 className="text-primary mb-4">트레이너 프로필 작성</h2> */}
       {user && (
         <div className="d-flex align-items-center mb-3">
           <img
@@ -317,6 +319,7 @@ const TrainerProfilePage = () => {
                   type="button"
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDeleteSkill(index)}
+                  style={{ width: "50px" }}
                 >
                   삭제
                 </button>
