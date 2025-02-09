@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import '../css/ChatIcon.css';
-import chatIcon from '../../assets/chatIcon.png'; // 파일 경로 수정
+import chatIcon from '../../assets/chatIcon.png';
 import ChatModal from './ChatModal';
 import { getUserChats } from '../../mainpage/apis/chat';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 
-
 const ChatIcon = () => {
-    
-    const { userInfo } = useContext(LoginContext);
+    const { userInfo, stompClient } = useContext(LoginContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [chatRooms, setChatRooms] = useState([]);
-    const userId = userInfo ? userInfo.id : null; // userInfo에서 로그인한 유저 id 가져오기
+    const {unreadMessage, setUnreadMessage} = useContext(LoginContext);
+
+    const userId = userInfo ? userInfo.id : null;
 
     useEffect(() => {
         if (isModalOpen) {
@@ -19,11 +19,12 @@ const ChatIcon = () => {
         }
     }, [isModalOpen]);
 
+
     const fetchChatRooms = async () => {
         try {
-            console.log('현재 로그인한 유저', userId, userInfo.id);
+            console.log('현재 로그인한 유저', userId);
             const data = await getUserChats(userId);
-            console.log('Fetched chat rooms:', data); // 데이터 로그 출력
+            console.log('Fetched chat rooms:', data);
             setChatRooms(data);
         } catch (error) {
             console.error('Error fetching chat rooms:', error);
@@ -32,18 +33,44 @@ const ChatIcon = () => {
 
     const handleIconClick = () => {
         setModalOpen(true);
+        
     };
 
     const handleCloseModal = () => {
         setModalOpen(false);
     };
 
+    // 🔹 모든 채팅방의 읽지 않은 메시지가 0인지 확인
+    const hasUnreadMessage = Object.values(unreadMessage || {}).some(count => count > 0);
+    
+
     return (
-        <div>
+        <div className="relative">
             <div className="chat-icon-container" onClick={handleIconClick}>
                 <img src={chatIcon} alt="Chat Icon" className="chat-icon" />
             </div>
-            <ChatModal isOpen={isModalOpen} onClose={handleCloseModal} chatRooms={chatRooms} userId={userId}/>
+            {/* 🔴 빨간 점 표시 */}
+            {hasUnreadMessage && (
+                <span style={{
+                    position: "fixed",
+                    bottom: 65,
+                    right: 25,
+                    width: 12,
+                    height: 12,
+                    backgroundColor: "red",
+                    borderRadius: "50%",
+                    zIndex: 9999,
+                }}></span>
+            )}
+            <ChatModal 
+                isOpen={isModalOpen} 
+                onClose={handleCloseModal} 
+                chatRooms={chatRooms} 
+                userId={userId} 
+                stompClient={stompClient} 
+                unreadMessage={unreadMessage} 
+                setUnreadMessage={setUnreadMessage}
+            />
         </div>
     );
 };
