@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import RegisterScheduleModal from "../modal/RegisterSceduleModal";
 import DailyItem from "../items/DailyItem";
 
@@ -9,39 +9,57 @@ const DailyScheduleModal = ({
   selectedDate,
   dailyEvents,
   user,
+  selectedUser,
 }) => {
   const [modalChange, setModalChange] = useState(true);
   const [timeInput, setTimeInput] = useState("");
 
-  //모달 변경
+  // 모달 변경
   const handleModalChange = () => {
     setModalChange((prev) => !prev);
   };
-  //모달 닫히면 스케줄 창 보여주도록 변경
+
+  // 모달 닫히면 스케줄 창 보여주도록 변경
   useEffect(() => {
     if (!isModalOpen) setModalChange(true);
     setTimeInput("");
   }, [isModalOpen]);
 
+  // 선택된 유저 일정 필터링 - 수정된 부분
+  const filteredEvents = React.useMemo(() => {
+    if (!dailyEvents) return [];
+    return selectedUser
+      ? dailyEvents.filter(
+          (event) =>
+            event.userId === selectedUser.userId ||
+            event.userId === String(selectedUser.userId)
+        )
+      : dailyEvents;
+  }, [dailyEvents, selectedUser]);
+
+  // 디버깅을 위한 콘솔 로그
+  useEffect(() => {
+    console.log("Selected User:", selectedUser);
+    console.log("Daily Events:", dailyEvents);
+    console.log("Filtered Events:", filteredEvents);
+  }, [selectedUser, dailyEvents, filteredEvents]);
+
   return (
     <Modal show={isModalOpen} onHide={closeModal} centered>
       <Modal.Header>
         <Modal.Title>{modalChange ? "스케줄" : "일정 등록"}</Modal.Title>
-        {/* authority가 트레이너인 경우 보여지는 모달화면입니다. */}
-        {user.authority === "ROLE_TRAINER" ? (
+        {user.authority === "ROLE_TRAINER" && (
           <Button variant="primary" onClick={handleModalChange}>
             {modalChange ? "일정 추가" : "스케줄"}
           </Button>
-        ) : (
-          <div></div>
         )}
       </Modal.Header>
       <Modal.Body>
         {!user ? (
           <div className="text-center">잠시만 기다리세요...</div>
         ) : modalChange ? (
-          dailyEvents.length > 0 ? (
-            dailyEvents.map((event, index) => (
+          filteredEvents.length > 0 ? (
+            filteredEvents.map((event, index) => (
               <DailyItem event={event} key={index} />
             ))
           ) : (
@@ -51,8 +69,8 @@ const DailyScheduleModal = ({
           <RegisterScheduleModal
             isModalOpen={isModalOpen}
             closeModal={() => {
-              handleModalChange(); // 스케줄 화면으로 전환
-              closeModal(); // 모달 닫기
+              handleModalChange();
+              closeModal();
             }}
             selectedDate={selectedDate}
             timeInput={timeInput}

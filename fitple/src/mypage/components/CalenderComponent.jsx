@@ -8,13 +8,14 @@ import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
+import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 
 const CalenderComponent = ({ user }) => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [members, setMembers] = useState([]);
   const [dailyEvents, setDailyEvents] = useState([]); //오늘 일정 리스트
   const { events, updateEvents } = useEventContext(); //이 달의 일정
@@ -104,10 +105,25 @@ const CalenderComponent = ({ user }) => {
   //   // console.log("컨텍스트 사용")
   //   // console.log(events);
   // }, [events])
+  // <TrainerStudentsDropdown
+  //   trainerId={user.id}
+  //   updateEvents={updateEvents}
+  //   year={date.getFullYear()}
+  //   month={date.getMonth()}
+  // />;
 
   return (
     <>
       <Container>
+        <TrainerStudentsDropdown
+          trainerId={user.id}
+          updateEvents={setDailyEvents}
+          year={date ? date.getFullYear() : new Date().getFullYear()} // ✅ 기본값 설정
+          month={date ? date.getMonth() : new Date().getMonth()} // ✅ 기본값 설정
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
+
         <Calendar
           value={date}
           onChange={handleDateChange}
@@ -145,8 +161,9 @@ const CalenderComponent = ({ user }) => {
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         selectedDate={selectedDate}
-        dailyEvents={dailyEvents}
-        user={user}
+        dailyEvents={dailyEvents} // 전체 일정
+        user={user} // 로그인된 사용자 정보
+        selectedUser={selectedUser} // 선택한 학생 정보 추가
       />
 
       {/* 일정 리스트 보기 */}
