@@ -35,27 +35,29 @@ function TrainerCertifications({ certifications, BASE_URL }) {
                 ))}
             </ul>
 
-            {/* 모달 */}
             {selectedImage && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div
-                        className="modal-content"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <img
-                            src={`${BASE_URL}${selectedImage}`}
-                            alt="자격증 사진"
-                            className="modal-image"
-                        />
-                        <button
-                            className="close-button"
-                            onClick={closeModal}
-                        >
-                            닫기
-                        </button>
-                    </div>
-                </div>
-            )}
+    <div className="modal-overlay" onClick={closeModal}>
+        <div
+            className="modal-contents"
+            onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 닫히지 않도록 방지
+        >
+            {/* 이미지 */}
+            <img
+                src={`${BASE_URL}${selectedImage}`}
+                alt="자격증 사진"
+                className="modal-images"
+            />
+
+            {/* 닫기 버튼 */}
+            <button
+                className="close-button"
+                onClick={closeModal}
+            >
+                닫기
+            </button>
+        </div>
+    </div>
+)}
         </div>
     );
 }

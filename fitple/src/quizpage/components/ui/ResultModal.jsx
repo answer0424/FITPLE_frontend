@@ -37,15 +37,51 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
         }
     }, [isOpen, hbtiType]);
 
+    // const handleViewDetails = async () => {
+    //     if (!userId) {
+    //         alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요.');
+    //         navigate('/login');
+    //         return;
+    //     }
+
+    //     try {
+    //         const token = Cookies.get('accessToken');
+    //         const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${token}`
+    //             },
+    //             body: JSON.stringify({
+    //                 userId: userId,
+    //                 answers: Object.values(answers)
+    //             })
+    //         });
+
+    //         if (!saveResponse.ok) {
+    //             throw new Error('Failed to save results');
+    //         }
+    //         navigate(`/quiz/${userId}/result`);
+    //         onClose();
+    //     } catch (error) {
+    //         console.error('Error saving HBTI result:', error);
+    //         alert('결과 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    //     }
+    // };
+
     const handleViewDetails = async () => {
         if (!userId) {
-            alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요.');
+            alert('로그인이 필요한 기능입니다.');
             navigate('/login');
             return;
         }
-
+    
         try {
             const token = Cookies.get('accessToken');
+            if (!token) {
+                throw new Error('인증 토큰이 없습니다.');
+            }
+    
             const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
                 method: 'POST',
                 headers: {
@@ -57,18 +93,22 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
                     answers: Object.values(answers)
                 })
             });
-
+    
             if (!saveResponse.ok) {
-                throw new Error('Failed to save results');
+                throw new Error('결과 저장 실패');
             }
-            navigate(`/quiz/${userId}/result`);
+    
+            // 저장 성공 후 이동
+            navigate(`/quiz/${userId}/result`, { 
+                state: { fromQuiz: true } 
+            });
             onClose();
         } catch (error) {
-            console.error('Error saving HBTI result:', error);
-            alert('결과 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+            console.error('HBTI 결과 저장 실패:', error);
+            alert('결과 저장 중 오류가 발생했습니다.');
         }
     };
-
+    
     const handleRetakeQuiz = () => {
         window.location.href = '/quiz';
         onClose();

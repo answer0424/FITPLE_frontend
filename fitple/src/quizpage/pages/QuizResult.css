@@ -1,4 +1,3 @@
-/* QuizResult.css */
 .quiz-result-container {
   min-height: 100vh;
   padding: 3rem 1rem;
@@ -7,54 +6,67 @@
 .result-content-box {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 1);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
 .panel-layout {
   display: flex;
   min-height: 600px;
+  position: relative;
 }
 
-/* Left Panel Styles */
-.left-panel {
-  width: 25%;
-  border-right: 1px solid #e5e7eb;
-  padding: 1.5rem;
+.panel-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #FAFAFA;
+  opacity: 0.2;
+  z-index: 1;
 }
 
-/* Right Panel Styles */
+.panel-layout > * {
+  position: relative;
+  z-index: 2;
+}
+
+.left-panel {
+  width: 30%;
+  padding: 2rem;
+}
+
+.hbtiResult {
+  padding-left:3rem;
+  padding-top:0.6rem;
+}
+
 .right-panel {
-  width: 75%;
+  width: 70%;
   padding: 2rem;
   position: relative;
-  background-color: #FAFAFA;
 }
 
-/* Error and Loading States */
 .error-message {
   color: #dc2626;
   padding: 20px;
   text-align: center;
   font-size: 1.125rem;
-
 }
 
 .loading {
   text-align: center;
   padding: 20px;
-
   font-size: 1.125rem;
 }
 
-/* Progress Bar Styles */
+
 .progress-bar-container {
   width: 100%;
   height: 12px;
-  background-color: #f5f5f5;
+  background-color: hsl(0, 0%, 96%);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -105,7 +117,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: 20px;
   width: 100px;
   height: 48px;
   border: none;
@@ -136,14 +148,12 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 2rem;
-  color: #333;
-
+  color: #FFF;
 }
 
 .percentages-grid {
   display: grid;
-
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .percentage-item {
@@ -178,98 +188,103 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #FFF;
 }
 
 .description-section p {
-  font-size: 1.125rem;
+  font-size: 1.07rem;
   line-height: 1.7;
-  color: #4a5568;
+  color: #FFF;
 }
 
 /* Matches Section Styles */
 .matches-section {
-  padding: 1.5rem;
+  padding: 1.5rem 1rem;
+  width:100%;
 }
 
 .matches-section h2 {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 2rem;
-  color: #333;
-
+  margin-bottom: 2.5rem;
+  color: #FFF;
+  text-align: center;
 }
 
 .matches-grid {
   display: grid;
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .match-card {
-  background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-}
-
-.match-card h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 1rem 0;
-  color: #333;
-  line-height: 1.4;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .match-image {
-  width: 100%;
-  height: 200px;
+  width: 80%;
+  height: 120px;
   object-fit: cover;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.2rem;
 }
 
 .match-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 1rem;
+  text-align: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .match-type {
-  text-align: right;
   font-weight: bold;
-  font-size: 1.25rem;
-  color: #333;
+  font-size: 1.2rem;
+  color: #FFF;
 }
 
 /* Match Button Styles */
 .match-button-container {
   margin-top: 2rem;
   padding: 0 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .match-button {
-  width: 100%;
-  background-color: #EE8989;
-  color: white;
-  padding: 1rem;
+  width: 33%;
+  background-color: #A1D0FC;
+  color: #000;
+  padding: 0.7rem;
   border-radius: 0.5rem;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
+  margin-right: 1rem;
 }
 
 .match-button:hover {
-  background-color: #D97070;
+  background-color: #60A5FA;
   transform: scale(1.02);
 }
 
-/* Add these styles to your QuizResult.css */
-
+/* Trait Bar Styles */
 .trait-bar-container {
-  padding: 1.5rem;
+  padding: 1.2rem;
   background: white;
   border-radius: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -301,7 +316,7 @@
 }
 
 .trait-label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #666;
   white-space: nowrap;
 }
@@ -378,11 +393,24 @@
     position: static;
     margin: 1rem auto;
   }
+
+  .matches-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
 }
 
 @media (max-width: 640px) {
   .matches-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .match-card {
+    max-width: 400px;
+    margin: 0 auto;
   }
   
   .percentage-card {
@@ -393,5 +421,4 @@
     width: 100px;
     height: 100px;
   }
-
 }

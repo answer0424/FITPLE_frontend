@@ -10,7 +10,7 @@ const TrainerStatusModal = ({ isAccess, trainerId }) => {
     useEffect(() => {
         const handleModalAction = () => {
             if (isAccess === "거절") {
-                navigate(`/trainer/edit/${trainerId}`); // 수정 페이지로 이동
+                navigate(`/trainer/${trainerId}/edit`); // 수정 페이지로 이동
             } else {
                 navigate("/mypage"); // 마이페이지 이동
             }

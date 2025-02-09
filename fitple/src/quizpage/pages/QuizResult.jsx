@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import HBTIResultDisplay from '../components/quiz_common/HbtiResultDisplay';
+import PanelNavigation from '../components/ui/PanelNavigation';
 import './QuizResult.css';
 
 // Progress Bar Component
@@ -16,7 +17,7 @@ const ProgressBar = ({ progress }) => (
 
 // Circle Progress Component
 const CircleProgress = ({ percentage }) => {
-  const circumference = 2 * Math.PI * 40; // r=40
+  const circumference = 2 * Math.PI * 40;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
@@ -53,10 +54,10 @@ const CircleProgress = ({ percentage }) => {
   );
 };
 
-// Updated PercentageDisplay component
+// Trait pairs configuration
 const traitPairs = {
   'M': { opposite: 'B', label: '의료적/미용적' },
-  'I': { opposite: 'E', label: '즉흥형/계획형' },
+  'E': { opposite: 'I', label: '계획형/즉흥형' },
   'C': { opposite: 'N', label: '유산소형/근력형' },
   'P': { opposite: 'G', label: '개인형/단체형' }
 };
@@ -66,13 +67,11 @@ const TraitBar = ({ trait, score }) => {
   const label = traitPairs[trait]?.label;
   const [leftTrait, rightTrait] = label?.split('/') || [];
   
-  // Determine which trait is dominant
   const isFirstTraitDominant = score > 50;
   const dominantScore = isFirstTraitDominant ? score : 100 - score;
 
   return (
     <div className="trait-bar-container">
-      {/* Top labels with scores */}
       <div className="trait-scores">
         <span className={`trait-score ${isFirstTraitDominant ? 'dominant' : ''}`}>
           {score}%
@@ -82,7 +81,6 @@ const TraitBar = ({ trait, score }) => {
         </span>
       </div>
 
-      {/* Progress bar */}
       <div className="trait-bar-wrapper">
         <span className="trait-label left">{leftTrait}</span>
         <div className="trait-bar">
@@ -98,7 +96,6 @@ const TraitBar = ({ trait, score }) => {
         <span className="trait-label right">{rightTrait}</span>
       </div>
 
-      {/* Trait letters */}
       <div className="trait-letters">
         <span className={`trait-letter ${isFirstTraitDominant ? 'dominant' : ''}`}>
           {trait}
@@ -112,8 +109,7 @@ const TraitBar = ({ trait, score }) => {
 };
 
 const PercentageDisplay = ({ percentages }) => {
-  // Sort the traits to maintain consistent order: M/B, I/E, C/N, P/G
-  const orderedTraits = ['M', 'I', 'C', 'P'];
+  const orderedTraits = ['M', 'E', 'C', 'P'];
   
   return (
     <div className="percentages-section">
@@ -131,7 +127,6 @@ const PercentageDisplay = ({ percentages }) => {
   );
 };
 
-// Description Display Component
 const DescriptionDisplay = ({ details }) => (
   <div className="description-section">
     <h2>{details.label}</h2>
@@ -139,7 +134,6 @@ const DescriptionDisplay = ({ details }) => (
   </div>
 );
 
-// Match Card Component
 const MatchCard = ({ match }) => (
   <div className="match-card">
     {match.details?.dogImage && (
@@ -149,20 +143,18 @@ const MatchCard = ({ match }) => (
         className="match-image"
       />
     )}
-    <h3>{match.details?.label} 선생님과 함께 운동을 시작해보아요!</h3>
     <div className="match-info">
-      <CircleProgress percentage={match.score} />
       <div className="match-type">
-        <div>{match.hbtiType}</div>
+        <div>✨{match.hbtiType}✨ 트레이너 </div>
       </div>
+      <CircleProgress percentage={match.score} />
     </div>
   </div>
 );
 
-// Matches Display Component
 const MatchesDisplay = ({ topMatches }) => (
   <div className="matches-section">
-    <h2>Top Matching Trainers</h2>
+    <h2>나랑 가장 잘 맞는 트레이너 HBTI는?</h2>
     <div className="matches-grid">
       {topMatches.map((match, index) => (
         <MatchCard key={index} match={match} />
@@ -171,23 +163,13 @@ const MatchesDisplay = ({ topMatches }) => (
   </div>
 );
 
-// Navigation Button Component
-const NavigationButton = ({ direction, onClick, children }) => (
-  <button
-    onClick={onClick}
-    className={`nav-button ${direction}-button`}
-  >
-    {children}
-  </button>
-);
-
-// Main Component
 const QuizResult = () => {
   const [resultData, setResultData] = useState(null);
   const [error, setError] = useState(null);
-  const [currentPanel, setCurrentPanel] = useState(1); // 1: Percentage, 2: Description, 3: Matches
+  const [currentPanel, setCurrentPanel] = useState(1);
   const { userId } = useParams();
   const navigate = useNavigate();
+  const TOTAL_PANELS = 3;
 
   // Check authentication
   useEffect(() => {
@@ -235,19 +217,18 @@ const QuizResult = () => {
     }
   }, [userId]);
 
-  if (error) return <div className="error-message">Error: {error}</div>;
-  if (!resultData) return <div className="loading">Loading...</div>;
-
-  const { hbtiType, percentages, details, topMatches } = resultData;
-
-  // Navigation handlers
   const handleNext = () => {
-    setCurrentPanel(prev => Math.min(prev + 1, 3));
+    setCurrentPanel(prev => Math.min(prev + 1, TOTAL_PANELS));
   };
 
   const handlePrevious = () => {
     setCurrentPanel(prev => Math.max(prev - 1, 1));
   };
+
+  if (error) return <div className="error-message">Error: {error}</div>;
+  if (!resultData) return <div className="loading">Loading...</div>;
+
+  const { hbtiType, percentages, details, topMatches } = resultData;
 
   return (
     <div className="quiz-result-container">
@@ -255,13 +236,15 @@ const QuizResult = () => {
         <div className="panel-layout">
           {/* Left Panel */}
           <div className="left-panel">
-            <HBTIResultDisplay 
-              hbtiData={{ 
-                hbtiType, 
-                details,
-                dogImage: details?.dogImage 
-              }} 
-            />
+            <div className="hbtiResult">
+              <HBTIResultDisplay 
+                hbtiData={{ 
+                  hbtiType, 
+                  details,
+                  dogImage: details?.dogImage 
+                }} 
+              />
+            </div>
           </div>
           
           {/* Right Panel */}
@@ -269,29 +252,35 @@ const QuizResult = () => {
             {currentPanel === 1 && (
               <>
                 <PercentageDisplay percentages={percentages} />
-                <NavigationButton direction="next" onClick={handleNext}>
-                  다음
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onNext={handleNext}
+                  showPrevious={false}
+                />
               </>
             )}
             
             {currentPanel === 2 && (
               <>
-                <NavigationButton direction="prev" onClick={handlePrevious}>
-                  이전
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onNext={handleNext}
+                  onPrevious={handlePrevious}
+                />
                 <DescriptionDisplay details={details} />
-                <NavigationButton direction="next" onClick={handleNext}>
-                  다음
-                </NavigationButton>
               </>
             )}
             
             {currentPanel === 3 && (
               <>
-                <NavigationButton direction="prev" onClick={handlePrevious}>
-                  이전
-                </NavigationButton>
+                <PanelNavigation
+                  currentPanel={currentPanel}
+                  totalPanels={TOTAL_PANELS}
+                  onPrevious={handlePrevious}
+                  showNext={false}
+                />
                 <MatchesDisplay topMatches={topMatches} />
                 <div className="match-button-container">
                   <button
@@ -300,14 +289,13 @@ const QuizResult = () => {
                     })}
                     className="match-button"
                   >
-                    트레이너 매칭하기
+                    ↪ 나에게 맞는 트레이너 매칭하기
                   </button>
                 </div>
               </>
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

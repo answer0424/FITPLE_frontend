@@ -33,7 +33,8 @@ const QuizComponent = ({ quizData, currentPlatform, onAnswerSubmit, shouldShow }
         fontSize: '1.2rem',
         fontWeight: '600',
         marginBottom: '1rem',
-        color: '#272626'
+        color: '#272626',
+        textAlign: 'left'
     };
 
     const labelContainerStyle = {
