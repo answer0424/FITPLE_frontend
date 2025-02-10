@@ -1,27 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import adminApi from '../apis/admin';
 
 const Modal = ({ trainer, onClose }) => {
   if (!trainer) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg max-w-2xl w-full mx-4">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Trainer Profile</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-            ✕
-          </button>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2 className="modal-title">트레이너 상세 정보</h2>
+          <button onClick={onClose} className="modal-close">✕</button>
         </div>
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-semibold">Career</h3>
+        <div className="modal-body">
+          <div className="trainer-info">
+            <h3>기본 정보</h3>
+            <p>이름: {trainer.trainerName}</p>
+            <p>이메일: {trainer.trainerEmail}</p>
+            <p>회당 가격: {trainer.perPrice}원</p>
+            <p>HBTI: {trainer.hbti}</p>
+          </div>
+          <div className="trainer-gym">
+            <h3>헬스장 정보</h3>
+            <p>헬스장: {trainer.gymName}</p>
+            <p>주소: {trainer.gymAddress}</p>
+          </div>
+          <div className="trainer-career">
+            <h3>경력사항</h3>
             <p>{trainer.career}</p>
           </div>
-          <div>
-            <h3 className="font-semibold">Certifications</h3>
-            <ul className="list-disc pl-4">
+          <div className="trainer-intro">
+            <h3>자기소개</h3>
+            <p>{trainer.content}</p>
+          </div>
+          <div className="trainer-certs">
+            <h3>보유 자격증</h3>
+            <ul>
               {trainer.certifications?.map((cert, index) => (
                 <li key={index}>{cert.skills}</li>
               ))}
@@ -55,42 +69,70 @@ const TrainerList = () => {
     setIsLoading(false);
   };
 
+  const handleDeleteTrainer = async (trainerId) => {
+    if (window.confirm('Are you sure you want to delete this trainer?')) {
+      try {
+        await adminApi.deleteUser(trainerId, 'ROLE_TRAINER');
+        fetchTrainers();
+      } catch (error) {
+        console.error('Failed to delete trainer:', error);
+      }
+    }
+  };
+
+  const handleViewDetail = async (trainerId) => {
+    try {
+      const trainerDetail = await adminApi.getTrainerProfile(trainerId);
+      setSelectedTrainer(trainerDetail);
+      setShowModal(true);
+    } catch (error) {
+      console.error('Failed to fetch trainer details:', error);
+    }
+  };
+
   if (isLoading) {
-    return <div className="text-center py-4">Loading...</div>;
+    return <div className="loading-state">Loading...</div>;
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md m-4 p-4">
-      <div className="mb-4">
-        <h2 className="text-xl font-bold">Trainer Management</h2>
+    <div className="admin-panel">
+      <div>
+        <h2 className="panel-title">트레이너 관리</h2>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead className="bg-gray-50">
+      <div className="admin-table-container">
+        <table className="admin-table">
+          <thead className="admin-table-header">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+              <th className="admin-table-th">ID</th>
+              <th className="admin-table-th">아이디</th>
+              <th className="admin-table-th">이메일</th>
+              <th className="admin-table-th">닉네임</th>
+              <th className="admin-table-th">상세보기</th>
+              <th className="admin-table-th">관리</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="admin-table-body">
             {trainers.content.map((trainer) => (
               <tr key={trainer.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{trainer.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{trainer.username}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{trainer.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{trainer.isAccess || 'Pending'}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="admin-table-td">{trainer.id}</td>
+                <td className="admin-table-td">{trainer.username}</td>
+                <td className="admin-table-td">{trainer.email}</td>
+                <td className="admin-table-td">{trainer.nickname}</td>
+                <td className="admin-table-td">
                   <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
-                    onClick={() => {
-                      setSelectedTrainer(trainer);
-                      setShowModal(true);
-                    }}
+                    className="view-button"
+                    onClick={() => handleViewDetail(trainer.id)}
                   >
-                    View Details
+                    상세보기
+                  </button>
+                </td>
+                <td className="admin-table-td">
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteTrainer(trainer.id)}
+                  >
+                    <UserX className="h-4 w-4 mr-1" />
+                    삭제하기
                   </button>
                 </td>
               </tr>
@@ -98,6 +140,7 @@ const TrainerList = () => {
           </tbody>
         </table>
       </div>
+      
       {showModal && (
         <Modal
           trainer={selectedTrainer}
@@ -107,19 +150,20 @@ const TrainerList = () => {
           }}
         />
       )}
-      <div className="flex justify-center gap-2 mt-4">
+
+      <div className="pagination-container">
         <button
-          className="px-3 py-1 rounded-md border border-gray-300 disabled:opacity-50"
+          className="pagination-button"
           onClick={() => setPage(p => Math.max(0, p - 1))}
           disabled={page === 0}
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        <span className="py-1">
+        <span className="pagination-text">
           Page {page + 1} of {trainers.totalPages}
         </span>
         <button
-          className="px-3 py-1 rounded-md border border-gray-300 disabled:opacity-50"
+          className="pagination-button"
           onClick={() => setPage(p => p + 1)}
           disabled={page >= trainers.totalPages - 1}
         >

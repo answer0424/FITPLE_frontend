@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import adminApi from '../apis/admin';
+import '../pages/admin.css';
 
 const UserList = () => {
   const [users, setUsers] = useState({ content: [], totalPages: 0 });
@@ -34,39 +35,41 @@ const UserList = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-4">Loading...</div>;
+    return <div className="loading-state">Loading...</div>;
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md m-4 p-4">
-      <div className="mb-4">
-        <h2 className="text-xl font-bold">User Management</h2>
+    <div className="admin-panel">
+      <div>
+        <h2 className="panel-title">User Management</h2>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead className="bg-gray-50">
+      <div className="admin-table-container">
+        <table className="admin-table">
+          <thead className="admin-table-header">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="admin-table-th">ID</th>
+              <th className="admin-table-th">아이디</th>
+              <th className="admin-table-th">이메일</th>
+              <th className="admin-table-th">닉네임</th>
+              <th className="admin-table-th">트레이너 목록</th>
+              <th className="admin-table-th">관리</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="admin-table-body">
             {users.content.map((user) => (
               <tr key={user.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{user.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.authority}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="admin-table-td">{user.id}</td>
+                <td className="admin-table-td">{user.username}</td>
+                <td className="admin-table-td">{user.email}</td>
+                <td className="admin-table-td">{user.nickname}</td>
+                <td className="admin-table-td">{user.nickname}</td>
+                <td className="admin-table-td">
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm flex items-center"
+                    className="delete-button"
                     onClick={() => handleDeleteUser(user.id)}
                   >
                     <UserX className="h-4 w-4 mr-1" />
-                    Delete
+                    삭제하기
                   </button>
                 </td>
               </tr>
@@ -74,19 +77,19 @@ const UserList = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center gap-2 mt-4">
+      <div className="pagination-container">
         <button
-          className="px-3 py-1 rounded-md border border-gray-300 disabled:opacity-50"
+          className="pagination-button"
           onClick={() => setPage(p => Math.max(0, p - 1))}
           disabled={page === 0}
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        <span className="py-1">
+        <span className="pagination-text">
           Page {page + 1} of {users.totalPages}
         </span>
         <button
-          className="px-3 py-1 rounded-md border border-gray-300 disabled:opacity-50"
+          className="pagination-button"
           onClick={() => setPage(p => p + 1)}
           disabled={page >= users.totalPages - 1}
         >

@@ -208,7 +208,8 @@ const LoginContextProvider = ({children}) => {
         // confirm 받아서 로그아웃
         if (confirm('로그아웃 하시겠습니까?')) {
             logoutSetting();
-            navigate('/');
+            // navigate('/');
+            window.location.reload();
         } else { 
             return;
         }

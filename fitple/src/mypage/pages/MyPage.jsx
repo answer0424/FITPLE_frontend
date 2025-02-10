@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from 'react';
+  import React, { useEffect, useState, useContext } from 'react';
   import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
   import { Container, Row, Col } from "react-bootstrap";
   import TrainerComponent from '../components/trainer/TrainerComponent';
@@ -9,6 +9,8 @@
   import axios from 'axios';
 import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
   // import { getRole } from '../utill';
+  import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+
 
   const MyPage = () => {
     // const role = authInfo();
@@ -16,6 +18,14 @@ import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState("a");
     const navigate = useNavigate();
+
+    const { authority, isLogin } = useContext(LoginContext);
+  
+  useEffect(() => {
+      if (isLogin && authority.isAdmin) {
+        navigate("/admin");
+      }
+    }, []);
 
     useEffect(() => {      
       const accessToken = document.cookie

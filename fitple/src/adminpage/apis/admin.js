@@ -30,14 +30,14 @@ api.interceptors.response.use(
     response => response,
     error => {
         if (error.response?.status === 401) {
-            // 인증 에러 시 로그인 페이지로 리다이렉트
+            // 토큰이 만료되었거나 유효하지 않은 경우 로그인 페이지로 리다이렉트
             window.location.href = '/login';
         }
         return Promise.reject(error);
     }
 );
 
-export const adminApi = {
+const adminApi = {
     // 회원 관리
     getUsers: async (page = 0, size = 10, sortBy = 'id', direction = 'asc') => {
         const response = await api.get(`/api/admin/users`, {
@@ -46,8 +46,10 @@ export const adminApi = {
         return response.data;
     },
 
-    deleteUser: async (userId) => {
-        const response = await api.delete(`/api/admin/users/${userId}`);
+    deleteUser: async (userId, role) => {
+        const response = await api.delete(`/api/admin/users/${userId}`, {
+            params: { role }
+        });
         return response.data;
     },
 
@@ -59,11 +61,26 @@ export const adminApi = {
         return response.data;
     },
 
+    getTrainerProfile: async (trainerId) => {
+        const response = await api.get(`/api/admin/trainers/${trainerId}/profile`);
+        return response.data;
+    },
+
     // 리뷰 관리
     getReviews: async (page = 0, size = 10, sortBy = 'id', direction = 'asc') => {
         const response = await api.get(`/api/admin/reviews`, {
             params: { page, size, sortBy, direction }
         });
+        return response.data;
+    },
+
+    getReviewDetail: async (reviewId) => {
+        const response = await api.get(`/api/admin/reviews/${reviewId}`);
+        return response.data;
+    },
+
+    deleteReview: async (reviewId) => {
+        const response = await api.delete(`/api/admin/reviews/${reviewId}`);
         return response.data;
     }
 };
