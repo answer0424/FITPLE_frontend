@@ -17,78 +17,94 @@ const CalenderComponent = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [dailyEvents, setDailyEvents] = useState([]); //오늘 일정 리스트
-  const { events, updateEvents } = useEventContext(); //이 달의 일정
-  const [selectedStudent, setSelectedStudent] = useState([]); //회원별 일정
+  const [dailyEvents, setDailyEvents] = useState([]);
+  const { events, updateEvents } = useEventContext();
+  const [selectedStudent, setSelectedStudent] = useState([]);
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
+
   const { userInfo, authority } = useContext(LoginContext);
 
-  //달력 제어
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
-
+  // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
-    const selectedDay = formattedDate.slice(8, 10);
 
-    console.log(selectedDay);
+    let matchingReservations;
 
-    if (events) {
-      setDailyEvents(
-        events.filter((event) => {
-          if (
-            event.date &&
-            typeof event.date === "string" &&
-            event.date.length >= 10
-          ) {
-            const eventDay = event.date.slice(8, 10);
-            // console.log(eventDay);
-            return eventDay === selectedDay;
-          }
-          return false;
-        })
+    if (!selectedUser) {
+      matchingReservations = events?.filter((event) =>
+        event.date?.startsWith(formattedDate)
       );
+    } else if (selectedStudent && Array.isArray(selectedStudent)) {
+      matchingReservations = selectedStudent.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else {
+      matchingReservations = [];
     }
+
+    console.log("선택한 날짜의 일정:", matchingReservations);
     setSelectedDate(formattedDate);
+    setDailyEvents(matchingReservations);
     setIsModalOpen(true);
   };
-  //달력 제어
 
+  // 📌 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
     setDailyEvents([]);
   };
 
-  // const toggleCompletion = (index) => {
-  //   setEvent((prev) =>
-  //     prev.map((event, i) =>
-  //       i === index ? { ...event, isCompleted: !event.isCompleted } : event
-  //     )
-  //   );
-  // };
+  // 📌 캘린더의 날짜별 일정 표시
+  const tileContent = ({ date }) => {
+    const formattedDate = moment(date).format("YYYY-MM-DD");
 
-  const getEventsForDate = (date) => {
-    if (!events || !Array.isArray(events)) {
-      console.error("Events data is not loaded properly.");
-      return []; // 데이터를 반환하지 않고 빈 배열로 처리
+    let matchingReservations;
+
+    if (!selectedUser) {
+      matchingReservations = events?.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else if (selectedStudent && Array.isArray(selectedStudent)) {
+      matchingReservations = selectedStudent.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else {
+      matchingReservations = [];
     }
 
-    const formattedDate = moment(date).format("YYYY-MM-DD");
-    return events.filter((event) => event.date === formattedDate);
+    return (
+      <div className="event-info">
+        {matchingReservations.length > 0 &&
+          matchingReservations.map((event) => (
+            <div key={event.reservationId} className="reservation-item">
+              <span>{event.nickname}</span>
+              <span>{event.date.slice(11, 16)}</span>
+            </div>
+          ))}
+      </div>
+    );
   };
 
+  // 📌 월 변경 감지 (월이 변경될 때마다 currentYear, currentMonth 업데이트)
+  const handleActiveStartDateChange = ({ activeStartDate }) => {
+    setCurrentYear(activeStartDate.getFullYear());
+    setCurrentMonth(activeStartDate.getMonth() + 1);
+  };
+
+  // 📌 일정 데이터 가져오기 (연도 또는 월이 변경될 때만 실행)
   useEffect(() => {
     const accessToken = document.cookie
       .split("; ")
       .find((row) => row.startsWith("accessToken="))
       ?.split("=")[1];
-    //일정 불러오기
+
     api
       .get(`/member/${user.id}/calendar`, {
         params: {
-          year: date.getFullYear(),
-          month: date.getMonth(),
+          year: currentYear,
+          month: currentMonth,
         },
         withCredentials: true,
         headers: {
@@ -96,68 +112,30 @@ const CalenderComponent = ({ user }) => {
         },
       })
       .then((response) => {
-        // console.log(response.headers['content-type']);
-        // console.log(response.data);
-        console.log("일정입니다 : ", response.data);
+        console.log(
+          `${currentYear}년 ${currentMonth}월 일정 로드: `,
+          response.data
+        );
         updateEvents(response.data);
+      })
+      .catch((error) => {
+        console.error("일정 불러오기 실패:", error);
       });
-  }, []);
+  }, [currentYear, currentMonth]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
 
-  // useEffect(() => {
-  //   // console.log("컨텍스트 사용")
-  //   // console.log(events);
-  // }, [events])
-  // <TrainerStudentsDropdown
-  //   trainerId={user.id}
-  //   updateEvents={updateEvents}
-  //   year={date.getFullYear()}
-  //   month={date.getMonth()}
-  // />;
-
-  const tileContent = ({ date }) => {
-    const formattedDate = date.toISOString().split("T")[0];
-
-    // 해당 날짜에 맞는 예약 찾기
-    const matchingReservations =
-      events && Array.isArray(events)
-        ? events.filter(
-            (event) => event.date && event.date.split("T")[0] === formattedDate
-          )
-        : [];
-
-    // 예약이 있으면 렌더링
-    return (
-      <div className="event-info">
-        {selectedStudent && selectedStudent.length > 0 ? (
-          selectedStudent.map((event) => (
-            <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
-              <span>{event.date.slice(11, 16)}</span>
-            </div>
-          ))
-        ) : matchingReservations && matchingReservations.length > 0 ? (
-          matchingReservations.map((event) => (
-            <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
-              <span>{event.date.slice(11, 16)}</span>
-            </div>
-          ))
-        ) : (
-          <span></span>
-        )}
-      </div>
-    );
-  };
   return (
     <>
       <Container>
         {authority.isTrainer ? (
           <TrainerStudentsDropdown
             trainerId={user.id}
-            updateEvents={setDailyEvents}
+            updateEvents={updateEvents}
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
             setSelectedStudent={setSelectedStudent}
+            year={currentYear}
+            month={currentMonth}
+            allowAllUsers={true}
           />
         ) : (
           <div />
@@ -165,33 +143,24 @@ const CalenderComponent = ({ user }) => {
 
         <Calendar
           value={date}
-          onChange={handleDateChange}
+          onChange={setDate}
           onClickDay={handleDayClick}
+          onActiveStartDateChange={handleActiveStartDateChange} // ✅ 월 변경 감지 추가
           calendarType="gregory"
           showNeighboringMonth={false}
           tileContent={tileContent}
         />
       </Container>
 
-      {/* 일정 모달 */}
+      {/* ✅ 모달: 선택한 날짜의 일정 표시 */}
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         selectedDate={selectedDate}
-        dailyEvents={dailyEvents} // 전체 일정
-        user={user} // 로그인된 사용자 정보
-        selectedUser={selectedUser} // 선택한 학생 정보 추가
+        dailyEvents={dailyEvents}
+        user={user}
+        selectedUser={selectedUser}
       />
-
-      {/* 일정 리스트 보기 */}
-      {/* <EventList>
-        {members.map((member, index) => (
-          <EventItem key={index}>
-            <span>{member.name}</span>
-            <span>{member.completed ? "완료" : "미완료"}</span>
-          </EventItem>
-        ))}
-      </EventList> */}
     </>
   );
 };

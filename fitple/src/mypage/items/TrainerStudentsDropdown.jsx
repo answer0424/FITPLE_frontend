@@ -8,6 +8,8 @@ const TrainerStudentsDropdown = ({
   selectedUser,
   setSelectedUser,
   setSelectedStudent,
+  year,
+  month,
 }) => {
   const [studentList, setStudentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,10 +80,9 @@ const TrainerStudentsDropdown = ({
     try {
       let response;
 
-      const currentYear =
-        typeof year === "function" ? year() : parseInt(year, 10);
-      const currentMonth =
-        typeof month === "function" ? month() + 1 : parseInt(month, 10) + 1;
+      // 받은 year, month 값 적용
+      const selectedYear = year || new Date().getFullYear();
+      const selectedMonth = month || new Date().getMonth();
 
       if (studentId === "all") {
         setSelectedStudent(null);
@@ -89,11 +90,12 @@ const TrainerStudentsDropdown = ({
         response = await axios.get(
           `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
           {
-            params: { year: currentYear, month: currentMonth },
+            params: { year: selectedYear, month: selectedMonth },
             withCredentials: true,
             headers: { Authorization: `Bearer ${getAccessToken()}` },
           }
         );
+        setSelectedStudent(response.data);
       }
 
       console.log(

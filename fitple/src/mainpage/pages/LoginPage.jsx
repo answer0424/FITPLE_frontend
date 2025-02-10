@@ -91,9 +91,7 @@ const LoginPage = () => {
             </div>
           </form>
           <div className="forgot-password-link">
-            <button onClick={() => alert("Forgot Password?")}>
-              Forgot Password?
-            </button>
+            <button onClick={gotoForgotPassword}>Forgot Password?</button>
           </div>
           <div className="login-box">
             <button
