@@ -9,7 +9,7 @@ const ChatIcon = () => {
     const { userInfo, stompClient } = useContext(LoginContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [chatRooms, setChatRooms] = useState([]);
-    const {unreadMessage, setUnreadMessage} = useContext(LoginContext);
+    const { unreadMessage, setUnreadMessage } = useContext(LoginContext);
 
     const userId = userInfo ? userInfo.id : null;
 
@@ -19,6 +19,17 @@ const ChatIcon = () => {
         }
     }, [isModalOpen]);
 
+    useEffect(() => {
+        // 🔹 unreadMessage 초기화가 필요한 경우
+        if (unreadMessage && Object.values(unreadMessage).includes(undefined)) {
+            setUnreadMessage(prev => {
+                const cleanedUnreadMessage = Object.fromEntries(
+                    Object.entries(prev).filter(([key, value]) => value !== undefined)
+                );
+                return cleanedUnreadMessage;
+            });
+        }
+    }, [unreadMessage, setUnreadMessage]);
 
     const fetchChatRooms = async () => {
         try {
@@ -33,7 +44,10 @@ const ChatIcon = () => {
 
     const handleIconClick = () => {
         setModalOpen(true);
-        
+        setUnreadMessage((prev) => ({
+            ...prev,
+            undefined: 0
+        }));
     };
 
     const handleCloseModal = () => {
@@ -42,7 +56,8 @@ const ChatIcon = () => {
 
     // 🔹 모든 채팅방의 읽지 않은 메시지가 0인지 확인
     const hasUnreadMessage = Object.values(unreadMessage || {}).some(count => count > 0);
-    
+
+    console.log('hasUnreadMessage래' ,hasUnreadMessage, unreadMessage);
 
     return (
         <div className="relative">
