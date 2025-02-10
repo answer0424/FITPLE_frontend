@@ -273,14 +273,15 @@ function TrainerDetailPage() {
                                 <TrainerCertifications certifications={trainer.certifications} BASE_URL={BASE_URL} />
                             )}
                             {activeTab === "review" && (
-                                <TrainerReviews
-                                    reviews={filteredReviews}
-                                    setReviews={setReviews}
-                                    BASE_URL={BASE_URL}
-                                    user={user}
-                                    trainerId={trainerId}
-                                    trainingId={matchedTrainingId} 
-                                />
+                           <TrainerReviews
+                           reviews={reviews} // 현재 리뷰 목록 전달
+                           setReviews={setReviews} // 부모의 상태 업데이트 함수 전달
+                           BASE_URL={BASE_URL}
+                           user={user} // 현재 로그인한 유저 정보 전달
+                           trainerId={trainerId}
+                           trainingId={matchedTrainingId} 
+                       />
+                       
                             )}
                         </div>
                     </div>

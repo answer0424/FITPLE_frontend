@@ -17,6 +17,7 @@ import ResetPasswordPage from "./mainpage/pages/ResetPasswordPage";
 import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 import TrainerDetailPageWrite from "./mypage/pages/TrainerDetailPage";
 import MatchPage from "./matchpage/pages/MatchPage";
+import OAuthCallback from "./mainpage/components/OAuthCallback";
 
 
 function Fitple() {
@@ -31,6 +32,7 @@ function Fitple() {
             <Route path="/register/student" Component={UserRegister}></Route>
             <Route path="/register/trainer" Component={TrainerRegister}></Route>
             <Route path="/quiz" Component={QuizPage}></Route>
+            <Route path="/oauth/callback/:provider" element={<OAuthCallback />} />
             <Route
               path="/quiz/:userId/result"
               element={

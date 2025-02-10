@@ -45,7 +45,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
             <img
                 src={`${BASE_URL}${selectedImage}`}
                 alt="자격증 사진"
-                className="modal-image"
+                className="modal-images"
             />
 
             {/* 닫기 버튼 */}
