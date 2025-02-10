@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import './ResultModal.css';
 import HBTIResultDisplay from '../quiz_common/HbtiResultDisplay';
+import { LoginContext } from '../../../mainpage/contexts/LoginContextProvider';
 
 const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
     const [hbtiData, setHbtiData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { isLogin } = useContext(LoginContext);
 
     useEffect(() => {
         const fetchHbtiData = async () => {
@@ -70,7 +72,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
     // };
 
     const handleViewDetails = async () => {
-        if (!userId) {
+        if (!isLogin) {
             alert('로그인이 필요한 기능입니다.');
             navigate('/login');
             return;
@@ -110,7 +112,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
     };
     
     const handleRetakeQuiz = () => {
-        window.location.href = '/quiz';
+        window.location.reload();
         onClose();
     };
 
