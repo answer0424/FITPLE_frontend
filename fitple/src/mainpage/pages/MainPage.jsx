@@ -10,7 +10,10 @@ import ChatIcon from '../../common/component/ChatIcon';
 
 const MainPage = () => {
     const navigate = useNavigate();
+
     const { isLogin, userInfo } = useContext(LoginContext); // userInfo 추가
+
+
 
     // HBTI test로 이동
     const gotoTest = () => {
@@ -30,12 +33,14 @@ const MainPage = () => {
             return;
         }
 
+
         if (userInfo?.id) {
             navigate(`/quiz/${userInfo.id}/result/match`); // userInfo.id를 URL에 동적으로 추가
         } else {
             alert('로그인 정보를 확인할 수 없습니다.');
         }
     };
+
 
     return (
         <div className='mainPage'>
