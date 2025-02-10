@@ -11,44 +11,53 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
 
-  const { login, loginCheck, handleOAuthLogin } = useContext(LoginContext);
+  const { login, loginCheck} = useContext(LoginContext);
 
   const onLogin = async (e) => {
     e.preventDefault();
-    try {
-      const success = await login(username, password);
-      console.log("Login success:", success); // 디버깅용
-      if (success === true) {
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
+
+
+    const success = await login(username, password);
+    if (success) {
+        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
     }
   };
 
+
   useEffect(() => {
-    console.log("LoginContextProvider 마운트 됨");
+    console.log('LoginContextProvider 마운트 됨')
+
+    // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get("rememberId");
     console.log(`쿠키 rememberId : ${rememberId}`);
     setRememberUserId(rememberId);
   }, []);
 
+
   const handleClick = () => {
     alert("Login submitted successfully!");
     console.log("User Data:", { email: username, password });
-
-    // 비밀번호찾기 페이지 네비게이션
-    const navigate = useNavigate();
-  };
-  const gotoResetPassword = () => {
-    alert("비밀번호을 잊으셨습니까");
-    navigate("/forgot-password");
   };
 
-  // OAuth 로그인 핸들러
-  const onKakaoLogin = () => handleOAuthLogin("kakao");
-  const onGoogleLogin = () => handleOAuthLogin("google");
-  const onNaverLogin = () => handleOAuthLogin("naver");
+
+  // oauth
+  const onKakaoLogin = () => {
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/kakao`;
+    console.log('kakao oauth 로그인');
+    
+  };
+  
+  const onGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
+    console.log('google oauth 로그인');
+    
+  };
+  
+  const onNaverLogin = () => {
+    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
+    console.log('naver oauth 로그인');
+    
+  };
 
   return (
     <div className="App">
@@ -63,6 +72,7 @@ const LoginPage = () => {
               placeholder="Enter your id"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className="id-input"
             />
             <input
               type="password"
@@ -70,16 +80,20 @@ const LoginPage = () => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="pw-input"
             />
             <div className="forgot-password-link">
-              <button type="button" onClick={gotoResetPassword}>
-                Forgot Password?
-              </button>
+              <button onClick={handleClick}>Forgot Password?</button>
             </div>
             <div className="button-container">
-              <button type="submit">Login</button>
+              <button type="submit" className="login-button">Login</button>
             </div>
           </form>
+          <div className="forgot-password-link">
+            <button onClick={() => alert("Forgot Password?")}>
+              Forgot Password?
+            </button>
+          </div>
           <div className="login-box">
             <button
               className="social-button"

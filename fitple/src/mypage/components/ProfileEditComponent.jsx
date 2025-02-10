@@ -6,7 +6,7 @@ const ProfilEditComponent = () => {
     const { userInfo } = useContext(LoginContext);
 
     useEffect(() => {
-        console.log(userInfo);
+        console.log(userInfo)
     });
 
     return (
