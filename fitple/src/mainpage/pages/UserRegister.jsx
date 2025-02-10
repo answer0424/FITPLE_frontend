@@ -3,13 +3,13 @@ import React from "react";
 import RegisterForm from "../components/RegisterForm";
 
 const userQuestions = [
-  "Enter your email address",
-  "Enter your id",
-  "Enter your password",
-  "Confirm your password",
-  "Enter your nickname",
-  "Enter your date of birth",
-  "Enter your home address",
+  "이메일을 입력해주세요",
+  "아이디를 입력해주세요",
+  "비밀번호를 입력해주세요",
+  "비밀번호를 다시 입력해주세요",
+  "닉네임을 입력해주세요",
+  "생년월일을 입력해주세요",
+  "집 주소를 입력해주세요",
 ];
 
 const UserRegister = () => {

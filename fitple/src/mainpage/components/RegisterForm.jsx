@@ -12,6 +12,7 @@ const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const [birthDate, setBirthDate] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
@@ -21,27 +22,58 @@ const RegisterForm = ({ questions = [], userType }) => {
     }
   }, [currentQuestionIndex]);
 
+  // validation 함수
+  const validateInput = (index, value) => {
+    let error = "";
+    switch (index) {
+      case 0:
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error = "유효한 이메일을 입력하세요.";
+        }
+        break;
+      case 1:
+        if (!/^[a-zA-Z]{5,20}$/.test(value)) {
+          error = "아이디는 5~20자의 영어로 입력해야 합니다.";
+        }
+        break;
+      case 2:
+        if (value.length < 12) {
+          error = "비밀번호는 12자 이상이어야 합니다.";
+        }
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [index]: error }));
+    return error === "";
+  };
+
   const handleAnswerChange = (e, index) => {
     const newAnswers = [...answers];
     newAnswers[index] = e.target.value;
     setAnswers(newAnswers);
+    validateInput(index, e.target.value);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      if (currentQuestionIndex < questions.length - 1) {
-        handleNextQuestion();
-      }
+      handleNextQuestion();  // 엔터 키를 눌렀을 때 다음 질문으로 넘어감
     }
   };
 
   const handleNextQuestion = () => {
+    if (!validateInput(currentQuestionIndex, answers[currentQuestionIndex])) {
+      return;
+    }
     if (currentQuestionIndex === 3 && answers[2] !== answers[3]) {
-      alert("Passwords do not match!");
-    } else if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setErrors((prevErrors) => ({ ...prevErrors, 3: "비밀번호가 일치하지 않습니다." }));
+      return;
+    }
+
+    if (currentQuestionIndex === questions.length - 1) {
+      handleSubmit(); // 마지막 질문이면 submit
     } else {
-      handleSubmit();
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
@@ -125,10 +157,10 @@ const RegisterForm = ({ questions = [], userType }) => {
       <div>
         <h2>{userType} Sign up</h2>
         <Link to={"/register/student"}>
-          <button>Student</button>
+          <button className="reg-student">Student</button>
         </Link>
         <Link to={"/register/trainer"}>
-          <button>Trainer</button>
+          <button className="reg-trainer">Trainer</button>
         </Link>
       </div>
       <div className="progress-bar-container">
@@ -165,56 +197,36 @@ const RegisterForm = ({ questions = [], userType }) => {
         >
           <h2>{questions[currentQuestionIndex]}</h2>
           <div className="input-container">
-            {currentQuestionIndex === 6 ? (
-              <KakaoSearch onPlaceSelect={handlePlaceSelect} />
-            ) : currentQuestionIndex === 5 || currentQuestionIndex === 7 ? (
+            {currentQuestionIndex === 5 ? (
               <DatePicker
                 selected={birthDate}
-                onChange={(date) =>
-                  handleDateChange(date, currentQuestionIndex)
-                }
+                onChange={(date) => handleDateChange(date, currentQuestionIndex)}
                 dateFormat="yyyy/MM/dd"
                 placeholderText="Select your birth date"
                 className="date-picker-input"
+                onKeyPress={handleKeyPress} // 키 입력 처리 추가
               />
+            ) : currentQuestionIndex === 6 ? (
+              <KakaoSearch onPlaceSelect={handlePlaceSelect} />
             ) : (
               <input
-                type={
-                  currentQuestionIndex === 2 || currentQuestionIndex === 3
-                    ? "password"
-                    : "text"
-                }
+                type={currentQuestionIndex === 2 || currentQuestionIndex === 3 ? "password" : "text"}
                 placeholder="Type your answer here..."
                 value={answers[currentQuestionIndex]}
                 onChange={(e) => handleAnswerChange(e, currentQuestionIndex)}
-                onKeyPress={handleKeyPress} 
+                onKeyPress={handleKeyPress} // 키 입력 처리 추가
+                ref={(el) => inputRefs.current[currentQuestionIndex] = el} // 현재 질문에 맞는 ref 연결
               />
             )}
-
-            {currentQuestionIndex === 3 && (
-              <p
-                style={{
-                  color: answers[2] === answers[3] ? "green" : "red",
-                  marginTop: "5px",
-                }}
-              >
-                {answers[2] === answers[3]
-                  ? "Passwords match!"
-                  : "Passwords do not match."}
-              </p>
+            {errors[currentQuestionIndex] && (
+              <p style={{ color: "red", marginTop: "5px" }}>{errors[currentQuestionIndex]}</p>
             )}
-
             <div className="button-container">
-              <button
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
+              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)} disabled={currentQuestionIndex === 0} className="back-button">
                 Back
               </button>
-              <button onClick={handleNextQuestion}>
-                {currentQuestionIndex === questions.length - 1
-                  ? "Submit"
-                  : "Next"}
+              <button onClick={handleNextQuestion} className="">
+                {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
               </button>
             </div>
           </div>
