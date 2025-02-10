@@ -19,8 +19,8 @@ const CalenderComponent = ({ user }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [dailyEvents, setDailyEvents] = useState([]); //오늘 일정 리스트
   const { events, updateEvents } = useEventContext(); //이 달의 일정
-  const { selectedStudent, setSelectedStudent } = useState([]); //회원별 일정
-  const { userInfo } = useContext(LoginContext);
+  const [selectedStudent, setSelectedStudent] = useState([]); //회원별 일정
+  const { userInfo, authority } = useContext(LoginContext);
 
   //달력 제어
   const handleDateChange = (newDate) => {
@@ -118,9 +118,12 @@ const CalenderComponent = ({ user }) => {
     const formattedDate = date.toISOString().split("T")[0];
 
     // 해당 날짜에 맞는 예약 찾기
-    const matchingReservations = events.filter(
-      (event) => event.date && event.date.split("T")[0] === formattedDate
-    );
+    const matchingReservations =
+      events && Array.isArray(events)
+        ? events.filter(
+            (event) => event.date && event.date.split("T")[0] === formattedDate
+          )
+        : [];
 
     // 예약이 있으면 렌더링
     return (
@@ -148,7 +151,7 @@ const CalenderComponent = ({ user }) => {
   return (
     <>
       <Container>
-        {userInfo.isTrainer ? (
+        {authority.isTrainer ? (
           <TrainerStudentsDropdown
             trainerId={user.id}
             updateEvents={setDailyEvents}
