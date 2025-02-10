@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../mainpage/apis/api";
 import { Button } from "react-bootstrap";
-import { GearFill } from "react-bootstrap-icons"; // 설정 아이콘
+import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 아이콘
 import "../static/css/ProfileComponent.css";
 
 const ProfileComponent = ({ user }) => {
@@ -29,6 +29,11 @@ const ProfileComponent = ({ user }) => {
       });
   }, [user]);
 
+  // 트레이너 홈으로 이동하는 함수
+  const goToTrainerHome = () => {
+    navigate(`/trainer/${user.id}/detail`); // 이동할 경로 설정
+  };
+
   return (
     <div className="profile-container">
       {userInfo ? (
@@ -43,8 +48,11 @@ const ProfileComponent = ({ user }) => {
             <GearFill className="settings-icon" />
           </div>
 
-          {/* 닉네임 */}
-          <h2 className="nickname">{userInfo.nickname}</h2>
+          {/* 닉네임 & 집 아이콘 */}
+          <div className="nickname-container">
+            <h2 className="nickname">{userInfo.nickname}</h2>
+            <HouseFill className="home-icon" onClick={goToTrainerHome} />
+          </div>
 
           {/* HBTI */}
           <p className="hbti">{userInfo.hbti}</p>
