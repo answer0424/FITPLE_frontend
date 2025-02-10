@@ -72,6 +72,7 @@ const LoginPage = () => {
               placeholder="Enter your id"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className="id-input"
             />
             <input
               type="password"
@@ -79,12 +80,13 @@ const LoginPage = () => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="pw-input"
             />
             <div className="forgot-password-link">
               <button onClick={handleClick}>Forgot Password?</button>
             </div>
             <div className="button-container">
-              <button type="submit">Login</button>
+              <button type="submit" className="login-button">Login</button>
             </div>
           </form>
           <div className="forgot-password-link">

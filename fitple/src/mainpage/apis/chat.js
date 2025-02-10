@@ -4,7 +4,8 @@ const CHAT_BASE_URL = 'http://localhost:8081/api';
 
 // 채팅방 생성 url
 export const createChat = async (userId, trainerId) => {
-    const response = await axios.post(`${CHAT_BASE_URL}/chat/create`, { userId, trainerId });
+    const response = await axios.post(`${CHAT_BASE_URL}/chat/create?userId=${userId}&trainerId=${trainerId}`);
+    console.log('컨트롤러로 보내야 됨', userId, trainerId);
     return response.data;
 };
 

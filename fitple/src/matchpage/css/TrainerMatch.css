@@ -1,24 +1,168 @@
-.carousel-inner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1000px;
+
+.trainer-list-wrapper {
+    position: absolute; /* 화면에서 고정 */
+    top: 60%; /* 수직 중앙 */
+    left: 50%; /* 수평 중앙 */
+    transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 화면 전체 너비 */
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 60px;
+    background-color: linear-gradient(180deg, #000000, #000000, #1b2735);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.carousel-item-custom {
-  transform: scale(0.8);
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0.5;
+
+/* 리스트 컨테이너 */
+.horizontal-trainer-list-container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+    width: auto;
 }
 
-.carousel-item-next.carousel-item-start,
-.carousel-item-prev.carousel-item-end {
-  transform: scale(0.8);
-  opacity: 0.5;
+/* 전체 카드 스타일 */
+.trainer-card1 {
+    flex-shrink: 0;
+    width: 400px; /* 카드 너비 */
+    height: 500px; /* 카드 높이 */
+    position: relative; /* 오버레이를 위한 상대 위치 */
+    border-radius: 15px; /* 둥근 모서리 */
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* 그림자 */
+    transition: transform 0.3s, box-shadow 0.3s; /* 부드러운 확대 효과 */
+  }
+  
+  .trainer-card1:hover {
+    transform: scale(1.05); /* 호버 시 확대 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8); /* 더 강한 그림자 */
+  }
+  
+  /* 이미지 배경 */
+  .trainer-card1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 카드에 꽉 차도록 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* 이미지가 가장 아래 */
+  }
+  
+  /* 정보 섹션 */
+  .trainer-info-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7); /* 어두운 반투명 배경 */
+    color: white;
+    padding: 15px;
+    z-index: 2; /* 이미지 위에 위치 */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  /* 트레이너 이름 */
+.trainer-info-overlay h5 {
+    margin: 0;
+    font-size: 20px; 
+    font-weight: 700; 
+    color: #ffd700; 
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); 
+    line-height: 1.4;
 }
 
-.active.carousel-item {
-  transform: scale(1);
-  opacity: 1;
-  z-index: 1;
+/* 추가 정보 */
+.trainer-info-overlay p {
+    margin: 0;
+    font-size: 16px; 
+    color: #e0e0e0;
+    line-height: 1.6;
+    letter-spacing: 0.5px; 
+    text-align: left;
+    margin-top: 5px; 
+}
+
+/* 상세보기 버튼 */
+.trainer-info-overlay button {
+    font-size: 16px; 
+    padding: 10px 20px;
+    background-color: #ffd700; 
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: flex-end; 
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+/* 버튼 호버 효과 */
+.trainer-info-overlay button:hover {
+    background-color: #ffc400; /* 약간 더 진한 노란색 */
+    transform: translateY(-3px); /* 살짝 위로 이동 효과 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 더 강한 그림자 */
+    color: #1e1e1e; /* 텍스트 색상 강조 */
+}
+
+  
+/* 화살표 버튼 */
+.arrow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #222, #444); /* 그라데이션 배경 */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.arrow-button.left-arrow {
+    left: 30px;
+}
+
+.arrow-button.right-arrow {
+    right: 30px;
+}
+
+/* 화살표 아이콘 */
+.arrow-button::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.arrow-button.left-arrow::before {
+    border-width: 10px 15px 10px 0;
+    border-color: transparent white transparent transparent;
+}
+
+.arrow-button.right-arrow::before {
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent white;
+}
+
+.arrow-button:hover {
+    transform: scale(1.2); /* 호버 시 버튼 크기 확대 */
+    background: linear-gradient(135deg, #333, #555); /* 더 밝은 배경 */
 }
