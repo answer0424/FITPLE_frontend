@@ -4,12 +4,12 @@ import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import "../static/css/CalenderStyle.css";
 import { Container } from "react-bootstrap";
-import axios from "axios";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 import "../static/css/ModalReset.css";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const CalenderComponent = ({ user }) => {
   const today = new Date();
@@ -17,9 +17,10 @@ const CalenderComponent = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [members, setMembers] = useState([]);
   const [dailyEvents, setDailyEvents] = useState([]); //오늘 일정 리스트
   const { events, updateEvents } = useEventContext(); //이 달의 일정
+  const { selectedStudent, setSelectedStudent } = useState([]); //회원별 일정
+  const { userInfo } = useContext(LoginContext);
 
   //달력 제어
   const handleDateChange = (newDate) => {
@@ -119,45 +120,51 @@ const CalenderComponent = ({ user }) => {
     // 해당 날짜에 맞는 예약 찾기
     const matchingReservations = events.filter(
       (event) =>
-        event.date.split('T')[0] === formattedDate
+        event.date && event.date.split('T')[0] === formattedDate
     );
 
     // 예약이 있으면 렌더링
     return (
       <div className="event-info">
-        {matchingReservations.length > 0 ? (
+        { (selectedStudent && selectedStudent.length > 0) ? (
+          selectedStudent.map((event) => (
+            <div key={event.reservationId} className="reservation-item">
+              <span>{event.nickname}</span>
+              <span>{event.date.slice(11, 16)}</span>
+            </div>
+          )))
+        : (matchingReservations && matchingReservations.length > 0 ? (
           matchingReservations.map((event) => (
             <div key={event.reservationId} className="reservation-item">
               <span>{event.nickname}</span>
               <span>{event.date.slice(11, 16)}</span>
             </div>
-          ))
-        ) : (
+          ))) 
+          : (
           <span></span>
-        )}
+        ))}
       </div>
     );
+    
   };
 
   return (
     <>
       <Container>
+        { userInfo.isTrainer ?
         <TrainerStudentsDropdown
           trainerId={user.id}
           updateEvents={setDailyEvents}
-          year={date ? date.getFullYear() : new Date().getFullYear()} // ✅ 기본값 설정
-          month={date ? date.getMonth() : new Date().getMonth()} // ✅ 기본값 설정
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
-        />
+          setSelectedStudent={setSelectedStudent}
+        /> : (<div/>)
+        }
 
         <Calendar
           value={date}
           onChange={handleDateChange}
           onClickDay={handleDayClick}
-          formatDay={(locale, date) => moment(date).format("D")}
-          formatYear={(locale, date) => moment(date).format("YYYY")}
-          formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
           calendarType="gregory"
           showNeighboringMonth={false}
           tileContent={tileContent}

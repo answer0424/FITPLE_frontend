@@ -5,10 +5,9 @@ import { Form } from "react-bootstrap";
 const TrainerStudentsDropdown = ({
   trainerId,
   updateEvents,
-  year,
-  month,
   selectedUser,
   setSelectedUser,
+  setSelectedStudent,
 }) => {
   const [studentList, setStudentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +61,7 @@ const TrainerStudentsDropdown = ({
   useEffect(() => {
     if (selectedStudentId === "all") {
       setSelectedUser(null);
+      setSelectedStudent(null);
     } else {
       const student = studentList.find(
         (s) => s.userId === parseInt(selectedStudentId)
@@ -84,13 +84,7 @@ const TrainerStudentsDropdown = ({
         typeof month === "function" ? month() + 1 : parseInt(month, 10) + 1;
 
       if (studentId === "all") {
-        response = await axios.get(
-          `http://localhost:8081/member/${trainerId}/calendar`,
-          {
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${getAccessToken()}` },
-          }
-        );
+        setSelectedStudent(null);
       } else {
         response = await axios.get(
           `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
