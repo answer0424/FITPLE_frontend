@@ -10,7 +10,7 @@ import ChatIcon from '../../common/component/ChatIcon';
 
 const MainPage = () => {
     const navigate = useNavigate();
-    const { isLogin } = useContext(LoginContext);
+    const { isLogin, userInfo } = useContext(LoginContext);
 
     // HBTI test로 이동
     const gotoTest = () => {
@@ -29,7 +29,7 @@ const MainPage = () => {
             navigate('/login');
             return;
         }
-        navigate('/');
+        navigate(`/quiz/${userInfo.id}/result/match`);
     }
 
     return (
