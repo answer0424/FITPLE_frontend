@@ -55,7 +55,10 @@ const ProfileComponent = ({ user, onClick }) => {
               alt="Profile"
               className="profile-image"
             />
-          <GearFill className="settings-icon" />
+            {/* 이 버튼과 GearFill에 적용된 클래스 네임은 css 수정하며 손 볼 것 */}
+          <button onClick={() => handleClick("c")} className="settings-icon"> 
+            <GearFill className="settings-icon" />
+          </button>
           </div>
 
           {/* 닉네임 & 집 아이콘 */}

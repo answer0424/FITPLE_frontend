@@ -120,7 +120,7 @@ const CalenderComponent = ({ user }) => {
     // 해당 날짜에 맞는 예약 찾기
     const matchingReservations = events.filter(
       (event) =>
-        event.date.split('T')[0] === formattedDate
+        event.date && event.date.split('T')[0] === formattedDate
     );
 
     // 예약이 있으면 렌더링

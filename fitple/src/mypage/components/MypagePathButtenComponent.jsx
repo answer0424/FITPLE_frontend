@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import "../static/css/MyPagePathButtonStyle.css";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const MypagePathButtenComponent = ({ onClick }) => {
   const [active, setActive] = useState(null);
+  const { userInfo } = useContext(LoginContext);
 
   const handleClick = (type) => {
     setActive(type);
@@ -24,7 +26,7 @@ const MypagePathButtenComponent = ({ onClick }) => {
           className={`mypage-button ${active === "b" ? "active" : ""}`}
           onClick={() => handleClick("b")}
         >
-          Schedule Registration
+          {userInfo.isTrainer ? "Schedule Registration" : "couponPage"}
         </Button>
       </ButtonGroup>
     </div>
