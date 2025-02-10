@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../mainpage/apis/api";
 import { Button } from "react-bootstrap";
 import { Container, Row, Col } from 'react-bootstrap';
 import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 아이콘
 import "../static/css/ProfileComponent.css";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const ProfileComponent = ({ user, onClick }) => {
   const [userInfo, setUserInfo] = useState(null);
+  // const { userInfo } = useContext(LoginContext);
   const navigate = useNavigate();
   const [active, setActive] = useState(null);
 
