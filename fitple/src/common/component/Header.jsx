@@ -16,7 +16,7 @@ const Header = () => {
     return (
         <div>
             <div className="header">
-                <Link to={"/hbti"} className="header-left">HBTI</Link>
+                <Link to={"/quiz"} className="header-left">HBTI</Link>
                 <Link to={"/"}>
                     <img src={logo} alt="Logo" className='header-image'/>
                 </Link>

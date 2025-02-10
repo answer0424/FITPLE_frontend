@@ -208,7 +208,7 @@ const LoginContextProvider = ({children}) => {
         // confirm 받아서 로그아웃
         if (confirm('로그아웃 하시겠습니까?')) {
             logoutSetting();
-            navigate('/');
+            window.location.reload();
         } else { 
             return;
         }
@@ -256,7 +256,7 @@ const LoginContextProvider = ({children}) => {
 
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         setIsLogin(true);
-        setUserInfo({ id, username: finalUsername, authority });
+        setUserInfo({ id, username: finalUsername, authority, hbti: userData.hbti });
 
         const updatedAuthority = authority ? {
             isStudent: authority.includes('ROLE_STUDENT'),
@@ -295,7 +295,7 @@ const LoginContextProvider = ({children}) => {
     }
 
     return (
-        <LoginContext.Provider value={{ isLogin, userInfo, authority, loginCheck, login, logout, stompClient: stompClient.current , unreadMessage: unreadMessage || {}, setUnreadMessage}}>
+        <LoginContext.Provider value={{ isLogin, userInfo, authority,hbti: userInfo?.hbti,  loginCheck, login, logout, stompClient: stompClient.current , unreadMessage: unreadMessage || {}, setUnreadMessage}}>
             {children}
         </LoginContext.Provider>
     );
