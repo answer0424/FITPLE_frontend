@@ -4,23 +4,23 @@ import '../assets/styles/MainPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../contexts/LoginContextProvider';
-import sectionImg from './../assets/images/sectionImg.png'
+import sectionImg from './../assets/images/sectionImg.png';
 import Footer from '../../common/component/Footer';
 import ChatIcon from '../../common/component/ChatIcon';
 
 const MainPage = () => {
     const navigate = useNavigate();
-    const { isLogin } = useContext(LoginContext);
+    const { isLogin, userInfo } = useContext(LoginContext); // userInfo 추가
 
     // HBTI test로 이동
     const gotoTest = () => {
         navigate('/quiz');
-    }
+    };
 
     // HBTI detail로 이동
     const goHBTI = () => {
         navigate('/hbti');
-    }
+    };
 
     // matchPage로 이동
     const goMatching = () => {
@@ -29,8 +29,13 @@ const MainPage = () => {
             navigate('/login');
             return;
         }
-        navigate('/');
-    }
+
+        if (userInfo?.id) {
+            navigate(`/quiz/${userInfo.id}/result/match`); // userInfo.id를 URL에 동적으로 추가
+        } else {
+            alert('로그인 정보를 확인할 수 없습니다.');
+        }
+    };
 
     return (
         <div className='mainPage'>
@@ -62,7 +67,7 @@ const MainPage = () => {
                     <img src={sectionImg} alt="Trainer Match Image"/>
                 </div>
                 <Footer/>
-                {isLogin && <ChatIcon/>}
+                {isLogin && <ChatIcon />}
             </div>
         </div>
     );
