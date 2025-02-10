@@ -115,51 +115,50 @@ const CalenderComponent = ({ user }) => {
   // />;
 
   const tileContent = ({ date }) => {
-    const formattedDate = date.toISOString().split('T')[0];
+    const formattedDate = date.toISOString().split("T")[0];
 
     // 해당 날짜에 맞는 예약 찾기
     const matchingReservations = events.filter(
-      (event) =>
-        event.date && event.date.split('T')[0] === formattedDate
+      (event) => event.date && event.date.split("T")[0] === formattedDate
     );
 
     // 예약이 있으면 렌더링
     return (
       <div className="event-info">
-        { (selectedStudent && selectedStudent.length > 0) ? (
+        {selectedStudent && selectedStudent.length > 0 ? (
           selectedStudent.map((event) => (
             <div key={event.reservationId} className="reservation-item">
               <span>{event.nickname}</span>
               <span>{event.date.slice(11, 16)}</span>
             </div>
-          )))
-        : (matchingReservations && matchingReservations.length > 0 ? (
+          ))
+        ) : matchingReservations && matchingReservations.length > 0 ? (
           matchingReservations.map((event) => (
             <div key={event.reservationId} className="reservation-item">
               <span>{event.nickname}</span>
               <span>{event.date.slice(11, 16)}</span>
             </div>
-          ))) 
-          : (
+          ))
+        ) : (
           <span></span>
-        ))}
+        )}
       </div>
     );
-    
   };
-
   return (
     <>
       <Container>
-        { userInfo.isTrainer ?
-        <TrainerStudentsDropdown
-          trainerId={user.id}
-          updateEvents={setDailyEvents}
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-          setSelectedStudent={setSelectedStudent}
-        /> : (<div/>)
-        }
+        {userInfo.isTrainer ? (
+          <TrainerStudentsDropdown
+            trainerId={user.id}
+            updateEvents={setDailyEvents}
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
+            setSelectedStudent={setSelectedStudent}
+          />
+        ) : (
+          <div />
+        )}
 
         <Calendar
           value={date}
