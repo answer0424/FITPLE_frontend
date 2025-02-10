@@ -9,8 +9,8 @@ import {
   Form,
 } from "react-bootstrap";
 import axios from "axios";
-import "../static/css/StudentsList.css";
-import SearchStudentItem from "../items/SerchStudentItem";
+import "../../static/css/StudentsList.css";
+import SearchStudentItem from "../../items/SerchStudentItem";
 
 const StudentsList = ({ user }) => {
   const [studentList, setStudentList] = useState([]);

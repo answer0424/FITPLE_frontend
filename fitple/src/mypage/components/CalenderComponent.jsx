@@ -113,6 +113,32 @@ const CalenderComponent = ({ user }) => {
   //   month={date.getMonth()}
   // />;
 
+  const tileContent = ({ date }) => {
+    const formattedDate = date.toISOString().split('T')[0];
+
+    // 해당 날짜에 맞는 예약 찾기
+    const matchingReservations = events.filter(
+      (event) =>
+        event.date.split('T')[0] === formattedDate
+    );
+
+    // 예약이 있으면 렌더링
+    return (
+      <div className="event-info">
+        {matchingReservations.length > 0 ? (
+          matchingReservations.map((event) => (
+            <div key={event.reservationId} className="reservation-item">
+              <span>{event.nickname}</span>
+              <span>{event.date.slice(11, 16)}</span>
+            </div>
+          ))
+        ) : (
+          <span></span>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       <Container>
@@ -134,26 +160,7 @@ const CalenderComponent = ({ user }) => {
           formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
           calendarType="gregory"
           showNeighboringMonth={false}
-          tileContent={({ date, view }) => {
-            if (view === "month") {
-              const eventsForDay = getEventsForDate(date);
-              return (
-                <>
-                  {eventsForDay.map((event, index) => (
-                    <div
-                      key={index}
-                      className={`event-item ${
-                        event.isCompleted ? "completed" : ""
-                      }`}
-                    >
-                      {event.time} {event.title}
-                    </div>
-                  ))}
-                </>
-              );
-            }
-            return null;
-          }}
+          tileContent={tileContent}
         />
       </Container>
 

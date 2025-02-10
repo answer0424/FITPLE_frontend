@@ -1,9 +1,8 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import ProfileComponent from "../ProfileComponent";
 import CalenderComponent from "../CalenderComponent";
-import StudentsList from ".././StudentsList";
+import StudentsList from "../trainer/StudentsList";
+import ProfilEditComponent from '../ProfileEditComponent';
 
 const TrainerComponent = ({ currentPage, user }) => {
   return (
@@ -11,6 +10,7 @@ const TrainerComponent = ({ currentPage, user }) => {
       <Container>
         {currentPage === "a" && <CalenderComponent user={user} />}
         {currentPage === "b" && <StudentsList user={user} />}
+        {currentPage === 'c' && <ProfilEditComponent user={user} />}
       </Container>
     </>
   );

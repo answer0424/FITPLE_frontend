@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import api from "../../mainpage/apis/api";
-import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+import api from "../../../mainpage/apis/api";
+import { LoginContext } from "../../../mainpage/contexts/LoginContextProvider";
 import { Button } from "react-bootstrap";
 
 const CouponComponent = () => {

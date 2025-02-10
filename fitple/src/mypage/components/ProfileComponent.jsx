@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../mainpage/apis/api";
 import { Button } from "react-bootstrap";
+import { Container, Row, Col } from 'react-bootstrap';
 import { GearFill } from "react-bootstrap-icons"; // 설정 아이콘
 import "../static/css/ProfileComponent.css";
 
-const ProfileComponent = ({ user }) => {
+const ProfileComponent = ({ user, onClick }) => {
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
+  const [active, setActive] = useState(null);
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -29,25 +31,33 @@ const ProfileComponent = ({ user }) => {
       });
   }, [user]);
 
+  //프로필 변경으로 이동
+  const handleClick = (type) => {
+    setActive(type);
+    onClick(type);
+  };
+
   return (
     <div className="profile-container">
       {userInfo ? (
         <>
-          {/* 프로필 이미지 */}
+        <Row className="w-100">
+        <Col xs={12} className="d-flex flex-column">
           <div className="profile-image-container">
             <img
               src={`${import.meta.env.VITE_Server}/${userInfo.profileImage}`}
               alt="Profile"
               className="profile-image"
             />
-            <GearFill className="settings-icon" />
+          <GearFill className="settings-icon" />
           </div>
 
-          {/* 닉네임 */}
           <h2 className="nickname">{userInfo.nickname}</h2>
 
-          {/* HBTI */}
           <p className="hbti">{userInfo.hbti}</p>
+
+        </Col>
+        </Row>
         </>
       ) : (
         <p className="loading-text">사용자 정보를 불러오는 중...</p>
