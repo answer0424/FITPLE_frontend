@@ -34,6 +34,11 @@ const ProtectedRoute = ({ children }) => {
         return <Navigate to="/login" replace />;
     }
 
+    if (adminOnly && !authority?.isAdmin) {
+        // 관리자 권한이 필요한데 없는 경우
+        return <Navigate to="/" />;
+    }
+
     // 인증된 경우
     return children;
 };
