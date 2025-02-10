@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
+import moment from 'moment';
+import api from '../../mainpage/apis/api';
 
 const ProfilEditComponent = () => {
     const { userInfo } = useContext(LoginContext);
@@ -9,7 +11,12 @@ const ProfilEditComponent = () => {
         nickname: userInfo.nickname || "",
         email: userInfo.email || "",
         address: userInfo.address || "",
-        birth: userInfo.birth ? userInfo.birth.split('T')[0] : "",  // Date를 YYYY-MM-DD 형식으로 변환
+        birth: userInfo.birth || '',
+        userId: userInfo.id,
+        gymId: userInfo.gym && userInfo.gym.id,
+        authority: userInfo.authority,
+        profileImage: userInfo.profileImage,
+        HBTI: userInfo.hbti,
     });
 
     // 입력 처리 함수
@@ -21,116 +28,98 @@ const ProfilEditComponent = () => {
         }));
     };
 
-    // birth 값이 Date 형식이므로, 입력 후 필요한 형태로 변환해야 합니다.
+    // date 변환 입력 처리 함수
     const handleDateChange = (e) => {
+        const formattedDate = moment.utc(e.target.value).format('YYYY-MM-DD');
         setEditedInfo({
             ...editedInfo,
-            birth: e.target.value,
+            birth: formattedDate,  // moment로 변환한 날짜를 사용
         });
     };
 
     // 폼 제출 시 userInfo 업데이트
     const handleSubmit = (e) => {
         e.preventDefault();
+        const accessToken = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("accessToken="))
+            ?.split("=")[1];
 
-        // localStorage에도 저장
-        localStorage.setItem("userInfo", JSON.stringify({
-            ...userInfo,
-            ...editedInfo,
-        }));
+        if (editedInfo.birth) {
+            setEditedInfo((prevInfo) => ({
+                ...prevInfo,
+                birth: moment.utc(editedInfo.birth).format('YYYY-MM-DD'),
+            }));
+        }
 
-        // 필요한 경우 서버에 변경된 데이터를 보낼 수 있음
-        console.log("수정된 정보:", editedInfo);
+        console.log(editedInfo);
+
+        api.patch('/member/mypage', editedInfo, {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then((response) => {
+            //팝업창
+            console.log(response.status)
+            // localStorage에 미리 저장
+            localStorage.setItem("userInfo", JSON.stringify({
+                ...userInfo,
+                ...editedInfo,
+            }));
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     };
+
+    useEffect(() => {
+        console.log(userInfo)
+    }, [userInfo])
 
     return (
         <Container>
             <h2 className="my-4">Profile Edit</h2>
             <Form onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Nickname</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="nickname"
-                            value={editedInfo.nickname}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
 
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            value={editedInfo.email}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
-                </Row>
+                <Form.Group>
+                    <Form.Label>Nickname</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="nickname"
+                        value={editedInfo.nickname}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
 
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="address"
-                            value={editedInfo.address}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
+                <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        type="email"
+                        name="email"
+                        value={editedInfo.email}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
 
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Birth</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="birth"
-                            value={editedInfo.birth}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
-                </Row>
+                <Form.Group>
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="address"
+                        value={editedInfo.address}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
 
-                {/* 읽기 전용 정보 */}
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Authority</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={userInfo.authority}
-                            disabled
-                        />
-                    </Form.Group>
-
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Profile Image</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={userInfo.profileImage || 'No image'}
-                            disabled
-                        />
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>HBTI</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={userInfo.HBTI || 'Not available'}
-                            disabled
-                        />
-                    </Form.Group>
-
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Gym ID</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={userInfo.gymId || 'Not available'}
-                            disabled
-                        />
-                    </Form.Group>
-                </Row>
+                <Form.Group>
+                    <Form.Label>Birth</Form.Label>
+                    <Form.Control
+                        type="date"
+                        name="birth"
+                        value={editedInfo.birth}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
 
                 <Button variant="primary" type="submit">
                     Save Changes
