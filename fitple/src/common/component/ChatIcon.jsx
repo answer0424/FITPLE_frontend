@@ -46,7 +46,8 @@ const ChatIcon = () => {
         setModalOpen(true);
         setUnreadMessage((prev) => ({
             ...prev,
-            undefined: 0
+            undefined: 0,
+            35:0,
         }));
     };
 
