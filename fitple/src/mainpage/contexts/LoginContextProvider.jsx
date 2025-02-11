@@ -248,7 +248,7 @@ const LoginContextProvider = ({ children }) => {
     }
   };
 
-  const loginSetting = (
+  const loginSetting = async (
     userData,
     accessToken,
     username,
