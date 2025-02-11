@@ -32,3 +32,11 @@
     width: 100px;
     margin-top: 75px;
 }
+
+.logout {
+    color: rgba(187, 99, 6, 0.567);
+    font-size: 30px;
+    position: absolute;
+    margin-left: 100px;
+    margin-top: -20px;
+}
