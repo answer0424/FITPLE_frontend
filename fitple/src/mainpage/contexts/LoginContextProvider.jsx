@@ -285,68 +285,81 @@ const LoginContextProvider = ({ children }) => {
       return;
     }
 
-    const { id, username: finalUsername, authority } = userData;
+    const { id, username: finalUsername, authority: userAuthority } = userData;
 
+    // Set authority based on user's role
+    const newAuthority = {
+        isStudent: userAuthority === "ROLE_STUDENT",
+        isTrainer: userAuthority === "ROLE_TRAINER",
+        isAdmin: userAuthority === "ROLE_ADMIN"
+    };
+    
+    setAuthority(newAuthority);
+    localStorage.setItem('authority', JSON.stringify(newAuthority));
+    
     console.log(`✅ 로그인 성공!
             ID: ${id}
             Username: ${finalUsername}
             Authority: ${authority}
         `);
-    
-    
-        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-        setIsLogin(true);
-        setUserInfo({ id, username: finalUsername, authority : authority }); //= > userAuthority
-    
-        // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
-        const storedAnswers = localStorage.getItem("hbtiAnswers");
-        console.log("hbtiAnswers",storedAnswers);
-    
-        if (storedAnswers) {
-            console.log("📢 저장된 HBTI 데이터가 있습니다. 서버에 저장 중...");
-        
-            const parsedAnswers = JSON.parse(storedAnswers); // 객체 형태로 저장된 JSON 파싱
-            const answerArray = Object.values(parsedAnswers); // 🔥 배열로 변환
-        
-            const requestBody = JSON.stringify({
-                userId: id,
-                answers: answerArray // ✅ 객체 → 배열 변환 후 전송
-            });
-        
-            console.log("📝 변환된 데이터:", requestBody);  // 🔥 변환된 데이터 확인
-        
-            try {
-                const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${accessToken}`
-                    },
-                    body: requestBody
-                });
-        
-                if (response.ok) {
-                    console.log("✅ HBTI 데이터가 성공적으로 저장되었습니다.");
-                    localStorage.removeItem("hbtiAnswers"); // 🟢 저장 성공 시 로컬스토리지에서 삭제
-                    navigate(`/quiz/${id}/result`, { state: { fromLogin: true } });
-                    return;
-                } else {
-                    console.error("❌ HBTI 데이터 저장 실패:", await response.text()); // 🔥 서버 응답 확인
-                }
-            } catch (error) {
-                console.error("❌ 서버에 HBTI 데이터 저장 중 오류 발생:", error);
-            }
-        
+
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    setIsLogin(true);
+    setUserInfo({ id, username: finalUsername, authority: userAuthority }); //= > userAuthority
+
+    // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
+    const storedAnswers = localStorage.getItem("hbtiAnswers");
+    console.log("hbtiAnswers", storedAnswers);
+
+    if (storedAnswers) {
+      console.log("📢 저장된 HBTI 데이터가 있습니다. 서버에 저장 중...");
+
+      const parsedAnswers = JSON.parse(storedAnswers); // 객체 형태로 저장된 JSON 파싱
+      const answerArray = Object.values(parsedAnswers); // 🔥 배열로 변환
+
+      const requestBody = JSON.stringify({
+        userId: id,
+        answers: answerArray, // ✅ 객체 → 배열 변환 후 전송
+      });
+
+      console.log("📝 변환된 데이터:", requestBody); // 🔥 변환된 데이터 확인
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_Server}/api/hbti/save`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: requestBody,
+          }
+        );
+
+        if (response.ok) {
+          console.log("✅ HBTI 데이터가 성공적으로 저장되었습니다.");
+          localStorage.removeItem("hbtiAnswers"); // 🟢 저장 성공 시 로컬스토리지에서 삭제
+          navigate(`/quiz/${id}/result`, { state: { fromLogin: true } });
+          return;
         } else {
-            console.log("⚠ 저장된 HBTI 데이터가 없습니다.");
+          console.error("❌ HBTI 데이터 저장 실패:", await response.text()); // 🔥 서버 응답 확인
         }
-    
-        // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
-        // navigate('/');
-        localStorage.setItem("isLogin", "true");
-        localStorage.setItem("userInfo", JSON.stringify({ id, username: finalUsername, authority }));
-    };
-    
+      } catch (error) {
+        console.error("❌ 서버에 HBTI 데이터 저장 중 오류 발생:", error);
+      }
+    } else {
+      console.log("⚠ 저장된 HBTI 데이터가 없습니다.");
+    }
+
+    // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
+    // navigate('/');
+    localStorage.setItem("isLogin", "true");
+    localStorage.setItem(
+      "userInfo",
+      JSON.stringify({ id, username: finalUsername, authority })
+    );
+  };
 
   // 로그아웃 세팅
   const logoutSetting = () => {
