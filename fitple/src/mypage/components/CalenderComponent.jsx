@@ -10,6 +10,7 @@ import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 import "../static/css/ModalReset.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+import "../static/css/EventItems.css";
 
 const CalenderComponent = ({ user }) => {
   const today = new Date();
@@ -28,7 +29,7 @@ const CalenderComponent = ({ user }) => {
   // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
-    
+
     let matchingReservations;
 
     if (events && !selectedUser) {
@@ -76,13 +77,19 @@ const CalenderComponent = ({ user }) => {
 
     return (
       <div className="event-info">
-        {matchingReservations.length > 0 &&
-          matchingReservations.map((event) => (
-            <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
-              <span>{event.date.slice(11, 16)}</span>
-            </div>
-          ))}
+        {matchingReservations.slice(0, 2).map((event) => (
+          <div
+            key={event.reservationId}
+            className="reservation-item event-color"
+          >
+            <span className="event-nickname">{event.nickname}회원</span>
+          </div>
+        ))}
+        {matchingReservations.length > 2 && (
+          <div className="reservation-item more-events">
+            +{matchingReservations.length - 2}
+          </div>
+        )}
       </div>
     );
   };

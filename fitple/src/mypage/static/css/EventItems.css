@@ -1,0 +1,53 @@
+/* 전체 이벤트 감싸는 박스 */
+.event-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* 예약된 PT 박스 */
+.reservation-item {
+  background-color: aliceblue;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 8px;
+  font-weight: bold;
+  border-radius: 8px;
+  color: rgb(2, 2, 2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 마우스 오버 시 */
+.reservation-item:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* 닉네임 스타일 */
+.event-nickname {
+  font-size: 11px;
+  color: rgb(9, 9, 9);
+}
+/* 더보기 버튼 */
+.more-events {
+  background-color: aliceblue;
+  display: inline-flex;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  font-size: 8px;
+  font-weight: bold;
+  border-radius: 8px;
+  color: rgb(2, 2, 2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 마우스 오버 시 */
+.more-events:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
