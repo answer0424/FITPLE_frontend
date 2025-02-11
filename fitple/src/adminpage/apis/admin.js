@@ -79,6 +79,19 @@ const adminApi = {
         console.log("트레이너의 회원 목록:", response.data);
         return response.data;
     },
+    getTrainerGrantStatus: async (trainerId) => {
+        const response = await api.get(`/api/admin/trainers/${trainerId}/grant-status`);
+        console.log("트레이너 승인 상태:", response.data);
+        return response.data;
+    },
+
+    updateTrainerGrantStatus: async (trainerId, status) => {
+        const response = await api.put(`/api/admin/trainers/${trainerId}/grant-status`, null, {
+            params: { status }
+        });
+        console.log("트레이너 승인 상태 변경:", response.data);
+        return response.data;
+    },
 
     // 리뷰 관리
     getReviews: async (page = 0, size = 10, sortBy = 'id', direction = 'asc') => {
