@@ -59,6 +59,10 @@ const LoginPage = () => {
     
   };
 
+  const gotoForgotPassword = () => {
+    navigate('/forgot-password');
+  };
+
   return (
     <div className="App">
       <Header />
