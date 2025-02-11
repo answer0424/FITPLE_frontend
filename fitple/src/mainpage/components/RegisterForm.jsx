@@ -32,8 +32,8 @@ const RegisterForm = ({ questions = [], userType }) => {
         }
         break;
       case 1:
-        if (!/^[a-zA-Z]{5,20}$/.test(value)) {
-          error = "아이디는 5~20자의 영어로 입력해야 합니다.";
+        if (!/^[a-zA-Z1-9]{5,20}$/.test(value)) {
+          error = "아이디는 5~20자의 영어 또는 숫자로 입력해야 합니다.";
         }
         break;
       case 2:
@@ -155,12 +155,12 @@ const RegisterForm = ({ questions = [], userType }) => {
     <div className="App">
       <Header />
       <div>
-        <h2>{userType} Sign up</h2>
+        <h2 className="font">{userType} Sign up</h2>
         <Link to={"/register/student"}>
-          <button className="reg-student">Student</button>
+          <button className="reg-student font">Student</button>
         </Link>
         <Link to={"/register/trainer"}>
-          <button className="reg-trainer">Trainer</button>
+          <button className="reg-trainer font">Trainer</button>
         </Link>
       </div>
       <div className="progress-bar-container">
@@ -222,10 +222,10 @@ const RegisterForm = ({ questions = [], userType }) => {
               <p style={{ color: "red", marginTop: "5px" }}>{errors[currentQuestionIndex]}</p>
             )}
             <div className="button-container">
-              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)} disabled={currentQuestionIndex === 0} className="back-button">
+              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)} disabled={currentQuestionIndex === 0} className="back-button font">
                 Back
               </button>
-              <button onClick={handleNextQuestion} className="">
+              <button onClick={handleNextQuestion} className="font">
                 {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
               </button>
             </div>

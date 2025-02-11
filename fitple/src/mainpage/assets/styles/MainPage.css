@@ -1,4 +1,7 @@
 /* 전체 페이지 스타일 */
+
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Notable&display=swap');
+
 .mainPage {
     background-color: black;
     overflow-x: hidden;
@@ -20,18 +23,21 @@
 .HBTI-test-container h1 {
     font-size: 3rem;
     color: #a1d0fc;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .HBTI-test-container p {
     font-size: 1.5rem;
     color: #a1d0fc;
+    
 }
 
 .HBTI-test-container button {
     background-color: #a1d0fc;
     color: white;
     border: none;
-    padding: 15px 30px;
     font-size: 1.2rem;
     cursor: pointer;
     border-radius: 10px;
@@ -40,7 +46,11 @@
     width: 200px; /* 버튼 너비 고정 */
     display: block; /* flex 영향을 받지 않도록 */
     text-align: center;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
+
  
 /* 배경 원 이미지 */
 .background-image {
@@ -99,6 +109,9 @@
     color: white;
     font-weight: 900;
     margin-bottom: 50px;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .about-HBTI-container p {
@@ -113,6 +126,9 @@
 
 .about-HBTI-container button {
     border-radius: 10px;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 /* match-trainer-container */
@@ -135,6 +151,9 @@
     color: white;
     font-weight: 900;
     margin-bottom: 50px;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .match-trainer-container p {
@@ -149,4 +168,7 @@
 
 .match-trainer-container button {
     border-radius: 10px;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
