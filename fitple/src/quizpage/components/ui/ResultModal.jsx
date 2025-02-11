@@ -39,39 +39,10 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
         }
     }, [isOpen, hbtiType]);
 
-    // const handleViewDetails = async () => {
-    //     if (!userId) {
-    //         alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요.');
-    //         navigate('/login');
-    //         return;
-    //     }
 
-    //     try {
-    //         const token = Cookies.get('accessToken');
-    //         const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             },
-    //             body: JSON.stringify({
-    //                 userId: userId,
-    //                 answers: Object.values(answers)
-    //             })
-    //         });
-
-    //         if (!saveResponse.ok) {
-    //             throw new Error('Failed to save results');
-    //         }
-    //         navigate(`/quiz/${userId}/result`);
-    //         onClose();
-    //     } catch (error) {
-    //         console.error('Error saving HBTI result:', error);
-    //         alert('결과 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
-    //     }
-    // };
 
     const handleViewDetails = async () => {
+        localStorage.setItem('hbtiAnswers', JSON.stringify(answers));
         if (!isLogin) {
             alert('로그인이 필요한 기능입니다.');
             navigate('/login');
