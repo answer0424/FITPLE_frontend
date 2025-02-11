@@ -114,7 +114,7 @@ const LoginContextProvider = ({children}) => {
     // 로그인 확인
     const loginCheck = async (isAuthPage = false) => {
         const accessToken = Cookies.get('accessToken');
-
+        
         console.log(`accessToken: ${accessToken}`);
         let response;
         let data;
@@ -298,7 +298,7 @@ const LoginContextProvider = ({children}) => {
         }
     
         // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
-        navigate('/');
+        // navigate('/');
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("userInfo", JSON.stringify({ id, username: finalUsername, authority }));
     };
@@ -321,6 +321,7 @@ const LoginContextProvider = ({children}) => {
         localStorage.removeItem('authority');
         localStorage.removeItem('username');
         
+        navigate('/');
     }
 
     return (

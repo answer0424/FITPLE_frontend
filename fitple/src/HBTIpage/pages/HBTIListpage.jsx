@@ -120,7 +120,7 @@ function HBTIListPage() {
                   onClick={() => handleCardClick(item.hbti)}
                   style={{ cursor: "pointer" }}
                 >
-                  <div className={`card h-100 shadow-sm card-${group}`}>
+                  <div className={`card1 h-100 shadow-sm card-${group}`}>
                     <img
                       src={`${import.meta.env.VITE_Server}${item.dogImage}`}
                       className="card-img-top"

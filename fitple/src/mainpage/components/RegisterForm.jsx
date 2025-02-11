@@ -38,9 +38,9 @@ const RegisterForm = ({ questions = [], userType }) => {
         }
         break;
       case 2:
-        if (value.length < 12) {
-          error = "비밀번호는 12자 이상이어야 합니다.";
-        }
+        if (value.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+          error = "비밀번호는 8자 이상이며, 특수문자를 하나 이상 포함해야 합니다.";
+      }  
         break;
       default:
         break;
