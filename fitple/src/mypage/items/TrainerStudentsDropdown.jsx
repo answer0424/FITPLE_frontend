@@ -82,7 +82,7 @@ const TrainerStudentsDropdown = ({
 
       // 받은 year, month 값 적용
       const selectedYear = year || new Date().getFullYear();
-      const selectedMonth = month || new Date().getMonth();
+      const selectedMonth = month || new Date().getMonth() + 1;
 
       if (studentId === "all") {
         setSelectedStudent(null);

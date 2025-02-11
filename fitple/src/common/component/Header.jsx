@@ -20,7 +20,7 @@ const Header = () => {
         <Link to={"/"}>
           <img src={logo} alt="Logo" className="header-image" />
         </Link>
-        <Link to={"/member"} className="header-right">
+        <Link to={"/member/detail/write"} className="header-right">
           아아아
         </Link>
         {/* 로그인 상태에 따라 버튼 변경 */}

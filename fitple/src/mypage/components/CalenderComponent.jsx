@@ -104,6 +104,7 @@ const CalenderComponent = ({ user }) => {
         params: {
           year: currentYear,
           month: currentMonth -1 ,
+
         },
         withCredentials: true,
         headers: {
@@ -120,7 +121,7 @@ const CalenderComponent = ({ user }) => {
       .catch((error) => {
         console.error("일정 불러오기 실패:", error);
       });
-  }, [currentYear, currentMonth]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
+  }, [currentYear, currentMonth, date]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
 
   useEffect(() => {
     console.log("업데이트된 이벤트:", events);
