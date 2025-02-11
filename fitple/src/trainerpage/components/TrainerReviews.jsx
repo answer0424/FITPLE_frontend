@@ -212,9 +212,9 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
         onChange={(e) => setSortOption(e.target.value)}
         className="form-select kr-font"
     >
-        <option value="latest kr-font">최신순</option>
-        <option value="highest kr-font">별점 높은 순</option>
-        <option value="lowest kr-font">별점 낮은 순</option>
+        <option value="latest">최신순</option>
+        <option value="highest">별점 높은 순</option>
+        <option value="lowest">별점 낮은 순</option>
     </select>
 </div>
     
