@@ -4,6 +4,7 @@ import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import moment from 'moment';
 import api from '../../mainpage/apis/api';
 import KakaoSearch from '../../mainpage/components/KakaoSearch';
+import axios from 'axios';
 
 const ProfilEditComponent = () => {
     const { userInfo, authority } = useContext(LoginContext);
@@ -96,9 +97,10 @@ const ProfilEditComponent = () => {
     };
 
     // 프로필 사진을 서버에 업로드하는 함수
-    const handleImageUpload = () => {
+    const handleImageUpload = async (e) => {
+        e.preventDefault()
         if (!selectedImage) {
-            alert("Please select an image first.");
+            alert("이미지는 넣고 돌리세요");
             return;
         }
 
@@ -120,22 +122,31 @@ const ProfilEditComponent = () => {
             console.log(`${key}: ${value}`);
         }
 
-        api.patch('/member/profileimg',
-            formData,
-            {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        )
-        .then((response) => {
-            console.log(response.status);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        try {
+      const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        ?.split("=")[1];
+
+      await axios.post(
+        `${import.meta.env.VITE_Server}/member/profile-img`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      alert("트");
+    } catch (error) {
+      console.error("오류:", error.response || error);
+      alert(
+        error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
+      );
+    }
     };
 
     // useEffect(() => {
@@ -145,21 +156,32 @@ const ProfilEditComponent = () => {
     return (
         <Container>
             <h2 className="my-4">Profile Edit</h2>
-            <div>
-                <Button variant="secondary" onClick={() => document.getElementById('profileImageInput').click()}>
-                    Change Profile Image
+            <Form onSubmit={handleImageUpload}>
+                <div>
+                    {/* 이미지 변경 버튼 */}
+                    <Button variant="secondary" onClick={() => document.getElementById('profileImage').click()}>
+                        Change Profile Image
+                    </Button>
+                    <input
+                        id="profileImage"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleImageChange}
+                    />
+                </div>
+                {/* 미리보기 이미지 표시
+                {selectedImage && (
+                    <div>
+                        <h5>Selected Image:</h5>
+                        <img src={selectedImage} alt="Profile Preview" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                    </div>
+                )} */}
+                {/* 제출 버튼 */}
+                <Button type="submit" variant="primary">
+                    Upload Image
                 </Button>
-                <input
-                    id="profileImageInput"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                />
-            </div>
-            <Button variant="primary" onClick={handleImageUpload}>
-                프로필 사진 변경
-            </Button>
+            </Form>
             <Form onSubmit={handleSubmit}>
 
                 <Form.Group>
