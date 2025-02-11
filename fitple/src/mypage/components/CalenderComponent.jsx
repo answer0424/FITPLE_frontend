@@ -1,84 +1,131 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styled, { withTheme } from "styled-components";
 import moment from "moment";
-// import "./Calendar.css";
-// import Profile from "./profile";
-import '../static/css/CalenderStyle.css';
-import { Modal, Button, Form, Container } from "react-bootstrap";
+import "../static/css/CalenderStyle.css";
+import { Container } from "react-bootstrap";
+import DailyScheduleModal from "../modal/DailyScheduleModal";
+import { EventProvider, useEventContext } from "../context/EventContext";
+import api from "../../mainpage/apis/api";
+import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
+import "../static/css/ModalReset.css";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
-
-const CalenderComponent = ({user}) => {
-
+const CalenderComponent = ({ user }) => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState([]); // 일정 데이터를 저장하는 상태
-  const [eventInput, setEventInput] = useState(""); // 일정 제목 입력 상태
-  const [timeInput, setTimeInput] = useState(""); // 일정 시간 입력 상태
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [members, setMembers] = useState([
-    { name: "John Doe", completed: false },
-    { name: "Jane Smith", completed: true },
-  ]); // 회원 리스트 샘플 데이터
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [dailyEvents, setDailyEvents] = useState([]);
+  const { events, updateEvents } = useContext(EventProvider);
+  const [selectedStudent, setSelectedStudent] = useState([]);
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
+  const { userInfo, authority } = useContext(LoginContext);
+  const [matchingReservations, setMatchingReservations] = useState([]); //일별 달력에 뜨는 일정
 
+  // 📌 날짜 클릭 시 모달 열기
   const handleDayClick = (clickedDate) => {
-    setSelectedDate(moment(clickedDate).format("YYYY-MM-DD"));
+    const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
+
+    setMatchingReservations();
+    console.log("선택한 날짜의 일정:", matchingReservations);
+    setDailyEvents(
+      events?.filter((event) => event.date?.startsWith(formattedDate))
+    );
+    setSelectedDate(formattedDate);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
-    setEventInput("");
-    setTimeInput("");
+    setDailyEvents([]);
   };
 
-  const addEvent = () => {
-    if (!eventInput.trim() || !timeInput.trim()) return;
-    setEvents((prev) => [
-      ...prev,
-      {
-        date: selectedDate,
-        time: timeInput,
-        title: eventInput.trim(),
-        isCompleted: false,
-        member: selectedMember,
-      },
-    ]);
-    closeModal();
+  // 📌 캘린더의 날짜별 일정 표시
+  const tileContent = useCallback(
+    ({ date }) => {
+      const formattedDate = moment(date).format("YYYY-MM-DD");
+
+      let matchingReservations =
+        selectedUser && Array.isArray(selectedStudent)
+          ? selectedStudent.filter((event) =>
+              event.date?.startsWith(formattedDate)
+            )
+          : events?.filter((event) => event.date?.startsWith(formattedDate)) ||
+            [];
+
+      return (
+        <div className="event-info">
+          {matchingReservations.length > 0 &&
+            matchingReservations.map((event) => (
+              <div key={event.reservationId} className="reservation-item">
+                <span>{event.nickname}</span>
+                <span>{event.date.slice(11, 16)}</span>
+              </div>
+            ))}
+        </div>
+      );
+    },
+    [events, selectedStudent]
+  );
+
+  // 📌 월 변경 감지
+  const handleActiveStartDateChange = ({ activeStartDate }) => {
+    setCurrentYear(activeStartDate.getFullYear());
+    setCurrentMonth(activeStartDate.getMonth() + 1); // 여기서 보정된 값을 사용
   };
 
-  const toggleCompletion = (index) => {
-    setEvents((prev) =>
-      prev.map((event, i) =>
-        i === index ? { ...event, isCompleted: !event.isCompleted } : event
-      )
-    );
-  };
+  // 📌 일정 데이터 가져오기
+  useEffect(() => {
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
 
-  const getEventsForDate = (date) => {
-    const formattedDate = moment(date).format("YYYY-MM-DD");
-    return events.filter((event) => event.date === formattedDate);
-  };
+    api
+      .get(`/member/${user.id}/calendar`, {
+        params: { year: currentYear, month: currentMonth - 1 },
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((response) => {
+        console.log(
+          `캘린더 컴포넌트 ${currentYear}년 ${currentMonth}월 일정 로드: `,
+          response.data
+        );
+        updateEvents(response.data);
+        setTimeout(() => setDate(new Date()), 100); // ✅ 강제 리렌더링
+      })
+      .catch((error) => console.error("일정 불러오기 실패:", error));
+  }, [currentYear, currentMonth]);
 
-  
-  return  (
+  return (
     <>
       <Container>
+        {authority.isTrainer && (
+          <TrainerStudentsDropdown
+            trainerId={user.id}
+            updateEvents={updateEvents}
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
+            setSelectedStudent={setSelectedStudent}
+            year={currentYear}
+            month={currentMonth}
+            allowAllUsers={true}
+          />
+        )}
         <Calendar
           value={date}
           onChange={handleDateChange}
           onClickDay={handleDayClick}
-          formatDay={(locale, date) => moment(date).format("D")}
-          formatYear={(locale, date) => moment(date).format("YYYY")}
-          formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
+          onActiveStartDateChange={handleActiveStartDateChange}
+          // 중요: activeStartDate를 명시적으로 설정
+          activeStartDate={new Date(currentYear, currentMonth - 1)}
           calendarType="gregory"
           showNeighboringMonth={false}
           tileContent={({ date, view }) => {
@@ -87,7 +134,12 @@ const CalenderComponent = ({user}) => {
               return (
                 <>
                   {eventsForDay.map((event, index) => (
-                    <div key={index} className={`event-item ${event.isCompleted ? "completed" : ""}`}>
+                    <div
+                      key={index}
+                      className={`event-item ${
+                        event.isCompleted ? "completed" : ""
+                      }`}
+                    >
                       {event.time} {event.title}
                     </div>
                   ))}
@@ -99,52 +151,14 @@ const CalenderComponent = ({user}) => {
         />
       </Container>
 
-      {/* 일정 추가 모달 */}
-      <Modal show={isModalOpen} onHide={closeModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>일정 추가</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>선택된 날짜: {selectedDate}</p>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>일정 제목</Form.Label>
-              <Form.Control
-                type="text"
-                value={eventInput}
-                onChange={(e) => setEventInput(e.target.value)}
-                placeholder="일정 제목을 입력하세요"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>시간</Form.Label>
-              <Form.Control
-                type="time"
-                value={timeInput}
-                onChange={(e) => setTimeInput(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            닫기
-          </Button>
-          <Button variant="primary" onClick={addEvent}>
-            추가
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* 일정 리스트 보기 */}
-      {/* <EventList>
-        {members.map((member, index) => (
-          <EventItem key={index}>
-            <span>{member.name}</span>
-            <span>{member.completed ? "완료" : "미완료"}</span>
-          </EventItem>
-        ))}
-      </EventList> */}
+      <DailyScheduleModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        selectedDate={selectedDate}
+        dailyEvents={dailyEvents}
+        user={user}
+        selectedUser={selectedUser}
+      />
     </>
   );
 };
