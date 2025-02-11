@@ -36,6 +36,11 @@ const LoginPage = () => {
     console.log("User Data:", { email: username, password });
   };
 
+  const gotoForgotPassword = () => {
+    alert("비밀번호 찾기페이지로 이동합니다.");
+    navigate("/forgot-password");
+  };
+
   // oauth
   const onKakaoLogin = () => {
     window.location.href = `${
@@ -91,9 +96,7 @@ const LoginPage = () => {
             </div>
           </form>
           <div className="forgot-password-link">
-            <button onClick={() => alert("Forgot Password?")}>
-              Forgot Password?
-            </button>
+            <button onClick={gotoForgotPassword}>Forgot Password?</button>
           </div>
           <div className="login-box">
             <button

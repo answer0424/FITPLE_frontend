@@ -277,7 +277,7 @@ const LoginContextProvider = ({ children }) => {
     console.log("✅ 최종 username:", normalizedUsername);
 
     const normalizedUserDataUsername = userData.username
-      ? userData.username.trim().toUpperCase()
+      ? userData.username.trim()
       : null;
 
     if (normalizedUsername !== normalizedUserDataUsername) {
