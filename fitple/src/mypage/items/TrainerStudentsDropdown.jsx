@@ -70,7 +70,7 @@ const TrainerStudentsDropdown = ({
       // 전체 회원 선택 시
       if (studentId === "all") {
         setSelectedUser(null);
-        setSelectedStudent("all");
+        setSelectedStudent([]);
         updateEvents([]);
         return;
       }
