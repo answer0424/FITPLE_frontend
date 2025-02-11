@@ -13,6 +13,9 @@ const Modal = ({ trainer, onClose }) => {
           <button onClick={onClose} className="modal-close">✕</button>
         </div>
         <div className="modal-body">
+          <div className="trainer-access">
+            <p>: {trainer.isAccess}</p>
+          </div>
           <div className="trainer-info">
             <h3>기본 정보</h3>
             <p>이름: {trainer.trainerName}</p>
@@ -47,12 +50,54 @@ const Modal = ({ trainer, onClose }) => {
   );
 };
 
+// StudentListModal 컴포넌트 추가
+const StudentListModal = ({ trainer, students, onClose }) => {
+  if (!trainer) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2 className="modal-title">{trainer.nickname}의 회원 목록</h2>
+          <button onClick={onClose} className="modal-close">✕</button>
+        </div>
+        <div className="modal-body">
+          <table className="admin-table">
+            <thead className="admin-table-header">
+              <tr>
+                <th className="admin-table-th">ID</th>
+                <th className="admin-table-th">아이디</th>
+                <th className="admin-table-th">이메일</th>
+                <th className="admin-table-th">이름</th>
+                <th className="admin-table-th">남은 횟수</th>
+              </tr>
+            </thead>
+            <tbody className="admin-table-body">
+              {students.map((student) => (
+                <tr key={student.userId}>
+                  <td className="admin-table-td">{student.userId}</td>
+                  <td className="admin-table-td">{student.nickname}</td>
+                  <td className="admin-table-td">{student.email}</td>
+                  <td className="admin-table-td">{student.name}</td>
+                  <td className="admin-table-td">{student.times}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const TrainerList = () => {
   const [trainers, setTrainers] = useState({ content: [], totalPages: 0 });
   const [page, setPage] = useState(0);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showStudentModal, setShowStudentModal] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   useEffect(() => {
     fetchTrainers();
@@ -90,6 +135,18 @@ const TrainerList = () => {
     }
   };
 
+  const handleViewStudents = async (trainer) => {
+    try {
+      const students = await adminApi.getTrainerStudents(trainer.id);
+      setSelectedTrainer(trainer);
+      setSelectedStudents(students);
+      setShowStudentModal(true);
+    } catch (error) {
+      console.error('Failed to fetch trainer students:', error);
+    }
+  };
+
+
   if (isLoading) {
     return <div className="loading-state">Loading...</div>;
   }
@@ -107,7 +164,8 @@ const TrainerList = () => {
               <th className="admin-table-th">아이디</th>
               <th className="admin-table-th">이메일</th>
               <th className="admin-table-th">닉네임</th>
-              <th className="admin-table-th">상세보기</th>
+              <th className="admin-table-th">회원 목록</th>
+              <th className="admin-table-th">트레이너 포토폴리오</th>
               <th className="admin-table-th">관리</th>
             </tr>
           </thead>
@@ -118,6 +176,14 @@ const TrainerList = () => {
                 <td className="admin-table-td">{trainer.username}</td>
                 <td className="admin-table-td">{trainer.email}</td>
                 <td className="admin-table-td">{trainer.nickname}</td>
+                <td className="admin-table-td">
+                  <button
+                    className="view-button"
+                    onClick={() => handleViewStudents(trainer)}
+                  >
+                    회원 목록
+                  </button>
+                </td>
                 <td className="admin-table-td">
                   <button
                     className="view-button"
@@ -150,6 +216,18 @@ const TrainerList = () => {
           }}
         />
       )}
+
+      {showStudentModal && (
+          <StudentListModal
+            trainer={selectedTrainer}
+            students={selectedStudents}
+            onClose={() => {
+              setShowStudentModal(false);
+              setSelectedTrainer(null);
+              setSelectedStudents([]);
+            }}
+          />
+        )}
 
       <div className="pagination-container">
         <button

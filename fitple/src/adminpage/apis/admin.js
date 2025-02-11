@@ -30,7 +30,6 @@ api.interceptors.response.use(
     response => response,
     error => {
         if (error.response?.status === 401) {
-            // 토큰이 만료되었거나 유효하지 않은 경우 로그인 페이지로 리다이렉트
             window.location.href = '/login';
         }
         return Promise.reject(error);
@@ -43,6 +42,12 @@ const adminApi = {
         const response = await api.get(`/api/admin/users`, {
             params: { page, size, sortBy, direction }
         });
+        console.log("회원관리:", response.data);
+        return response.data;
+    },
+
+    getStudentTrainers: async (studentId) => {
+        const response = await api.get(`/api/admin/students/${studentId}/trainers`);
         return response.data;
     },
 
@@ -50,6 +55,7 @@ const adminApi = {
         const response = await api.delete(`/api/admin/users/${userId}`, {
             params: { role }
         });
+        console.log("회원삭제:",response.data);
         return response.data;
     },
 
@@ -58,11 +64,19 @@ const adminApi = {
         const response = await api.get(`/api/admin/trainers`, {
             params: { page, size, sortBy, direction }
         });
+        console.log("트레이너관리:",response.data);
         return response.data;
     },
 
     getTrainerProfile: async (trainerId) => {
         const response = await api.get(`/api/admin/trainers/${trainerId}/profile`);
+        console.log("트레이너 프로필:",response.data);
+        return response.data;
+    },
+
+    getTrainerStudents: async (trainerId) => {
+        const response = await api.get(`/api/admin/trainers/${trainerId}/students`);
+        console.log("트레이너의 회원 목록:", response.data);
         return response.data;
     },
 
@@ -71,16 +85,19 @@ const adminApi = {
         const response = await api.get(`/api/admin/reviews`, {
             params: { page, size, sortBy, direction }
         });
+        console.log("리뷰관리:",response.data);
         return response.data;
     },
 
     getReviewDetail: async (reviewId) => {
         const response = await api.get(`/api/admin/reviews/${reviewId}`);
+        console.log("리뷰 디테일:",response.data);
         return response.data;
     },
 
     deleteReview: async (reviewId) => {
         const response = await api.delete(`/api/admin/reviews/${reviewId}`);
+        console.log("리뷰 지우기:",response.data);
         return response.data;
     }
 };

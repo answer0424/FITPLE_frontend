@@ -5,13 +5,22 @@ import adminApi from '../apis/admin';
 const Modal = ({ review, onClose }) => {
   if (!review) return null;
 
+  // 데이터는 일단 받아와지는데 별 색이 안 칠해지네요 부탁드립니다 - 동희 - 
   const renderStars = (rating) => {
-    return [...Array(5)].map((_, index) => (
-      <Star
-        key={index}
-        className={`h-4 w-4 ${index < rating ? 'star-active' : 'star-inactive'}`}
-      />
-    ));
+    return (
+      <div className="flex gap-1">
+        {[...Array(5)].map((_, index) => (
+          <Star
+            key={index}
+            className={`h-4 w-4 ${
+              index < rating 
+                ? 'text-yellow-400 fill-current' 
+                : 'text-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -79,15 +88,6 @@ const ReviewList = () => {
         console.error('Failed to delete review:', error);
       }
     }
-  };
-
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, index) => (
-      <Star
-        key={index}
-        className={`h-4 w-4 ${index < rating ? 'star-active' : 'star-inactive'}`}
-      />
-    ));
   };
 
   if (isLoading) {
