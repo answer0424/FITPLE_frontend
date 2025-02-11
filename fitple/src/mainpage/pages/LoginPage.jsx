@@ -59,10 +59,6 @@ const LoginPage = () => {
     
   };
 
-  const gotoForgotPassword = () => {
-    navigate('/forgot-password');
-  };
-
   return (
     <div className="App">
       <Header />
@@ -86,12 +82,17 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="pw-input"
             />
+            <div className="forgot-password-link">
+              <button onClick={handleClick}>Forgot Password?</button>
+            </div>
             <div className="button-container">
               <button type="submit" className="login-button">Login</button>
             </div>
           </form>
           <div className="forgot-password-link">
-            <button onClick={handleClick}>Forgot Password?</button>
+            <button onClick={() => alert("Forgot Password?")}>
+              Forgot Password?
+            </button>
           </div>
           <div className="login-box">
             <button

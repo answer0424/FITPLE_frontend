@@ -4,11 +4,18 @@ import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import moment from 'moment';
 import api from '../../mainpage/apis/api';
 import KakaoSearch from '../../mainpage/components/KakaoSearch';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ProfilEditComponent = () => {
     const { userInfo, authority } = useContext(LoginContext);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
+    const accessToken = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("accessToken="))
+            ?.split("=")[1];
+
     const [editedInfo, setEditedInfo] = useState({
         nickname: userInfo.nickname || "",
         email: userInfo.email || "",
@@ -57,10 +64,6 @@ const ProfilEditComponent = () => {
     // 폼 제출 시 userInfo 업데이트
     const handleSubmit = (e) => {
         e.preventDefault();
-        const accessToken = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("accessToken="))
-            ?.split("=")[1];
 
         if (editedInfo.birth) {
             setEditedInfo((prevInfo) => ({
@@ -89,76 +92,69 @@ const ProfilEditComponent = () => {
         })
     };
 
+    //이미지 변경
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setSelectedImage(file); // 파일을 선택한 후 상태에 저장
+            setSelectedImage(file);
         }
     };
+
+    useEffect(() => {
+        if (selectedImage) {
+            const previewUrl = URL.createObjectURL(selectedImage);
+            setImagePreviewUrl(previewUrl); // 미리보기 URL을 상태에 저장
+        } else {
+            setImagePreviewUrl(null); // 이미지가 없으면 미리보기 URL을 null로 설정
+        }
+
+        // 클린업: 컴포넌트 언마운트 시 URL 객체를 해제
+        return () => {
+            if (imagePreviewUrl) {
+                URL.revokeObjectURL(imagePreviewUrl); // 메모리 해제를 위해 URL을 제거
+            }
+        };
+    }, [selectedImage]);
 
     // 프로필 사진을 서버에 업로드하는 함수
-    const handleImageUpload = async (e) => {
-        e.preventDefault()
-        if (!selectedImage) {
-            alert("이미지는 넣고 돌리세요");
-            return;
-        }
-
-        const accessToken = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("accessToken="))
-            ?.split("=")[1];
-
-        console.log(userInfo.id)
-        console.log(selectedImage)
-        console.log(accessToken)
+    // 폼 제출 시 userInfo 업데이트
+    const handleImageUpload = (e) => {
+        e.preventDefault();
 
         const formData = new FormData();
-        formData.append("userId", userInfo.id);
         formData.append("profileImage", selectedImage);
+        formData.append("userId", 126);
 
-        // console.log("오긴해?");
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
-        try {
-      const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        ?.split("=")[1];
-
-      await axios.post(
-        `${import.meta.env.VITE_Server}/member/profile-img`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      alert("트");
-    } catch (error) {
-      console.error("오류:", error.response || error);
-      alert(
-        error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
-      );
-    }
+        api.patch('/member/profile-img', formData, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((response) => {
+            //팝업창
+            console.log(response.status)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     };
-
-    // useEffect(() => {
-    //     console.log(userInfo.birth)
-    // }, [userInfo])
+    useEffect(() => {
+        console.log(userInfo)
+    }, [userInfo])
 
     return (
         <Container>
             <h2 className="my-4">Profile Edit</h2>
+            <Link className='btn btn-primary'>비밀번호 변경으로 이동</Link>
             <Form onSubmit={handleImageUpload}>
+                {imagePreviewUrl && (
+                    <div>
+                        <img src={imagePreviewUrl} alt="Profile Preview" />
+                    </div>
+                )}
                 <div>
-                    {/* 이미지 변경 버튼 */}
                     <Button variant="secondary" onClick={() => document.getElementById('profileImage').click()}>
                         Change Profile Image
                     </Button>
@@ -169,19 +165,12 @@ const ProfilEditComponent = () => {
                         style={{ display: 'none' }}
                         onChange={handleImageChange}
                     />
-                </div>
-                {/* 미리보기 이미지 표시
-                {selectedImage && (
-                    <div>
-                        <h5>Selected Image:</h5>
-                        <img src={selectedImage} alt="Profile Preview" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                    </div>
-                )} */}
-                {/* 제출 버튼 */}
                 <Button type="submit" variant="primary">
                     Upload Image
                 </Button>
+                </div>
             </Form>
+            
             <Form onSubmit={handleSubmit}>
 
                 <Form.Group>
