@@ -16,7 +16,7 @@ const CalenderComponent = ({ user }) => {
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("all");
   const [dailyEvents, setDailyEvents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -27,14 +27,16 @@ const CalenderComponent = ({ user }) => {
   const { events, updateEvents } = useEventContext();
   const { userInfo, authority } = useContext(LoginContext);
 
+
   // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
     let filteredReservations = [];
 
-    if (!selectedUser) {
+    if (selectedUser === "all") {
+      console.log("handleDayClick 진입")
       // events가 배열인지 확인 후 필터링
-      filteredReservations = Array.isArray(events)
+      filteredReservations = Array.isArray(matchingReservations)
         ? events.filter((event) => event.date?.startsWith(formattedDate))
         : [];
     } else if (selectedStudent && Array.isArray(selectedStudent)) {
@@ -43,7 +45,7 @@ const CalenderComponent = ({ user }) => {
       );
     }
 
-    setMatchingReservations(filteredReservations);
+    // setMatchingReservations(filteredReservations);
     setSelectedDate(formattedDate);
     setDailyEvents(filteredReservations);
     setIsModalOpen(true);
@@ -54,16 +56,16 @@ const CalenderComponent = ({ user }) => {
     setIsModalOpen(false);
     setSelectedDate(null);
     setDailyEvents([]);
-    setMatchingReservations([]);
+    // setMatchingReservations([]);
   };
 
-  // 📌 캘린더의 날짜별 일정 표시
+  // 📌 캘린더에 일정 표시
   const tileContent = ({ date }) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     let filteredReservations = [];
 
-    if (!selectedUser && Array.isArray(events)) {
-      filteredReservations = events.filter((event) =>
+    if (selectedUser === "all" && Array.isArray(matchingReservations)) {
+      filteredReservations = matchingReservations.filter((event) =>
         event.date?.startsWith(formattedDate)
       );
     } else if (selectedStudent && Array.isArray(selectedStudent)) {
@@ -106,10 +108,15 @@ const CalenderComponent = ({ user }) => {
           withCredentials: true,
         });
 
-        console.log(
-          `${currentYear}년 ${currentMonth}월 일정 로드: `,
-          response.data
-        );
+        // console.log(
+        //   `${currentYear}년 ${currentMonth}월 일정 로드: `,
+        //   response.data
+        // );
+        //일정이 없을 경우
+        if(response.data.length === 0) {
+          setMatchingReservations([1, 2, 3]);
+          alert("일정이 없네용")
+        }
         // Context의 updateEvents 함수 사용
         updateEvents(response.data);
       } catch (error) {
@@ -124,9 +131,25 @@ const CalenderComponent = ({ user }) => {
   // 📌 전체 회원 선택 시 전체 일정 불러오기
   useEffect(() => {
     if (selectedStudent === "all" && Array.isArray(events)) {
-      updateEvents(events);
+      setMatchingReservations(events)
     }
   }, [selectedStudent]);
+
+  //불러온 이벤트 매칭예약에 옮기기
+  useEffect(() => {
+    // console.log("컨텍스트 적용")
+    console.log(events);
+    setMatchingReservations(events);
+  }, [events])
+
+  useEffect(() => {
+    console.log(dailyEvents);
+  }, [dailyEvents])
+
+  useEffect(() => {
+    console.log(matchingReservations);
+  }, [matchingReservations])
+
 
   return (
     <>
@@ -146,6 +169,8 @@ const CalenderComponent = ({ user }) => {
           <div />
         )}
 
+        {
+        (matchingReservations && matchingReservations.length >= 0) &&
         <Calendar
           value={date}
           onChange={setDate}
@@ -155,11 +180,13 @@ const CalenderComponent = ({ user }) => {
           showNeighboringMonth={false}
           tileContent={tileContent}
         />
+        }
       </Container>
 
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
+        setSelectedUser={setSelectedUser}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
         user={user}

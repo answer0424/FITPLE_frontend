@@ -58,8 +58,8 @@ const DailyScheduleModal = ({
         {!user ? (
           <div className="text-center">잠시만 기다리세요...</div>
         ) : modalChange ? (
-          filteredEvents.length > 0 ? (
-            filteredEvents.map((event, index) => (
+          dailyEvents.length > 0 ? (
+            dailyEvents.map((event, index) => (
               <DailyItem event={event} key={index} />
             ))
           ) : (
