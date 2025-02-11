@@ -78,7 +78,7 @@ const MyPage = () => {
                 className="flex-column p-3 d-flex justify-content-center align-items-center"
               >
                 <div className="vh-60">
-                  <ProfileComponent user={user} onClick={handleCurrentPage}/>
+                  <ProfileComponent user={user} onClick={handleCurrentPage} />
                 </div>
                 <div className="vh-40">
                   <MypagePathButtenComponent

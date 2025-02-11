@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import "../css/Header.css";
-
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
@@ -13,7 +12,7 @@ const Header = () => {
   return (
     <div>
       <div className="header">
-        <Link to={"/member/detail/write"} className="header-left">
+        <Link to={"/quiz"} className="header-left en-font">
           HBTI
         </Link>
         <Link to={"/"}>
@@ -21,11 +20,11 @@ const Header = () => {
         </Link>
         {/* 로그인 상태에 따라 버튼 변경 */}
         {isLogin ? (
-          <Link to={"/member"} className="header-right">
+          <Link to={"/member"} className="header-right en-font">
             MYPAGE
           </Link>
         ) : (
-          <Link to={"/login"} className="header-right">
+          <Link to={"/login"} className="header-right en-font">
             LOGIN
           </Link>
         )}
