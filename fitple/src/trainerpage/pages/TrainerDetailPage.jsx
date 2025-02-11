@@ -266,30 +266,30 @@ const validateAndRefreshToken = async () => {
                                 />
                             </div>
                             <div className="info-section">
-                                <h1 className="trainer-name">{trainer.trainerName}</h1>
+                                <h1 className="trainer-name kr-font">{trainer.trainerName}</h1>
                                 {renderStars(averageRating)}
-                                <p className="rating-text">{averageRating}점</p>
+                                <p className="rating-text kr-font">{averageRating}점</p>
                                 <div className="extra-info">
                                     <div className="info-box">
-                                        <p><strong>연차:</strong> {calculateYears(trainer.career)}</p>
+                                        <p className="kr-font"><strong className="kr-font">연차:</strong> {calculateYears(trainer.career)}</p>
                                     </div>
                                     <div className="info-box">
-                                        <p><strong>HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
+                                        <p className="kr-font"><strong className="kr-font">HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="details-section">
                                 <div className="detail-box">
-                                    <p><strong>1회 PT 가격:</strong></p>
-                                    <p>{trainer.perPrice.toLocaleString()}원</p>
+                                    <p><strong className="kr-font">1회 PT 가격:</strong></p>
+                                    <p className="kr-font">{trainer.perPrice.toLocaleString()}원</p>
                                 </div>
                                 <div className="detail-box">
-                                    <p><strong>헬스장:</strong></p>
-                                    <p>{trainer.gymName || "정보 없음"}</p>
+                                    <p><strong className="kr-font">헬스장:</strong></p>
+                                    <p className="kr-font">{trainer.gymName || "정보 없음"}</p>
                                 </div>
                                 <div className="detail-box">
                                     <button
-                                        className="btn btn-primary chat-button"
+                                        className="btn btn-primary chat-button kr-font"
                                         onClick={handleChatClick} // 채팅 클릭 시 채팅방 생성 함수 호출
                                     >
                                         <FaCommentDots style={{ marginRight: "10px" }} /> 채팅문의
@@ -307,21 +307,21 @@ const validateAndRefreshToken = async () => {
                             </button>
                         )}
                         
-                        <div className="trainer-tabs">
+                        <div className="trainer-tabs ">
                             <button
-                                className={`tab-button ${activeTab === "home" ? "active" : ""}`}
+                                className={`tab-button kr-font ${activeTab === "home" ? "active" : ""}`}
                                 onClick={() => setActiveTab("home")}
                             >
                                 홈
                             </button>
                             <button
-                                className={`tab-button ${activeTab === "career" ? "active" : ""}`}
+                                className={`tab-button kr-font ${activeTab === "career" ? "active" : ""}` }
                                 onClick={() => setActiveTab("career")}
                             >
                                 경력
                             </button>
                             <button
-                                className={`tab-button ${activeTab === "review" ? "active" : ""}`}
+                                className={`tab-button kr-font ${activeTab === "review" ? "active" : ""}`}
                                 onClick={() => setActiveTab("review")}
                             >
                                 리뷰 ({filteredReviews.length})

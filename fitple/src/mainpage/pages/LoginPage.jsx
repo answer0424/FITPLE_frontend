@@ -11,21 +11,19 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberUserId, setRememberUserId] = useState();
 
-  const { login, loginCheck} = useContext(LoginContext);
+  const { login, loginCheck } = useContext(LoginContext);
 
   const onLogin = async (e) => {
     e.preventDefault();
 
-
     const success = await login(username, password);
     if (success) {
-        navigate('/');  // 로그인 성공 시 메인 페이지로 이동
+      navigate("/"); // 로그인 성공 시 메인 페이지로 이동
     }
   };
 
-
   useEffect(() => {
-    console.log('LoginContextProvider 마운트 됨')
+    console.log("LoginContextProvider 마운트 됨");
 
     // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get("rememberId");
@@ -33,30 +31,30 @@ const LoginPage = () => {
     setRememberUserId(rememberId);
   }, []);
 
-
   const handleClick = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
+    navigate("/forgot-password");
   };
-
 
   // oauth
   const onKakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/kakao`;
-    console.log('kakao oauth 로그인');
-    
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/kakao`;
+    console.log("kakao oauth 로그인");
   };
-  
+
   const onGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/google`;
-    console.log('google oauth 로그인');
-    
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/google`;
+    console.log("google oauth 로그인");
   };
-  
+
   const onNaverLogin = () => {
-    window.location.href = `${import.meta.env.VITE_Server}/oauth2/authorization/naver`;
-    console.log('naver oauth 로그인');
-    
+    window.location.href = `${
+      import.meta.env.VITE_Server
+    }/oauth2/authorization/naver`;
+    console.log("naver oauth 로그인");
   };
 
   return (
@@ -83,7 +81,9 @@ const LoginPage = () => {
               className="pw-input"
             />
             <div className="button-container">
-              <button type="submit" className="login-button en-font">Login</button>
+              <button type="submit" className="login-button en-font">
+                Login
+              </button>
             </div>
           </form>
           <div className="forgot-password-link">
