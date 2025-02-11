@@ -14,9 +14,10 @@ export const EventProvider = ({ children }) => {
         console.log(newEvent);
         if(events.length > 0) {
             console.log("여기가 도나?");
-            setEvents((prevEvents) => [...prevEvents, newEvent]);}
-        else {
-            setEvents(newEvent)};
+            setEvents(newEvent)
+        } else {
+            setEvents((prevEvents) => [...prevEvents, newEvent]);
+        };
     };
 
     return (

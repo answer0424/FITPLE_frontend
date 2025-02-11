@@ -70,16 +70,14 @@ const CalenderComponent = ({ user }) => {
       matchingReservations = selectedStudent.filter((event) =>
         event.date?.startsWith(formattedDate)
       );
-    } else {
-      matchingReservations = [];
-    }
+    } 
 
     return (
       <div className="event-info">
         {matchingReservations.length > 0 &&
           matchingReservations.map((event) => (
             <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
+              <span>{event.nickname}</span><br/>
               <span>{event.date.slice(11, 16)}</span>
             </div>
           ))}
@@ -89,6 +87,7 @@ const CalenderComponent = ({ user }) => {
 
   // 📌 월 변경 감지 (월이 변경될 때마다 currentYear, currentMonth 업데이트)
   const handleActiveStartDateChange = ({ activeStartDate }) => {
+    
     setCurrentYear(activeStartDate.getFullYear());
     setCurrentMonth(activeStartDate.getMonth() + 1);
   };
@@ -104,7 +103,7 @@ const CalenderComponent = ({ user }) => {
       .get(`/member/${user.id}/calendar`, {
         params: {
           year: currentYear,
-          month: currentMonth,
+          month: currentMonth -1 ,
         },
         withCredentials: true,
         headers: {
@@ -122,6 +121,10 @@ const CalenderComponent = ({ user }) => {
         console.error("일정 불러오기 실패:", error);
       });
   }, [currentYear, currentMonth]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
+
+  useEffect(() => {
+    console.log("업데이트된 이벤트:", events);
+  }, [events]);
 
   return (
     <>
