@@ -68,27 +68,6 @@ const TrainerStudentsDropdown = ({
   const handleMemberSelect = async (selectedId) => {
     setSelectedStudentId(selectedId);
     if (selectedId === "all") {
-      console.log("🔄 전체 회원 일정 로드 중...");
-      setSelectedUser(null);
-      setSelectedStudent([]);
-      try {
-        const response = await axios.get(
-          `http://localhost:8081/member/${trainerId}/calendar`,
-          {
-            params: { year, month },
-            withCredentials: true,
-            headers: { Authorization: `Bearer ${getAccessToken()}` },
-          }
-        );
-        updateEvents(response.data);
-        console.log(
-          "########트레이너의 이달일정 dropdowncopo : ",
-          response.data
-        );
-      } catch (error) {
-        console.error("❌ 전체 회원 일정 조회 실패:", error);
-      }
-      return;
     }
     try {
       const student = studentList.find(

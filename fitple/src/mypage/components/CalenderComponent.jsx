@@ -5,7 +5,7 @@ import moment from "moment";
 import "../static/css/CalenderStyle.css";
 import { Container } from "react-bootstrap";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
-import { useEventContext } from "../context/EventContext";
+import { EventProvider, useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 import "../static/css/ModalReset.css";
@@ -18,7 +18,7 @@ const CalenderComponent = ({ user }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [dailyEvents, setDailyEvents] = useState([]);
-  const { events, updateEvents } = useEventContext();
+  const { events, updateEvents }= useContext(EventProvider);
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
@@ -30,13 +30,10 @@ const CalenderComponent = ({ user }) => {
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
 
-    let matchingReservations = events?.filter((event) =>
-      event.date?.startsWith(formattedDate)
-    );
-
+    setMatchingReservations();
     console.log("선택한 날짜의 일정:", matchingReservations);
+    setDailyEvents(events?.filter((event) =>event.date?.startsWith(formattedDate)));
     setSelectedDate(formattedDate);
-    setDailyEvents(matchingReservations);
     setIsModalOpen(true);
   };
 
@@ -139,7 +136,6 @@ const CalenderComponent = ({ user }) => {
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
         user={user}
-        tileContent={tileContent}
         selectedUser={selectedUser}
       />
     </>
