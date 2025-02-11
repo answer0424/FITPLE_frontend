@@ -296,7 +296,7 @@ const LoginContextProvider = ({ children }) => {
     
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         setIsLogin(true);
-        setUserInfo({ id, username: finalUsername, authority : userAuthority });
+        setUserInfo({ id, username: finalUsername, authority : authority }); //= > userAuthority
     
         // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
         const storedAnswers = localStorage.getItem("hbtiAnswers");
