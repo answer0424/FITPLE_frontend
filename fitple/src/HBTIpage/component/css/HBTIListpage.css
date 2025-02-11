@@ -97,7 +97,7 @@ body {
 
 
 
-.card {
+.card1 {
   background: none !important;
   background-color: transparent !important;
   border: none;
@@ -107,7 +107,7 @@ body {
 }
 
 
-.card:hover {
+.card1:hover {
   transform: translateY(-10px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }

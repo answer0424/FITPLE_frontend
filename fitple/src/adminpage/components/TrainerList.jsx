@@ -91,10 +91,10 @@ const StudentListModal = ({ trainer, students, onClose }) => {
 
 const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">포트폴리오 승인 상태</h2>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-body">
+          <h2 className="modal-header">포트폴리오 승인 상태</h2>
           <button 
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -103,14 +103,14 @@ const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
           </button>
         </div>
         
-        <div className="mb-6">
-          <p className="text-gray-700 mb-2">현재 상태:</p>
-          <p className="font-bold text-lg">
+        <div className="modal-body">
+          <p className="modal-body">현재 상태:</p>
+          <p className="modal-body">
             {currentStatus}
           </p>
         </div>
 
-        <div className="flex gap-4 justify-center">
+        <div className="modal-body">
           <button
             onClick={() => onStatusUpdate('승인')}
             className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium"
@@ -214,15 +214,13 @@ const TrainerList = () => {
   }
 
   return (
-    <div className="admin-panel">
-      <div>
-        <h2 className="panel-title">트레이너 관리</h2>
-      </div>
-      <div className="admin-table-container">
-        <table className="admin-table">
-          <thead className="admin-table-header">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title en-font">Trainer List</h5>
+        <table className="table table-dark">
+          <thead>
             <tr>
-              <th className="admin-table-th">ID</th>
+              <th className="admin-table-th">#</th>
               <th className="admin-table-th">아이디</th>
               <th className="admin-table-th">이메일</th>
               <th className="admin-table-th">닉네임</th>
@@ -241,7 +239,7 @@ const TrainerList = () => {
                 <td className="admin-table-td">{trainer.nickname}</td>
                 <td className="admin-table-td">
                   <button
-                    className="view-button"
+                    className="btn btn-primary btn-sm"
                     onClick={() => handleViewStudents(trainer)}
                   >
                     회원 목록
@@ -249,7 +247,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="view-button"
+                    className="btn btn-primary btn-sm"
                     onClick={() => handleViewDetail(trainer.id)}
                   >
                     상세보기
@@ -257,7 +255,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="view-button"
+                    className="btn btn-primary btn-sm"
                     onClick={() => handleStatusClick(trainer.id)}
                   >
                     승인상태 확인
@@ -265,7 +263,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="delete-button"
+                    className="btn btn-danger btn-sm d-flex align-items-center"
                     onClick={() => handleDeleteTrainer(trainer.id)}
                   >
                     <UserX className="h-4 w-4 mr-1" />
@@ -308,24 +306,23 @@ const TrainerList = () => {
         />
       )}
 
-      <div className="pagination-container">
-        <button
-          className="pagination-button"
-          onClick={() => setPage(p => Math.max(0, p - 1))}
-          disabled={page === 0}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <span className="pagination-text">
-          Page {page + 1} of {trainers.totalPages}
-        </span>
-        <button
-          className="pagination-button"
-          onClick={() => setPage(p => p + 1)}
-          disabled={page >= trainers.totalPages - 1}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
+      {/* Pagination */}
+      <div className="d-flex justify-content-between">
+          <button 
+              className="btn btn-secondary col-3" 
+              onClick={() => setPage(prev => Math.max(0, prev - 1))}
+              disabled={page === 0}
+          >
+              Previous
+          </button>
+          <span> {page + 1} / {trainers.totalPages}</span>
+          <button 
+              className="btn btn-secondary col-3" 
+              onClick={() => setPage(prev => prev + 1)}
+              disabled={page >= trainers.totalPages - 1}
+          >
+              Next
+          </button>
       </div>
     </div>
   );

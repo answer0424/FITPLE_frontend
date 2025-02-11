@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { UserX, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { UserX } from 'lucide-react';
 import adminApi from '../apis/admin';
-import '../pages/admin.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/UserList.css';
 
-const UserList = () => {
+
+const UserTable = () => {
     const [users, setUsers] = useState({ content: [], totalPages: 0 });
     const [page, setPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,122 +37,142 @@ const UserList = () => {
         }
     };
 
-    const TrainerModal = ({ isOpen, onClose, trainers }) => {
-        if (!isOpen) return null;
+    const handleDeleteUser = async (userId) => {
+        if (!window.confirm('정말로 삭제하시겠습니까?')) return;
 
-        return (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-6 w-full max-w-3xl">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-bold">트레이너 목록</h3>
-                        <button 
-                            onClick={onClose}
-                            className="text-gray-500 hover:text-gray-700"
-                        >
-                            <X className="h-6 w-6" />
-                        </button>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-4 py-2 text-left">트레이너 ID</th>
-                                    <th className="px-4 py-2 text-left">아이디</th>
-                                    <th className="px-4 py-2 text-left">이메일</th>
-                                    <th className="px-4 py-2 text-left">남은 횟수</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {trainers.map((trainer) => (
-                                    <tr key={trainer.trainerId} className="border-b">
-                                        <td className="px-4 py-2">{trainer.trainerId}</td>
-                                        <td className="px-4 py-2">{trainer.name}</td>
-                                        <td className="px-4 py-2">{trainer.email}</td>
-                                        <td className="px-4 py-2">{trainer.remainingSessions}회</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        );
+        try {
+            await adminApi.deleteUser(userId);
+            fetchUsers(); // 삭제 후 목록 갱신
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+        }
     };
 
     return (
-        <div className="admin-panel">
-            <div>
-                <h2 className="panel-title">User Management</h2>
-            </div>
-            <div className="admin-table-container">
-                <table className="admin-table">
-                    <thead className="admin-table-header">
-                        <tr>
-                            <th className="admin-table-th">ID</th>
-                            <th className="admin-table-th">아이디</th>
-                            <th className="admin-table-th">이메일</th>
-                            <th className="admin-table-th">생일</th>
-                            <th className="admin-table-th">닉네임</th>
-                            <th className="admin-table-th">트레이너 목록</th>
-                            <th className="admin-table-th">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody className="admin-table-body">
-                        {users.content.map((user) => (
-                            <tr key={user.id}>
-                                <td className="admin-table-td">{user.id}</td>
-                                <td className="admin-table-td">{user.username}</td>
-                                <td className="admin-table-td">{user.email}</td>
-                                <td className="admin-table-td">{user.birth}</td>
-                                <td className="admin-table-td">{user.nickname}</td>
-                                <td className="admin-table-td">
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-                                        onClick={() => handleViewTrainers(user.id)}
-                                    >
-                                        상세보기
-                                    </button>
-                                </td>
-                                <td className="admin-table-td">
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => handleDeleteUser(user.id)}
-                                    >
-                                        <UserX className="h-4 w-4 mr-1" />
-                                        삭제하기
-                                    </button>
-                                </td>
+        <div className="card">
+            <div className="card-body">
+                <h5 className="card-title en-font">User List</h5>
+
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <table className="table table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">아이디</th>
+                                <th scope="col">이메일</th>
+                                <th scope="col">생일</th>
+                                <th scope="col">닉네임</th>
+                                <th scope="col">트레이너 목록</th>
+                                <th scope="col">관리</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {users.content.length > 0 ? (
+                                users.content.map((user, index) => (
+                                    <tr key={user.id}>
+                                        <th scope="row">{index + 1 + page * 10}</th>
+                                        <td>{user.username}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.birth}</td>
+                                        <td>{user.nickname}</td>
+                                        <td>
+                                            <button
+                                                className="btn btn-primary btn-sm"
+                                                onClick={() => handleViewTrainers(user.id)}
+                                            >
+                                                상세보기
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="btn btn-danger btn-sm d-flex align-items-center"
+                                                onClick={() => handleDeleteUser(user.id)}
+                                            >
+                                                <UserX className="h-4 w-4 me-1" />
+                                                삭제하기
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className="text-center">
+                                        No users found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
+
+                {/* Pagination */}
+                <div className="d-flex justify-content-between">
+                    <button 
+                        className="btn btn-secondary col-3" 
+                        onClick={() => setPage(prev => Math.max(0, prev - 1))}
+                        disabled={page === 0}
+                    >
+                        Previous
+                    </button>
+                    <span> {page + 1} / {users.totalPages}</span>
+                    <button 
+                        className="btn btn-secondary col-3" 
+                        onClick={() => setPage(prev => prev + 1)}
+                        disabled={page >= users.totalPages - 1}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
-            <TrainerModal 
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                trainers={selectedTrainers}
-            />
-            <div className="pagination-container">
-                <button
-                    className="pagination-button"
-                    onClick={() => setPage(p => Math.max(0, p - 1))}
-                    disabled={page === 0}
-                >
-                    <ChevronLeft className="h-4 w-4" />
-                </button>
-                <span className="pagination-text">
-                    Page {page + 1} of {users.totalPages}
-                </span>
-                <button
-                    className="pagination-button"
-                    onClick={() => setPage(p => p + 1)}
-                    disabled={page >= users.totalPages - 1}
-                >
-                    <ChevronRight className="h-4 w-4" />
-                </button>
-            </div>
+
+            {/* 트레이너 목록 모달 */}
+            <div className={`modal fade ${isModalOpen ? 'show' : ''}`} id="trainerModal" tabIndex="-1" style={{ display: isModalOpen ? 'block' : 'none' }}>
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                    <div className="modal-header col-12">
+                        <h5 className="modal-title">트레이너 목록</h5>
+                        <button type="button" className="btn-close col-2" data-bs-dismiss="modal" aria-label="Close" onClick={() => setIsModalOpen(false)}></button>
+                    </div>
+                    <div className="modal-body bg-color">
+                        <table className="table">
+                        <thead>
+                            <tr>
+                            <th>트레이너 ID</th>
+                            <th>아이디</th>
+                            <th>이메일</th>
+                            <th>남은 횟수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {selectedTrainers.length > 0 ? (
+                            selectedTrainers.map((trainer) => (
+                                <tr key={trainer.trainerId}>
+                                <td>{trainer.trainerId}</td>
+                                <td>{trainer.name}</td>
+                                <td>{trainer.email}</td>
+                                <td>{trainer.remainingSessions}회</td>
+                                </tr>
+                            ))
+                            ) : (
+                            <tr>
+                                <td colSpan="4" className="text-center">트레이너 없음</td>
+                            </tr>
+                            )}
+                        </tbody>
+                        </table>
+                    </div>
+                    <div className="modal-footer col-12">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => setIsModalOpen(false)}>
+                        닫기
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                </div>
         </div>
     );
 };
 
-export default UserList;
+export default UserTable;
