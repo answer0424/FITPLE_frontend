@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import HBTIResultDisplay from '../components/quiz_common/HbtiResultDisplay';
 import PanelNavigation from '../components/ui/PanelNavigation';
 import './QuizResult.css';
 import Header from '../../common/component/Header';
+
+
 
 // Progress Bar Component
 const ProgressBar = ({ progress }) => (
@@ -171,7 +173,8 @@ const QuizResult = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const TOTAL_PANELS = 3;
-
+ 
+ 
   // Check authentication
   useEffect(() => {
     const token = Cookies.get('accessToken');
@@ -185,9 +188,11 @@ const QuizResult = () => {
     const fetchDetailedResults = async () => {
       try {
         const token = Cookies.get('accessToken');
+        console.log("🔑 Access Token:", token);  // 토큰이 정상적으로 존재하는지 확인
         if (!token) {
           throw new Error('Authentication required. Please log in.');
         }
+        console.log("✅ Fetching HBTI results for user:", userId);
 
         const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/${userId}/result`, {
           headers: {
@@ -207,6 +212,7 @@ const QuizResult = () => {
         
         const data = await response.json();
         setResultData(data);
+    
       } catch (err) {
         console.error('Error fetching results:', err);
         setError(err.message);

@@ -134,6 +134,7 @@ const LoginContextProvider = ({children}) => {
         // 2. accessToken이 있다면
         console.log('쿠키에 accessToken이 있습니다.');
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      
 
         try {
             response = await auth.userInfo();
@@ -221,59 +222,76 @@ const LoginContextProvider = ({children}) => {
         };
     }
 
-    const loginSetting = (userData, accessToken, username, provider, providerId) => {
+    const loginSetting = async (userData, accessToken, username, provider, providerId) => {
         console.log("📌 loginSetting() params:", username, provider, providerId);
         console.log("📝 userData:", userData);
-
+    
         if (!userData) {
             console.error("🚨 userData가 비어있음!");
             return;
         }
-
-        // OAuth 로그인 시 username이 없을 수도 있으므로 provider 기반으로 찾기
-        if (!username && userData.provider === provider && userData.providerId === providerId) {
-            username = userData.username;
-        }
-
-        const normalizedUsername = userData.username;
-
-        console.log("✅ 최종 username:", normalizedUsername);
-
-        const normalizedUserDataUsername = userData.username ? userData.username.trim().toUpperCase() : null;
-
-        if (normalizedUsername !== normalizedUserDataUsername) {
-            console.error('❌ 로그인한 사용자 정보를 찾을 수 없습니다.');
-            return;
-        }
-
+    
         const { id, username: finalUsername, authority } = userData;
-
+    
         console.log(`✅ 로그인 성공!
             ID: ${id}
             Username: ${finalUsername}
             Authority: ${authority}
         `);
-
+    
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         setIsLogin(true);
-        setUserInfo({ id, username: finalUsername, authority, hbti: userData.hbti });
-
-        const updatedAuthority = authority ? {
-            isStudent: authority.includes('ROLE_STUDENT'),
-            isTrainer: authority.includes('ROLE_TRAINER'),
-            isAdmin: authority.includes('ROLE_ADMIN'),
-        } : {
-            isStudent: false,
-            isTrainer: false,
-            isAdmin: false,
-        };
-        setAuthority(updatedAuthority);
-
+        setUserInfo({ id, username: finalUsername, authority });
+    
+        // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
+        const storedAnswers = localStorage.getItem("hbtiAnswers");
+        console.log("hbtiAnswers",storedAnswers);
+    
+        if (storedAnswers) {
+            console.log("📢 저장된 HBTI 데이터가 있습니다. 서버에 저장 중...");
+        
+            const parsedAnswers = JSON.parse(storedAnswers); // 객체 형태로 저장된 JSON 파싱
+            const answerArray = Object.values(parsedAnswers); // 🔥 배열로 변환
+        
+            const requestBody = JSON.stringify({
+                userId: id,
+                answers: answerArray // ✅ 객체 → 배열 변환 후 전송
+            });
+        
+            console.log("📝 변환된 데이터:", requestBody);  // 🔥 변환된 데이터 확인
+        
+            try {
+                const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`
+                    },
+                    body: requestBody
+                });
+        
+                if (response.ok) {
+                    console.log("✅ HBTI 데이터가 성공적으로 저장되었습니다.");
+                    localStorage.removeItem("hbtiAnswers"); // 🟢 저장 성공 시 로컬스토리지에서 삭제
+                    navigate(`/quiz/${id}/result`, { state: { fromLogin: true } });
+                    return;
+                } else {
+                    console.error("❌ HBTI 데이터 저장 실패:", await response.text()); // 🔥 서버 응답 확인
+                }
+            } catch (error) {
+                console.error("❌ 서버에 HBTI 데이터 저장 중 오류 발생:", error);
+            }
+        
+        } else {
+            console.log("⚠ 저장된 HBTI 데이터가 없습니다.");
+        }
+    
+        // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
         navigate('/');
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("userInfo", JSON.stringify({ id, username: finalUsername, authority }));
-        localStorage.setItem("authority", JSON.stringify(updatedAuthority));
     };
+    
 
     // 로그아웃 세팅
     const logoutSetting = () => {
