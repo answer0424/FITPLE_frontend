@@ -13,7 +13,7 @@ export const EventProvider = ({ children }) => {
     console.log("업데이트 시 받는 값");
     console.log(newEvent);
     if (events.length > 0) {
-      console.log("여기가 도나?");
+      //   console.log("여기가 도나?");
       setEvents(newEvent);
     } else {
       setEvents((prevEvents) => [...prevEvents, newEvent]);

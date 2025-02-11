@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <div>
       <div className="header">
-        <Link to={"/quiz"} className="header-left">
+        <Link to={"/member/detail/write"} className="header-left">
           HBTI
         </Link>
         <Link to={"/"}>
