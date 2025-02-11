@@ -116,17 +116,20 @@ const ProfilEditComponent = () => {
         formData.append("profileImage", selectedImage);
 
         // console.log("오긴해?");
-        // for (let [key, value] of formData.entries()) {
-        //     console.log(`${key}: ${value}`);
-        // }
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
 
-        api.post('/member/profile-img', formData, {
-            withCredentials: true,
-            headers: {
+        api.patch('/member/profileimg',
+            formData,
+            {
+              withCredentials: true,
+              headers: {
                 "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${accessToken}`,
-            },
-        })
+                },
+            }
+        )
         .then((response) => {
             console.log(response.status);
         })
