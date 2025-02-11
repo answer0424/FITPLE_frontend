@@ -63,10 +63,6 @@ const LoginPage = () => {
     console.log("naver oauth 로그인");
   };
 
-  const gotoForgotPassword = () => {
-    navigate('/forgot-password');
-  };
-
   return (
     <div className="App">
       <Header />
