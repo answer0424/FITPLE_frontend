@@ -30,8 +30,6 @@ const CalenderComponent = ({ user }) => {
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
 
-    const source = selectedStudent.length ? selectedStudent : events;
-
     let matchingReservations;
 
     if (events && !selectedUser) {
@@ -167,6 +165,7 @@ const CalenderComponent = ({ user }) => {
         closeModal={closeModal}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
+        setDailyEvents={setDailyEvents}
         user={user}
         tileContent={tileContent}
         selectedUser={selectedUser}
