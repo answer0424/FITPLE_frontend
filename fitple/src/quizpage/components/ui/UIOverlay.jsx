@@ -19,7 +19,7 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         <h1 className="start-Text">➡ START</h1>
                     </button>
                 )}
-                
+
                 {gameState === 'playing' && currentPlatform < totalPlatforms - 1 && (
                     <button 
                         className="button-base next-button"
@@ -47,7 +47,7 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         </svg>
                     </button>
                 )}
-                
+
                 {gameState === 'playing' && currentPlatform > 0 && (
                     <button 
                         className="button-base prev-button"
@@ -75,7 +75,22 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         </svg>
                     </button>
                 )}
-                
+
+                {/* 홈으로 가기 버튼 중앙 하단에 위치 */}
+                <button
+                    className="button-base home-button"
+                    style={{
+                        position: 'absolute',
+                        left: '50%',
+                        bottom: '40px',  // 하단에 배치
+                        transform: 'translateX(-50%)',  // 수평 중앙 정렬
+                        fontSize: '20px',
+                    }}
+                    onClick={() => window.location.href = '/'}  // 홈으로 가기
+                >
+                    HOME
+                </button>
+
                 {gameState === 'playing' && currentPlatform === totalPlatforms - 1 && (
                     <button 
                         className="button-base result-button"

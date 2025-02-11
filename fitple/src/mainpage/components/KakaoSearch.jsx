@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import '../assets/styles/KakaoSearch.css';
 
-const KakaoSearch = ({ onPlaceSelect, initialAddress  }) => {
-  if(!initialAddress) initialAddress = ""
-  const [keyword, setKeyword] = useState(initialAddress);
+const KakaoSearch = ({ onPlaceSelect }) => {
+  const [keyword, setKeyword] = useState("");
   const [places, setPlaces] = useState([]);
   const [displayedPlaces, setDisplayedPlaces] = useState([]);
   const [page, setPage] = useState(1); // 페이지 상태 관리
@@ -112,9 +112,10 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress  }) => {
   };
 
   return (
-    <div>
+    <div className="kakao-search-container">
       <input
         type="text"
+        className="kakao-search-input"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         onKeyPress={(e) => {
@@ -124,37 +125,16 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress  }) => {
         }}
         placeholder="검색어를 입력하세요"
       />
-      <button onClick={searchPlaces}>검색</button>
-
-      <div
-        style={{
-          maxHeight: "300px",
-          overflowY: "auto",
-          backgroundColor: "#fff",
-          borderRadius: "8px",
-          border: "1px solid #ddd",
-          marginTop: "10px",
-          padding: "10px",
-          color: "black",
-        }}
-      >
+      <button onClick={searchPlaces} className="kakao-search-button">검색</button>
+  
+      <div className="kakao-search-results">
         <h3>검색 결과</h3>
         {displayedPlaces.length === 0 ? (
           <p>검색 결과가 없습니다.</p>
         ) : (
-          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+          <ul>
             {displayedPlaces.map((place, index) => (
-              <li
-                key={index}
-                onClick={() => handlePlaceClick(place)}
-                style={{
-                  padding: "10px",
-                  cursor: "pointer",
-                  transition: "background-color 0.2s",
-                  borderBottom: "1px solid #eee",
-                  color: "black",
-                }}
-              >
+              <li key={index} onClick={() => handlePlaceClick(place)}>
                 <div>{place.name}</div>
                 <div>{place.address}</div>
                 {place.phone && <div>{place.phone}</div>}
@@ -163,24 +143,11 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress  }) => {
           </ul>
         )}
         {places.length > displayedPlaces.length && (
-          <button
-            onClick={loadMorePlaces}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#A1D0FC",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              marginTop: "10px",
-              fontSize: "14px",
-            }}
-          >
-            더보기
-          </button>
+          <button onClick={loadMorePlaces} className="kakao-load-more">더보기</button>
         )}
       </div>
     </div>
   );
-};
+}  
 
 export default KakaoSearch;

@@ -1,109 +1,41 @@
-/* 📌 전체 달력 스타일 */
-.react-calendar {
-  background: transparent !important;
-  border: none !important;
-  color: #fff;
-  /* background-color: #dadada93 !important; */
-  font-family: "Pretendard", sans-serif;
-  width: 900px;
-  /* max-width: 900px; ✅ 직사각형 크기 조정 */
-  height: 600px; /* ✅ 높이 설정 */
-  margin: auto;
-  margin-left: 170px;
-}
-
-/* 📌 전체 달력 스타일 */
-.react-calendar > * {
-  width: 900px;
-}
-
-/* 📌 달력 헤더 (연도 버튼 숨기기) */
-.react-calendar__navigation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.react-calendar__navigation button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* 📌 "연도 변경" 버튼 숨기기 */
-.react-calendar__navigation button:nth-child(1),  /* 이전 연도 */
-.react-calendar__navigation button:nth-child(5) {
-  /* 다음 연도 */
-  display: none;
-}
-
-/* 📌 날짜 스타일 */
-.react-calendar__tile {
-  background: none;
-  border-radius: 8px;
-  padding: 15px;
-  text-align: left; /* ✅ 날짜 왼쪽 정렬 */
-  position: relative; /* 위치 조정 */
-  color: #ddd;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background 0.3s ease-in-out;
-}
-
-/* 📌 날짜 숫자 위치 이동 */
-.react-calendar__tile abbr {
-  position: absolute;
-  top: 5px;
-  left: 5px; /* ✅ 왼쪽 상단 정렬 */
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-}
-
-/* 📌 이벤트 아이콘 */
-.event-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 5px 8px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-top: 8px; /* ✅ 일정 간격 조정 */
-  color: #fff;
-  white-space: nowrap;
-}
-
-/* 📌 이벤트 최대 3개 표시 */
-.react-calendar__tile div.event-item:nth-child(n + 4) {
-  display: none;
-}
-.react-calendar__month-view__days {
-  height: 100px;
-}
-.react-calendar__tile {
-  height: 130px;
-}
-
-/* 📌 이벤트 색상 */
-.event-item:nth-child(1) {
-  background-color: #6a5acd;
-} /* 퍼플 */
-.event-item:nth-child(2) {
-  background-color: #ffcc00;
-} /* 옐로우 */
-.event-item:nth-child(3) {
-  background-color: #1eb980;
-} /* 그린 */
-.event-item:nth-child(4) {
-  background-color: #ff3b30;
-} /* 레드 */
-/* 
-.event-info {
-  color: red;
-} */
+.calendar-wrapper {
+    background: linear-gradient(180deg, #0c0c0c 50%, #192536 100%);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+    position: relative;
+    padding-bottom: 20px;
+  }
+  
+  /* 모달 오버레이 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* 일정 스타일 */
+  .event-item {
+    background-color: #f0f8ff;
+    display: block;
+    padding: 2px 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: black;
+  }
+  
+  .event-item.completed {
+    text-decoration: line-through;
+  }
+  

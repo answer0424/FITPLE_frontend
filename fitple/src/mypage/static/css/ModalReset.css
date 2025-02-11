@@ -1,7 +1,0 @@
-/* .modal-content {
-  background-color: transparent !important;
-} */
-
-.modal-content > * {
-  background-color: white !important;
-}
