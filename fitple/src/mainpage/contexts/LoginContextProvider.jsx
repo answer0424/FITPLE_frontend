@@ -232,17 +232,27 @@ const LoginContextProvider = ({children}) => {
             return;
         }
     
-        const { id, username: finalUsername, authority } = userData;
+        const { id, username: finalUsername, authority: userAuthority } = userData;
     
+        const newAuthority = {
+            isStudent: userAuthority === "ROLE_STUDENT",
+            isTrainer: userAuthority === "ROLE_TRAINER",
+            isAdmin: userAuthority === "ROLE_ADMIN"
+        };
+
+        setAuthority(newAuthority);
+        localStorage.setItem('authority', JSON.stringify(newAuthority));
+        
         console.log(`✅ 로그인 성공!
             ID: ${id}
             Username: ${finalUsername}
             Authority: ${authority}
         `);
     
+    
         api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         setIsLogin(true);
-        setUserInfo({ id, username: finalUsername, authority });
+        setUserInfo({ id, username: finalUsername, authority : userAuthority });
     
         // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
         const storedAnswers = localStorage.getItem("hbtiAnswers");
