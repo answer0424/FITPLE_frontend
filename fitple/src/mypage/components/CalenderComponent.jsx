@@ -28,10 +28,10 @@ const CalenderComponent = ({ user }) => {
   // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
-    
+
     let matchingReservations;
 
-    if (events && !selectedUser) {
+    if (!selectedUser) {
       matchingReservations = events?.filter((event) =>
         event.date?.startsWith(formattedDate)
       );
@@ -62,7 +62,7 @@ const CalenderComponent = ({ user }) => {
 
     let matchingReservations;
 
-    if (!selectedUser && events && Array.isArray(events)) {
+    if (!selectedUser) {
       matchingReservations = events?.filter((event) =>
         event.date?.startsWith(formattedDate)
       );
@@ -70,8 +70,6 @@ const CalenderComponent = ({ user }) => {
       matchingReservations = selectedStudent.filter((event) =>
         event.date?.startsWith(formattedDate)
       );
-    } else {
-      matchingReservations = [];
     }
 
     return (
@@ -80,6 +78,7 @@ const CalenderComponent = ({ user }) => {
           matchingReservations.map((event) => (
             <div key={event.reservationId} className="reservation-item">
               <span>{event.nickname}</span>
+              <br />
               <span>{event.date.slice(11, 16)}</span>
             </div>
           ))}
@@ -123,6 +122,10 @@ const CalenderComponent = ({ user }) => {
       });
   }, [currentYear, currentMonth, date]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
 
+  useEffect(() => {
+    console.log("업데이트된 이벤트:", events);
+  }, [events]);
+
   return (
     <>
       <Container>
@@ -159,7 +162,6 @@ const CalenderComponent = ({ user }) => {
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
         user={user}
-        tileContent={tileContent}
         selectedUser={selectedUser}
       />
     </>
