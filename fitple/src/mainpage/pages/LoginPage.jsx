@@ -32,8 +32,7 @@ const LoginPage = () => {
   }, []);
 
   const handleClick = () => {
-    alert("Login submitted successfully!");
-    console.log("User Data:", { email: username, password });
+    navigate("/forgot-password");
   };
 
   // oauth
