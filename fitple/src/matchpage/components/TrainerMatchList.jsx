@@ -93,14 +93,14 @@ const TrainerMatchList = ({ userId }) => {
               alt={trainer.trainerName}
             />
             <div className="trainer-info-overlay">
-              <h5>{trainer.trainerName}</h5>
-              <p>
+              <h5 className="kr-font">{trainer.trainerName}</h5>
+              <p className="kr-font">
                 <strong>HBTI:</strong> {trainer.hbti}
               </p>
-              <p>
+              <p className="kr-font">
                 <strong>헬스장:</strong> {trainer.gymName}
               </p>
-              <button onClick={() => navigate(`/trainer/${trainer.trainerId}/detail`)}>
+              <button className="kr-font" onClick={() => navigate(`/trainer/${trainer.trainerId}/detail`)}>
                 상세보기
               </button>
             </div>

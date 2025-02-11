@@ -12,8 +12,6 @@ body {
   text-align: center;
   color: #87cefa;
   font-size: 7rem;
-  font-weight: bold;
-  font-family: "Arial", sans-serif;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
@@ -23,8 +21,7 @@ body {
   text-align: center;
   color: #87cefa;
   font-size: 3rem;
-  font-weight: normal;
-  font-family: "Arial", sans-serif;
+
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
 }
@@ -34,8 +31,7 @@ body {
   text-align: center;
   color: #87cefa;
   font-size: 3rem;
-  font-weight: bold;
-  font-family: "Arial", sans-serif;
+
   margin-bottom: 30rem;
 }
 /* 그룹 섹션 스타일 */
@@ -50,7 +46,7 @@ body {
 .group-section.solo {
   background-color: #b7d9fb; /* 솔로형 색상 */
   z-index: 4;
-  clip-path: polygon(0 15%, 50% 0, 100% 15%, 100% 100%, 0 95%);
+  clip-path: polygon(0 5%, 50% 0, 100% 5%, 100% 100%, 0 95%);
   /* clip-path: polygon(0 0, 100% 5%, 100% 95%, 0 100%); 위쪽 경사: 5%, 아래쪽 경사: 95% */
 }
 
