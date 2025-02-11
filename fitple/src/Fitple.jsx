@@ -18,7 +18,7 @@ import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 import TrainerDetailPageWrite from "./mypage/pages/TrainerDetailPage";
 import MatchPage from "./matchpage/pages/MatchPage";
 import OAuthCallback from "./mainpage/components/OAuthCallback";
-
+import AdminPage from "./adminpage/pages/AdminPage";
 
 function Fitple() {
 
@@ -65,7 +65,16 @@ function Fitple() {
             <Route path="/hbti/detail" element={<HBTIListDetailPage/>} />
             <Route path="member/reset-password/:userId/:uuid" element={<ResetPasswordPage/>}></Route>
             <Route path="/forgot-password" element={<ForgotPasswordPage/>}></Route>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
+          
 
         </LoginContextProvider>
       </BrowserRouter>
