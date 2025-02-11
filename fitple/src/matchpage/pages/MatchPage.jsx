@@ -87,6 +87,7 @@ const MatchPage = () => {
     }
   }, [latestUserInfo, isLoading]); // ✅ latestUserInfo가 업데이트된 후 실행
 
+
   if (isLoading) {
     return <p>로딩 중...</p>;
   }
