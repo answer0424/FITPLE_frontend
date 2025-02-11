@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const KakaoSearch = ({ onPlaceSelect }) => {
-  const [keyword, setKeyword] = useState("");
+const KakaoSearch = ({ onPlaceSelect, initialAddress  }) => {
+  if(!initialAddress) initialAddress = ""
+  const [keyword, setKeyword] = useState(initialAddress);
   const [places, setPlaces] = useState([]);
   const [displayedPlaces, setDisplayedPlaces] = useState([]);
   const [page, setPage] = useState(1); // 페이지 상태 관리

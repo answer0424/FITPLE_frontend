@@ -21,6 +21,7 @@ const CalenderComponent = ({user}) => {
   const { events, updateEvents } = useEventContext(); //이 달의 일정
   const [ selectedStudent, setSelectedStudent ] = useState([]); //회원별 일정
   const { userInfo, authority } = useContext(LoginContext);
+  const [matchingReservations, setMatchingReservations] = useState([]); //일별 달력에 뜨는 일정
 
   //달력 제어
   const handleDateChange = (newDate) => {
@@ -114,27 +115,29 @@ const CalenderComponent = ({user}) => {
   //   month={date.getMonth()}
   // />;
 
+  const filterEventsByDate = (events, formattedDate) => {
+    return events && Array.isArray(events)
+      ? events.filter((event) => {
+          if (!event.date) return false;
+          const eventDate = event.date.split('T')[0];
+          return eventDate === formattedDate;
+        })
+      : [];
+  };
+  
   const tileContent = ({ date }) => {
     const formattedDate = date.toISOString().split('T')[0];
 
-    // 해당 날짜에 맞는 예약 찾기
-    const matchingReservations = events && Array.isArray(events)
-  ? events.filter(
-      (event) => event.date && event.date.split('T')[0] === formattedDate
-    )
-  : [];
+    if(selectedStudent && selectedUser && selectedStudent.userId === selectedUser.userId){
+      setMatchingReservations(filterEventsByDate(selectedStudent, formattedDate))
+    } else {
+      setMatchingReservations(filterEventsByDate(events, formattedDate))
+    }
 
     // 예약이 있으면 렌더링
     return (
       <div className="event-info">
-        { (selectedStudent && selectedStudent.length > 0) ? (
-          selectedStudent.map((event) => (
-            <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
-              <span>{event.date.slice(11, 16)}</span>
-            </div>
-          )))
-        : (matchingReservations && matchingReservations.length > 0 ? (
+        { (matchingReservations && matchingReservations.length > 0 ? (
           matchingReservations.map((event) => (
             <div key={event.reservationId} className="reservation-item">
               <span>{event.nickname}</span>
@@ -161,7 +164,7 @@ const CalenderComponent = ({user}) => {
           setSelectedStudent={setSelectedStudent}
         /> : (<div/>)
         }
-
+        
         <Calendar
           value={date}
           onChange={handleDateChange}
