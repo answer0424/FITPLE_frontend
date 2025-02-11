@@ -282,7 +282,7 @@ const TrainerProfilePage = () => {
             <label style={{ color: "black" }}>HBTI:</label>
             <div
               className="detail-input"
-              style={{ color: "black", fontSize: "1.2rem", color: "#000000" }}
+              style={{ color: "black", fontSize: "1.2rem"}}
               required
             >
               {hbti}
