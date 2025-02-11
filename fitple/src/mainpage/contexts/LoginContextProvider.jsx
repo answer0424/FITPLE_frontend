@@ -133,13 +133,13 @@ const LoginContextProvider = ({ children }) => {
     }
   }, [isLogin]);
 
-    // 로그인 확인
-    const loginCheck = async (isAuthPage = false) => {
-        const accessToken = Cookies.get('accessToken');
-        
-        console.log(`accessToken: ${accessToken}`);
-        let response;
-        let data;
+  // 로그인 확인
+  const loginCheck = async (isAuthPage = false) => {
+    const accessToken = Cookies.get("accessToken");
+
+    console.log(`accessToken: ${accessToken}`);
+    let response;
+    let data;
 
     // 1-1. JWT(accessToken) 이 없고 인증이 필요 없다면
     if (!accessToken) {
@@ -359,14 +359,14 @@ const LoginContextProvider = ({ children }) => {
     Cookies.remove("accessToken");
     api.defaults.headers.common.Authorization = undefined;
 
-        // 새로고침 시 localStorage 지우기
-        localStorage.removeItem('isLogin');
-        localStorage.removeItem('userInfo');
-        localStorage.removeItem('authority');
-        localStorage.removeItem('username');
-        
-        navigate('/');
-    }
+    // 새로고침 시 localStorage 지우기
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("authority");
+    localStorage.removeItem("username");
+
+    navigate("/");
+  };
 
   return (
     <LoginContext.Provider
