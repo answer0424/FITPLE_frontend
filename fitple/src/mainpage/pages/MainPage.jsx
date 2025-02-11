@@ -7,6 +7,7 @@ import { LoginContext } from '../contexts/LoginContextProvider';
 import sectionImg from './../assets/images/sectionImg.png';
 import Footer from '../../common/component/Footer';
 import ChatIcon from '../../common/component/ChatIcon';
+import '../../common/css/Font.css';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -46,28 +47,28 @@ const MainPage = () => {
         <div className='mainPage'>
             <Header />
             <div className="HBTI-test-container">
-                <h1>HBTI</h1>
-                <p>나의 운동 성향 확인하기</p>
-                <button onClick={gotoTest}>Test</button>
+                <h1 className='en-font'>HBTI</h1>
+                <p className='kr-font'>나의 운동 성향 확인하기</p>
+                <button onClick={gotoTest} className='en-font'>Test</button>
             </div>
             <div className='section'>
                 <div className='background-image'></div>
                 <div className="about-HBTI-container">
                     <div>
-                        <h2>Learn About HBTI</h2>
-                        <p>FITPLE과 함께 HBTI에 대한 정보를 얻고 사용자의 운동 성향을 테스트 해보세요!</p>
-                        <p>HBTI를 통해 자신의 운동 성향을 알 수 있습니다.</p>
-                        <button onClick={goHBTI}>GO TO HBTI</button>
+                        <h2 className='en-font'>Learn About HBTI</h2>
+                        <p className='kr-font'>FITPLE과 함께 HBTI에 대한 정보를 얻고 사용자의 운동 성향을 테스트 해보세요!</p>
+                        <p className='kr-font'>HBTI를 통해 자신의 운동 성향을 알 수 있습니다.</p>
+                        <button onClick={goHBTI} className='en-font'>GO TO HBTI</button>
                     </div>
                     <img src={sectionImg} alt="HBTI Image"/>
                 </div>
 
                 <div className="match-trainer-container">
                     <div>
-                        <h2>Recommend Trainer</h2>
-                        <p>FITPLE과 함께 자신에게 맞는 트레이너를 찾고 운동 능력을 향상시켜보세요!</p>
-                        <p>자신과 맞는 트레이너와 함께했을 때 최적의 운동 능력을 발휘할 수 있습니다.</p>
-                        <button onClick={goMatching}>MATCH TRAINER</button>
+                        <h2 className='en-font'>Recommend Trainer</h2>
+                        <p className='kr-font'>FITPLE과 함께 자신에게 맞는 트레이너를 찾고 운동 능력을 향상시켜보세요!</p>
+                        <p className='kr-font'>자신과 맞는 트레이너와 함께했을 때 최적의 운동 능력을 발휘할 수 있습니다.</p>
+                        <button onClick={goMatching} className='en-font'>MATCH TRAINER</button>
                     </div>
                     <img src={sectionImg} alt="Trainer Match Image"/>
                 </div>

@@ -1,42 +1,40 @@
 /* Header.css */
-
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: black;
-    margin-top: -70px;
-    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  margin-top: -70px;
 }
 
 .header-left {
-    color: white;
-    font-size: 24px;
-    margin-right: 50px;
-    text-decoration: none;
-    width: 300px;
-    text-align: center;
+  color: white;
+  font-size: 24px;
+  margin-right: 50px;
+  text-decoration: none;
+  width: 300px;
+  text-align: center;
 }
 
-.header-right{
-    color: white;
-    font-size: 24px;
-    margin-left: 50px;
-    text-decoration: none;
-    width: 300px;
-    text-align: center;
+.header-right {
+  color: white;
+  font-size: 24px;
+  margin-left: 50px;
+  text-decoration: none;
+  width: 300px;
+  text-align: center;
 }
 
 .header-image {
-    height: 150px;
-    width: 100px;
-    margin-top: 75px;
+  height: 150px;
+  width: 100px;
+  margin-top: 75px;
 }
 
 .logout {
-    color: rgba(187, 99, 6, 0.567);
-    font-size: 30px;
-    position: absolute;
-    margin-left: 100px;
-    margin-top: -20px;
+  color: rgba(187, 99, 6, 0.567);
+  font-size: 30px;
+  position: absolute;
+  margin-left: 100px;
+  margin-top: -20px;
 }
