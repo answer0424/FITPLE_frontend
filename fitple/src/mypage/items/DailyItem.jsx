@@ -3,7 +3,7 @@ import { Modal, Button, Card } from "react-bootstrap";
 import api from "../../mainpage/apis/api";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import TrainerButtonItem from "../items/TrainerButtonItem";
-import "../static/css/EventItems.css"; // CSS 파일 추가
+import "../static/css/DailyItem.css"; // CSS 파일 추가
 
 const DailyItem = ({ event }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
