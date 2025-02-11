@@ -160,9 +160,11 @@ const TrainerList = () => {
     if (window.confirm('트레이너를 삭제하시겠습니까?')) {
       try {
         await adminApi.deleteUser(trainerId, 'ROLE_TRAINER');
+        alert('사용자가 삭제되었습니다.');
         fetchTrainers();
       } catch (error) {
         console.error('Failed to delete trainer:', error);
+        alert('사용자 삭제에 실패했습니다.');
       }
     }
   };
