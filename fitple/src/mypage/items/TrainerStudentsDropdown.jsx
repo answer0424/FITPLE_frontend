@@ -16,6 +16,7 @@ const TrainerStudentsDropdown = ({
   const [error, setError] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState("all");
 
+  // Get access token from cookies
   const getAccessToken = () => {
     return document.cookie
       .split("; ")
@@ -23,11 +24,14 @@ const TrainerStudentsDropdown = ({
       ?.split("=")[1];
   };
 
+  // Fetch student list
   useEffect(() => {
     const fetchStudents = async () => {
       if (!trainerId) return;
+
       setIsLoading(true);
       setError(null);
+
       try {
         const response = await axios.get(
           `http://localhost:8081/member/${trainerId}/register`,
@@ -36,6 +40,7 @@ const TrainerStudentsDropdown = ({
             headers: { Authorization: `Bearer ${getAccessToken()}` },
           }
         );
+
         if (response.status === 200 && response.data.length > 0) {
           console.log("드롭다운 , 전체 회원 리스트:", response.data);
           setStudentList(response.data);
@@ -50,13 +55,15 @@ const TrainerStudentsDropdown = ({
         setIsLoading(false);
       }
     };
+
     fetchStudents();
   }, [trainerId]);
 
+  // 선택된 학생 ID가 변경될 때 selectedUser 업데이트
   useEffect(() => {
     if (selectedStudentId === "all") {
       setSelectedUser(null);
-      setSelectedStudent([]);
+      setSelectedStudent(null);
     } else {
       const student = studentList.find(
         (s) => s.userId === parseInt(selectedStudentId)
@@ -65,34 +72,40 @@ const TrainerStudentsDropdown = ({
     }
   }, [selectedStudentId, studentList, setSelectedUser]);
 
-  const handleMemberSelect = async (selectedId) => {
-    setSelectedStudentId(selectedId);
-    if (selectedId === "all") {
-    }
+  // Handle student selection
+  const handleMemberSelect = async (studentId) => {
+    console.log("선택한 studentId : ", studentId);
+    setSelectedStudentId(studentId);
+
     try {
-      const student = studentList.find(
-        (s) => s.userId.toString() === selectedId
-      );
-      if (!student) return;
-      const response = await axios.get(
-        `http://localhost:8081/member/${trainerId}/calendar/student/${selectedId}`,
-        {
-          params: { year, month },
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${getAccessToken()}` },
-        }
-      );
-      if (!response.data || response.data.length === 0) {
-        alert("트레이닝이 없습니다");
-        handleMemberSelect("all");
-        return;
+      let response;
+
+      // 받은 year, month 값 적용
+      const selectedYear = year || new Date().getFullYear();
+      const selectedMonth = month || new Date().getMonth() + 1;
+
+      if (studentId === "all") {
+        setSelectedStudent(null);
+      } else {
+        response = await axios.get(
+          `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
+          {
+            params: { year: selectedYear, month: selectedMonth },
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${getAccessToken()}` },
+          }
+        );
+        setSelectedStudent(response.data);
       }
-      console.log("✅ 선택한 회원의 일정: ", response.data);
-      setSelectedUser(student);
-      setSelectedStudent(response.data);
+
+      console.log(
+        `${studentId === "all" ? "전체 회원" : studentId} 일정: `,
+        response.data
+      );
       updateEvents(response.data);
     } catch (error) {
-      console.error("❌ 일정 조회 실패:", error);
+      console.error("일정 조회 실패: ", error);
+      setError("일정을 불러오는 중 오류가 발생했습니다.");
     }
   };
 
@@ -102,6 +115,7 @@ const TrainerStudentsDropdown = ({
         <option>로딩 중...</option>
       </Form.Select>
     );
+  // if (error) return <div className="text-danger">{error}</div>;
 
   return (
     <Form.Select

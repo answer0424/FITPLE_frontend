@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import styled, { withTheme } from "styled-components";
 import moment from "moment";
 import "../static/css/CalenderStyle.css";
 import { Container } from "react-bootstrap";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
-import { EventProvider, useEventContext } from "../context/EventContext";
+import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 import "../static/css/ModalReset.css";
@@ -19,27 +18,38 @@ const CalenderComponent = ({ user }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [dailyEvents, setDailyEvents] = useState([]);
-  const { events, updateEvents } = useContext(EventProvider);
+  const { events, updateEvents } = useEventContext();
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
   const { userInfo, authority } = useContext(LoginContext);
-  const [matchingReservations, setMatchingReservations] = useState([]); //일별 달력에 뜨는 일정
 
-  // 📌 날짜 클릭 시 모달 열기
+  // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
+    
+    let matchingReservations;
 
-    setMatchingReservations();
+    if (events && !selectedUser) {
+      matchingReservations = events?.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else if (selectedStudent && Array.isArray(selectedStudent)) {
+      matchingReservations = selectedStudent.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else {
+      matchingReservations = [];
+    }
+
     console.log("선택한 날짜의 일정:", matchingReservations);
-    setDailyEvents(
-      events?.filter((event) => event.date?.startsWith(formattedDate))
-    );
     setSelectedDate(formattedDate);
+    setDailyEvents(matchingReservations);
     setIsModalOpen(true);
   };
 
+  // 📌 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate(null);
@@ -47,40 +57,43 @@ const CalenderComponent = ({ user }) => {
   };
 
   // 📌 캘린더의 날짜별 일정 표시
-  const tileContent = useCallback(
-    ({ date }) => {
-      const formattedDate = moment(date).format("YYYY-MM-DD");
+  const tileContent = ({ date }) => {
+    const formattedDate = moment(date).format("YYYY-MM-DD");
 
-      let matchingReservations =
-        selectedUser && Array.isArray(selectedStudent)
-          ? selectedStudent.filter((event) =>
-              event.date?.startsWith(formattedDate)
-            )
-          : events?.filter((event) => event.date?.startsWith(formattedDate)) ||
-            [];
+    let matchingReservations;
 
-      return (
-        <div className="event-info">
-          {matchingReservations.length > 0 &&
-            matchingReservations.map((event) => (
-              <div key={event.reservationId} className="reservation-item">
-                <span>{event.nickname}</span>
-                <span>{event.date.slice(11, 16)}</span>
-              </div>
-            ))}
-        </div>
+    if (!selectedUser && events && Array.isArray(events)) {
+      matchingReservations = events?.filter((event) =>
+        event.date?.startsWith(formattedDate)
       );
-    },
-    [events, selectedStudent]
-  );
+    } else if (selectedStudent && Array.isArray(selectedStudent)) {
+      matchingReservations = selectedStudent.filter((event) =>
+        event.date?.startsWith(formattedDate)
+      );
+    } else {
+      matchingReservations = [];
+    }
 
-  // 📌 월 변경 감지
-  const handleActiveStartDateChange = ({ activeStartDate }) => {
-    setCurrentYear(activeStartDate.getFullYear());
-    setCurrentMonth(activeStartDate.getMonth() + 1); // 여기서 보정된 값을 사용
+    return (
+      <div className="event-info">
+        {matchingReservations.length > 0 &&
+          matchingReservations.map((event) => (
+            <div key={event.reservationId} className="reservation-item">
+              <span>{event.nickname}</span>
+              <span>{event.date.slice(11, 16)}</span>
+            </div>
+          ))}
+      </div>
+    );
   };
 
-  // 📌 일정 데이터 가져오기
+  // 📌 월 변경 감지 (월이 변경될 때마다 currentYear, currentMonth 업데이트)
+  const handleActiveStartDateChange = ({ activeStartDate }) => {
+    setCurrentYear(activeStartDate.getFullYear());
+    setCurrentMonth(activeStartDate.getMonth() + 1);
+  };
+
+  // 📌 일정 데이터 가져오기 (연도 또는 월이 변경될 때만 실행)
   useEffect(() => {
     const accessToken = document.cookie
       .split("; ")
@@ -89,25 +102,31 @@ const CalenderComponent = ({ user }) => {
 
     api
       .get(`/member/${user.id}/calendar`, {
-        params: { year: currentYear, month: currentMonth - 1 },
+        params: {
+          year: currentYear,
+          month: currentMonth - 1,
+        },
         withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((response) => {
         console.log(
-          `캘린더 컴포넌트 ${currentYear}년 ${currentMonth}월 일정 로드: `,
+          `${currentYear}년 ${currentMonth}월 일정 로드: `,
           response.data
         );
         updateEvents(response.data);
-        setTimeout(() => setDate(new Date()), 100); // ✅ 강제 리렌더링
       })
-      .catch((error) => console.error("일정 불러오기 실패:", error));
-  }, [currentYear, currentMonth]);
+      .catch((error) => {
+        console.error("일정 불러오기 실패:", error);
+      });
+  }, [currentYear, currentMonth, date]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
 
   return (
     <>
       <Container>
-        {authority.isTrainer && (
+        {authority.isTrainer ? (
           <TrainerStudentsDropdown
             trainerId={user.id}
             updateEvents={updateEvents}
@@ -118,45 +137,29 @@ const CalenderComponent = ({ user }) => {
             month={currentMonth}
             allowAllUsers={true}
           />
+        ) : (
+          <div />
         )}
+
         <Calendar
           value={date}
-          onChange={handleDateChange}
+          onChange={setDate}
           onClickDay={handleDayClick}
-          onActiveStartDateChange={handleActiveStartDateChange}
-          // 중요: activeStartDate를 명시적으로 설정
-          activeStartDate={new Date(currentYear, currentMonth - 1)}
+          onActiveStartDateChange={handleActiveStartDateChange} // ✅ 월 변경 감지 추가
           calendarType="gregory"
           showNeighboringMonth={false}
-          tileContent={({ date, view }) => {
-            if (view === "month") {
-              const eventsForDay = getEventsForDate(date);
-              return (
-                <>
-                  {eventsForDay.map((event, index) => (
-                    <div
-                      key={index}
-                      className={`event-item ${
-                        event.isCompleted ? "completed" : ""
-                      }`}
-                    >
-                      {event.time} {event.title}
-                    </div>
-                  ))}
-                </>
-              );
-            }
-            return null;
-          }}
+          tileContent={tileContent}
         />
       </Container>
 
+      {/* ✅ 모달: 선택한 날짜의 일정 표시 */}
       <DailyScheduleModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
         user={user}
+        tileContent={tileContent}
         selectedUser={selectedUser}
       />
     </>
