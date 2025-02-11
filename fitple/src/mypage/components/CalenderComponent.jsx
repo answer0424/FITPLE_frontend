@@ -30,6 +30,8 @@ const CalenderComponent = ({ user }) => {
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
 
+    const source = selectedStudent.length ? selectedStudent : events;
+
     let matchingReservations;
 
     if (events && !selectedUser) {
@@ -128,7 +130,7 @@ const CalenderComponent = ({ user }) => {
       .catch((error) => {
         console.error("일정 불러오기 실패:", error);
       });
-  }, [currentYear, currentMonth, date]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
+  }, [currentYear, currentMonth, selectedUser]); // ✅ date를 제거하고 currentYear, currentMonth만 감시
 
   return (
     <>
