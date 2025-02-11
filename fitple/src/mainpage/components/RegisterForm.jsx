@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import KakaoSearch from "./KakaoSearch";
 import { registerStudent, registerTrainer } from '../apis/auth';
+// import '../../common/css/Font.css';
 
 const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -155,12 +156,12 @@ const RegisterForm = ({ questions = [], userType }) => {
     <div className="App">
       <Header />
       <div>
-        <h2 className="font">{userType} Sign up</h2>
+        <h2 className="en-font">{userType} Sign up</h2>
         <Link to={"/register/student"}>
-          <button className="reg-student font">Student</button>
+          <button className="reg-student en-font">Student</button>
         </Link>
         <Link to={"/register/trainer"}>
-          <button className="reg-trainer font">Trainer</button>
+          <button className="reg-trainer en-font">Trainer</button>
         </Link>
       </div>
       <div className="progress-bar-container">
@@ -195,7 +196,7 @@ const RegisterForm = ({ questions = [], userType }) => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
         >
-          <h2>{questions[currentQuestionIndex]}</h2>
+          <h2 className="kr-font">{questions[currentQuestionIndex]}</h2>
           <div className="input-container">
             {currentQuestionIndex === 5 ? (
               <DatePicker
@@ -219,13 +220,13 @@ const RegisterForm = ({ questions = [], userType }) => {
               />
             )}
             {errors[currentQuestionIndex] && (
-              <p style={{ color: "red", marginTop: "5px" }}>{errors[currentQuestionIndex]}</p>
+              <p style={{ color: "red", marginTop: "5px" }} className="kr-font">{errors[currentQuestionIndex]}</p>
             )}
             <div className="button-container">
-              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)} disabled={currentQuestionIndex === 0} className="back-button font">
+              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)} disabled={currentQuestionIndex === 0} className="back-button en-font">
                 Back
               </button>
-              <button onClick={handleNextQuestion} className="font">
+              <button onClick={handleNextQuestion} className="en-font">
                 {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
               </button>
             </div>

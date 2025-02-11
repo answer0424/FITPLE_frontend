@@ -1,7 +1,4 @@
 /* Header.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Notable&display=swap');
-
 .header {
     display: flex;
     align-items: center;
@@ -17,9 +14,6 @@
     text-decoration: none;
     width: 300px;
     text-align: center;
-    font-family: "Alfa Slab One", serif;
-    font-weight: 400;
-    font-style: normal;
 }
 
 .header-right{
@@ -29,9 +23,6 @@
     text-decoration: none;
     width: 300px;
     text-align: center;
-    font-family: "Alfa Slab One", serif;
-    font-weight: 400;
-    font-style: normal;
 }
 
 .header-image {

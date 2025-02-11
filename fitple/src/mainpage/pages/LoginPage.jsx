@@ -63,7 +63,7 @@ const LoginPage = () => {
     <div className="App">
       <Header />
       <div className="question-container">
-        <h2>Login</h2>
+        <h2 className="en-font">Login</h2>
         <div className="input-container">
           <form onSubmit={onLogin}>
             <input
@@ -83,7 +83,7 @@ const LoginPage = () => {
               className="pw-input"
             />
             <div className="button-container">
-              <button type="submit" className="login-button">Login</button>
+              <button type="submit" className="login-button en-font">Login</button>
             </div>
           </form>
           <div className="forgot-password-link">
