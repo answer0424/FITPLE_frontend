@@ -35,20 +35,6 @@ const UserList = () => {
         }
     };
 
-    const handleDeleteUser = async (userId) => {
-        if (window.confirm('정말 이 사용자를 삭제하시겠습니까?')) {
-            try {
-                // 기본값으로 ROLE_STUDENT 설정
-                await adminApi.deleteUser(userId, 'ROLE_STUDENT');
-                alert('사용자가 삭제되었습니다.');
-                fetchUsers(); // 삭제 후 목록 새로고침
-            } catch (error) {
-                console.error('Failed to delete user:', error);
-                alert('사용자 삭제에 실패했습니다.');
-            }
-        }
-    };
-
     const TrainerModal = ({ isOpen, onClose, trainers }) => {
         if (!isOpen) return null;
 
