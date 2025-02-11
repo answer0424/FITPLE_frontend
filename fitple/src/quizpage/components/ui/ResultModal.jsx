@@ -1,124 +1,119 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import './ResultModal.css';
-import HBTIResultDisplay from '../quiz_common/HbtiResultDisplay';
-import { LoginContext } from '../../../mainpage/contexts/LoginContextProvider';
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import "./ResultModal.css";
+import HBTIResultDisplay from "../quiz_common/HbtiResultDisplay";
+import { LoginContext } from "../../../mainpage/contexts/LoginContextProvider";
 
 const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
-    const [hbtiData, setHbtiData] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-    const { isLogin } = useContext(LoginContext);
+  const [hbtiData, setHbtiData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { isLogin } = useContext(LoginContext);
 
-    useEffect(() => {
-        const fetchHbtiData = async () => {
-            if (!hbtiType) {
-                console.log("No hbtiType available");
-                return;
-            }
-            
-            try {
-                console.log("Fetching HBTI data for type:", hbtiType);
-                const response = await axios.get(
-                    `${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`
-                );
-                setHbtiData(response.data);
-                setLoading(false);
-            } catch (err) {
-                console.error("HBTI 데이터 로드 실패:", err);
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchHbtiData = async () => {
+      if (!hbtiType) {
+        console.log("No hbtiType available");
+        return;
+      }
 
-        if (isOpen && hbtiType) {
-            fetchHbtiData();
-        }
-    }, [isOpen, hbtiType]);
-
-
-
-    const handleViewDetails = async () => {
-        localStorage.setItem('hbtiAnswers', JSON.stringify(answers));
-        if (!isLogin) {
-            alert('로그인이 필요한 기능입니다.');
-            navigate('/login');
-            return;
-        }
-    
-        try {
-            const token = Cookies.get('accessToken');
-            if (!token) {
-                throw new Error('인증 토큰이 없습니다.');
-            }
-    
-            const saveResponse = await fetch(`${import.meta.env.VITE_Server}/api/hbti/save`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    answers: Object.values(answers)
-                })
-            });
-    
-            if (!saveResponse.ok) {
-                throw new Error('결과 저장 실패');
-            }
-    
-            // 저장 성공 후 이동
-            navigate(`/quiz/${userId}/result`, { 
-                state: { fromQuiz: true } 
-            });
-            onClose();
-        } catch (error) {
-            console.error('HBTI 결과 저장 실패:', error);
-            alert('결과 저장 중 오류가 발생했습니다.');
-        }
-    };
-    
-    const handleRetakeQuiz = () => {
-        window.location.reload();
-        onClose();
+      try {
+        console.log("Fetching HBTI data for type:", hbtiType);
+        const response = await axios.get(
+          `${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`
+        );
+        setHbtiData(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("HBTI 데이터 로드 실패:", err);
+        setError(err.message);
+        setLoading(false);
+      }
     };
 
-    if (!isOpen) return null;
+    if (isOpen && hbtiType) {
+      fetchHbtiData();
+    }
+  }, [isOpen, hbtiType]);
 
-    return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                {error ? (
-                    <div className="error-message">
-                        데이터를 불러오는데 실패했습니다: {error}
-                    </div>
-                ) : loading ? (
-                    <div className="loading-message">Loading...</div>
-                ) : (
-                    <>
-                        <HBTIResultDisplay hbtiData={hbtiData} />
-                        
-                        <button
-                            onClick={handleViewDetails}
-                            className="modal-button"
-                        >
-                            내 HBTI 자세히 보기
-                        </button>
-                        <span
-                            onClick={handleRetakeQuiz}
-                            className="retake-text"
-                        >
-                            퀴즈 다시 풀기
-                        </span>
-                    </>
-                )}
-            </div>
-        </div>
-    );
+  const handleViewDetails = async () => {
+    localStorage.setItem("hbtiAnswers", JSON.stringify(answers));
+    if (!isLogin) {
+      alert("로그인이 필요한 기능입니다.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const token = Cookies.get("accessToken");
+      if (!token) {
+        throw new Error("인증 토큰이 없습니다.");
+      }
+
+      const saveResponse = await fetch(
+        `${import.meta.env.VITE_Server}/api/hbti/save`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId: userId,
+            answers: Object.values(answers),
+          }),
+        }
+      );
+
+      if (!saveResponse.ok) {
+        throw new Error("결과 저장 실패");
+      }
+
+      // 저장 성공 후 이동
+      navigate(`/quiz/${userId}/result`, {
+        state: { fromQuiz: true },
+      });
+      onClose();
+    } catch (error) {
+      console.error("HBTI 결과 저장 실패:", error);
+      alert("결과 저장 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleRetakeQuiz = () => {
+    window.location.reload();
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {error ? (
+          <div className="error-message">
+            데이터를 불러오는데 실패했습니다: {error}
+          </div>
+        ) : loading ? (
+          <div className="loading-message">Loading...</div>
+        ) : (
+          <>
+            <HBTIResultDisplay hbtiData={hbtiData} />
+
+            <button onClick={handleViewDetails} className="modal-button">
+              내 HBTI 자세히 보기
+            </button>
+            <span onClick={handleRetakeQuiz} className="retake-text">
+              퀴즈 다시 풀기
+            </span>
+          </>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default ResultModal;

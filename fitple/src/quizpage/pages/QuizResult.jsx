@@ -1,20 +1,15 @@
-import React, { useState, useEffect ,useContext} from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import HBTIResultDisplay from '../components/quiz_common/HbtiResultDisplay';
-import PanelNavigation from '../components/ui/PanelNavigation';
-import './QuizResult.css';
-import Header from '../../common/component/Header';
-
-
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import HBTIResultDisplay from "../components/quiz_common/HbtiResultDisplay";
+import PanelNavigation from "../components/ui/PanelNavigation";
+import "./QuizResult.css";
+import Header from "../../common/component/Header";
 
 // Progress Bar Component
 const ProgressBar = ({ progress }) => (
   <div className="progress-bar-container">
-    <div 
-      className="progress-bar"
-      style={{ width: `${progress}%` }}
-    />
+    <div className="progress-bar" style={{ width: `${progress}%` }} />
   </div>
 );
 
@@ -46,40 +41,42 @@ const CircleProgress = ({ percentage }) => {
           className="circle-progress-bar"
           style={{
             strokeDasharray: circumference,
-            strokeDashoffset
+            strokeDashoffset,
           }}
         />
       </svg>
-      <span className="circle-progress-text">
-        {percentage}%
-      </span>
+      <span className="circle-progress-text">{percentage}%</span>
     </div>
   );
 };
 
 // Trait pairs configuration
 const traitPairs = {
-  'M': { opposite: 'B', label: '의료적/미용적' },
-  'E': { opposite: 'I', label: '계획형/즉흥형' },
-  'C': { opposite: 'N', label: '유산소형/근력형' },
-  'P': { opposite: 'G', label: '개인형/단체형' }
+  M: { opposite: "B", label: "의료적/미용적" },
+  E: { opposite: "I", label: "계획형/즉흥형" },
+  C: { opposite: "N", label: "유산소형/근력형" },
+  P: { opposite: "G", label: "개인형/단체형" },
 };
 
 const TraitBar = ({ trait, score }) => {
   const opposite = traitPairs[trait]?.opposite;
   const label = traitPairs[trait]?.label;
-  const [leftTrait, rightTrait] = label?.split('/') || [];
-  
+  const [leftTrait, rightTrait] = label?.split("/") || [];
+
   const isFirstTraitDominant = score > 50;
   const dominantScore = isFirstTraitDominant ? score : 100 - score;
 
   return (
     <div className="trait-bar-container">
       <div className="trait-scores">
-        <span className={`trait-score ${isFirstTraitDominant ? 'dominant' : ''}`}>
+        <span
+          className={`trait-score ${isFirstTraitDominant ? "dominant" : ""}`}
+        >
           {score}%
         </span>
-        <span className={`trait-score ${!isFirstTraitDominant ? 'dominant' : ''}`}>
+        <span
+          className={`trait-score ${!isFirstTraitDominant ? "dominant" : ""}`}
+        >
           {(100 - score).toFixed(1)}%
         </span>
       </div>
@@ -87,12 +84,14 @@ const TraitBar = ({ trait, score }) => {
       <div className="trait-bar-wrapper">
         <span className="trait-label left">{leftTrait}</span>
         <div className="trait-bar">
-          <div 
-            className={`trait-progress ${isFirstTraitDominant ? 'left' : 'right'}`}
-            style={{ 
+          <div
+            className={`trait-progress ${
+              isFirstTraitDominant ? "left" : "right"
+            }`}
+            style={{
               width: `${dominantScore}%`,
-              left: isFirstTraitDominant ? '0' : 'auto',
-              right: isFirstTraitDominant ? 'auto' : '0'
+              left: isFirstTraitDominant ? "0" : "auto",
+              right: isFirstTraitDominant ? "auto" : "0",
             }}
           />
         </div>
@@ -100,10 +99,14 @@ const TraitBar = ({ trait, score }) => {
       </div>
 
       <div className="trait-letters">
-        <span className={`trait-letter ${isFirstTraitDominant ? 'dominant' : ''}`}>
+        <span
+          className={`trait-letter ${isFirstTraitDominant ? "dominant" : ""}`}
+        >
           {trait}
         </span>
-        <span className={`trait-letter ${!isFirstTraitDominant ? 'dominant' : ''}`}>
+        <span
+          className={`trait-letter ${!isFirstTraitDominant ? "dominant" : ""}`}
+        >
           {opposite}
         </span>
       </div>
@@ -112,18 +115,14 @@ const TraitBar = ({ trait, score }) => {
 };
 
 const PercentageDisplay = ({ percentages }) => {
-  const orderedTraits = ['M', 'E', 'C', 'P'];
-  
+  const orderedTraits = ["M", "E", "C", "P"];
+
   return (
     <div className="percentages-section">
       <h2>나의 운동 성향</h2>
       <div className="percentages-grid">
-        {orderedTraits.map(trait => (
-          <TraitBar 
-            key={trait} 
-            trait={trait} 
-            score={percentages[trait] || 0} 
-          />
+        {orderedTraits.map((trait) => (
+          <TraitBar key={trait} trait={trait} score={percentages[trait] || 0} />
         ))}
       </div>
     </div>
@@ -140,7 +139,7 @@ const DescriptionDisplay = ({ details }) => (
 const MatchCard = ({ match }) => (
   <div className="match-card">
     {match.details?.dogImage && (
-      <img 
+      <img
         src={`${import.meta.env.VITE_Server}${match.details.dogImage}`}
         alt={match.hbtiType}
         className="match-image"
@@ -173,13 +172,12 @@ const QuizResult = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const TOTAL_PANELS = 3;
- 
- 
+
   // Check authentication
   useEffect(() => {
-    const token = Cookies.get('accessToken');
+    const token = Cookies.get("accessToken");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [navigate]);
 
@@ -187,34 +185,38 @@ const QuizResult = () => {
   useEffect(() => {
     const fetchDetailedResults = async () => {
       try {
-        const token = Cookies.get('accessToken');
-        console.log("🔑 Access Token:", token);  // 토큰이 정상적으로 존재하는지 확인
+        const token = Cookies.get("accessToken");
+        console.log("🔑 Access Token:", token); // 토큰이 정상적으로 존재하는지 확인
         if (!token) {
-          throw new Error('Authentication required. Please log in.');
+          throw new Error("Authentication required. Please log in.");
         }
         console.log("✅ Fetching HBTI results for user:", userId);
 
-        const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/${userId}/result`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const response = await fetch(
+          `${import.meta.env.VITE_Server}/api/hbti/${userId}/result`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        });
-        
+        );
+
         if (response.status === 302) {
-          throw new Error('Please log in to view your results');
+          throw new Error("Please log in to view your results");
         }
-        
+
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch detailed results');
+          throw new Error(
+            errorData.message || "Failed to fetch detailed results"
+          );
         }
-        
+
         const data = await response.json();
         setResultData(data);
-    
       } catch (err) {
-        console.error('Error fetching results:', err);
+        console.error("Error fetching results:", err);
         setError(err.message);
       }
     };
@@ -225,11 +227,11 @@ const QuizResult = () => {
   }, [userId]);
 
   const handleNext = () => {
-    setCurrentPanel(prev => Math.min(prev + 1, TOTAL_PANELS));
+    setCurrentPanel((prev) => Math.min(prev + 1, TOTAL_PANELS));
   };
 
   const handlePrevious = () => {
-    setCurrentPanel(prev => Math.max(prev - 1, 1));
+    setCurrentPanel((prev) => Math.max(prev - 1, 1));
   };
 
   if (error) return <div className="error-message">Error: {error}</div>;
@@ -239,76 +241,77 @@ const QuizResult = () => {
 
   return (
     <>
-    <Header />
-    <div className="quiz-result-container">
-      <div className="result-content-box">
-        <div className="panel-layout">
-          {/* Left Panel */}
-          <div className="left-panel">
-            <div className="hbtiResult">
-              <HBTIResultDisplay 
-                hbtiData={{ 
-                  hbtiType, 
-                  details,
-                  dogImage: details?.dogImage 
-                }} 
-              />
+      <Header />
+      <div className="quiz-result-container">
+        <div className="result-content-box">
+          <div className="panel-layout">
+            {/* Left Panel */}
+            <div className="left-panel">
+              <div className="hbtiResult">
+                <HBTIResultDisplay
+                  hbtiData={{
+                    hbtiType,
+                    details,
+                    dogImage: details?.dogImage,
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          
-          {/* Right Panel */}
-          <div className="right-panel">
-            {currentPanel === 1 && (
-              <>
-                <PercentageDisplay percentages={percentages} />
-                <PanelNavigation
-                  currentPanel={currentPanel}
-                  totalPanels={TOTAL_PANELS}
-                  onNext={handleNext}
-                  showPrevious={false}
-                />
-              </>
-            )}
-            
-            {currentPanel === 2 && (
-              <>
-                <PanelNavigation
-                  currentPanel={currentPanel}
-                  totalPanels={TOTAL_PANELS}
-                  onNext={handleNext}
-                  onPrevious={handlePrevious}
-                />
-                <DescriptionDisplay details={details} />
-              </>
-            )}
-            
-            {currentPanel === 3 && (
-              <>
-                <PanelNavigation
-                  currentPanel={currentPanel}
-                  totalPanels={TOTAL_PANELS}
-                  onPrevious={handlePrevious}
-                  showNext={false}
-                />
-                <MatchesDisplay topMatches={topMatches} />
-                <div className="match-button-container">
-                  <button
-                    onClick={() => navigate(`/quiz/${userId}/result/match`, {
-                      state: { hbtiTypes: [hbtiType] }
-                    })}
-                    className="match-button"
-                  >
-                    ↪ 나에게 맞는 트레이너 매칭하기
-                  </button>
-                </div>
-              </>
-            )}
+
+            {/* Right Panel */}
+            <div className="right-panel">
+              {currentPanel === 1 && (
+                <>
+                  <PercentageDisplay percentages={percentages} />
+                  <PanelNavigation
+                    currentPanel={currentPanel}
+                    totalPanels={TOTAL_PANELS}
+                    onNext={handleNext}
+                    showPrevious={false}
+                  />
+                </>
+              )}
+
+              {currentPanel === 2 && (
+                <>
+                  <PanelNavigation
+                    currentPanel={currentPanel}
+                    totalPanels={TOTAL_PANELS}
+                    onNext={handleNext}
+                    onPrevious={handlePrevious}
+                  />
+                  <DescriptionDisplay details={details} />
+                </>
+              )}
+
+              {currentPanel === 3 && (
+                <>
+                  <PanelNavigation
+                    currentPanel={currentPanel}
+                    totalPanels={TOTAL_PANELS}
+                    onPrevious={handlePrevious}
+                    showNext={false}
+                  />
+                  <MatchesDisplay topMatches={topMatches} />
+                  <div className="match-button-container">
+                    <button
+                      onClick={() =>
+                        navigate(`/quiz/${userId}/result/match`, {
+                          state: { hbtiTypes: [hbtiType] },
+                        })
+                      }
+                      className="match-button"
+                    >
+                      ↪ 나에게 맞는 트레이너 매칭하기
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
-    
   );
 };
 

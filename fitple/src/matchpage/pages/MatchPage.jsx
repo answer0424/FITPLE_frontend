@@ -41,6 +41,7 @@ const MatchPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+
       if (!response.ok) {
         console.error("❌ 사용자 정보를 가져오는 데 실패했습니다.");
         navigate("/login");
@@ -89,6 +90,7 @@ const MatchPage = () => {
   if (isLoading) {
     return <p>로딩 중...</p>;
   }
+
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>

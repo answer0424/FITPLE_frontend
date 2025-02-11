@@ -1,0 +1,71 @@
+.students-container {
+  margin: 0 0 50px 50px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-left: 200px;
+  width: 1000px;
+}
+*::-webkit-scrollbar {
+  display: none; /* 스크롤바 숨기기 */
+}
+
+.students-container {
+  -ms-overflow-style: none; /* IE, Edge에서 스크롤바 숨김 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
+}
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 500px; /* 스크롤이 가능한 최대 높이 */
+  overflow-y: auto; /* 스크롤 적용 */
+}
+
+.student-card {
+  background-color: rgba(230, 226, 226, 0.42) !important;
+  padding: 12px;
+  width: 800px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
+.description {
+  color: #ddd;
+  font-size: 14px;
+}
+
+.student-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.remaining-times {
+  color: white;
+  font-size: 14px;
+}
+
+.timestamp {
+  color: gray;
+  font-size: 12px;
+}

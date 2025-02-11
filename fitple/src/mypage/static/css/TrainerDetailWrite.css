@@ -1,0 +1,188 @@
+/* Main container styles */
+.trainer-profile {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0c0c0c 50%, #192536 100%);
+  padding: 2rem;
+}
+
+.trainer-profile__container {
+  max-width: 1790px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 3px solid #fff9f9;
+  border-radius: 30px;
+  color: #ffffff;
+}
+
+/* Header styles */
+.trainer-profile__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.trainer-profile__avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.trainer-profile__greeting {
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Form styles */
+.trainer-profile__form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.trainer-profile__form-group {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: 12px 12px 0px #d9d9d9;
+}
+
+.trainer-profile__label {
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: #000000;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.trainer-profile__input {
+  width: 100%;
+  padding: 1rem;
+  background: #d9d9d9;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  color: #000000;
+}
+
+/* Editor styles */
+.trainer-profile__editor {
+  grid-column: span 2;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Skills section */
+.trainer-profile__skills-section {
+  grid-column: span 2;
+}
+
+.trainer-profile__skills-input {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.trainer-profile__skills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trainer-profile__skill-item {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 8px 8px 0px #d9d9d9;
+}
+
+.trainer-profile__skill-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.trainer-profile__skill-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Button styles */
+.trainer-profile__btn-add {
+  background: #7986cb;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.trainer-profile__btn-delete {
+  background: #ff8a80;
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.trainer-profile__btn-submit {
+  grid-column: span 2;
+  background: #7986cb;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 8px 8px 0px #5c6bc0;
+}
+
+.trainer-profile__btn-submit:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0px #5c6bc0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .trainer-profile__form {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-profile__editor,
+  .trainer-profile__skills-section,
+  .trainer-profile__btn-submit {
+    grid-column: span 1;
+  }
+
+  .trainer-profile__skills-input {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-input {
+  background-color: #efefef;
+  height: 80px;
+  margin-left: 20px;
+  border-radius: 20px;
+}

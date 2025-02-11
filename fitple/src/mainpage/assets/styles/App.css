@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Notable&display=swap');
+
 .App {
     font-family: Arial, sans-serif;
     position: relative;
@@ -52,21 +54,25 @@
     text-align: center;
     position: relative;
     overflow-y: auto; /* 외부에서 스크롤을 제어합니다 */
+    
 }
 
 
 .answer-item {
     margin-bottom: 10px;
+    
 }
 
 .answer-item strong {
     font-weight: bold;
     color: #FFD700;
+    
 }
 
 .answer-item p {
     margin: 5px 0;
     color: #FFF;
+    
 }
 
 .question-container {
@@ -93,6 +99,7 @@ input,
   max-width: 700px;
   transition: border-color 0.3s ease;
   font-size: 24px; /* 크기를 30텍스트로 통일 */
+  
 }
 
 
@@ -103,6 +110,7 @@ input,
     margin-top: 20px;
     width: 100%;
     max-width: 700px;
+    
 }
 
 button {
@@ -114,6 +122,7 @@ button {
     cursor: pointer;
     flex: 1;
     margin: 0 10px;
+    
 }
 
 button:hover {
@@ -382,4 +391,10 @@ body {
   .date-picker-input:focus {
     border-color: #FFD700;
   }
+
+  .reg-student {
+    margin-left: 25px;
+  }
+
+  
   

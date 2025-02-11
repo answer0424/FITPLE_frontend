@@ -1,18 +1,27 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Headers from "../../common/component/Header";
+import "../static/css/TrainerDetailWrite.css";
 const TrainerProfilePage = () => {
   const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
   const [perPrice, setPerPrice] = useState("");
   const [career, setCareer] = useState("");
+  const [hbti, setHbti] = useState("");
+  const [gymName, setGymName] = useState("");
   const [skills, setSkills] = useState([]);
   const [deletedSkillsId, setDeletedSkillsId] = useState("");
   const [newSkill, setNewSkill] = useState({ name: "", imageFile: null });
   const quillRef = useRef(null);
+  const navigate = useNavigate();
+
+  const gotoDetail = () => {
+    navigate(`/trainer/${user.id}/detail`);
+  };
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -32,6 +41,10 @@ const TrainerProfilePage = () => {
       })
       .then((res) => {
         setUser(res.data), console.log("현재 사용자 : ", res.data);
+        setGymName(res.data?.gym?.name || "정보 없음");
+        console.log(res.data.gym.name);
+        setHbti(res.data?.hbti?.hbti || "정보 없음");
+        console.log(res.data.hbti.hbti);
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
 
@@ -43,6 +56,9 @@ const TrainerProfilePage = () => {
       .then((res) => {
         console.log("데이터 : ", res.data);
         console.log("certification : ", res.data.certificationId);
+        if (res.data.perPrice || res.data.career || res.data.content) {
+          alert("기존 프로필 내용이 존재합니다. 내용을 확인 후 수정하세요!");
+        }
         setPerPrice(res.data.perPrice || "");
         setCareer(res.data.career || "");
         setContent(res.data.content || "");
@@ -163,9 +179,11 @@ const TrainerProfilePage = () => {
 
     const formData = new FormData();
     formData.append("trainerId", user.id);
-    formData.append("content", editorContent);
+    formData.append("content", content);
     formData.append("perPrice", perPrice);
     formData.append("career", career);
+    formData.append("hbti", hbti);
+    formData.append("gymName", gymName);
 
     if (deletedSkillsId.length > 0) {
       deletedSkillsId.forEach((id) => {
@@ -219,111 +237,154 @@ const TrainerProfilePage = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-primary mb-4">트레이너 프로필 작성</h2>
-      {user && (
-        <div className="d-flex align-items-center mb-3">
-          <img
-            src={user.profileImage}
-            alt="프로필"
-            className="rounded-circle me-3"
-            width={60}
-            height={60}
-          />
-          <p className="mb-0 fs-5">{user.nickname}님, 안녕하세요!</p>
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-        <div className="mb-3">
-          <label className="form-label">1회 가격 (₩):</label>
-          <input
-            type="number"
-            className="form-control shadow-sm"
-            value={perPrice}
-            onChange={(e) => setPerPrice(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">경력 시작 날짜:</label>
-          <input
-            type="date"
-            className="form-control shadow-sm"
-            value={career}
-            onChange={(e) => setCareer(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="form-label">상세 내용 작성:</label>
-          <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            value={content}
-            onChange={setContent}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="form-label">스킬 등록:</label>
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="스킬 이름"
-              value={newSkill.name}
-              onChange={(e) =>
-                setNewSkill({ ...newSkill, name: e.target.value })
-              }
+    <div className="trainer-profile">
+      <Headers />
+      <div className="trainer-profile__container">
+        {user && (
+          <div className="trainer-profile__header">
+            <img
+              src={`${import.meta.env.VITE_Server}/${user.profileImage}`}
+              alt="프로필"
+              className="trainer-profile__avatar"
             />
-            <input
-              type="file"
-              className="form-control"
-              onChange={handleFileChange}
-              accept="image/*"
-            />
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={handleAddSkill}
-            >
-              추가
-            </button>
+            <p className="trainer-profile__greeting">
+              {user.nickname}님, 안녕하세요!
+            </p>
           </div>
-        </div>
-        <div className="mb-4">
-          <label className="form-label">보유 스킬:</label>
-          <ul className="list-group">
-            {skills.map((skill, index) => (
-              <li
-                key={index}
-                className="list-group-item d-flex justify-content-between align-items-center"
+        )}
+
+        <form onSubmit={handleSubmit} className="trainer-profile__form">
+          <div className="trainer-profile__form-group">
+            <label style={{ color: "black" }}>1회 가격 (₩):</label>
+            <input
+              style={{ color: "black" }}
+              type="number"
+              className="detail-input"
+              value={perPrice}
+              onChange={(e) => setPerPrice(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="trainer-profile__form-group">
+            <label style={{ color: "black" }}>경력 시작 날짜:</label>
+            <input
+              className="detail-input"
+              style={{ color: "black" }}
+              type="date"
+              value={career}
+              onChange={(e) => setCareer(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="trainer-profile__form-group">
+            <label style={{ color: "black" }}>HBTI:</label>
+            <div
+              className="detail-input"
+              style={{ color: "black", fontSize: "1.2rem", color: "#000000" }}
+              required
+            >
+              {hbti}
+            </div>
+          </div>
+
+          <div className="trainer-profile__form-group">
+            <label style={{ color: "black" }}>체육관 이름:</label>
+            <div className="detail-input" style={{ color: "black" }} required>
+              {gymName}
+            </div>
+          </div>
+
+          <div className="trainer-profile__form-group">
+            <label style={{ color: "black" }}>상세 내용 작성:</label>
+            <ReactQuill
+              className="detail-input"
+              style={{ color: "black", height: "500px" }}
+              ref={quillRef}
+              theme="snow"
+              value={content}
+              onChange={setContent}
+            />
+          </div>
+
+          <div className="trainer-profile__form-group">
+            <label className="form-label" style={{ color: "black" }}>
+              스킬 등록:
+            </label>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="스킬 이름"
+                value={newSkill.name}
+                onChange={(e) =>
+                  setNewSkill({ ...newSkill, name: e.target.value })
+                }
+              />
+              <input
+                type="file"
+                className="form-control"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={handleAddSkill}
               >
-                <div className="d-flex align-items-center">
-                  {skill.imageUrl && (
-                    <img
-                      src={skill.imageUrl}
-                      alt={skill.name}
-                      className="me-2"
-                      style={{ width: "30px", height: "30px" }}
-                    />
-                  )}
-                  {skill.name}
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDeleteSkill(index)}
-                >
-                  삭제
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <button type="submit" className="btn btn-primary w-100 mt-3">
-          등록하기
-        </button>
-      </form>
+                추가
+              </button>
+            </div>{" "}
+            <div className="trainer-profile__form-group">
+              <label className="form-label" style={{ color: "black" }}>
+                보유 스킬:
+              </label>
+              <ul className="list-group">
+                {skills.map((skill, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <div
+                      className="d-flex align-items-center"
+                      style={{ color: "black" }}
+                    >
+                      {skill.imageUrl && (
+                        <img
+                          src={`${import.meta.env.VITE_Server}${
+                            skill.imageUrl
+                          }`}
+                          alt={skill.name}
+                          className="me-2"
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      )}
+                      {skill.name}
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeleteSkill(index)}
+                      style={{ width: "50px" }}
+                    >
+                      삭제
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="trainer-profile__btn-submit"
+            onClick={gotoDetail}
+          >
+            등록하기
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
