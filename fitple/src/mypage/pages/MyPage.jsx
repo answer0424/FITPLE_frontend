@@ -21,6 +21,14 @@ const MyPage = () => {
   const navigate = useNavigate();
   console.log("authority : ", authority);
 
+
+  //로그인 안 한 놈 쫒아내기
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/login");
+    }
+  }, []);
+
   //관리자 이동
   useEffect(() => {
     if (isLogin && authority.isAdmin) {

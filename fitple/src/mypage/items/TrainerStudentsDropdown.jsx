@@ -78,9 +78,20 @@ const TrainerStudentsDropdown = ({
     setSelectedStudentId(studentId);
 
     try {
-      let response;
+      // 전체 회원 선택 시
+      if (studentId === "all") {
+        setSelectedUser("all");
+        setSelectedStudent([]);
+        updateEvents([]);
+        return;
+      }
 
-      // 받은 year, month 값 적용
+      // 특정 회원 선택 시
+      const selectedStudent = studentList.find(
+        (s) => s.userId === parseInt(studentId)
+      );
+      setSelectedUser(selectedStudent || null);
+
       const selectedYear = year || new Date().getFullYear();
       const selectedMonth = month || new Date().getMonth() + 1;
 
