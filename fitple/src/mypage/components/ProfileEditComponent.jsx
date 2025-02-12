@@ -7,7 +7,7 @@ import KakaoSearch from '../../mainpage/components/KakaoSearch';
 import axios from 'axios';
 
 const ProfilEditComponent = () => {
-    const { userInfo, authority } = useContext(LoginContext);
+    const { userInfo, authority, setUserInfo } = useContext(LoginContext);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editedInfo, setEditedInfo] = useState({
         nickname: userInfo.nickname || "",
@@ -78,11 +78,8 @@ const ProfilEditComponent = () => {
         .then((response) => {
             //팝업창
             console.log(response.status)
-            // localStorage에 미리 저장
-            localStorage.setItem("userInfo", JSON.stringify({
-                ...userInfo,
-                ...editedInfo,
-            }));
+            // 유저 정보 업데이트
+            setUserInfo({...userInfo, ...editedInfo})
         })
         .catch((error) => {
             console.log(error)

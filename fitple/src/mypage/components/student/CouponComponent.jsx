@@ -26,6 +26,7 @@ const CouponComponent = () => {
         gymName: response.data.gymName,
         nickname: response.data.nickname,
         times: response.data.times,
+        selectedTrainerId: response.data.trainerId,
         trainerId: response.data.trainerId,
       })
     })
@@ -38,11 +39,11 @@ const CouponComponent = () => {
         ?.split("=")[1];
     //쿠폰 사용
     console.log("작동은 함")
-    console.log(userInfo.id, trainers.trainerId)
+    console.log(userInfo.id, selectedTrainer)
     api.patch(`/member/use-coupons`,
       {
         studentId: userInfo.id,
-        trainerId: trainers.trainerId,
+        trainerId: trainers.selectedTrainerId,
       },
       {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`},})
     .then((response) => {
@@ -63,6 +64,7 @@ const CouponComponent = () => {
         gymName: response.data.gymName,
         nickname: response.data.nickname,
         times: response.data.times,
+        selectedTrainerId: response.data.trainerId,
         trainerId: response.data.trainerId,
       })
     })

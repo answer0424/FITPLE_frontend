@@ -346,6 +346,7 @@ const LoginContextProvider = ({ children }) => {
         stompClient: stompClient.current,
         unreadMessage: unreadMessage || {},
         setUnreadMessage,
+        setUserInfo,
       }}
     >
       {children}
