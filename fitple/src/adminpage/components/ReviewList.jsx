@@ -8,44 +8,59 @@ const Modal = ({ review, onClose }) => {
 
   const renderStars = (rating) => {
     return (
-      <div className="flex gap-1">
+      <div className="d-flex gap-1">
         {[...Array(5)].map((_, index) => (
-          <Star
+          <span
             key={index}
-            className={`h-4 w-4 ${
-              index < rating 
-                ? 'text-yellow-400 fill-current' 
-                : 'text-gray-300'
+            className={`bi bi-star-fill ${
+              index < rating ? 'text-warning' : 'text-secondary'
             }`}
-          />
+          ></span>
         ))}
       </div>
     );
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">리뷰 상세 내용</h2>
-          <button onClick={onClose} className="modal-close">✕</button>
-        </div>
-        <div className="modal-body">
-          <div className="review-info">
-            <div className="review-rating">
-              <div className="star-rating">
-                {renderStars(review.rating)}
+    <div className="modal fade show" tabIndex="-1" style={{ display: 'block' }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">리뷰 상세 내용</h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <div className="review-info">
+              <div className="review-rating">
+                <div className="star-rating">{renderStars(review.rating)}</div>
+              </div>
+              <div className="review-text font-black">
+                <p>{review.content}</p>
               </div>
             </div>
-            <div className="review-text">
-              <p>{review.content}</p>
-            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onClick={onClose}
+            >
+              닫기
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState({ content: [], totalPages: 0 });
@@ -96,7 +111,7 @@ const ReviewList = () => {
 
   return (
     <>
-      <div className="card">
+      <div className="card card-bg-color">
         <h5 className="card-title en-font">Review List</h5>
           <div className="card-body">
             <table className="table table-dark">
@@ -117,7 +132,7 @@ const ReviewList = () => {
                     <td className="admin-table-td">{review.trainerName}</td>
                     <td className="admin-table-td">
                       <button
-                        className="btn btn-primary btn-sm"
+                        className="btn btn-primary btn-sm btn-detail kr-font"
                         onClick={() => handleViewDetails(review.id)}
                       >
                         상세보기
@@ -125,7 +140,7 @@ const ReviewList = () => {
                     </td>
                     <td className="admin-table-td">
                       <button
-                        className="btn btn-danger btn-sm d-flex align-items-center"
+                        className="btn btn-danger btn-sm d-flex align-items-center kr-font"
                         onClick={() => handleDeleteReview(review.id)}
                       >
                         <UserX className="h-4 w-4 me-1" />
