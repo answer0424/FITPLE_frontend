@@ -1,4 +1,5 @@
-전체 이벤트 감싸는 박스 .event-info {
+/* 전체 이벤트 감싸는 박스 */
+.event-info {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;

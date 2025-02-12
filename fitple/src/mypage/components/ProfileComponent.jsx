@@ -8,30 +8,30 @@ import "../static/css/ProfileComponent.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const ProfileComponent = ({ user, onClick }) => {
-  const [userInfo, setUserInfo] = useState(null);
-  // const { userInfo } = useContext(LoginContext);
+  // const [userInfo, setUserInfo] = useState(null);
+  const { userInfo, authority } = useContext(LoginContext);
   const navigate = useNavigate();
   const [active, setActive] = useState(null);
 
-  useEffect(() => {
-    const accessToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("accessToken="))
-      ?.split("=")[1];
+  // useEffect(() => {
+  //   const accessToken = document.cookie
+  //     .split("; ")
+  //     .find((row) => row.startsWith("accessToken="))
+  //     ?.split("=")[1];
 
-    api
-      .get(`/member/${user.id}/info`, {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      .then((response) => {
-        setUserInfo(response.data);
-      })
-      .catch((error) => {
-        console.error("사용자 정보 가져오기 실패:", error);
-        navigate("/");
-      });
-  }, [user]);
+  //   api
+  //     .get(`/member/${user.id}/info`, {
+  //       withCredentials: true,
+  //       headers: { Authorization: `Bearer ${accessToken}` },
+  //     })
+  //     .then((response) => {
+  //       setUserInfo(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("사용자 정보 가져오기 실패:", error);
+  //       navigate("/");
+  //     });
+  // }, [user]);
 
 
   //프로필 변경으로 이동
@@ -66,10 +66,10 @@ const ProfileComponent = ({ user, onClick }) => {
           {/* 닉네임 & 집 아이콘 */}
           <div className="nickname-container">
             <h2 className="nickname">{userInfo.nickname}</h2>
-            <HouseFill className="home-icon" onClick={goToTrainerHome} />
+            {authority.isTrainer && <HouseFill className="home-icon" onClick={goToTrainerHome} />}
           </div>
 
-          <p className="hbti">{userInfo.hbti}</p>
+          <p className="hbti">{userInfo.hbti.hbti}</p>
 
         </Col>
         </Row>

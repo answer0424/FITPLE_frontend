@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import { useEventContext } from "../context/EventContext";
 
 const RegisterScheduleModal = ({
   isModalOpen,
@@ -29,6 +30,8 @@ const RegisterScheduleModal = ({
 
     return scheduleDateTime.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss" 형식 유지
   };
+  //일정 추가 시 이벤트컨텍스트에 저장
+  const { events, updateEvents } = useEventContext();
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -111,7 +114,7 @@ const RegisterScheduleModal = ({
       console.log("전송할 일정 데이터:", scheduleData);
 
       const response = await axios.post(
-        `http://localhost:8081/member/register/add-schedule/${user.id}`,
+        `http://localhost:8081/member/register/add-schedule/${selectedStudent}`,
         scheduleData,
         {
           withCredentials: true,
@@ -120,9 +123,10 @@ const RegisterScheduleModal = ({
       );
 
       if (response.status === 200) {
+
         console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
-
+        updateEvents(response.data);
         if (onScheduleUpdate) {
           onScheduleUpdate(scheduleData);
         }

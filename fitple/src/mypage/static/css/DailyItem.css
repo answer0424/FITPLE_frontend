@@ -1,10 +1,10 @@
 /* 카드 스타일 */
 .daily-item-card {
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px 0;
+  /* border: 1px solid #ddd; */
+  /* border-radius: 10px; */
+  /* padding: 10px; */
+  /* margin: 10px 0; */
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
@@ -27,11 +27,11 @@
 }
 
 .daily-profile-placeholder {
-  width: 40px;
-  height: 40px;
+  /* width: 40px; */
+  /* height: 40px; */
   background: gray;
-  border-radius: 50%;
-  margin-right: 10px;
+  /* border-radius: 50%; */
+  /* margin-right: 10px; */
 }
 
 .daily-nickname {
@@ -46,7 +46,7 @@
 
 .daily-time {
   font-size: 0.9rem;
-  color: #666;
+  /* color: #666; */
 }
 
 /* 상태 버튼 */
@@ -54,8 +54,8 @@
   background-color: #333;
   border: none;
   font-size: 0.9rem;
-  padding: 5px 10px;
-  margin-bottom: 5px;
+  /* padding: 5px 10px; */
+  /* margin-bottom: 5px; */
 }
 
 .daily-status-button:hover {

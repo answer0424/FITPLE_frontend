@@ -10,6 +10,7 @@ import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
 import "../static/css/ModalReset.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+import "../static/css/EventItems.css";
 
 const CalenderComponent = ({ user }) => {
   const today = new Date();
@@ -159,7 +160,7 @@ const CalenderComponent = ({ user }) => {
 
   return (
     <>
-      <Container>
+      <Container fluid className="p-0" style={{ height: '100vh' }}>
         {authority.isTrainer ? (
           <TrainerStudentsDropdown
             trainerId={user.id}
@@ -177,15 +178,20 @@ const CalenderComponent = ({ user }) => {
 
         {
         (matchingReservations && matchingReservations.length >= 0) &&
-        <Calendar
-          value={date}
-          onChange={setDate}
-          onClickDay={handleDayClick}
-          onActiveStartDateChange={handleActiveStartDateChange}
-          calendarType="gregory"
-          showNeighboringMonth={false}
-          tileContent={tileContent}
-        />
+        <div className="row h-100">
+            <div className="col-12 d-flex justify-content-center align-items-center h-100">
+              <Calendar
+                value={date}
+                onChange={setDate}
+                onClickDay={handleDayClick}
+                onActiveStartDateChange={handleActiveStartDateChange}
+                calendarType="gregory"
+                showNeighboringMonth={false}
+                tileContent={tileContent}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </div>
         }
       </Container>
 

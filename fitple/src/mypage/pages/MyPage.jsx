@@ -79,8 +79,8 @@ const MyPage = () => {
       <Headers />
       {user ? (
         <>
-          <Container className="vh-100">
-            <Row>
+          <Container fluid className="vh-100 d-flex flex-column">
+            <Row className="col-12">
               <Col
                 md={4}
                 className="flex-column p-3 d-flex justify-content-center align-items-center"
@@ -97,12 +97,8 @@ const MyPage = () => {
               </Col>
               <Col
                 md={8}
-                className="vh-100 p-3 d-flex justify-content-center align-items-center"
+                className="p-3 d-flex justify-content-center align-items-center"
               >
-                <NoPermissionModal
-                  show={showModal}
-                  onClose={handleCloseModal}
-                />
                 <Routes>
                   {authority.isTrainer ? (
                     <Route
@@ -131,6 +127,10 @@ const MyPage = () => {
               </Col>
             </Row>
           </Container>
+          <NoPermissionModal
+                  show={showModal}
+                  onClose={handleCloseModal}
+                />
         </>
       ) : (
         <p>사용자 정보를 불러오는 중...</p>
