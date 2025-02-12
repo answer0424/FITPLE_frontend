@@ -29,7 +29,7 @@ const Modal = ({ review, onClose }) => {
             <h5 className="modal-title">리뷰 상세 내용</h5>
             <button
               type="button"
-              className="btn-close"
+              className="btn-close col-6"
               data-bs-dismiss="modal"
               aria-label="Close"
               onClick={onClose}

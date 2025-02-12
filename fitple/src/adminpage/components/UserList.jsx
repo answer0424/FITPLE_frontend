@@ -150,7 +150,7 @@ const UserTable = () => {
             </div>
             {/* 트레이너 목록 모달 */}
             <div className={`modal fade ${isModalOpen ? 'show' : ''}`} id="trainerModal" tabIndex="-1" style={{ display: isModalOpen ? 'block' : 'none' }}>
-                <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content">
                     <div className="modal-header col-12">
                         <h5 className="modal-title">트레이너 목록</h5>

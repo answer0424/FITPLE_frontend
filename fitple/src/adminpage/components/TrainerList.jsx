@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { UserX, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import adminApi from '../apis/admin';
 
 const Modal = ({ trainer, onClose }) => {
@@ -70,7 +70,7 @@ const StudentListModal = ({ trainer, students, onClose }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{trainer.nickname}의 회원 목록</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+            <button type="button" className="btn-close col-6" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <table className="table">
@@ -120,10 +120,12 @@ const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">포트폴리오 승인 상태</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+            <button type="button" className="btn-close col-6" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
           </div>
           <div className="modal-body font-black">
-            <p>현재 상태: <strong>{currentStatus}</strong></p>
+            <span className={`badge ${currentStatus === '승인' ? 'bg-success' : 'bg-warning text-dark'}`}>
+              현재 상태: {currentStatus}
+            </span>
           </div>
           <div className="modal-footer">
             <button className="btn btn-success" onClick={() => onStatusUpdate('승인')}>승인</button>
@@ -137,7 +139,8 @@ const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
 
 
 const TrainerList = () => {
-  const [trainers, setTrainers] = useState([{ content: [], totalPages: 0 }]);
+  const [trainers, setTrainers] = useState([]);  // 트레이너 목록
+  const [totalPages, setTotalPages] = useState(0);  // 전체 페이지 수
   const [page, setPage] = useState(0);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -147,16 +150,27 @@ const TrainerList = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedTrainerId, setSelectedTrainerId] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' }); // 기본 정렬: id 기준 asc
 
   useEffect(() => {
     fetchTrainers();
-  }, [page]);
+  }, []);
 
   const fetchTrainers = async () => {
     setIsLoading(true);
     try {
-      const data = await adminApi.getTrainers(page);
-      setTrainers(data);
+      let allTrainers = [];
+      let currentPage = 0;
+      let total = 0;
+      do {
+        const data = await adminApi.getTrainers(currentPage);
+        allTrainers = [...allTrainers, ...data.content];
+        total = data.totalPages;
+        currentPage++;
+      } while (currentPage < total);
+
+      setTrainers(allTrainers);  // 트레이너 목록 설정
+      setTotalPages(total);  // 전체 페이지 수 설정
     } catch (error) {
       console.error('Failed to fetch trainers:', error);
     }
@@ -207,13 +221,51 @@ const TrainerList = () => {
   };
 
   const handleStatusUpdate = async (newStatus) => {
-    try {
-      await adminApi.updateTrainerGrantStatus(selectedTrainerId, newStatus);
-      await fetchTrainers();
-      setShowStatusModal(false);
-    } catch (error) {
-      console.error('Failed to update status:', error);
+    // 상태 업데이트 전에 confirm 창 띄우기
+    const isConfirmed = window.confirm('승인 상태를 업데이트하시겠습니까?');
+    
+    if (isConfirmed) {
+      try {
+        // 승인 상태 업데이트
+        await adminApi.updateTrainerGrantStatus(selectedTrainerId, newStatus);
+        
+        // 트레이너 목록 새로고침
+        await fetchTrainers();
+        
+        // 상태 업데이트 후 모달 닫기
+        setShowStatusModal(false);
+        
+      } catch (error) {
+        console.error('Failed to update status:', error);
+        alert('승인 상태 업데이트에 실패했습니다.');
+      }
+    } else {
+      // 사용자가 취소를 클릭한 경우
+      console.log('승인 상태 업데이트가 취소되었습니다.');
     }
+  };
+  
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedTrainers = [...trainers].sort((a, b) => {
+    const valueA = a[sortConfig.key];
+    const valueB = b[sortConfig.key];
+
+    if (typeof valueA === 'string') {
+      return sortConfig.direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    }
+    return sortConfig.direction === 'asc' ? valueA - valueB : valueB - valueA;
+  });
+
+  const getSortIcon = (key) => {
+    return sortConfig.key === key ? (sortConfig.direction === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />) : <ChevronDown size={16} className="opacity-50" />;
   };
 
   if (isLoading) {
@@ -227,10 +279,18 @@ const TrainerList = () => {
         <table className="table table-dark">
           <thead>
             <tr>
-              <th className="admin-table-th">#</th>
-              <th className="admin-table-th">아이디</th>
-              <th className="admin-table-th">이메일</th>
-              <th className="admin-table-th">닉네임</th>
+              <th scope="col" onClick={() => handleSort('id')} className="sortable">
+                # {getSortIcon('id')}
+              </th>
+              <th scope="col" onClick={() => handleSort('username')} className="sortable">
+                아이디 {getSortIcon('username')}
+              </th>
+              <th scope="col" onClick={() => handleSort('email')} className="sortable">
+                이메일 {getSortIcon('email')}
+              </th>
+              <th scope="col" onClick={() => handleSort('nickname')} className="sortable">
+                닉네임 {getSortIcon('nickname')}
+              </th>
               <th className="admin-table-th">회원 목록</th>
               <th className="admin-table-th">트레이너 포토폴리오</th>
               <th className="admin-table-th">승인 상태</th>
@@ -238,7 +298,7 @@ const TrainerList = () => {
             </tr>
           </thead>
           <tbody className="admin-table-body">
-            {trainers.content.map((trainer) => (
+            {sortedTrainers.slice(page * 10, (page + 1) * 10).map((trainer, index) => (
               <tr key={trainer.id}>
                 <td className="admin-table-td">{trainer.id}</td>
                 <td className="admin-table-td">{trainer.username}</td>
@@ -315,24 +375,24 @@ const TrainerList = () => {
 
       {/* Pagination */}
       <div className="d-flex justify-content-between">
-          <button 
-              className="btn btn-secondary col-3" 
-              onClick={() => setPage(prev => Math.max(0, prev - 1))}
-              disabled={page === 0}
-          >
-              Previous
-          </button>
-          <span> {page + 1} / {trainers.totalPages}</span>
-          <button 
-              className="btn btn-secondary col-3" 
-              onClick={() => setPage(prev => prev + 1)}
-              disabled={page >= trainers.totalPages - 1}
-          >
-              Next
-          </button>
+        <button 
+          className="btn btn-secondary col-3" 
+          onClick={() => setPage(prev => Math.max(0, prev - 1))}
+          disabled={page === 0}
+        >
+          Previous
+        </button>
+        <span> {page + 1} / {totalPages}</span>
+        <button 
+          className="btn btn-secondary col-3" 
+          onClick={() => setPage(prev => prev + 1)}
+          disabled={page >= totalPages - 1}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
 };
 
-export default TrainerList; 
+export default TrainerList;
