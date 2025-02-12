@@ -162,10 +162,10 @@ function TrainerDetailPage() {
       if (!trainerResponse.ok)
         throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
 
-            const trainerData = await trainerResponse.json();
-            console.log("트레이너의 받아온 정보", trainerData);
-            setTrainer(trainerData);
-            console.log("트레이너의 아이디", trainerData.trainerId)
+      const trainerData = await trainerResponse.json();
+      console.log("트레이너의 받아온 정보", trainerData);
+      setTrainer(trainerData);
+      console.log("트레이너의 아이디", trainerData.trainerId);
 
       // 리뷰 데이터 가져오기
       const reviewsResponse = await fetch(
@@ -263,109 +263,134 @@ function TrainerDetailPage() {
     navigate(`/member/detail/write`);
   };
 
-    return (
-        <>
-            <Header />
-            {/* 상태가 대기나 거절일 경우 모달 표시 */}
-            {trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
-                <TrainerStatusModal isAccess={trainer.isAccess} trainerId={trainer.id} />
-            ) : (
-                <div className="trainer-container">
-                    <div className="trainer-card">
-                        <div className="trainer-header">
-                            <div className="profile-section">
-                                <img
-                                    src={`${BASE_URL}${trainer.trainerProfileImage}`}
-                                    alt={`${trainer.trainerName} 프로필`}
-                                    className="profile-image"
-                                    onError={(e) => (e.target.src = "/icons/certificate-icon.png")}
-                                />
-                            </div>
-                            <div className="info-section">
-                                <h1 className="trainer-name kr-font">{trainer.trainerName}</h1>
-                                {renderStars(averageRating)}
-                                <p className="rating-text kr-font">{averageRating}점</p>
-                                <div className="extra-info">
-                                    <div className="info-box">
-                                        <p className="kr-font"><strong className="kr-font">연차:</strong> {calculateYears(trainer.career)}</p>
-                                    </div>
-                                    <div className="info-box">
-                                        <p className="kr-font"><strong className="kr-font">HBTI:</strong> {trainer.hbti || "정보 없음"}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="details-section">
-                                <div className="detail-box">
-                                    <p><strong className="kr-font">1회 PT 가격:</strong></p>
-                                    <p className="kr-font">{trainer.perPrice.toLocaleString()}원</p>
-                                </div>
-                                <div className="detail-box">
-                                    <p><strong className="kr-font">헬스장:</strong></p>
-                                    <p className="kr-font">{trainer.gymName || "정보 없음"}</p>
-                                </div>
-                                <div className="detail-box">
-                                    <button
-                                        className="btn btn-primary chat-button kr-font"
-                                        onClick={handleChatClick} // 채팅 클릭 시 채팅방 생성 함수 호출
-                                    >
-                                        <FaCommentDots style={{ marginRight: "10px" }} /> 채팅문의
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        {/* 수정하기 버튼 (조건부 렌더링) */}
-                        {user && user.id === trainer.trainerId && (
-                            <button
-                                className="btn btn-warning edit-button kr-font"
-                                onClick={handleEditClick}
-                            >
-                                수정하기
-                            </button>
-                        )}
-                        
-                        <div className="trainer-tabs ">
-                            <button
-                                className={`tab-button kr-font ${activeTab === "home" ? "active" : ""}`}
-                                onClick={() => setActiveTab("home")}
-                            >
-                                홈
-                            </button>
-                            <button
-                                className={`tab-button kr-font ${activeTab === "career" ? "active" : ""}` }
-                                onClick={() => setActiveTab("career")}
-                            >
-                                경력
-                            </button>
-                            <button
-                                className={`tab-button kr-font ${activeTab === "review" ? "active" : ""}`}
-                                onClick={() => setActiveTab("review")}
-                            >
-                                리뷰 ({filteredReviews.length})
-                            </button>
-                        </div>
-                        <div className="tab-content">
-                            {activeTab === "home" && <TrainerHome {...trainer} />}
-                            {activeTab === "career" && (
-                                <TrainerCertifications certifications={trainer.certifications} BASE_URL={BASE_URL} />
-                            )}
-                            {activeTab === "review" && (
-                           <TrainerReviews
-                           reviews={reviews} // 현재 리뷰 목록 전달
-                           setReviews={setReviews} // 부모의 상태 업데이트 함수 전달
-                           BASE_URL={BASE_URL}
-                           user={user} // 현재 로그인한 유저 정보 전달
-                           trainerId={trainerId}
-                           trainingId={matchedTrainingId} 
-                       />
-                       
-                            )}
-                        </div>
-                    </div>
+  return (
+    <>
+      <Header />
+      {/* 상태가 대기나 거절일 경우 모달 표시 */}
+      {trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
+        <TrainerStatusModal
+          isAccess={trainer.isAccess}
+          trainerId={trainer.id}
+        />
+      ) : (
+        <div className="trainer-container">
+          <div className="trainer-card">
+            <div className="trainer-header">
+              <div className="profile-section">
+                <img
+                  src={`${BASE_URL}${trainer.trainerProfileImage}`}
+                  alt={`${trainer.trainerName} 프로필`}
+                  className="profile-image"
+                  onError={(e) =>
+                    (e.target.src = "/icons/certificate-icon.png")
+                  }
+                />
+              </div>
+              <div className="info-section">
+                <h1 className="trainer-name kr-font">{trainer.trainerName}</h1>
+                {renderStars(averageRating)}
+                <p className="rating-text kr-font">{averageRating}점</p>
+                <div className="extra-info">
+                  <div className="info-box">
+                    <p className="kr-font">
+                      <strong className="kr-font">연차:</strong>{" "}
+                      {calculateYears(trainer.career)}
+                    </p>
+                  </div>
+                  <div className="info-box">
+                    <p className="kr-font">
+                      <strong className="kr-font">HBTI:</strong>{" "}
+                      {trainer.hbti || "정보 없음"}
+                    </p>
+                  </div>
                 </div>
+              </div>
+              <div className="details-section">
+                <div className="detail-box">
+                  <p>
+                    <strong className="kr-font">1회 PT 가격:</strong>
+                  </p>
+                  <p className="kr-font">
+                    {trainer.perPrice.toLocaleString()}원
+                  </p>
+                </div>
+                <div className="detail-box">
+                  <p>
+                    <strong className="kr-font">헬스장:</strong>
+                  </p>
+                  <p className="kr-font">{trainer.gymName || "정보 없음"}</p>
+                </div>
+                <div className="detail-box">
+                  <button
+                    className="btn btn-primary chat-button kr-font"
+                    onClick={handleChatClick} // 채팅 클릭 시 채팅방 생성 함수 호출
+                  >
+                    <FaCommentDots style={{ marginRight: "10px" }} /> 채팅문의
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* 수정하기 버튼 (조건부 렌더링) */}
+            {user && user.id === trainer.trainerId && (
+              <button
+                className="btn btn-warning edit-button kr-font"
+                onClick={handleEditClick}
+              >
+                수정하기
+              </button>
             )}
-            {isLogin && <ChatIcon/>}
-        </>
-    );
+
+            <div className="trainer-tabs ">
+              <button
+                className={`tab-button kr-font ${
+                  activeTab === "home" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("home")}
+              >
+                홈
+              </button>
+              <button
+                className={`tab-button kr-font ${
+                  activeTab === "career" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("career")}
+              >
+                경력
+              </button>
+              <button
+                className={`tab-button kr-font ${
+                  activeTab === "review" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("review")}
+              >
+                리뷰 ({filteredReviews.length})
+              </button>
+            </div>
+            <div className="tab-content">
+              {activeTab === "home" && <TrainerHome {...trainer} />}
+              {activeTab === "career" && (
+                <TrainerCertifications
+                  certifications={trainer.certifications}
+                  BASE_URL={BASE_URL}
+                />
+              )}
+              {activeTab === "review" && (
+                <TrainerReviews
+                  reviews={reviews} // 현재 리뷰 목록 전달
+                  setReviews={setReviews} // 부모의 상태 업데이트 함수 전달
+                  BASE_URL={BASE_URL}
+                  user={user} // 현재 로그인한 유저 정보 전달
+                  trainerId={trainerId}
+                  trainingId={matchedTrainingId}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {isLogin && <ChatIcon />}
+    </>
+  );
 }
 
 export default TrainerDetailPage;
