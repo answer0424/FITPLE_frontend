@@ -146,9 +146,9 @@ const ProfilEditComponent = () => {
     }
     };
 
-    // useEffect(() => {
-    //     console.log(userInfo.birth)
-    // }, [userInfo])
+    useEffect(() => {
+        console.log(userInfo)
+    }, [userInfo])
 
     return (
         <Container>

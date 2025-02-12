@@ -305,7 +305,7 @@ const LoginContextProvider = ({ children }) => {
 
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     setIsLogin(true);
-    setUserInfo({ id, username: finalUsername, authority: userAuthority }); //= > userAuthority
+    setUserInfo(userData); //= > userAuthority
 
     // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
     const storedAnswers = localStorage.getItem("hbtiAnswers");
@@ -357,7 +357,7 @@ const LoginContextProvider = ({ children }) => {
     localStorage.setItem("isLogin", "true");
     localStorage.setItem(
       "userInfo",
-      JSON.stringify({ id, username: finalUsername, authority })
+      JSON.stringify(userData)
     );
   };
 
@@ -393,7 +393,6 @@ const LoginContextProvider = ({ children }) => {
         stompClient: stompClient.current,
         unreadMessage: unreadMessage || {},
         setUnreadMessage,
-        setUserInfo,
       }}
     >
       {children}
