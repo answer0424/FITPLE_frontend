@@ -31,14 +31,13 @@ const changeStatus = async (reservationId, status) => {
   }
 };
 
-// 🏋️‍♂️ 운동 상태 변경 버튼 컴포넌트
 const TrainerButtonItem = ({ event }) => {
   const [canComplete, setCanComplete] = useState(false);
   const [exerciseStartTime, setExerciseStartTime] = useState(
-    localStorage.getItem("exerciseStartTime") // 🔥 초기값을 localStorage에서 불러오기
+    localStorage.getItem("exerciseStartTime")
   );
+  const [isCompleted, setIsCompleted] = useState(event.status === "운동끝");
 
-  // 🕒 운동 시작 시간 체크 (30초 후 운동 완료 가능)
   useEffect(() => {
     if (exerciseStartTime) {
       const interval = setInterval(() => {
@@ -52,35 +51,37 @@ const TrainerButtonItem = ({ event }) => {
     }
   }, [exerciseStartTime]);
 
-  // 🏃‍♂️ 운동 시작
   const handleExerciseStart = () => {
-    const startTime = new Date().toISOString(); // ISO 형식으로 저장
-    localStorage.setItem("exerciseStartTime", startTime); // 🔥 localStorage에 저장
+    const startTime = new Date().toISOString();
+    localStorage.setItem("exerciseStartTime", startTime);
     setExerciseStartTime(startTime);
     changeStatus(event.reservationId, "운동중");
   };
 
-  // ✅ 운동끝
   const handleExerciseComplete = () => {
-    if (!canComplete || event.status === "운동끝") {
+    if (!canComplete) {
       alert("운동 시작 후 30초가 지나야 완료할 수 있습니다.");
       return;
     }
-    //localStorage.removeItem("exerciseStartTime"); // 🧹 완료 후 localStorage에서 삭제
+    setIsCompleted(true);
+    localStorage.removeItem("exerciseStartTime");
     changeStatus(event.reservationId, "운동끝");
   };
 
-  // ❌ 운동 취소
   const handleExerciseCancel = () => {
     if (window.confirm("운동을 취소하시겠습니까?")) {
-      localStorage.removeItem("exerciseStartTime"); // 🧹 취소 후 localStorage에서 삭제
+      localStorage.removeItem("exerciseStartTime");
       changeStatus(event.reservationId, "운동취소");
     }
   };
 
-  // 🛑 운동 완료 또는 취소된 경우, 상태만 출력
-  if (event.status === "운동완료" || event.status === "운동취소") {
-    return <p>Status: {event.status}</p>;
+  // 운동이 완료되었거나 취소된 경우
+  if (isCompleted || event.status === "운동끝" || event.status === "운동취소") {
+    return (
+      <div className="text-center p-2">
+        <p className="mb-0">상태: {event.status}</p>
+      </div>
+    );
   }
 
   return (
@@ -97,12 +98,12 @@ const TrainerButtonItem = ({ event }) => {
       )}
 
       {/* 운동 시작 후 */}
-      {exerciseStartTime || event.status === "운동중" ? (
+      {(exerciseStartTime || event.status === "운동중") && (
         <>
           <Button
             variant="success"
             onClick={handleExerciseComplete}
-            disabled={!canComplete || event.status === "운동끝"}
+            disabled={!canComplete}
             className="mt-2"
           >
             운동 완료 {!canComplete && "(30초 후 가능)"}
@@ -115,7 +116,10 @@ const TrainerButtonItem = ({ event }) => {
             운동 취소
           </Button>
         </>
-      ) : (
+      )}
+
+      {/* 운동 시작 전 취소 버튼 */}
+      {!exerciseStartTime && event.status !== "운동중" && (
         <Button
           variant="danger"
           onClick={handleExerciseCancel}

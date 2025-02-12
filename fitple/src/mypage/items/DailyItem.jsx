@@ -90,7 +90,8 @@ const DailyItem = ({ event }) => {
               {event.status === "운동끝" ? (
                 <Button
                   className="daily-end-button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // 이벤트 전파 방지
                     if (event.status === "운동완료") {
                       alert("이미 운동이 완료되었습니다.");
                       return;
