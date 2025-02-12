@@ -6,6 +6,7 @@ import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
+import TrainerSearchList from "../components/TrainerSearchList";
 
 const MatchPage = () => {
   const { userId } = useParams();
@@ -37,9 +38,12 @@ const MatchPage = () => {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_Server}/register/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_Server}/register/user`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) {
         console.error("❌ 사용자 정보를 가져오는 데 실패했습니다.");
@@ -86,15 +90,14 @@ const MatchPage = () => {
     }
   }, [latestUserInfo, isLoading]); // ✅ latestUserInfo가 업데이트된 후 실행
 
-
   if (isLoading) {
     return <p>로딩 중...</p>;
   }
 
-
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       <Header />
+      <TrainerSearchList />
       <TrainerMatchList userId={userId} />
     </div>
   );

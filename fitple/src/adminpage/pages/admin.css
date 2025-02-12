@@ -33,3 +33,29 @@
 .review-text {
   @apply text-gray-700; /* 리뷰 텍스트 색상 추가 */
 }
+
+.card-bg-color {
+  background-color: rgba(0,0,0,0);
+  color: white;
+}
+
+.btn-detail{
+  background-color: #A1D0FC;
+  color:black;
+}
+
+.admin-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 화면의 전체 높이를 차지하도록 설정 */
+  
+}
+
+.admin-container {
+  width: 80%;
+}
+
+.font-black{
+  color: black !important;
+}

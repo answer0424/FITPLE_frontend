@@ -8,6 +8,7 @@ const DailyScheduleModal = ({
   closeModal,
   selectedDate,
   dailyEvents,
+  setDailyEvents,
   user,
   selectedUser,
 }) => {
@@ -76,6 +77,7 @@ const DailyScheduleModal = ({
             timeInput={timeInput}
             setTimeInput={setTimeInput}
             user={user}
+            setDailyEvents={setDailyEvents}
           />
         )}
       </Modal.Body>

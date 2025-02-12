@@ -201,7 +201,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
 {/* 상단 컨트롤 섹션 */}
 <div className="controls-container">
     <button
-        className="review-submit-button col-3"
+        className="review-submit-button col-3 kr-font"
         onClick={() => setIsModalOpen(true)}
         disabled={!trainingId} // 트레이닝 ID가 없으면 버튼 비활성화
     >
@@ -210,7 +210,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     <select
         value={sortOption}
         onChange={(e) => setSortOption(e.target.value)}
-        className="form-select"
+        className="form-select kr-font"
     >
         <option value="latest">최신순</option>
         <option value="highest">별점 높은 순</option>
@@ -242,7 +242,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
           </p>
         </div>
         {user && review.userId === user.id && (
-          <button className="delete-btn col-3" onClick={() => handleDeleteReview(review.id)}>
+          <button className="delete-btn col-3 kr-font" onClick={() => handleDeleteReview(review.id)}>
             삭제
           </button>
         )}
@@ -258,22 +258,22 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                     <div className="modal1">
                         <div className="modal-content1">
                             <button className="close-modal" onClick={() => setIsModalOpen(false)}>X</button>
-                            <h3 className="modal-title">솔직한 후기를 남겨주세요!</h3>
-                            <p className="modal-description">
+                            <h3 className="modal-title kr-font">솔직한 후기를 남겨주세요!</h3>
+                            <p className="modal-description kr-font">
                                 일반 이용 후기 작성 요령
                             </p>
-                            <div className="modal-guidelines">
-                    <ul>
-                        <li>• 솔직하고 구체적인 피드백을 작성해주세요.</li>
-                        <li>• 경험하신 트레이닝의 장점과 개선점을 적어주시면 더욱 도움이 됩니다.</li>
-                        <li>• 다른 사용자들에게 도움이 될 만한 팁이나 조언을 포함해주세요.</li>
-                        <li>• 비속어나 부적절한 표현은 삼가주세요.</li>
+                            <div className="modal-guidelines ">
+                    <ul className="kr-font">
+                        <li className="kr-font">• 솔직하고 구체적인 피드백을 작성해주세요.</li>
+                        <li className="kr-font">• 경험하신 트레이닝의 장점과 개선점을 적어주시면 더욱 도움이 됩니다.</li>
+                        <li className="kr-font">• 다른 사용자들에게 도움이 될 만한 팁이나 조언을 포함해주세요.</li>
+                        <li className="kr-font">• 비속어나 부적절한 표현은 삼가주세요.</li>
                     </ul>
                 </div>
 
                             {/* 별점 선택 */}
                             <div className="rating-section">
-                                <label>별점을 선택해주세요</label>
+                                <label >별점을 선택해주세요</label>
                                 <div className="stars">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <span
@@ -302,7 +302,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
 
                             {/* 제출 버튼 */}
                             <button
-                                className="submit-button"
+                                className="submit-button kr-font"
                                 onClick={handleSubmitReview}
                                 disabled={reviewContent.trim() === ""}
                             >

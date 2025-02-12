@@ -5,6 +5,7 @@ import Header from "../../common/component/Header";
 import { useNavigate } from "react-router-dom";
 import "../component/css/HBTIListpage.css";
 
+
 // HBTI 유형에 따른 그룹 분류 함수
 const getGroup = (hbti) => {
   if (["MICP", "MECP", "BICP", "BECP"].includes(hbti)) return "solo";
@@ -96,15 +97,15 @@ function HBTIListPage() {
       <Header />
       <div className="container1 my-5">
         {/* 페이지 제목 */}
-        <h1 className="hbti-header">HBTI</h1>
-        <h2 className="hbti-subtitle">(HEALTH BEHAVIOR TYPE INDICATOR)</h2>
-        <h3 className="hbti-description">성격유형</h3>
+        <h1 className="hbti-header en-font">HBTI</h1>
+        <h2 className="hbti-subtitle en-font">(HEALTH BEHAVIOR TYPE INDICATOR)</h2>
+        <h3 className="hbti-description kr-font">성격유형</h3>
 
         {/* 그룹별 섹션 */}
         {Object.entries(groupedData).map(([group, items]) => (
           <div key={group} className={`group-section ${group}`}>
             {/* 그룹 제목 */}
-            <div className={`group-title ${group}`}>
+            <div className={`group-title  ${group}`}>
               {group === "solo" && "솔로형"}
               {group === "active" && "산소형"}
               {group === "strength" && "근육형"}
@@ -120,18 +121,18 @@ function HBTIListPage() {
                   onClick={() => handleCardClick(item.hbti)}
                   style={{ cursor: "pointer" }}
                 >
-                  <div className={`card h-100 shadow-sm card-${group}`}>
+                  <div className={`card1 h-100 shadow-sm card-${group}`}>
                     <img
                       src={`${import.meta.env.VITE_Server}${item.dogImage}`}
                       className="card-img-top"
                       alt={item.label}
                     />
                     <div className="card-body">
-                      <h5 className="card-title">{item.label}</h5>
-                      <div className="card-hbti">
+                      <h5 className="card-title kr-font">{item.label}</h5>
+                      <div className="card-hbti en-font">
                         <ColorfulText text={item.hbti} colors={hbtiColors} />
                       </div>
-                      <p className="card-text">{item.shortDescription}</p>
+                      <p className="card-text kr-font">{item.shortDescription}</p>
                     </div>
                   </div>
                 </div>
@@ -141,7 +142,7 @@ function HBTIListPage() {
           
         ))}
      <div className="center-container">
-  <button onClick={goHBTI} className="center-button">
+  <button onClick={goHBTI} className="center-button kr-font">
     테스트 하러가기
   </button>
 </div>
