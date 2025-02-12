@@ -5,44 +5,53 @@ import adminApi from '../apis/admin';
 const Modal = ({ trainer, onClose }) => {
   if (!trainer) return null;
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">트레이너 상세 정보</h2>
-          <button onClick={onClose} className="modal-close">✕</button>
-        </div>
-        <div className="modal-body">
-          <div className="trainer-access">
-            <p>: {trainer.isAccess}</p>
+  return ( 
+    <div className="modal fade show" tabIndex="-1" style={{ display: 'block' }}>
+      <div className="modal-dialog modal-dialog-centered modal-md">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title fw-bold">트레이너 상세 정보</h5>
+            <button type="button" className="btn-close col-6" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
           </div>
-          <div className="trainer-info">
-            <h3>기본 정보</h3>
-            <p>이름: {trainer.trainerName}</p>
-            <p>이메일: {trainer.trainerEmail}</p>
-            <p>회당 가격: {trainer.perPrice}원</p>
-            <p>HBTI: {trainer.hbti}</p>
+          <div className="modal-body font-black">
+            <div className="trainer-access mb-4">
+              <span className={`badge ${trainer.isAccess === '승인' ? 'bg-success' : 'bg-warning text-dark'}`}>
+                승인 상태: {trainer.isAccess}
+              </span>
+            </div>
+            <div className="trainer-info border-bottom pb-3 mb-3">
+              <h5 className="fw-semibold">📌 기본 정보</h5>
+              <p><strong>이름:</strong> {trainer.trainerName}</p>
+              <p><strong>이메일:</strong> {trainer.trainerEmail}</p>
+              <p><strong>회당 가격:</strong> {trainer.perPrice}원</p>
+              <p><strong>HBTI:</strong> {trainer.hbti}</p>
+            </div>
+            <div className="trainer-gym border-bottom pb-3 mb-3">
+              <h5 className="fw-semibold">🏋️ 헬스장 정보</h5>
+              <p><strong>헬스장:</strong> {trainer.gymName}</p>
+              <p><strong>주소:</strong> {trainer.gymAddress}</p>
+            </div>
+            <div className="trainer-career border-bottom pb-3 mb-3">
+              <h5 className="fw-semibold">📅 경력사항</h5>
+              <p>{trainer.career}</p>
+            </div>
+            <div className="trainer-intro border-bottom pb-3 mb-3">
+              <h5 className="fw-semibold">📝 자기소개</h5>
+              <p className='font-black'>{trainer.content}</p>
+            </div>
+            <div className="trainer-certs">
+              <h5 className="fw-semibold">📜 보유 자격증</h5>
+              <div className="d-flex flex-wrap gap-2">
+                {trainer.certifications?.map((cert, index) => (
+                  <span key={index} className="badge bg-primary">{cert.skills}</span>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="trainer-gym">
-            <h3>헬스장 정보</h3>
-            <p>헬스장: {trainer.gymName}</p>
-            <p>주소: {trainer.gymAddress}</p>
-          </div>
-          <div className="trainer-career">
-            <h3>경력사항</h3>
-            <p>{trainer.career}</p>
-          </div>
-          <div className="trainer-intro">
-            <h3>자기소개</h3>
-            <p>{trainer.content}</p>
-          </div>
-          <div className="trainer-certs">
-            <h3>보유 자격증</h3>
-            <ul>
-              {trainer.certifications?.map((cert, index) => (
-                <li key={index}>{cert.skills}</li>
-              ))}
-            </ul>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary w-100" data-bs-dismiss="modal" onClick={onClose}>
+              닫기
+            </button>
           </div>
         </div>
       </div>
@@ -50,39 +59,54 @@ const Modal = ({ trainer, onClose }) => {
   );
 };
 
+
+
 const StudentListModal = ({ trainer, students, onClose }) => {
   if (!trainer) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">{trainer.nickname}의 회원 목록</h2>
-          <button onClick={onClose} className="modal-close">✕</button>
-        </div>
-        <div className="modal-body">
-          <table className="admin-table">
-            <thead className="admin-table-header">
-              <tr>
-                <th className="admin-table-th">ID</th>
-                <th className="admin-table-th">아이디</th>
-                <th className="admin-table-th">이메일</th>
-                <th className="admin-table-th">이름</th>
-                <th className="admin-table-th">남은 횟수</th>
-              </tr>
-            </thead>
-            <tbody className="admin-table-body">
-              {students.map((student) => (
-                <tr key={student.userId}>
-                  <td className="admin-table-td">{student.userId}</td>
-                  <td className="admin-table-td">{student.nickname}</td>
-                  <td className="admin-table-td">{student.email}</td>
-                  <td className="admin-table-td">{student.name}</td>
-                  <td className="admin-table-td">{student.times}</td>
+    <div className="modal fade show" tabIndex="-1" style={{ display: 'block' }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">{trainer.nickname}의 회원 목록</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>아이디</th>
+                  <th>이메일</th>
+                  <th>이름</th>
+                  <th>남은 횟수</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {students.length > 0 ? (
+                  students.map((student) => (
+                    <tr key={student.userId}>
+                      <td>{student.userId}</td>
+                      <td>{student.nickname}</td>
+                      <td>{student.email}</td>
+                      <td>{student.name}</td>
+                      <td>{student.times}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center">회원 없음</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>
+              닫기
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -91,46 +115,29 @@ const StudentListModal = ({ trainer, students, onClose }) => {
 
 const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-body">
-          <h2 className="modal-header">포트폴리오 승인 상태</h2>
-          <button 
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ✕
-          </button>
-        </div>
-        
-        <div className="modal-body">
-          <p className="modal-body">현재 상태:</p>
-          <p className="modal-body">
-            {currentStatus}
-          </p>
-        </div>
-
-        <div className="modal-body">
-          <button
-            onClick={() => onStatusUpdate('승인')}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium"
-          >
-            승인
-          </button>
-          <button
-            onClick={() => onStatusUpdate('거절')}
-            className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium"
-          >
-            반려
-          </button>
+    <div className="modal fade show" tabIndex="-1" style={{ display: 'block' }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">포트폴리오 승인 상태</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body font-black">
+            <p>현재 상태: <strong>{currentStatus}</strong></p>
+          </div>
+          <div className="modal-footer">
+            <button className="btn btn-success" onClick={() => onStatusUpdate('승인')}>승인</button>
+            <button className="btn btn-danger" onClick={() => onStatusUpdate('거절')}>반려</button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
+
 const TrainerList = () => {
-  const [trainers, setTrainers] = useState({ content: [], totalPages: 0 });
+  const [trainers, setTrainers] = useState([{ content: [], totalPages: 0 }]);
   const [page, setPage] = useState(0);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -214,7 +221,7 @@ const TrainerList = () => {
   }
 
   return (
-    <div className="card">
+    <div className="card card-bg-color">
       <div className="card-body">
         <h5 className="card-title en-font">Trainer List</h5>
         <table className="table table-dark">
@@ -239,7 +246,7 @@ const TrainerList = () => {
                 <td className="admin-table-td">{trainer.nickname}</td>
                 <td className="admin-table-td">
                   <button
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary btn-sm btn-detail kr-font"
                     onClick={() => handleViewStudents(trainer)}
                   >
                     회원 목록
@@ -247,7 +254,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary btn-sm btn-detail kr-font"
                     onClick={() => handleViewDetail(trainer.id)}
                   >
                     상세보기
@@ -255,7 +262,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary btn-sm btn-detail kr-font"
                     onClick={() => handleStatusClick(trainer.id)}
                   >
                     승인상태 확인
@@ -263,7 +270,7 @@ const TrainerList = () => {
                 </td>
                 <td className="admin-table-td">
                   <button
-                    className="btn btn-danger btn-sm d-flex align-items-center"
+                    className="btn btn-danger btn-sm d-flex align-items-center kr-font"
                     onClick={() => handleDeleteTrainer(trainer.id)}
                   >
                     <UserX className="h-4 w-4 mr-1" />

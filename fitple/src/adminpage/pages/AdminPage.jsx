@@ -14,6 +14,7 @@ const AdminPage = () => {
   }
 
   return (
+  <div className='admin-wrapper'>
     <div className="admin-container">
       <h1 className="admin-title en-font">Admin Page</h1>
       
@@ -51,6 +52,7 @@ const AdminPage = () => {
         {activeTab === 'reviews' && <ReviewList />}
       </div>
     </div>
+  </div>
   );
 };
 
