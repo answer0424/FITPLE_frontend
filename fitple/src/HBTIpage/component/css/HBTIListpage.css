@@ -146,13 +146,15 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* 카드 텍스트 스타일 */
+
 /* 카드 텍스트 스타일 */
 .card-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  padding: 0 1rem;
-  margin: 1.5rem 0 0; /* 텍스트 위쪽에 간격 추가 */
+  font-size: 1.5rem; /* 폰트 크기 약간 키움 */
+  font-weight: bold; /* 글씨 강조 */
+  line-height: 1.7; /* 줄 간격 더 넓게 */
+  color: #333333; /* 너무 강한 검정 대신 부드러운 색 */
+  padding: 0 1.5rem; /* 좌우 여백 조금 더 추가 */
+  margin: 2rem 0 0; /* 위쪽 여백 좀 더 추가 */
   text-align: center; /* 중앙 정렬 */
 }
 
