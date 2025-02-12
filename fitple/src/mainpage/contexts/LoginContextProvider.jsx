@@ -289,14 +289,14 @@ const LoginContextProvider = ({ children }) => {
 
     // Set authority based on user's role
     const newAuthority = {
-        isStudent: userAuthority === "ROLE_STUDENT",
-        isTrainer: userAuthority === "ROLE_TRAINER",
-        isAdmin: userAuthority === "ROLE_ADMIN"
+      isStudent: userAuthority === "ROLE_STUDENT",
+      isTrainer: userAuthority === "ROLE_TRAINER",
+      isAdmin: userAuthority === "ROLE_ADMIN",
     };
-    
+
     setAuthority(newAuthority);
-    localStorage.setItem('authority', JSON.stringify(newAuthority));
-    
+    localStorage.setItem("authority", JSON.stringify(newAuthority));
+
     console.log(`✅ 로그인 성공!
             ID: ${id}
             Username: ${finalUsername}
@@ -378,7 +378,7 @@ const LoginContextProvider = ({ children }) => {
     localStorage.removeItem("authority");
     localStorage.removeItem("username");
 
-    navigate("/");
+    //navigate("/"); // 비밀번호 재설정 링크 안들어가지는 이슈로 잠시 주석합니다.
   };
 
   return (
