@@ -13,7 +13,7 @@ const MypagePathButtenComponent = ({ onClick }) => {
   };
 
   return (
-    <div className="mypage-button-container">
+    <div className="mypage-button-container justify-content-center align-items-center">
       {/* <span className="mypage-label">monthly</span> */}
       <ButtonGroup className="mypage-button-group">
         <Button

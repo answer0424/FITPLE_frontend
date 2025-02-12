@@ -78,7 +78,7 @@ const CalenderComponent = () => {
     return (
       <div className="event-info">
         {filteredReservations.length > 0 &&
-          filteredReservations.map((event) => (
+          filteredReservations.slice(0, 2).map((event) => (
             <div
             key={event.reservationId}
             className="reservation-item event-color"
@@ -126,8 +126,8 @@ const CalenderComponent = () => {
           alert("일정이 없네용")
         }
         // Context의 updateEvents 함수 사용
-        if(events) MonthUpdateEvents(response.data)
-        else updateEvents(response.data);
+        if(events) updateEvents(response.data);
+        else MonthUpdateEvents(response.data);
       } catch (error) {
         console.error("일정 불러오기 실패:", error);
         MonthUpdateEvents([]); // 에러 시 빈 배열로 초기화

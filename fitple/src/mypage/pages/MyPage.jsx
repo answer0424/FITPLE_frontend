@@ -10,7 +10,7 @@ import MypagePathButtenComponent from "../components/MypagePathButtenComponent";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { EventProvider } from "../context/EventContext";
 import Headers from "../../common/component/Header";
-import "../../mypage/static/css/Reset.css";
+// import "../../mypage/static/css/Reset.css";
 
 const MyPage = () => {
   // const role = authInfo();
@@ -85,10 +85,8 @@ const MyPage = () => {
                 md={4}
                 className="flex-column p-3 d-flex justify-content-center align-items-center vh-100"
               >
-                <div className="vh-60">
-                  <ProfileComponent user={user} onClick={handleCurrentPage}/>
-                </div>
-                <div className="vh-40">
+                <ProfileComponent user={user} onClick={handleCurrentPage}/>
+                <div>
                   <MypagePathButtenComponent
                     user={user}
                     onClick={handleCurrentPage}
