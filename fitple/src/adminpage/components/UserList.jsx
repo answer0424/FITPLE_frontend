@@ -82,6 +82,15 @@ const UserTable = () => {
         return sortConfig.key === key ? (sortConfig.direction === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />) : <ChevronDown size={16} className="opacity-50" />;
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 해줘야 함
+        const day = String(date.getDate()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}`; // yyyy-MM-dd 형식으로 반환
+    };
+
     return (
         <div className="card card-bg-color">
             <div className="card-body">
@@ -118,7 +127,7 @@ const UserTable = () => {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.username}</td>
                                     <td>{user.email}</td>
-                                    <td>{user.birth}</td>
+                                    <td>{formatDate(user.birth)}</td> {/* 생일 포맷팅 */}
                                     <td>{user.nickname}</td>
                                     <td>
                                         <button className="btn btn-primary btn-sm btn-detail kr-font" onClick={() => handleViewTrainers(user.id)}>
