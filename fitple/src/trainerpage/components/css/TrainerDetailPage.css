@@ -52,7 +52,7 @@ body {
     align-items: center;
 }
 
-.profile-image {
+.profile-image1 {
     width: 200px;
     height: 200px;
     border-radius: 50%;
@@ -109,12 +109,16 @@ body {
 .detail-box {
     background-color: #444;
     padding: 10px 15px;
-    border-radius: 10px;
+    border-radius: 20px;
     text-align: left;
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    align-items: center; /* 세로 정렬 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    white-space: nowrap; /* 줄 바꿈 방지 */
 }
+
 
 .rating {
     display: flex;

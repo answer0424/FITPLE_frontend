@@ -280,7 +280,7 @@ function TrainerDetailPage() {
                 <img
                   src={`${BASE_URL}${trainer.trainerProfileImage}`}
                   alt={`${trainer.trainerName} 프로필`}
-                  className="profile-image"
+                  className="profile-image1"
                   onError={(e) =>
                     (e.target.src = "/icons/certificate-icon.png")
                   }
