@@ -78,12 +78,18 @@ const CalenderComponent = ({ user }) => {
       <div className="event-info">
         {filteredReservations.length > 0 &&
           filteredReservations.map((event) => (
-            <div key={event.reservationId} className="reservation-item">
-              <span>{event.nickname}</span>
-              <br />
-              <span>{event.date.slice(11, 16)}</span>
-            </div>
-          ))}
+            <div
+            key={event.reservationId}
+            className="reservation-item event-color"
+          >
+            <span className="event-nickname">{event.nickname}회원</span>
+          </div>
+        ))}
+        {filteredReservations.length > 2 && (
+        <div className="reservation-item more-events">
+          +{filteredReservations.length - 2}
+        </div>
+        )}
       </div>
     );
   };
