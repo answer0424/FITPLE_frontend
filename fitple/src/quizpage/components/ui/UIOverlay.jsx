@@ -81,18 +81,37 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                     className="button-base home-button"
                     style={{
                         position: 'absolute',
-                        left: '50%',
-                        bottom: '40px',  // 하단에 배치
-                        transform: 'translateX(-50%)',  // 수평 중앙 정렬
-                        fontSize: '15px',
+                        left: '30px',
+                        top: '30px',
+                        padding: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '50%',
+                        width: '48px',
+                        height: '48px'
                     }}
                     onClick={() => {
                         if (window.confirm('홈으로 이동하시겠습니까?')) {
                             window.location.href = '/';
                         }
-                    }}  // 홈으로 가기
+                    }}
                 >
-                    HOME
+                    <svg
+                        width="50"
+                        height="50"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M3 12l9-9 9 9M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
                 </button>
 
                 {gameState === 'playing' && currentPlatform === totalPlatforms - 1 && (
