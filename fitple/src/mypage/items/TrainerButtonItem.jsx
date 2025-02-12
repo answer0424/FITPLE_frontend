@@ -62,11 +62,11 @@ const TrainerButtonItem = ({ event }) => {
 
   // ✅ 운동끝
   const handleExerciseComplete = () => {
-    if (!canComplete) {
+    if (!canComplete || event.status === "운동끝") {
       alert("운동 시작 후 30초가 지나야 완료할 수 있습니다.");
       return;
     }
-    localStorage.removeItem("exerciseStartTime"); // 🧹 완료 후 localStorage에서 삭제
+    //localStorage.removeItem("exerciseStartTime"); // 🧹 완료 후 localStorage에서 삭제
     changeStatus(event.reservationId, "운동끝");
   };
 
@@ -102,7 +102,7 @@ const TrainerButtonItem = ({ event }) => {
           <Button
             variant="success"
             onClick={handleExerciseComplete}
-            disabled={!canComplete}
+            disabled={!canComplete || event.status === "운동끝"}
             className="mt-2"
           >
             운동 완료 {!canComplete && "(30초 후 가능)"}

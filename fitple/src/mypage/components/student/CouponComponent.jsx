@@ -25,10 +25,11 @@ const CouponComponent = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log("response.data : ", response.data);
         if (!trainers) setTrainers(response.data.trainerIds);
-
+        // stamp 10개 있어야만 coupons 1개
         setSelectedTrainer({
+          stamp: reportError.data.stamp,
           coupons: response.data.coupons,
           gymName: response.data.gymName,
           nickname: response.data.nickname,
@@ -89,6 +90,7 @@ const CouponComponent = () => {
       .then((response) => {
         console.log(response.data);
         setSelectedTrainer({
+          stamp: response.data.stamp,
           coupons: response.data.coupons,
           gymName: response.data.gymName,
           nickname: response.data.nickname,
@@ -133,6 +135,9 @@ const CouponComponent = () => {
             </p>
             <p className="coupon-info-item">
               <strong>GYM:</strong> {selectedTrainer.gymName}
+            </p>
+            <p className="coupon-info-item">
+              <strong>Stamp:</strong> {selectedTrainer.stamp}
             </p>
             <p className="coupon-info-item">
               <strong>COUPON:</strong> {selectedTrainer.coupons}
