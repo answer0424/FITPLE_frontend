@@ -157,6 +157,7 @@ const validateAndRefreshToken = async () => {
             const trainerData = await trainerResponse.json();
             console.log("트레이너의 받아온 정보", trainerData);
             setTrainer(trainerData);
+            console.log("트레이너의 아이디", trainerData.trainerId)
 
             // 리뷰 데이터 가져오기
             const reviewsResponse = await fetch(`${BASE_URL}/api/reviews/training/${trainerId}`, {
@@ -298,7 +299,7 @@ const validateAndRefreshToken = async () => {
                             </div>
                         </div>
                         {/* 수정하기 버튼 (조건부 렌더링) */}
-                        {user && user.id === trainer.id && (
+                        {user && user.id === trainer.trainerId && (
                             <button
                                 className="btn btn-warning edit-button"
                                 onClick={handleEditClick}
