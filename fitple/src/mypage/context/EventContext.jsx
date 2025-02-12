@@ -20,6 +20,10 @@ export const EventProvider = ({ children }) => {
     }
   };
 
+  const MonthUpdateEvents = (newEvent) => {
+    setEvents(newEvent);
+  };
+
   return (
     <EventContext.Provider value={{ events, updateEvents }}>
       {children}

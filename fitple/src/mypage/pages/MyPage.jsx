@@ -83,7 +83,7 @@ const MyPage = () => {
             <Row className="col-12">
               <Col
                 md={4}
-                className="flex-column p-3 d-flex justify-content-center align-items-center"
+                className="flex-column p-3 d-flex justify-content-center align-items-center vh-100"
               >
                 <div className="vh-60">
                   <ProfileComponent user={user} onClick={handleCurrentPage}/>

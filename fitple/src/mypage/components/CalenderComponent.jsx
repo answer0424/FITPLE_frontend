@@ -12,7 +12,7 @@ import "../static/css/ModalReset.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import "../static/css/EventItems.css";
 
-const CalenderComponent = ({ user }) => {
+const CalenderComponent = () => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +25,7 @@ const CalenderComponent = ({ user }) => {
   const [matchingReservations, setMatchingReservations] = useState([]);
 
   // EventContext에서 events와 updateEvents를 가져옵니다
-  const { events, updateEvents } = useEventContext();
+  const { events, updateEvents, MonthUpdateEvents } = useEventContext();
   const { userInfo, authority } = useContext(LoginContext);
 
 
@@ -103,11 +103,13 @@ const CalenderComponent = ({ user }) => {
 
   // 📌 일정 데이터 가져오기
   useEffect(() => {
-    if (!user?.id) return;
+    console.log(userInfo.id);
+    if (!userInfo.id) return;
 
+    console.log("일정 가져오기" + userInfo.id);
     const fetchSchedules = async () => {
       try {
-        const response = await api.get(`/member/${user.id}/calendar`, {
+        const response = await api.get(`/member/${userInfo.id}/calendar`, {
           params: {
             year: currentYear,
             month: currentMonth - 1,
@@ -115,25 +117,25 @@ const CalenderComponent = ({ user }) => {
           withCredentials: true,
         });
 
-        // console.log(
-        //   `${currentYear}년 ${currentMonth}월 일정 로드: `,
-        //   response.data
-        // );
+        console.log(
+          `${currentYear}년 ${currentMonth}월 일정 로드: `,
+          response.data
+        );
         //일정이 없을 경우
         if(response.data.length === 0) {
-          setMatchingReservations([1, 2, 3]);
           alert("일정이 없네용")
         }
         // Context의 updateEvents 함수 사용
-        updateEvents(response.data);
+        if(events) MonthUpdateEvents(response.data)
+        else updateEvents(response.data);
       } catch (error) {
         console.error("일정 불러오기 실패:", error);
-        updateEvents([]); // 에러 시 빈 배열로 초기화
+        MonthUpdateEvents([]); // 에러 시 빈 배열로 초기화
       }
     };
 
     fetchSchedules();
-  }, [user?.id, currentYear, currentMonth]);
+  }, [currentYear, currentMonth]);
 
   // 📌 전체 회원 선택 시 전체 일정 불러오기
   useEffect(() => {
@@ -144,26 +146,25 @@ const CalenderComponent = ({ user }) => {
 
   //불러온 이벤트 매칭예약에 옮기기
   useEffect(() => {
-    // console.log("컨텍스트 적용")
     console.log(events);
     setMatchingReservations(events);
   }, [events])
 
   useEffect(() => {
-    console.log(dailyEvents);
-  }, [dailyEvents])
+    console.log(currentMonth);
+  }, [currentMonth])
 
-  useEffect(() => {
-    console.log(matchingReservations);
-  }, [matchingReservations])
+  // useEffect(() => {
+  //   console.log(matchingReservations);
+  // }, [matchingReservations])
 
 
   return (
     <>
-      <Container fluid className="p-0" style={{ height: '100vh' }}>
+      <Container fluid className="p-0 vh-100">
         {authority.isTrainer ? (
           <TrainerStudentsDropdown
-            trainerId={user.id}
+            trainerId={userInfo.id}
             updateEvents={updateEvents}
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
@@ -189,6 +190,7 @@ const CalenderComponent = ({ user }) => {
                 showNeighboringMonth={false}
                 tileContent={tileContent}
                 style={{ width: '100%', height: '100%' }}
+                className="w-100 h-100"
               />
             </div>
           </div>
@@ -201,7 +203,6 @@ const CalenderComponent = ({ user }) => {
         setSelectedUser={setSelectedUser}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
-        user={user}
         selectedUser={selectedUser}
       />
     </>

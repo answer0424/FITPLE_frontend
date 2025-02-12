@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import RegisterScheduleModal from "../modal/RegisterSceduleModal";
 import DailyItem from "../items/DailyItem";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const DailyScheduleModal = ({
   isModalOpen,
@@ -14,6 +15,7 @@ const DailyScheduleModal = ({
 }) => {
   const [modalChange, setModalChange] = useState(true);
   const [timeInput, setTimeInput] = useState("");
+  const { userInfo } = useContext(LoginContext);
 
   // 모달 변경
   const handleModalChange = () => {
@@ -49,14 +51,14 @@ const DailyScheduleModal = ({
     <Modal show={isModalOpen} onHide={closeModal} centered>
       <Modal.Header>
         <Modal.Title>{modalChange ? "스케줄" : "일정 등록"}</Modal.Title>
-        {user.authority === "ROLE_TRAINER" && (
+        {userInfo.authority === "ROLE_TRAINER" && (
           <Button variant="primary" onClick={handleModalChange}>
             {modalChange ? "일정 추가" : "스케줄"}
           </Button>
         )}
       </Modal.Header>
       <Modal.Body style={{ color: "black" }}>
-        {!user ? (
+        {!userInfo ? (
           <div className="text-center">잠시만 기다리세요...</div>
         ) : modalChange ? (
           dailyEvents.length > 0 ? (
@@ -76,7 +78,6 @@ const DailyScheduleModal = ({
             selectedDate={selectedDate}
             timeInput={timeInput}
             setTimeInput={setTimeInput}
-            user={user}
             setDailyEvents={setDailyEvents}
           />
         )}

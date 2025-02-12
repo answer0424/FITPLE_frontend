@@ -29,6 +29,9 @@ const TrainerMatchList = ({ userId }) => {
           }
         );
 
+        console.log("여기여기여기다아아아아앙")
+        console.log(response)
+
         if (response.status === 204) {
           setTrainers([]);
           return;
@@ -58,6 +61,7 @@ const TrainerMatchList = ({ userId }) => {
       setCurrentIndex((prevIndex) => prevIndex - 1);
     }
   };
+
 
   if (error) return <Alert variant="danger">Error: {error}</Alert>;
   if (!trainers.length)

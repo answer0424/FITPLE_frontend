@@ -11,7 +11,6 @@ const RegisterScheduleModal = ({
   setTimeInput,
 
   onScheduleUpdate,
-  user,
 }) => {
   const [studentList, setStudentList] = useState([]);
   const [trainingList, setTrainingList] = useState([]); // Training 정보를 저장할 상태 추가
@@ -32,10 +31,11 @@ const RegisterScheduleModal = ({
   };
   //일정 추가 시 이벤트컨텍스트에 저장
   const { events, updateEvents } = useEventContext();
+  const { userInfo } = useContext(LoginContext);
 
   useEffect(() => {
     const fetchStudents = async () => {
-      if (!isModalOpen || !user?.id) return;
+      if (!isModalOpen || !userInfo.id) return;
 
       setIsLoading(true);
       setError(null);
@@ -43,7 +43,7 @@ const RegisterScheduleModal = ({
       try {
         // 트레이너의 트레이닝 목록을 가져오는 API 호출
         const response = await axios.get(
-          `http://localhost:8081/member/${user.id}/register`,
+          `http://localhost:8081/member/${userInfo.id}/register`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -54,12 +54,12 @@ const RegisterScheduleModal = ({
           setStudentList(response.data);
           // Training 정보도 함께 저장
           if (Array.isArray(response.data)) {
-            const trainings = response.data.map((user) => ({
+            const trainings = response.data.map((userInfo) => ({
               // trainingId: user.trainingId, // Training 테이블의 ID
-              studentId: user.userId, // User(Student) 테이블의 ID
-              nickname: user.nickname,
-              times: user.times,
-              trainingId: user.trainingId,
+              studentId: userInfo.userId, // User(Student) 테이블의 ID
+              nickname: userInfo.nickname,
+              times: userInfo.times,
+              trainingId: userInfo.trainingId,
             }));
 
             console.log("tranings : ", trainings);
@@ -80,7 +80,7 @@ const RegisterScheduleModal = ({
     };
 
     fetchStudents();
-  }, [isModalOpen, user]);
+  }, [isModalOpen, userInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
