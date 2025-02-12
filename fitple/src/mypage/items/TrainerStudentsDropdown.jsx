@@ -41,9 +41,9 @@ const TrainerStudentsDropdown = ({
           }
         );
 
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.length > 0) {
           console.log("드롭다운 , 전체 회원 리스트:", response.data);
-          setStudentList(response.data || []);
+          setStudentList(response.data);
         } else {
           setStudentList([]);
           setError("학생 목록을 불러올 수 없습니다.");
@@ -51,7 +51,6 @@ const TrainerStudentsDropdown = ({
       } catch (error) {
         console.error("학생 목록 불러오기 실패:", error);
         setError("학생 목록을 불러오는 중 오류가 발생했습니다.");
-        setStudentList([]);
       } finally {
         setIsLoading(false);
       }
@@ -60,9 +59,21 @@ const TrainerStudentsDropdown = ({
     fetchStudents();
   }, [trainerId]);
 
+  // 선택된 학생 ID가 변경될 때 selectedUser 업데이트
+  useEffect(() => {
+    if (selectedStudentId === "all") {
+      setSelectedUser(null);
+      setSelectedStudent(null);
+    } else {
+      const student = studentList.find(
+        (s) => s.userId === parseInt(selectedStudentId)
+      );
+      setSelectedUser(student || null);
+    }
+  }, [selectedStudentId, studentList, setSelectedUser]);
+
   // Handle student selection
-  const handleMemberSelect = async (event) => {
-    const studentId = event.target.value;
+  const handleMemberSelect = async (studentId) => {
     console.log("선택한 studentId : ", studentId);
     setSelectedStudentId(studentId);
 
@@ -84,52 +95,51 @@ const TrainerStudentsDropdown = ({
       const selectedYear = year || new Date().getFullYear();
       const selectedMonth = month || new Date().getMonth() + 1;
 
-      const response = await axios.get(
-        `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
-        {
-          params: { year: selectedYear, month: selectedMonth },
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${getAccessToken()}` },
-        }
-      );
-
-      if (response.status === 200) {
-        const scheduleData = response.data || [];
-        console.log(`${studentId} 회원 일정:`, scheduleData);
-        setSelectedStudent(scheduleData);
-        updateEvents(scheduleData);
+      if (studentId === "all") {
+        setSelectedStudent(null);
       } else {
-        throw new Error("일정 데이터를 불러올 수 없습니다.");
+        response = await axios.get(
+          `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
+          {
+            params: { year: selectedYear, month: selectedMonth },
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${getAccessToken()}` },
+          }
+        );
+        setSelectedStudent(response.data);
       }
+
+      console.log(
+        `${studentId === "all" ? "전체 회원" : studentId} 일정: `,
+        response.data
+      );
+      updateEvents(response.data);
     } catch (error) {
       console.error("일정 조회 실패: ", error);
-      alert("회원의 일정이 존재하지 않습니다");
-      // setError("일정을 불러오는 중 오류가 발생했습니다.");
-      setSelectedStudent([]);
-      updateEvents([]);
+      setError("일정을 불러오는 중 오류가 발생했습니다.");
     }
   };
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <Form.Select disabled>
         <option>로딩 중...</option>
       </Form.Select>
     );
-  }
+  // if (error) return <div className="text-danger">{error}</div>;
 
   return (
-    <>
-      <Form.Select value={selectedStudentId} onChange={handleMemberSelect}>
-        <option value="all">전체 회원</option>
-        {studentList.map((student) => (
-          <option key={student.userId} value={student.userId}>
-            {student.nickname}
-          </option>
-        ))}
-      </Form.Select>
-      {error && <div className="text-danger mt-2">{error}</div>}
-    </>
+    <Form.Select
+      value={selectedStudentId}
+      onChange={(e) => handleMemberSelect(e.target.value)}
+    >
+      <option value="all">전체 회원</option>
+      {studentList.map((student) => (
+        <option key={student.userId} value={student.userId}>
+          {student.nickname}
+        </option>
+      ))}
+    </Form.Select>
   );
 };
 
