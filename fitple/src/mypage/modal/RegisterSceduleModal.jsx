@@ -8,6 +8,7 @@ const RegisterScheduleModal = ({
   selectedDate,
   timeInput,
   setTimeInput,
+
   onScheduleUpdate,
   user,
 }) => {
@@ -121,6 +122,7 @@ const RegisterScheduleModal = ({
       if (response.status === 200) {
         console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
+
         if (onScheduleUpdate) {
           onScheduleUpdate(scheduleData);
         }

@@ -29,36 +29,39 @@ const StudentsList = ({ user }) => {
     .find((row) => row.startsWith("accessToken="))
     ?.split("=")[1];
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (!user?.id) return;
+  const fetchStudents = async () => {
+    if (!user?.id) return;
 
-      setIsLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        const response = await axios.get(
-          `http://localhost:8081/member/${user.id}/register`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        );
-
-        if (response.status === 200 && response.data.length > 0) {
-          setStudentList(response.data);
-          setDisplayList(response.data.slice(0, visibleCount));
-        } else {
-          setStudentList([]);
-          setDisplayList([]);
-          setError("학생 목록을 불러올 수 없습니다.");
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/member/${user.id}/register`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
-      } catch (error) {
-        setError("학생 목록을 불러오는 중 오류가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      );
 
+      // ✅ 데이터 존재 여부 확인 후 처리
+      if (response.status === 200 && Array.isArray(response.data)) {
+        setStudentList(response.data);
+        setDisplayList(response.data.slice(0, visibleCount));
+      } else {
+        setStudentList([]);
+        setDisplayList([]);
+        setError("학생 목록을 불러올 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("학생 목록 요청 중 오류 발생:", error);
+      setError("학생 목록을 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ✅ fetchStudents를 useEffect 바깥으로 이동하여 handleUpdateTimes에서도 호출 가능
+  useEffect(() => {
     fetchStudents();
   }, [user]);
 
@@ -95,7 +98,7 @@ const StudentsList = ({ user }) => {
 
     try {
       await axios.patch(
-        "http://localhost:8081/pt-count",
+        "http://localhost:8081/member/pt-count",
         {
           studentId: selectedStudent.userId,
           trainerId: user.id,
@@ -110,6 +113,8 @@ const StudentsList = ({ user }) => {
           s.userId === selectedStudent.userId ? { ...s, times: newTimes } : s
         )
       );
+      alert("횟수 변경이 완료되었습니다.");
+      fetchStudents();
       setShowModal(false);
     } catch (error) {
       alert("횟수 변경 중 오류 발생");
@@ -140,7 +145,7 @@ const StudentsList = ({ user }) => {
             >
               <div className="student-info">
                 <img
-                  src={`${import.meta.env.VITE_Server}/${student.profileImage}`}
+                  src={`${import.meta.env.VITE_Server}${student.profileImage}`}
                   alt="profile"
                   className="profile-img"
                 />
