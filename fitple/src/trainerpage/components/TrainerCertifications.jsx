@@ -17,7 +17,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
 
     return (
         <div className="certifications-container">
-            <h3 className="text-center mb-4">검증된 자격 사항</h3>
+            <h3 className="text-center mb-4 kr-font">검증된 자격 사항</h3>
             <ul className="certifications-list">
                 {certifications.map((cert, index) => (
                     <li
@@ -30,7 +30,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
                             alt="자격증 아이콘"
                             className="certification-icon"
                         />
-                        <span className="certification-skill">{cert.skills}</span>
+                        <span className="certification-skill kr-font">{cert.skills}</span>
                     </li>
                 ))}
             </ul>
@@ -50,7 +50,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
 
             {/* 닫기 버튼 */}
             <button
-                className="close-button"
+                className="close-button kr-font"
                 onClick={closeModal}
             >
                 닫기

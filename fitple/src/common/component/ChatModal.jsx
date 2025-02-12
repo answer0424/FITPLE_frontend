@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ChatMessage from './ChatMessage'; // ChatMessage 컴포넌트 추가
 
-const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
+const ChatModal = ({ isOpen, onClose, chatRooms = [], userId, unreadMessage, setUnreadMessage }) => {
     const [rooms, setRooms] = useState(chatRooms);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
@@ -31,6 +31,11 @@ const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
 
     const handleChatClick = (chatId) => {
         setSelectedChatId(chatId);
+        // 해당 채팅방의 읽지 않은 메시지를 0으로 초기화
+        setUnreadMessage((prev) => ({
+            ...prev,
+            [chatId]: 0
+        }));
     };
 
     const handleBack = () => {
@@ -43,12 +48,22 @@ const ChatModal = ({ isOpen, onClose, chatRooms = [], userId }) => {
                 <button className="close-button" onClick={onClose}>X</button>
                 <h2 className='text-align chat-name'>채팅방</h2>
                 {selectedChatId ? (
-                    <ChatMessage chatId={selectedChatId} onBack={handleBack} rooms={rooms}/>
+                    <ChatMessage 
+                    chatId={selectedChatId} 
+                    onBack={handleBack} 
+                    rooms={rooms} 
+                    unreadMessage={unreadMessage} 
+                    setUnreadMessage={setUnreadMessage} // ✅ 반드시 전달
+                  />
                 ) : (
                     <ul className='list-group chat-room-list'>
                         {rooms.map((room) => (
                             <li key={room.chatId} className='list-group-item chat-room-item' onClick={() => handleChatClick(room.chatId)}>
                                 {room.otherNickname}
+                                {/* 읽지 않은 메시지가 있으면 빨간 점 표시 */}
+                                {unreadMessage[room.chatId] > 0 && (
+                                    <span className="unread-indicator">🔴</span>
+                                )}
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();

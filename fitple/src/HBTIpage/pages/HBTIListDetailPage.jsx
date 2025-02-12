@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import HBTIResultDisplay from "../../quizpage/components/quiz_common/HbtiResultDisplay";
+import Header from "../../common/component/Header";
 
 function HBTIListDetailPage() {
   const [searchParams] = useSearchParams();
@@ -41,32 +42,41 @@ function HBTIListDetailPage() {
   }
 
   return (
-    <div className="quiz-result-container min-h-screen py-12 px-4">
-      <div className="result-content-box max-w-7xl mx-auto rounded-2xl overflow-hidden">
-        <div className="panel-layout flex relative min-h-[600px]">
-          {/* Background overlay */}
-          <div className="absolute inset-0 bg-[#FAFAFA] opacity-20"></div>
-          
-          <div className="relative z-10 w-1/3 p-8">
-            <div className="hbtiResult pl-12 pt-2">
-              <HBTIResultDisplay 
-                hbtiData={{ 
-                  hbtiType: hbtiDetail.hbtiType,
-                  dogImage: hbtiDetail.dogImage
-                }}
-              />
+    <>
+    <Header />
+      <div className="quiz-result-container min-h-screen py-12 px-4">
+        <div className="result-content-box max-w-7xl mx-auto rounded-2xl overflow-hidden">
+          <div className="panel-layout flex relative min-h-[600px]">
+            {/* Background overlay */}
+            <div className="absolute inset-0 bg-[#FAFAFA] opacity-20"></div>
+            
+            <div className="left-panel">
+              <div className="relative z-10 w-1/3 p-8">
+                <div className="hbtiResult pl-12 pt-2">
+                  <HBTIResultDisplay 
+                    hbtiData={{ 
+                      hbtiType: hbtiDetail.hbtiType,
+                      dogImage: hbtiDetail.dogImage
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="relative z-10 w-2/3 p-8">
-            <div className="description-section">
-              <h2 className="text-2xl font-bold mb-6 text-white">{hbtiDetail.label}</h2>
-              <p className="text-lg leading-relaxed text-white">{hbtiDetail.fullDescription}</p>
+          
+            <div className="right-panel">
+              <div className="relative z-10 w-2/3 p-8">
+                <div className="description-section">
+                  <h2 className="text-2xl font-bold mb-6 text-white">{hbtiDetail.label}</h2>
+                  <p className="text-lg leading-relaxed text-white">{hbtiDetail.fullDescription}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
+    
   );
 }
 

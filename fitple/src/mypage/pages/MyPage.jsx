@@ -1,88 +1,125 @@
-  import React, { useEffect, useState } from 'react';
-  import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
-  import { Container, Row, Col } from "react-bootstrap";
-  import TrainerComponent from '../components/trainer/TrainerComponent';
-  import StudentComponent from '../components/student/StudentComponent';
-  import NoPermissionModal from '../modal/NoPermissionModal';
-  import ProfileComponent from '../components/ProfileComponent';
-  import { authInfo } from '../../mainpage/apis/auth';
-  import axios from 'axios';
-import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
-  // import { getRole } from '../utill';
+import React, { useContext, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import TrainerComponent from "../components/trainer/TrainerComponent";
+import StudentComponent from "../components/student/StudentComponent";
+import NoPermissionModal from "../modal/NoPermissionModal";
+import ProfileComponent from "../components/ProfileComponent";
+import api from "../../mainpage/apis/api";
+import MypagePathButtenComponent from "../components/MypagePathButtenComponent";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+import { EventProvider } from "../context/EventContext";
+import Headers from "../../common/component/Header";
+import "../../mypage/static/css/Reset.css";
 
-  const MyPage = () => {
-    // const role = authInfo();
-    const [user, setUser] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [currentPage, setCurrentPage] = useState("a");
-    const navigate = useNavigate();
+const MyPage = () => {
+  // const role = authInfo();
+  const [user, setUser] = useState(null);
+  const { authority, isLogin } = useContext(LoginContext);
+  const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState("a");
+  const navigate = useNavigate();
+  console.log("authority : ", authority);
 
-    useEffect(() => {      
-      const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        ?.split("=")[1];
 
-      // console.log(`${import.meta.env.VITE_Server}/register/user`);
+  //로그인 안 한 놈 쫒아내기
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/login");
+    }
+  }, []);
 
-      axios.get(`${import.meta.env.VITE_Server}/register/user`, {
+  //관리자 이동
+  useEffect(() => {
+    if (isLogin && authority.isAdmin) {
+      navigate("/admin");
+    }
+  }, []);
+
+  useEffect(() => {
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+
+    if (!accessToken) {
+      return;
+    }
+    // console.log(`${import.meta.env.VITE_Server}/register/user`);
+
+    //TODO 유저 정보 읽어오기. useContext 정상화 시 삭제
+    api
+      .get("/register/user", {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
+        // console.log(response.data.id);
         setUser(response.data);
-        // console.log("가져온 사용자 정보:", response.data);
-        // console.log("가져온 사용자 정보:", typeof(user));
-        // console.log("가져온 사용자 정보:", user);
-      })
-      .catch((error) => {
-        // console.error("사용자 정보 가져오기 오류:", error);
-        setUser(1);
       });
+  }, []);
 
-      if (!accessToken) {
-        return;
-      }
-    }, []);
+  const handleCurrentPage = (page) => {
+    setCurrentPage(page); // 버튼 클릭에 따라 currentPage 상태 변경
+  };
 
-    const handleCurrentPage = (page) => {
-      setCurrentPage(page); // 버튼 클릭에 따라 currentPage 상태 변경
-    };
+  const handleNoPermission = () => {
+    if (!showModal) {
+      setShowModal(true);
+    }
+  };
 
-    const handleNoPermission = () => {
-      if (!showModal) {  setShowModal(true);  }
-    };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate("/login");
+  };
 
-    const handleCloseModal = () => {
-      setShowModal(false);
-      navigate('/login');
-    };
-
-    return(
-      <div>
+  return (
+    <EventProvider>
+      <Headers />
       {user ? (
         <>
-          <Container fluid className="vh-100">
-            <Row>
-              <Col md={4} className="flex-column p-3 d-flex justify-content-center align-items-center">
+          <Container fluid className="vh-100 d-flex flex-column">
+            <Row className="col-12">
+              <Col
+                md={4}
+                className="flex-column p-3 d-flex justify-content-center align-items-center vh-100"
+              >
                 <div className="vh-60">
-                  <ProfileComponent user={user} />
+                  <ProfileComponent user={user} onClick={handleCurrentPage}/>
                 </div>
                 <div className="vh-40">
-                  <MypagePathButtenComponent user={user} onClick={handleCurrentPage}/>
+                  <MypagePathButtenComponent
+                    user={user}
+                    onClick={handleCurrentPage}
+                  />
                 </div>
               </Col>
-              <Col md={8} className="vh-100 p-3 d-flex justify-content-center align-items-center">
-                <NoPermissionModal show={showModal} onClose={handleCloseModal} />
+              <Col
+                md={8}
+                className="p-3 d-flex justify-content-center align-items-center"
+              >
                 <Routes>
-                  {user.authority === "ROLE_TRAINER" ? (
-                    <Route index element={<TrainerComponent user={user} currentPage={currentPage} />} />
-                  ) : user.authority === "ROLE_STUDENT" ? (
-                    <Route index element={<StudentComponent user={user} currentPage={currentPage} />} />
-                  ) : user.authority === "ROLE_ADMIN" ? (
-                    <Route path="/admin" element={<StudentComponent />} /> // 어드민 페이지 연결 예정
+                  {authority.isTrainer ? (
+                    <Route
+                      index
+                      element={
+                        <TrainerComponent
+                          user={user}
+                          currentPage={currentPage}
+                        />
+                      }
+                    />
+                  ) : authority.isStudent ? (
+                    <Route
+                      index
+                      element={
+                        <StudentComponent
+                          user={user}
+                          currentPage={currentPage}
+                        />
+                      }
+                    />
                   ) : (
                     <Route index element={handleNoPermission()} />
                   )}
@@ -90,13 +127,16 @@ import MypagePathButtenComponent from '../components/MypagePathButtenComponent';
               </Col>
             </Row>
           </Container>
+          <NoPermissionModal
+                  show={showModal}
+                  onClose={handleCloseModal}
+                />
         </>
       ) : (
         <p>사용자 정보를 불러오는 중...</p>
       )}
-    </div>
-  )
-  
-}
+    </EventProvider>
+  );
+};
 
-  export default MyPage;
+export default MyPage;

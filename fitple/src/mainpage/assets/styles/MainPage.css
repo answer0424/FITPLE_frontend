@@ -1,4 +1,5 @@
 /* 전체 페이지 스타일 */
+
 .mainPage {
     background-color: black;
     overflow-x: hidden;
@@ -25,13 +26,13 @@
 .HBTI-test-container p {
     font-size: 1.5rem;
     color: #a1d0fc;
+    
 }
 
 .HBTI-test-container button {
     background-color: #a1d0fc;
     color: white;
     border: none;
-    padding: 15px 30px;
     font-size: 1.2rem;
     cursor: pointer;
     border-radius: 10px;
@@ -41,6 +42,7 @@
     display: block; /* flex 영향을 받지 않도록 */
     text-align: center;
 }
+
  
 /* 배경 원 이미지 */
 .background-image {
@@ -137,10 +139,12 @@
     margin-bottom: 50px;
 }
 
+/* 다른 기존 스타일들은 유지 */
 .match-trainer-container p {
     font-size: 1.2rem;
     color: white;
 }
+
 
 .match-trainer-container img {
     width: 250px;
@@ -150,3 +154,5 @@
 .match-trainer-container button {
     border-radius: 10px;
 }
+
+

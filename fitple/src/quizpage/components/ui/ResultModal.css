@@ -15,7 +15,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content5 {
 
   align-items: center; 
 }
@@ -76,8 +76,8 @@
   text-align: center;
 }
 
-.modal-button {
-  width: 30%;
+.modal-button5 {
+
   padding: 14px 19px;
   background-color: #A1D0FC;
   color: black;

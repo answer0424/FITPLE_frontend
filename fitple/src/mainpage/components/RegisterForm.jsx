@@ -6,42 +6,78 @@ import "../assets/styles/App.css";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import KakaoSearch from "./KakaoSearch";
-import { registerStudent, registerTrainer } from '../apis/auth';
+import { registerStudent, registerTrainer } from "../apis/auth";
+// import '../../common/css/Font.css';
 
 const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const [birthDate, setBirthDate] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
   useEffect(() => {
-    if(inputRefs.current[currentQuestionIndex]) {
+    if (inputRefs.current[currentQuestionIndex]) {
       inputRefs.current[currentQuestionIndex].focus();
     }
   }, [currentQuestionIndex]);
+
+  // validation 함수
+  const validateInput = (index, value) => {
+    let error = "";
+    switch (index) {
+      case 0:
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error = "유효한 이메일을 입력하세요.";
+        }
+        break;
+      case 1:
+        if (!/^[a-zA-Z1-9]{5,20}$/.test(value)) {
+          error = "아이디는 5~20자의 영어 또는 숫자로 입력해야 합니다.";
+        }
+        break;
+      case 2:
+        if (value.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+          error = "비밀번호는 8자 이상이며, 특수문자를 하나 이상 포함해야 합니다.";
+      }  
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [index]: error }));
+    return error === "";
+  };
 
   const handleAnswerChange = (e, index) => {
     const newAnswers = [...answers];
     newAnswers[index] = e.target.value;
     setAnswers(newAnswers);
+    validateInput(index, e.target.value);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      if (currentQuestionIndex < questions.length - 1) {
-        handleNextQuestion();
-      }
+    if (e.key === "Enter") {
+      handleNextQuestion(); // 엔터 키를 눌렀을 때 다음 질문으로 넘어감
     }
   };
 
   const handleNextQuestion = () => {
+    if (!validateInput(currentQuestionIndex, answers[currentQuestionIndex])) {
+      return;
+    }
     if (currentQuestionIndex === 3 && answers[2] !== answers[3]) {
-      alert("Passwords do not match!");
-    } else if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        3: "비밀번호가 일치하지 않습니다.",
+      }));
+      return;
+    }
+
+    if (currentQuestionIndex === questions.length - 1) {
+      handleSubmit(); // 마지막 질문이면 submit
     } else {
-      handleSubmit();
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
@@ -63,7 +99,12 @@ const RegisterForm = ({ questions = [], userType }) => {
   };
 
   const handlePlaceSelect = (place) => {
-    const placeInfo = { address: place.address, lat: place.lat, lng: place.lng, gymName: place.name };
+    const placeInfo = {
+      address: place.address,
+      lat: place.lat,
+      lng: place.lng,
+      gymName: place.name,
+    };
 
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
@@ -88,11 +129,11 @@ const RegisterForm = ({ questions = [], userType }) => {
 
     try {
       let response;
-      if (userType === 'student') {
-        console.log('student 권한으로 회원가입 요청')
+      if (userType === "student") {
+        console.log("student 권한으로 회원가입 요청");
         response = await registerStudent(userData);
-      } else if (userType === 'trainer') {
-        console.log('trainer 권한으로 회원가입 요청')
+      } else if (userType === "trainer") {
+        console.log("trainer 권한으로 회원가입 요청");
         response = await registerTrainer(userData);
       }
 
@@ -107,10 +148,14 @@ const RegisterForm = ({ questions = [], userType }) => {
       console.error("There was an error registering the user:", error);
       if (error.response) {
         console.error("Error response data:", error.response.data);
-        alert(`회원가입에 실패했습니다: ${error.response.data.message || '이미 등록된 회원입니다.'}`);
-        navigate(`/register/${userType}`)
+        alert(
+          `회원가입에 실패했습니다: ${
+            error.response.data.message || "이미 등록된 회원입니다."
+          }`
+        );
+        navigate(`/register/${userType}`);
       } else {
-        console.log(response)
+        console.log(response);
         alert("An error occurred during registration. Please try again.");
       }
     }
@@ -123,12 +168,12 @@ const RegisterForm = ({ questions = [], userType }) => {
     <div className="App">
       <Header />
       <div>
-        <h2>{userType} Sign up</h2>
+        <h2 className="en-font">{userType} Sign up</h2>
         <Link to={"/register/student"}>
-          <button>Student</button>
+          <button className="reg-student en-font">Student</button>
         </Link>
         <Link to={"/register/trainer"}>
-          <button>Trainer</button>
+          <button className="reg-trainer en-font">Trainer</button>
         </Link>
       </div>
       <div className="progress-bar-container">
@@ -163,11 +208,9 @@ const RegisterForm = ({ questions = [], userType }) => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
         >
-          <h2>{questions[currentQuestionIndex]}</h2>
+          <h2 className="kr-font">{questions[currentQuestionIndex]}</h2>
           <div className="input-container">
-            {currentQuestionIndex === 6 ? (
-              <KakaoSearch onPlaceSelect={handlePlaceSelect} />
-            ) : currentQuestionIndex === 5 || currentQuestionIndex === 7 ? (
+            {currentQuestionIndex === 5 ? (
               <DatePicker
                 selected={birthDate}
                 onChange={(date) =>
@@ -176,7 +219,10 @@ const RegisterForm = ({ questions = [], userType }) => {
                 dateFormat="yyyy/MM/dd"
                 placeholderText="Select your birth date"
                 className="date-picker-input"
+                onKeyPress={handleKeyPress} // 키 입력 처리 추가
               />
+            ) : currentQuestionIndex === 6 ? (
+              <KakaoSearch onPlaceSelect={handlePlaceSelect} />
             ) : (
               <input
                 type={
@@ -187,31 +233,26 @@ const RegisterForm = ({ questions = [], userType }) => {
                 placeholder="Type your answer here..."
                 value={answers[currentQuestionIndex]}
                 onChange={(e) => handleAnswerChange(e, currentQuestionIndex)}
-                onKeyPress={handleKeyPress} 
+                onKeyPress={handleKeyPress} // 키 입력 처리 추가
+                ref={(el) => (inputRefs.current[currentQuestionIndex] = el)} // 현재 질문에 맞는 ref 연결
               />
             )}
-
-            {currentQuestionIndex === 3 && (
-              <p
-                style={{
-                  color: answers[2] === answers[3] ? "green" : "red",
-                  marginTop: "5px",
-                }}
-              >
-                {answers[2] === answers[3]
-                  ? "Passwords match!"
-                  : "Passwords do not match."}
+            {errors[currentQuestionIndex] && (
+              <p style={{ color: "red", marginTop: "5px" }} className="kr-font">
+                {errors[currentQuestionIndex]}
               </p>
             )}
-
             <div className="button-container">
               <button
-                onClick={handlePreviousQuestion}
+                onClick={() =>
+                  setCurrentQuestionIndex(currentQuestionIndex - 1)
+                }
                 disabled={currentQuestionIndex === 0}
+                className="back-button en-font"
               >
                 Back
               </button>
-              <button onClick={handleNextQuestion}>
+              <button onClick={handleNextQuestion} className="en-font">
                 {currentQuestionIndex === questions.length - 1
                   ? "Submit"
                   : "Next"}

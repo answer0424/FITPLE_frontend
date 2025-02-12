@@ -1,0 +1,101 @@
+/* 카드 스타일 */
+.daily-item-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.daily-item-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 카드 내부 구조 */
+.daily-item-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 왼쪽 (프로필 + 닉네임) */
+.daily-item-left {
+  display: flex;
+  align-items: center;
+}
+
+.daily-profile-placeholder {
+  width: 40px;
+  height: 40px;
+  background: gray;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.daily-nickname {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* 오른쪽 (시간 + 버튼) */
+.daily-item-right {
+  text-align: right;
+}
+
+.daily-time {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* 상태 버튼 */
+.daily-status-button {
+  background-color: #333;
+  border: none;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.daily-status-button:hover {
+  background-color: #222;
+}
+
+/* 모달 스타일 */
+.daily-modal-header {
+  background-color: #f8f9fa;
+  border-bottom: none;
+  text-align: center;
+}
+
+.daily-modal-body {
+  color: black;
+  text-align: center;
+}
+
+.daily-modal-footer {
+  border-top: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 모달 닫기 버튼 */
+.daily-close-button {
+  background: #999;
+  border: none;
+}
+
+.daily-close-button:hover {
+  background: #777;
+}
+
+/* 운동 완료 버튼 */
+.daily-end-button {
+  background: #333;
+  border: none;
+}
+
+.daily-end-button:hover {
+  background: #111;
+}

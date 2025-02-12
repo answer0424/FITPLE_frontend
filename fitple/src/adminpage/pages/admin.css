@@ -1,0 +1,61 @@
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-white p-6 rounded-lg max-w-2xl w-full mx-4; /* bg-gray-800을 bg-white로 변경 */
+}
+
+.modal-header {
+  @apply flex justify-between items-center mb-4;
+}
+
+.modal-title {
+  @apply text-xl font-bold text-gray-800; /* text-gray-900에서 text-gray-800로 변경 */
+}
+
+.modal-close {
+  @apply text-gray-500 hover:text-gray-700; /* hover 색상 수정 */
+}
+
+.review-info {
+  @apply mt-4;
+}
+
+.review-rating {
+  @apply mb-2;
+}
+
+.star-rating {
+  @apply flex gap-1;
+}
+
+.review-text {
+  @apply text-gray-700; /* 리뷰 텍스트 색상 추가 */
+}
+
+.card-bg-color {
+  background-color: rgba(0,0,0,0);
+  color: white;
+}
+
+.btn-detail{
+  background-color: #A1D0FC;
+  color:black;
+}
+
+.admin-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 화면의 전체 높이를 차지하도록 설정 */
+  
+}
+
+.admin-container {
+  width: 80%;
+}
+
+.font-black{
+  color: black !important;
+}

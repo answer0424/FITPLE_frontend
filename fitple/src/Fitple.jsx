@@ -18,55 +18,85 @@ import ForgotPasswordPage from "./mainpage/pages/ForgoatPasswordPage";
 import TrainerDetailPageWrite from "./mypage/pages/TrainerDetailPage";
 import MatchPage from "./matchpage/pages/MatchPage";
 import OAuthCallback from "./mainpage/components/OAuthCallback";
-
+import AdminPage from "./adminpage/pages/AdminPage";
 
 function Fitple() {
-
   return (
     <>
       <BrowserRouter>
         <LoginContextProvider>
           <Routes>
-            <Route path="/" Component={MainPage}></Route>
-            <Route path="/login" Component={LoginPage}></Route>
-            <Route path="/register/student" Component={UserRegister}></Route>
-            <Route path="/register/trainer" Component={TrainerRegister}></Route>
-            <Route path="/quiz" Component={QuizPage}></Route>
-            <Route path="/oauth/callback/:provider" element={<OAuthCallback />} />
+            <Route path="/" element={<MainPage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+            <Route path="/register/student" element={<UserRegister />}></Route>
+            <Route
+              path="/register/trainer"
+              element={<TrainerRegister />}
+            ></Route>
+            <Route path="/quiz" element={<QuizPage />}></Route>
+            <Route
+              path="/oauth/callback/:provider"
+              element={<OAuthCallback />}
+            />
             <Route
               path="/quiz/:userId/result"
               element={
-                <ProtectedRoute>
-                  <QuizResult />
+                // <ProtectedRoute>
+                <QuizResult />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/member/*"
+              element={
+                // <ProtectedRoute>
+                <MyPage />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/member/detail/write"
+              element={
+                // <ProtectedRoute>
+                <TrainerDetailPageWrite />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/:trainerId/detail"
+              element={
+                // <ProtectedRoute>
+                <TrainerDetailPage />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quiz/:userId/result/match"
+              element={
+                // <ProtectedRoute>
+                <MatchPage />
+                // </ProtectedRoute>
+              }
+            />
+            <Route path="/hbti" element={<HBTIListpage />} />
+            <Route path="/hbti/detail" element={<HBTIListDetailPage />} />
+            <Route
+              path="member/reset-password/:userId/:uuid"
+              element={<ResetPasswordPage />}
+            ></Route>
+            <Route
+              path="/forgot-password"
+              element={<ForgotPasswordPage />}
+            ></Route>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminPage />
                 </ProtectedRoute>
               }
             />
-            <Route path="/member/*" element={
-              <ProtectedRoute>
-                <MyPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/member/detail/write" element={
-              <ProtectedRoute>
-                <TrainerDetailPageWrite />
-              </ProtectedRoute>
-            } />
-            <Route path="/trainer/:trainerId/detail" element={
-              <ProtectedRoute>
-                <TrainerDetailPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/quiz/:userId/result/match" element={
-              <ProtectedRoute>
-                <MatchPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/hbti" Component={HBTIListpage} />
-            <Route path="/hbti/detail" Component={HBTIListDetailPage} />
-            <Route path="member/reset-password/:userId/:uuid" Component={ResetPasswordPage}></Route>
-            <Route path="/forgot-password" Component={ForgotPasswordPage}></Route>
           </Routes>
-
         </LoginContextProvider>
       </BrowserRouter>
     </>
