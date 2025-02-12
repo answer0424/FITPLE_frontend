@@ -184,6 +184,7 @@ const LoginContextProvider = ({ children }) => {
     // 인증 성공 로그인 정보 세팅
     const currentUsername =
       localStorage.getItem("username") || userInfo.username;
+      console.log('???????????????????//',currentUsername)
     loginSetting(data, accessToken, currentUsername);
   };
 
