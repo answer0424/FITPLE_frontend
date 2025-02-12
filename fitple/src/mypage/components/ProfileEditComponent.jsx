@@ -151,96 +151,77 @@ const ProfilEditComponent = () => {
     }, [userInfo])
 
     return (
-      <Container className="profile-edit-container mt-5 p-4 bg-light shadow rounded">
-        <h2 className="text-center mb-4">Edit Profile</h2>
-  
-        <Form onSubmit={handleImageUpload}>
-          <Row className="justify-content-center text-center">
-            <Col md={4} className="mb-3">
-              <Image
-                src={
-                  selectedImage
-                    ? URL.createObjectURL(selectedImage)
-                    : userInfo.profileImage
-                }
-                roundedCircle
-                className="img-fluid border profile-image"
-                alt="Profile Preview"
-              />
-            </Col>
-          </Row>
-          <Row className="justify-content-center">
-            <Col md={6}>
-              <Button
-                variant="secondary"
-                className="w-100"
-                onClick={() => document.getElementById("profileImage").click()}
-              >
-                Change Profile Image
-              </Button>
-              <input
-                id="profileImage"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageChange}
-              />
-            </Col>
-          </Row>
-          <Row className="justify-content-center mt-3">
-            <Col md={6}>
-              <Button type="submit" variant="primary" className="w-100">
-                Upload Image
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-  
-        <Form onSubmit={handleSubmit} className="mt-4">
-          <Form.Group className="mb-3">
-            <Form.Label>Nickname</Form.Label>
-            <Form.Control
-              type="text"
-              name="nickname"
-              value={editedInfo.nickname}
-              onChange={handleChange}
-            />
-          </Form.Group>
-  
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={editedInfo.email}
-              onChange={handleChange}
-            />
-          </Form.Group>
-  
-          <Form.Group className="mb-3">
-            <Form.Label>Address</Form.Label>
-            <KakaoSearch
-              onPlaceSelect={handlePlaceSelect}
-              initialAddress={userInfo.address}
-            />
-          </Form.Group>
-  
-          <Form.Group className="mb-3">
-            <Form.Label>Birth</Form.Label>
-            <Form.Control
-              type="date"
-              name="birth"
-              value={editedInfo.birth ? moment(editedInfo.birth).format("YYYY-MM-DD") : ""}
-              onChange={handleChange}
-            />
-          </Form.Group>
-  
-          <Button variant="success" type="submit" className="w-100">
-            Save Changes
-          </Button>
-        </Form>
-      </Container>
+        <Container>
+            <h2 className="my-4">Profile Edit</h2>
+            <Form onSubmit={handleImageUpload}>
+                <div>
+                    {/* 이미지 변경 버튼 */}
+                    <Button variant="secondary" onClick={() => document.getElementById('profileImage').click()}>
+                        Change Profile Image
+                    </Button>
+                    <input
+                        id="profileImage"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleImageChange}
+                    />
+                </div>
+                {/* 미리보기 이미지 표시
+                {selectedImage && (
+                    <div>
+                        <h5>Selected Image:</h5>
+                        <img src={selectedImage} alt="Profile Preview" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                    </div>
+                )} */}
+                {/* 제출 버튼 */}
+                <Button type="submit" variant="primary">
+                    Upload Image
+                </Button>
+            </Form>
+            <Form onSubmit={handleSubmit}>
+
+                <Form.Group>
+                    <Form.Label>Nickname</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="nickname"
+                        value={editedInfo.nickname}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        type="email"
+                        name="email"
+                        value={editedInfo.email}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Address</Form.Label>
+                    <KakaoSearch onPlaceSelect={handlePlaceSelect} initialAddress={userInfo.address} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Birth</Form.Label>
+                    <Form.Control
+                        type="date"
+                        name="birth"
+                        value={editedInfo.birth ? moment(editedInfo.birth).format('YYYY-MM-DD') : ''}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                    Save Changes
+                </Button>
+            </Form>
+        </Container>
     );
-  };
+};
 
 export default ProfilEditComponent;
