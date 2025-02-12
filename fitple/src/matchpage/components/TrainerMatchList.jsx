@@ -44,6 +44,7 @@ const TrainerMatchList = ({ userId }) => {
 
         const data = await response.json();
         setTrainers(data);
+        console.log(data);
       } catch (err) {
         setError(err.message);
       }
@@ -77,7 +78,7 @@ const TrainerMatchList = ({ userId }) => {
       <motion.div
         className="horizontal-trainer-list-container"
         animate={{
-          transform: `translateX(calc(50% - ${(currentIndex * 440) + 195}px))`,
+          transform: `translateX(calc(50% - ${currentIndex * 440 + 195}px))`,
         }}
         transition={{ type: "spring", stiffness: 60 }}
       >
@@ -104,7 +105,10 @@ const TrainerMatchList = ({ userId }) => {
               <p className="kr-font">
                 <strong>헬스장:</strong> {trainer.gymName}
               </p>
-              <button className="kr-font" onClick={() => navigate(`/trainer/${trainer.trainerId}/detail`)}>
+              <button
+                className="kr-font"
+                onClick={() => navigate(`/trainer/${trainer.trainerId}/detail`)}
+              >
                 상세보기
               </button>
             </div>

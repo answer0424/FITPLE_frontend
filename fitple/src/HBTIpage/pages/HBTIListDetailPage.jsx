@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import HBTIResultDisplay from "../../quizpage/components/quiz_common/HbtiResultDisplay";
 import Header from "../../common/component/Header";
-import "../component/css/HBTIListDetailPage.css";
 
 function HBTIListDetailPage() {
   const [searchParams] = useSearchParams();

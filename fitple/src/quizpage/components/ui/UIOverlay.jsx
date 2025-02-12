@@ -84,9 +84,13 @@ function UIOverlay({ currentPlatform, totalPlatforms, onNext, onPrev, onStart, o
                         left: '50%',
                         bottom: '40px',  // 하단에 배치
                         transform: 'translateX(-50%)',  // 수평 중앙 정렬
-                        fontSize: '20px',
+                        fontSize: '15px',
                     }}
-                    onClick={() => window.location.href = '/'}  // 홈으로 가기
+                    onClick={() => {
+                        if (window.confirm('홈으로 이동하시겠습니까?')) {
+                            window.location.href = '/';
+                        }
+                    }}  // 홈으로 가기
                 >
                     HOME
                 </button>
