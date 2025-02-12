@@ -314,9 +314,9 @@ function TrainerDetailPage() {
                             </div>
                         </div>
                         {/* 수정하기 버튼 (조건부 렌더링) */}
-                        {user && user.id === trainer.id && (
+                        {user && user.id === trainer.trainerId && (
                             <button
-                                className="btn btn-warning edit-button"
+                                className="btn btn-warning edit-button kr-font"
                                 onClick={handleEditClick}
                             >
                                 수정하기
