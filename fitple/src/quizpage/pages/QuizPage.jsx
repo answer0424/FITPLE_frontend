@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import Cookies from 'js-cookie';
 import GameScene from '../components/3d/GameScene';
 import QuizComponent from '../components/base/QuizComponent';
 import UIOverlay from '../components/ui/UIOverlay';
