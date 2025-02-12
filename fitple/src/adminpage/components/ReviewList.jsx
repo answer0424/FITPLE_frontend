@@ -1,51 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import adminApi from '../apis/admin';
+import { UserX } from 'lucide-react';
 
 const Modal = ({ review, onClose }) => {
   if (!review) return null;
 
-  // 데이터는 일단 받아와지는데 별 색이 안 칠해지네요 부탁드립니다 - 동희 - 
   const renderStars = (rating) => {
     return (
-      <div className="flex gap-1">
+      <div className="d-flex gap-1">
         {[...Array(5)].map((_, index) => (
-          <Star
+          <span
             key={index}
-            className={`h-4 w-4 ${
-              index < rating 
-                ? 'text-yellow-400 fill-current' 
-                : 'text-gray-300'
+            className={`bi bi-star-fill ${
+              index < rating ? 'text-warning' : 'text-secondary'
             }`}
-          />
+          ></span>
         ))}
       </div>
     );
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">리뷰 상세 내용</h2>
-          <button onClick={onClose} className="modal-close">✕</button>
-        </div>
-        <div className="modal-body">
-          <div className="review-info">
-            <div className="review-rating">
-              <div className="star-rating">
-                {renderStars(review.rating)}
+    <div className="modal fade show" tabIndex="-1" style={{ display: 'block' }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">리뷰 상세 내용</h5>
+            <button
+              type="button"
+              className="btn-close col-6"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <div className="review-info">
+              <div className="review-rating">
+                <div className="star-rating">{renderStars(review.rating)}</div>
+              </div>
+              <div className="review-text font-black">
+                <p>{review.content}</p>
               </div>
             </div>
-            <div className="review-text">
-              <p>{review.content}</p>
-            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onClick={onClose}
+            >
+              닫기
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState({ content: [], totalPages: 0 });
@@ -95,48 +110,48 @@ const ReviewList = () => {
   }
 
   return (
-    <div className="admin-panel">
-      <div>
-        <h2 className="panel-title">리뷰 관리</h2>
-      </div>
-      <div className="admin-table-container">
-        <table className="admin-table">
-          <thead className="admin-table-header">
-            <tr>
-              <th className="admin-table-th">ID</th>
-              <th className="admin-table-th">작성자</th>
-              <th className="admin-table-th">트레이너</th>
-              <th className="admin-table-th">상세보기</th>
-              <th className="admin-table-th">관리</th>
-            </tr>
-          </thead>
-          <tbody className="admin-table-body">
-            {reviews.content.map((review) => (
-              <tr key={review.id}>
-                <td className="admin-table-td">{review.id}</td>
-                <td className="admin-table-td">{review.username}</td>
-                <td className="admin-table-td">{review.trainerName}</td>
-                <td className="admin-table-td">
-                  <button
-                    className="view-button"
-                    onClick={() => handleViewDetails(review.id)}
-                  >
-                    상세보기
-                  </button>
-                </td>
-                <td className="admin-table-td">
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteReview(review.id)}
-                  >
-                    삭제하기
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <>
+      <div className="card card-bg-color">
+        <h5 className="card-title en-font">Review List</h5>
+          <div className="card-body">
+            <table className="table table-dark">
+              <thead className="admin-table-header">
+                <tr>
+                  <th className="admin-table-th">#</th>
+                  <th className="admin-table-th">작성자</th>
+                  <th className="admin-table-th">트레이너</th>
+                  <th className="admin-table-th">상세보기</th>
+                  <th className="admin-table-th">관리</th>
+                </tr>
+              </thead>
+              <tbody className="admin-table-body">
+                {reviews.content.map((review) => (
+                  <tr key={review.id}>
+                    <td className="admin-table-td">{review.id}</td>
+                    <td className="admin-table-td">{review.username}</td>
+                    <td className="admin-table-td">{review.trainerName}</td>
+                    <td className="admin-table-td">
+                      <button
+                        className="btn btn-primary btn-sm btn-detail kr-font"
+                        onClick={() => handleViewDetails(review.id)}
+                      >
+                        상세보기
+                      </button>
+                    </td>
+                    <td className="admin-table-td">
+                      <button
+                        className="btn btn-danger btn-sm d-flex align-items-center kr-font"
+                        onClick={() => handleDeleteReview(review.id)}
+                      >
+                        <UserX className="h-4 w-4 me-1" />
+                        삭제하기
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
       
       {showModal && (
         <Modal
@@ -147,27 +162,26 @@ const ReviewList = () => {
           }}
         />
       )}
-
-      <div className="pagination-container">
-        <button
-          className="pagination-button"
-          onClick={() => setPage(p => Math.max(0, p - 1))}
-          disabled={page === 0}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <span className="pagination-text">
-          Page {page + 1} of {reviews.totalPages}
-        </span>
-        <button
-          className="pagination-button"
-          onClick={() => setPage(p => p + 1)}
-          disabled={page >= reviews.totalPages - 1}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
+          {/* Pagination */}
+          <div className="d-flex justify-content-between">
+            <button 
+                className="btn btn-secondary col-3" 
+                onClick={() => setPage(prev => Math.max(0, prev - 1))}
+                disabled={page === 0}
+            >
+                Previous
+            </button>
+            <span> {page + 1} / {reviews.totalPages}</span>
+            <button 
+                className="btn btn-secondary col-3" 
+                onClick={() => setPage(prev => prev + 1)}
+                disabled={page >= reviews.totalPages - 1}
+            >
+                Next
+            </button>
+          </div>
+        </div>
+      </>
   );
 };
 

@@ -92,7 +92,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content5" onClick={(e) => e.stopPropagation()}>
         {error ? (
           <div className="error-message">
             데이터를 불러오는데 실패했습니다: {error}
@@ -103,7 +103,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
           <>
             <HBTIResultDisplay hbtiData={hbtiData} />
 
-            <button onClick={handleViewDetails} className="modal-button">
+            <button onClick={handleViewDetails} className="modal-button5">
               내 HBTI 자세히 보기
             </button>
             <span onClick={handleRetakeQuiz} className="retake-text">
