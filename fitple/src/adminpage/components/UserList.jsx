@@ -102,7 +102,7 @@ const UserList = ({ setChatUsers }) => {
                 ) : (
                     <table className="table table-dark">
                         <thead>
-                            <tr>
+                            <tr className='text-align-center'>
                                 <th scope="col" onClick={() => handleSort('id')} className="sortable">
                                     # {getSortIcon('id')}
                                 </th>
@@ -122,7 +122,7 @@ const UserList = ({ setChatUsers }) => {
                                 <th scope="col">관리</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className='text-align-center'>
                             {sortedUsers.slice(page * 10, (page + 1) * 10).map((user, index) => (
                                 <tr key={user.id}>
                                     <th scope="row">{user.id}</th>
@@ -135,8 +135,8 @@ const UserList = ({ setChatUsers }) => {
                                             상세보기
                                         </button>
                                     </td>
-                                    <td>
-                                        <button className="btn btn-danger btn-sm d-flex align-items-center kr-font" onClick={() => handleDeleteUser(user.id)}>
+                                    <td className='delete-button-center'>
+                                        <button className="btn btn-danger btn-sm d-flex align-items-center kr-font col-4" onClick={() => handleDeleteUser(user.id)}>
                                             <UserX className="h-4 w-4 me-1" />
                                             삭제하기
                                         </button>

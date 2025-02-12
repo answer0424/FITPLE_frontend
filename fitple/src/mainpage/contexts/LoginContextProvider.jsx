@@ -356,10 +356,7 @@ const LoginContextProvider = ({ children }) => {
     // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
     // navigate('/');
     localStorage.setItem("isLogin", "true");
-    localStorage.setItem(
-      "userInfo",
-      JSON.stringify(userData)
-    );
+    localStorage.setItem("userInfo", JSON.stringify(userData));
   };
 
   // 로그아웃 세팅

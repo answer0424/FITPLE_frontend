@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useEventContext } from "../context/EventContext";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const RegisterScheduleModal = ({
   isModalOpen,
@@ -123,7 +125,6 @@ const RegisterScheduleModal = ({
       );
 
       if (response.status === 200) {
-
         console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
         updateEvents(response.data);

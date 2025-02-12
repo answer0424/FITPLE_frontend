@@ -138,7 +138,7 @@ const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
 };
 
 
-const TrainerList = ({setChatTrainers}) => {
+const TrainerList = ({ setChatTrainers }) => {
   const [trainers, setTrainers] = useState([]);  // 트레이너 목록
   const [totalPages, setTotalPages] = useState(0);  // 전체 페이지 수
   const [page, setPage] = useState(0);
@@ -170,8 +170,8 @@ const TrainerList = ({setChatTrainers}) => {
       } while (currentPage < total);
 
       setTrainers(allTrainers);  // 트레이너 목록 설정
-      setTotalPages(total);  // 전체 페이지 수 설정
       setChatTrainers(allTrainers);
+      setTotalPages(total);  // 전체 페이지 수 설정
     } catch (error) {
       console.error('Failed to fetch trainers:', error);
     }
@@ -279,7 +279,7 @@ const TrainerList = ({setChatTrainers}) => {
         <h5 className="card-title en-font">Trainer List</h5>
         <table className="table table-dark">
           <thead>
-            <tr>
+            <tr className='text-align-center'>
               <th scope="col" onClick={() => handleSort('id')} className="sortable">
                 # {getSortIcon('id')}
               </th>
@@ -298,7 +298,7 @@ const TrainerList = ({setChatTrainers}) => {
               <th className="admin-table-th">관리</th>
             </tr>
           </thead>
-          <tbody className="admin-table-body">
+          <tbody className="admin-table-body text-align-center">
             {sortedTrainers.slice(page * 10, (page + 1) * 10).map((trainer, index) => (
               <tr key={trainer.id}>
                 <td className="admin-table-td">{trainer.id}</td>
@@ -329,9 +329,9 @@ const TrainerList = ({setChatTrainers}) => {
                     승인상태 확인
                   </button>
                 </td>
-                <td className="admin-table-td">
+                <td className="admin-table-td delete-button-center">
                   <button
-                    className="btn btn-danger btn-sm d-flex align-items-center kr-font"
+                    className="btn btn-danger btn-sm d-flex align-items-center kr-font col-5"
                     onClick={() => handleDeleteTrainer(trainer.id)}
                   >
                     <UserX className="h-4 w-4 mr-1" />
