@@ -5,16 +5,16 @@
   color: #fff;
   /* background-color: #dadada93 !important; */
   font-family: "Pretendard", sans-serif;
-  width: 900px;
+  /* width: 900px; */
   /* max-width: 900px; ✅ 직사각형 크기 조정 */
-  height: 600px; /* ✅ 높이 설정 */
-  margin: auto;
-  margin-left: 170px;
+  /* height: 80vh; ✅ 높이 설정 */
+  /* margin: auto; */
+  /* margin-left: 170px; */
 }
 
 /* 📌 전체 달력 스타일 */
 .react-calendar > * {
-  width: 900px;
+  /* width: 900px; */
 }
 
 /* 📌 달력 헤더 (연도 버튼 숨기기) */
@@ -22,7 +22,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .react-calendar__navigation button {
@@ -59,7 +59,7 @@
   position: absolute;
   top: 5px;
   left: 5px; /* ✅ 왼쪽 상단 정렬 */
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: bold;
   color: #fff;
 }
@@ -84,10 +84,10 @@
   display: none;
 }
 .react-calendar__month-view__days {
-  height: 100px;
+  height: 70vh;
 }
 .react-calendar__tile {
-  height: 130px;
+  height: 12vh;
 }
 
 /* 📌 이벤트 색상 */

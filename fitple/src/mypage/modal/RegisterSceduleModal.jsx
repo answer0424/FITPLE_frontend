@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import { useEventContext } from "../context/EventContext";
 
 const RegisterScheduleModal = ({
   isModalOpen,
@@ -10,7 +11,6 @@ const RegisterScheduleModal = ({
   setTimeInput,
 
   onScheduleUpdate,
-  user,
 }) => {
   const [studentList, setStudentList] = useState([]);
   const [trainingList, setTrainingList] = useState([]); // Training 정보를 저장할 상태 추가
@@ -29,10 +29,13 @@ const RegisterScheduleModal = ({
 
     return scheduleDateTime.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss" 형식 유지
   };
+  //일정 추가 시 이벤트컨텍스트에 저장
+  const { events, updateEvents } = useEventContext();
+  const { userInfo } = useContext(LoginContext);
 
   useEffect(() => {
     const fetchStudents = async () => {
-      if (!isModalOpen || !user?.id) return;
+      if (!isModalOpen || !userInfo.id) return;
 
       setIsLoading(true);
       setError(null);
@@ -40,7 +43,7 @@ const RegisterScheduleModal = ({
       try {
         // 트레이너의 트레이닝 목록을 가져오는 API 호출
         const response = await axios.get(
-          `http://localhost:8081/member/${user.id}/register`,
+          `http://localhost:8081/member/${userInfo.id}/register`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -51,12 +54,12 @@ const RegisterScheduleModal = ({
           setStudentList(response.data);
           // Training 정보도 함께 저장
           if (Array.isArray(response.data)) {
-            const trainings = response.data.map((user) => ({
+            const trainings = response.data.map((userInfo) => ({
               // trainingId: user.trainingId, // Training 테이블의 ID
-              studentId: user.userId, // User(Student) 테이블의 ID
-              nickname: user.nickname,
-              times: user.times,
-              trainingId: user.trainingId,
+              studentId: userInfo.userId, // User(Student) 테이블의 ID
+              nickname: userInfo.nickname,
+              times: userInfo.times,
+              trainingId: userInfo.trainingId,
             }));
 
             console.log("tranings : ", trainings);
@@ -77,7 +80,7 @@ const RegisterScheduleModal = ({
     };
 
     fetchStudents();
-  }, [isModalOpen, user]);
+  }, [isModalOpen, userInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,7 +114,7 @@ const RegisterScheduleModal = ({
       console.log("전송할 일정 데이터:", scheduleData);
 
       const response = await axios.post(
-        `http://localhost:8081/member/register/add-schedule/${user.id}`,
+        `http://localhost:8081/member/register/add-schedule/${selectedStudent}`,
         scheduleData,
         {
           withCredentials: true,
@@ -120,9 +123,10 @@ const RegisterScheduleModal = ({
       );
 
       if (response.status === 200) {
+
         console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
-
+        updateEvents(response.data);
         if (onScheduleUpdate) {
           onScheduleUpdate(scheduleData);
         }
