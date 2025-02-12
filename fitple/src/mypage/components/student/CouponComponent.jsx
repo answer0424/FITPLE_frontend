@@ -77,6 +77,12 @@ const CouponComponent = () => {
       });
   };
 
+  useEffect(() => {
+    if (selectedTrainer?.stamp === 10) {
+      alert("축하합니다! 스탬프 10개를 달성하셨습니다!");
+    }
+  }, [selectedTrainer?.stamp]);
+
   const changeTrainer = (trainerId) => {
     const accessToken = document.cookie
       .split("; ")
@@ -145,17 +151,28 @@ const CouponComponent = () => {
             <p className="coupon-info-item">
               <strong>TIMES:</strong> {selectedTrainer.times}
             </p>
+            <div className="stamp-container">
+              {[...Array(selectedTrainer.stamp)].map((_, index) => (
+                <img
+                  key={index}
+                  src="../../src/common/img/stamp.png"
+                  alt="Stamp"
+                  className="stamp-icon"
+                  style={{ width: "15vh" }}
+                />
+              ))}
+            </div>
             <Button className="coupon-use-button" onClick={useCoupon}>
               쿠폰사용하기
             </Button>
           </div>
         ) : (
-          <div className="coupon-loading">데이터를 로드하는 중입니다...</div>
+          <div className="coupon-loading">트레이너를 선택해주세요</div>
         )}
       </div>
     </>
   ) : (
-    <div>데이터를 로드하는 중입니다...</div>
+    <div> 트레이너를 추가해주세요</div>
   );
 };
 

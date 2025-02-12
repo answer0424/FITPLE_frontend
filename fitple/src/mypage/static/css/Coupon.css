@@ -56,3 +56,93 @@
   font-size: 1rem;
   color: #555;
 }
+/* 쿠폰 컴포넌트 컨테이너 */
+.coupon-component-container {
+  border: 2px solid #003366; /* 테두리 색상 */
+  border-radius: 30px; /* 둥근 모서리 */
+  padding: 20px; /* 내부 여백 */
+  margin: 20px auto; /* 중앙 정렬 */
+  max-width: 80%; /* 최대 너비 */
+  background-color: white; /* 배경색 */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 타이틀 스타일 */
+.coupon-title,
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 트레이너 목록 버튼 */
+.coupon-trainer-list {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.coupon-trainer-button {
+  background-color: #1d1e21;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.coupon-trainer-button:hover {
+  background-color: #393e3ac5;
+}
+
+/* 트레이너 정보 스타일 */
+.coupon-trainer-info {
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* 쿠폰 사용 버튼 */
+.coupon-use-button {
+  display: block;
+  margin: 20px auto;
+  background-color: #1d1e21;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.coupon-use-button:hover {
+  background-color: #393e3ac5;
+}
+
+/* 스탬프 아이콘 스타일 */
+.stamp-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.stamp-icon {
+  border-radius: 50%;
+  width: 10vh;
+}
+
+/* 로딩 메시지 */
+.coupon-loading {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+}
