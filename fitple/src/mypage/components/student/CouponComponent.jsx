@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import api from "../../../mainpage/apis/api";
 import { LoginContext } from "../../../mainpage/contexts/LoginContextProvider";
 import { Button } from "react-bootstrap";
+import { error } from "jquery";
 
 const CouponComponent = () => {
   const [trainers, setTrainers] = useState(null);
@@ -26,7 +27,6 @@ const CouponComponent = () => {
         gymName: response.data.gymName,
         nickname: response.data.nickname,
         times: response.data.times,
-        selectedTrainerId: response.data.trainerId,
         trainerId: response.data.trainerId,
       })
     })
@@ -39,15 +39,26 @@ const CouponComponent = () => {
         ?.split("=")[1];
     //쿠폰 사용
     console.log("작동은 함")
-    console.log(userInfo.id, selectedTrainer)
+    console.log(userInfo.id, selectedTrainer.trainerId)
     api.patch(`/member/use-coupons`,
       {
         studentId: userInfo.id,
-        trainerId: trainers.selectedTrainerId,
+        trainerId: selectedTrainer.trainerId,
       },
       {withCredentials: true, headers: {Authorization: `Bearer ${accessToken}`},})
     .then((response) => {
       console.log(response.data);
+      setSelectedTrainer(prevState => ({
+        ...prevState,
+        coupons: prevState.coupons - 1,
+        times: prevState.times + 1,
+        gymName: prevState.gymName,
+        nickname: prevState.nickname,
+        trainerId: prevState.trainerId,
+    }));
+    })
+    .catch((error) => {
+      console.log(error.response.data);
     })
   })
 
