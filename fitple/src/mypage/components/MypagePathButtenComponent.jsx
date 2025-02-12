@@ -5,7 +5,7 @@ import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const MypagePathButtenComponent = ({ onClick }) => {
   const [active, setActive] = useState(null);
-  const { userInfo } = useContext(LoginContext);
+  const { authority } = useContext(LoginContext);
 
   const handleClick = (type) => {
     setActive(type);
@@ -26,7 +26,7 @@ const MypagePathButtenComponent = ({ onClick }) => {
           className={`mypage-button ${active === "b" ? "active" : ""}`}
           onClick={() => handleClick("b")}
         >
-          {userInfo.isTrainer ? "Schedule Registration" : "couponPage"}
+          {authority.isTrainer ? "Schedule Registration" : "couponPage"}
         </Button>
       </ButtonGroup>
     </div>
