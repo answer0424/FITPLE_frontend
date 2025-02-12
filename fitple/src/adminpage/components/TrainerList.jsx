@@ -138,7 +138,7 @@ const StatusModal = ({ currentStatus, onClose, onStatusUpdate }) => {
 };
 
 
-const TrainerList = () => {
+const TrainerList = ({setChatTrainers}) => {
   const [trainers, setTrainers] = useState([]);  // 트레이너 목록
   const [totalPages, setTotalPages] = useState(0);  // 전체 페이지 수
   const [page, setPage] = useState(0);
@@ -171,6 +171,7 @@ const TrainerList = () => {
 
       setTrainers(allTrainers);  // 트레이너 목록 설정
       setTotalPages(total);  // 전체 페이지 수 설정
+      setChatTrainers(allTrainers);
     } catch (error) {
       console.error('Failed to fetch trainers:', error);
     }

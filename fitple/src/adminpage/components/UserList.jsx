@@ -4,7 +4,7 @@ import adminApi from '../apis/admin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/UserList.css';
 
-const UserTable = () => {
+const UserList = ({ setChatUsers }) => {
     const [users, setUsers] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(0);
@@ -15,7 +15,7 @@ const UserTable = () => {
 
     useEffect(() => {
         fetchAllUsers();
-    }, []);
+    }, [setUsers]);
 
     const fetchAllUsers = async () => {
         setIsLoading(true);
@@ -32,6 +32,7 @@ const UserTable = () => {
             } while (currentPage < total);
 
             setUsers(allUsers);
+            setChatUsers(allUsers);
             setTotalPages(total);
         } catch (error) {
             console.error('Failed to fetch users:', error);
@@ -205,4 +206,4 @@ const UserTable = () => {
     );
 };
 
-export default UserTable;
+export default UserList;

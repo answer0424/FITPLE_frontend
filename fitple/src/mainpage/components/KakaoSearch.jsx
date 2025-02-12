@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import '../assets/styles/KakaoSearch.css';
 
-const KakaoSearch = ({ onPlaceSelect }) => {
+const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
   const [keyword, setKeyword] = useState("");
   const [places, setPlaces] = useState([]);
   const [displayedPlaces, setDisplayedPlaces] = useState([]);
@@ -27,6 +27,12 @@ const KakaoSearch = ({ onPlaceSelect }) => {
       loadKakaoMapScript();
     }
   }, []);
+
+  //수정 시 기존 값이 있다면 기존 값 출력
+  useEffect(() => {
+    console.log(initialAddress);
+    initialAddress && setKeyword(initialAddress);
+  }, [])
 
   // 주소에 해당하는 위도와 경도를 가져오는 함수
   const getLatLngByAddress = (address) => {
