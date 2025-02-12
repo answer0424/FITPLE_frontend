@@ -69,8 +69,15 @@ const MatchPage = () => {
   // ✅ 최신 유저 정보를 불러온 후에만 검사 실행
   useEffect(() => {
     if (!isLoading && latestUserInfo) {
-      // ✅ 트레이너 접근 제한
-      if (latestUserInfo.authority.includes("ROLE_TRAINER")) {
+      const userAuthority = latestUserInfo.authority;
+  
+      // ✅ 관리자(ROLE_ADMIN)는 제한 없이 접근 가능
+      if (userAuthority.includes("ROLE_ADMIN")) {
+        return; // 아무 제한 없이 그대로 진행
+      }
+  
+      // ✅ 트레이너(ROLE_TRAINER) 접근 제한
+      if (userAuthority.includes("ROLE_TRAINER")) {
         showAlertAndRedirect(
           "권한이 없습니다",
           "매칭 페이지에 접근할 수 없습니다.",
@@ -78,7 +85,7 @@ const MatchPage = () => {
         );
         return;
       }
-
+  
       // ✅ HBTI 정보가 없으면 퀴즈 페이지로 이동
       if (!latestUserInfo.hbti) {
         showAlertAndRedirect(
@@ -88,7 +95,7 @@ const MatchPage = () => {
         );
       }
     }
-  }, [latestUserInfo, isLoading]); // ✅ latestUserInfo가 업데이트된 후 실행
+  }, [latestUserInfo, isLoading]);
 
   if (isLoading) {
     return <p>로딩 중...</p>;
