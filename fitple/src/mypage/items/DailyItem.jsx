@@ -53,7 +53,7 @@ const DailyItem = ({ event }) => {
             </div>
           </div>
           <div className="daily-item-right">
-            {event.status === "운동완료" ? (
+            {event.status === "운동끝" ? (
               <Button className="daily-status-button" onClick={openModal}>
                 완료됨
               </Button>
@@ -89,7 +89,7 @@ const DailyItem = ({ event }) => {
               {event.status === "운동끝" ? (
                 <Button
                   className="daily-end-button"
-                  onClick={() => changeStatus(event.reservationId, "운동완료")}
+                  onClick={() => changeStatus(event.reservationId, "운동끝")}
                 >
                   운동 끝
                 </Button>
