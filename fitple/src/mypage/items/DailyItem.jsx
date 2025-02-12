@@ -31,6 +31,7 @@ const DailyItem = ({ event }) => {
         }
       )
       .then((response) => {
+        alert("운동이 완료되셨습니다 stamp가 1 증가합니다.");
         console.log("팝업 정해지면 수정");
         console.log(response.status);
       });
@@ -38,7 +39,7 @@ const DailyItem = ({ event }) => {
 
   useEffect(() => {
     console.log(api.defaults.baseURL + "/member/schedule");
-  }, []);
+  }, [changeStatus]);
 
   return (
     <>
@@ -53,9 +54,9 @@ const DailyItem = ({ event }) => {
             </div>
           </div>
           <div className="daily-item-right">
-            {event.status === "운동끝" ? (
+            {event.status === "운동완료" ? (
               <Button className="daily-status-button" onClick={openModal}>
-                완료됨
+                완료
               </Button>
             ) : null}
             <span className="daily-time">
@@ -89,9 +90,16 @@ const DailyItem = ({ event }) => {
               {event.status === "운동끝" ? (
                 <Button
                   className="daily-end-button"
-                  onClick={() => changeStatus(event.reservationId, "운동끝")}
+                  onClick={() => {
+                    if (event.status === "운동완료") {
+                      alert("이미 운동이 완료되었습니다.");
+                      return;
+                    }
+                    changeStatus(event.reservationId, "운동완료");
+                  }}
+                  disabled={event.status === "운동완료"}
                 >
-                  운동 끝
+                  운동완료
                 </Button>
               ) : (
                 <strong>{event.status}</strong>
