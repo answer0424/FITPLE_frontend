@@ -1,0 +1,83 @@
+/* ProfileEditComponent.css */
+
+/* 컨테이너 스타일 */
+.profile-edit-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+.profile-edit-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+/* 입력 필드 스타일 */
+.profile-edit-form-group {
+    margin-bottom: 15px;
+}
+
+/* 프로필 이미지 스타일 */
+.profile-image-wrapper {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    margin-bottom: 10px;
+}
+
+/* 이미지 변경 버튼 */
+.profile-edit-change-img-btn {
+    width: 100%;
+    background-color: #6c757d;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.profile-edit-change-img-btn:hover {
+    background-color: #5a6268;
+}
+
+/* 버튼 스타일 */
+.profile-edit-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.profile-edit-save-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.profile-edit-save-button:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .profile-edit-container {
+        width: 90%;
+    }
+}
