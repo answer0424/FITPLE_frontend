@@ -47,7 +47,7 @@
 /* 배경 원 이미지 */
 .background-image {
     position: absolute;
-    top: 70%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1200px;

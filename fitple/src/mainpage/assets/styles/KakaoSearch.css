@@ -40,6 +40,8 @@ KakaoSearch.css
     border-radius: 8px;
     padding: 10px;
     margin-top: 10px;
+    overflow-x: scroll;
+    max-height: 400px;
   }
   
   .kakao-search-results h3 {
