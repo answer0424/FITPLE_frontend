@@ -27,13 +27,14 @@ const CalenderComponent = ({ user }) => {
   const { events, updateEvents } = useEventContext();
   const { userInfo, authority } = useContext(LoginContext);
 
+
   // 📌 달력 날짜 선택
   const handleDayClick = (clickedDate) => {
     const formattedDate = moment(clickedDate).format("YYYY-MM-DD");
     let filteredReservations = [];
 
     if (selectedUser === "all") {
-      console.log("handleDayClick 진입");
+      console.log("handleDayClick 진입")
       // events가 배열인지 확인 후 필터링
       filteredReservations = Array.isArray(matchingReservations)
         ? events.filter((event) => event.date?.startsWith(formattedDate))
@@ -112,9 +113,9 @@ const CalenderComponent = ({ user }) => {
         //   response.data
         // );
         //일정이 없을 경우
-        if (response.data.length === 0) {
+        if(response.data.length === 0) {
           setMatchingReservations([1, 2, 3]);
-          alert("일정이 없네용");
+          alert("일정이 없네용")
         }
         // Context의 updateEvents 함수 사용
         updateEvents(response.data);
@@ -130,7 +131,7 @@ const CalenderComponent = ({ user }) => {
   // 📌 전체 회원 선택 시 전체 일정 불러오기
   useEffect(() => {
     if (selectedStudent === "all" && Array.isArray(events)) {
-      setMatchingReservations(events);
+      setMatchingReservations(events)
     }
   }, [selectedStudent]);
 
@@ -139,15 +140,16 @@ const CalenderComponent = ({ user }) => {
     // console.log("컨텍스트 적용")
     console.log(events);
     setMatchingReservations(events);
-  }, [events]);
+  }, [events])
 
   useEffect(() => {
     console.log(dailyEvents);
-  }, [dailyEvents]);
+  }, [dailyEvents])
 
   useEffect(() => {
     console.log(matchingReservations);
-  }, [matchingReservations]);
+  }, [matchingReservations])
+
 
   return (
     <>
@@ -167,17 +169,18 @@ const CalenderComponent = ({ user }) => {
           <div />
         )}
 
-        {matchingReservations && matchingReservations.length >= 0 && (
-          <Calendar
-            value={date}
-            onChange={setDate}
-            onClickDay={handleDayClick}
-            onActiveStartDateChange={handleActiveStartDateChange}
-            calendarType="gregory"
-            showNeighboringMonth={false}
-            tileContent={tileContent}
-          />
-        )}
+        {
+        (matchingReservations && matchingReservations.length >= 0) &&
+        <Calendar
+          value={date}
+          onChange={setDate}
+          onClickDay={handleDayClick}
+          onActiveStartDateChange={handleActiveStartDateChange}
+          calendarType="gregory"
+          showNeighboringMonth={false}
+          tileContent={tileContent}
+        />
+        }
       </Container>
 
       <DailyScheduleModal
