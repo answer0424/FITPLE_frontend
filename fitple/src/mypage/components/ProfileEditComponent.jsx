@@ -5,6 +5,7 @@ import moment from 'moment';
 import api from '../../mainpage/apis/api';
 import KakaoSearch from '../../mainpage/components/KakaoSearch';
 import axios from 'axios';
+import "../static/css/ProfileEditComponent.css"
 
 const ProfilEditComponent = () => {
     const { userInfo, authority, setUserInfo } = useContext(LoginContext);

@@ -60,14 +60,14 @@ const TrainerButtonItem = ({ event }) => {
     changeStatus(event.reservationId, "운동중");
   };
 
-  // ✅ 운동 완료
+  // ✅ 운동끝
   const handleExerciseComplete = () => {
     if (!canComplete) {
       alert("운동 시작 후 30초가 지나야 완료할 수 있습니다.");
       return;
     }
     localStorage.removeItem("exerciseStartTime"); // 🧹 완료 후 localStorage에서 삭제
-    changeStatus(event.reservationId, "운동완료");
+    changeStatus(event.reservationId, "운동끝");
   };
 
   // ❌ 운동 취소
