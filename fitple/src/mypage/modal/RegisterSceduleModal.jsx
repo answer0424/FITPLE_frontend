@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useEventContext } from "../context/EventContext";
+import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 
 const RegisterScheduleModal = ({
   isModalOpen,

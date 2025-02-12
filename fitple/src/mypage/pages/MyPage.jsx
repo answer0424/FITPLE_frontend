@@ -10,7 +10,7 @@ import MypagePathButtenComponent from "../components/MypagePathButtenComponent";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { EventProvider } from "../context/EventContext";
 import Headers from "../../common/component/Header";
-// import "../../mypage/static/css/Reset.css";
+import "../../mypage/static/css/Reset.css";
 
 const MyPage = () => {
   // const role = authInfo();
@@ -76,16 +76,17 @@ const MyPage = () => {
 
   return (
     <EventProvider>
-      <Headers />
       {user ? (
         <>
-          <Container fluid className="vh-100 d-flex flex-column">
+          <Container fluid className="vh-100 d-flex flex-column col-12">
             <Row className="col-12">
+              {/* 왼쪽 프로필 영역 */}
               <Col
                 md={4}
-                className="flex-column p-3 d-flex justify-content-center align-items-center vh-100"
+                sm={12}
+                className="flex-column p-3 d-flex justify-content-start align-items-center mt-5"
               >
-                <ProfileComponent user={user} onClick={handleCurrentPage}/>
+                <ProfileComponent user={user} onClick={handleCurrentPage} />
                 <div>
                   <MypagePathButtenComponent
                     user={user}
@@ -93,11 +94,16 @@ const MyPage = () => {
                   />
                 </div>
               </Col>
+
+  
+              {/* 오른쪽 메인 콘텐츠 영역 */}
               <Col
                 md={8}
+                sm={12}
                 className="p-3 d-flex justify-content-center align-items-center"
               >
                 <Routes>
+                  {/* 트레이너일 경우 */}
                   {authority.isTrainer ? (
                     <Route
                       index
@@ -108,33 +114,36 @@ const MyPage = () => {
                         />
                       }
                     />
-                  ) : authority.isStudent ? (
-                    <Route
-                      index
-                      element={
-                        <StudentComponent
-                          user={user}
-                          currentPage={currentPage}
-                        />
-                      }
-                    />
                   ) : (
-                    <Route index element={handleNoPermission()} />
+                    // 학생일 경우
+                    authority.isStudent ? (
+                      <Route
+                        index
+                        element={
+                          <StudentComponent
+                            user={user}
+                            currentPage={currentPage}
+                          />
+                        }
+                      />
+                    ) : (
+                      // 권한이 없을 경우
+                      <Route index element={handleNoPermission()} />
+                    )
                   )}
                 </Routes>
               </Col>
             </Row>
           </Container>
-          <NoPermissionModal
-                  show={showModal}
-                  onClose={handleCloseModal}
-                />
+          {/* NoPermissionModal */}
+          <NoPermissionModal show={showModal} onClose={handleCloseModal} />
         </>
       ) : (
         <p>사용자 정보를 불러오는 중...</p>
       )}
     </EventProvider>
   );
+  
 };
 
 export default MyPage;

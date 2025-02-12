@@ -4,8 +4,8 @@ import api from "../../mainpage/apis/api";
 import { Button } from "react-bootstrap";
 import { Container, Row, Col } from 'react-bootstrap';
 import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 아이콘
-import "../static/css/ProfileComponent.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+import "../static/css/ProfileComponent.css";
 
 const ProfileComponent = ({ user, onClick }) => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -46,33 +46,37 @@ const ProfileComponent = ({ user, onClick }) => {
   };
 
   return (
-    <div className="profile-container">
+    <div className="profile-container d-flex justify-content-center align-items-center">
       {userInfo ? (
         <>
-        <Row className="w-100">
-        <Col xs={12} className="d-flex flex-column">
-          <div className="profile-image-container">
-            <img
-              src={`${import.meta.env.VITE_Server}/${userInfo.profileImage}`}
-              alt="Profile"
-              className="profile-image"
-            />
-            {/* 이 버튼과 GearFill에 적용된 클래스 네임은 css 수정하며 손 볼 것 */}
-          <button onClick={() => handleClick("c")} className="settings-icon"> 
-            <GearFill className="settings-icon" />
-          </button>
-          </div>
-
-          {/* 닉네임 & 집 아이콘 */}
-          <div className="nickname-container">
-            <h2 className="nickname">{userInfo.nickname}</h2>
-            {authority.isTrainer && <HouseFill className="home-icon" onClick={goToTrainerHome} />}
-          </div>
-
-          <p className="hbti">{userInfo.hbti.hbti}</p>
-
-        </Col>
-        </Row>
+          <Row className="w-100">
+            <Col className="d-flex flex-column align-items-center">
+              {/* 프로필 이미지와 설정 아이콘 */}
+              <div className="profile-image-container position-relative">
+                <img
+                  src={`${import.meta.env.VITE_Server}/${userInfo.profileImage}`}
+                  alt="Profile"
+                  className="profile-image"
+                />
+                <button onClick={() => handleClick("c")} className="settings-icon">
+                  <GearFill className="settings-icon" />
+                </button>
+              </div>
+  
+              {/* 닉네임과 집 아이콘 */}
+              <div className="nickname-container text-center mt-3">
+                <h2 className="nickname">{userInfo.nickname}</h2>
+                {authority.isTrainer && (
+                  <HouseFill
+                    className="home-icon"
+                    onClick={goToTrainerHome}
+                  />
+                )}
+              </div>
+  
+              <p className="hbti mt-2">{userInfo.hbti.hbti}</p>
+            </Col>
+          </Row>
         </>
       ) : (
         <p className="loading-text">사용자 정보를 불러오는 중...</p>

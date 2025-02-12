@@ -11,7 +11,7 @@
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
-  font-size: 8px;
+  font-size: 1vh;
   font-weight: bold;
   border-radius: 8px;
   color: rgb(2, 2, 2);

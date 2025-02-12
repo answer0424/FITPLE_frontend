@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import moment from "moment";
-import "../static/css/CalenderStyle.css";
 import { Container } from "react-bootstrap";
 import DailyScheduleModal from "../modal/DailyScheduleModal";
 import { useEventContext } from "../context/EventContext";
 import api from "../../mainpage/apis/api";
 import TrainerStudentsDropdown from "../items/TrainerStudentsDropdown";
-import "../static/css/ModalReset.css";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
+
+import "react-calendar/dist/Calendar.css";
+import "../static/css/CalenderStyle.css";
+import "../static/css/ModalReset.css";
 import "../static/css/EventItems.css";
 
 const CalenderComponent = () => {
@@ -77,9 +78,8 @@ const CalenderComponent = () => {
 
     return (
       <div className="event-info">
-        {filteredReservations.length > 0 &&
-          filteredReservations.slice(0, 2).map((event) => (
-            <div
+        {filteredReservations.slice(0, 2).map((event) => (
+          <div
             key={event.reservationId}
             className="reservation-item event-color"
           >
@@ -87,9 +87,9 @@ const CalenderComponent = () => {
           </div>
         ))}
         {filteredReservations.length > 2 && (
-        <div className="reservation-item more-events">
-          +{filteredReservations.length - 2}
-        </div>
+          <div className="reservation-item more-events">
+            +{filteredReservations.length - 2}
+          </div>
         )}
       </div>
     );
