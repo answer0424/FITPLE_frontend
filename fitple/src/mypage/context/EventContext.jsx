@@ -10,12 +10,12 @@ export const EventProvider = ({ children }) => {
   // 이벤트 데이터를 업데이트하는 함수
   // 월별 최초 업데이트 시 값이 이상하게 들어갈 경우, update와 페이지 로딩 시 인서트를 다르게 작성
   const updateEvents = (newEvent) => {
-    console.log("업데이트 시 받는 값");
-    console.log(newEvent);
-    if (events.length > 0) {
-      console.log("여기가 도나?");
+    // console.log("업데이트 시 받는 값");
+    // console.log(newEvent);
+    if (events.length === 0) {
+      // console.log("나 컨텍스튼데 여기가 도나?");
       setEvents(newEvent);
-    } else {
+    } else if (!Array.isArray(newEvent)) {
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
   };

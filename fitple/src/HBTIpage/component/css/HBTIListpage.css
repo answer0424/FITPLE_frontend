@@ -181,12 +181,6 @@ body {
   gap: 1.5rem; /* 카드 간격 */
 }
 
-/* 그룹 간의 간격 제거 */
-.container {
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-}
 
 .group-section + .group-section {
   margin-top: 0; /* 그룹 섹션 간 간격 제거 */
