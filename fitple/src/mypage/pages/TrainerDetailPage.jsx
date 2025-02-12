@@ -45,6 +45,7 @@ const TrainerProfilePage = () => {
         console.log(res.data.gym.name);
         setHbti(res.data?.hbti?.hbti || "정보 없음");
         console.log(res.data.hbti.hbti);
+        console.log(res.data);
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
 
@@ -56,7 +57,18 @@ const TrainerProfilePage = () => {
       .then((res) => {
         console.log("데이터 : ", res.data);
         console.log("certification : ", res.data.certificationId);
-        if (res.data.perPrice || res.data.career || res.data.content) {
+
+        if (res.data.isAccess === "대기 ") {
+          alert("프로필이 승인 대기중입니다, 수정이 불가능합니다");
+          navigate("/member");
+        }
+
+        const isNewProfile =
+          !res.data.perPrice && !res.data.career && !res.data.content;
+
+        if (isNewProfile) {
+          alert("신규프로필을 작성해주세요");
+        } else {
           alert("기존 프로필 내용이 존재합니다. 내용을 확인 후 수정하세요!");
         }
         setPerPrice(res.data.perPrice || "");
@@ -230,9 +242,9 @@ const TrainerProfilePage = () => {
       alert("트레이너 프로필이 등록되었습니다.");
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
-      alert(
-        error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
-      );
+      // alert(
+      //   error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
+      // );
     }
   };
 
@@ -282,7 +294,7 @@ const TrainerProfilePage = () => {
             <label style={{ color: "black" }}>HBTI:</label>
             <div
               className="detail-input"
-              style={{ color: "black", fontSize: "1.2rem", color: "#000000" }}
+              style={{ color: "black", fontSize: "1.2rem" }}
               required
             >
               {hbti}

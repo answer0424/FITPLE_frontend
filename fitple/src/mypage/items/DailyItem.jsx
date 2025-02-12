@@ -42,27 +42,23 @@ const DailyItem = ({ event }) => {
 
   return (
     <>
-      <Card
-        className="event-item"
-        style={{ color: "black" }}
-        onClick={openModal}
-      >
-        <Card.Body className="event-body">
-          <div className="event-left">
-            <div className="profile-placeholder"></div>
+      <Card className="daily-item-card" onClick={openModal}>
+        <Card.Body className="daily-item-body">
+          <div className="daily-item-left">
+            <div className="daily-profile-placeholder"></div>
             <div>
-              <Card.Title className="nickname">
-                {event.nickname} 회원님
+              <Card.Title className="daily-nickname" style={{ color: "black" }}>
+                {event.nickname} 회원
               </Card.Title>
             </div>
           </div>
-          <div className="event-right">
+          <div className="daily-item-right">
             {event.status === "운동완료" ? (
-              <Button className="status-button" onClick={openModal}>
+              <Button className="daily-status-button" onClick={openModal}>
                 완료됨
               </Button>
             ) : null}
-            <span className="event-time">
+            <span className="daily-time">
               {new Date(event.date).toLocaleTimeString()}
             </span>
           </div>
@@ -71,15 +67,20 @@ const DailyItem = ({ event }) => {
 
       {/* Modal */}
       <Modal show={isModalOpen} onHide={closeModal} centered>
-        <Modal.Header>
-          <Modal.Title>Event Details</Modal.Title>
+        <Modal.Header className="daily-modal-header">
+          <Modal.Title>일정 상세</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ color: "black" }}>
-          {`Date: ${new Date(event.date).toLocaleString()} | Nickname: ${
-            event.nickname
-          } | Reservation ID: ${event.reservationId} | User ID: ${
-            event.userId
-          }`}
+        <Modal.Body className="daily-modal-body" style={{ color: "black" }}>
+          <p>
+            <strong>DATE :</strong> {new Date(event.date).toLocaleDateString()}{" "}
+            (
+            {new Date(event.date).toLocaleDateString("ko-KR", {
+              weekday: "long",
+            })}
+            )
+          </p>
+
+          <strong>{event.nickname} 회원님</strong>
 
           {authority.isTrainer ? (
             <TrainerButtonItem event={event} />
@@ -87,19 +88,24 @@ const DailyItem = ({ event }) => {
             <>
               {event.status === "운동끝" ? (
                 <Button
+                  className="daily-end-button"
                   onClick={() => changeStatus(event.reservationId, "운동완료")}
                 >
                   운동 끝
                 </Button>
               ) : (
-                <p>status: {event.status}</p>
+                <strong>{event.status}</strong>
               )}
             </>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Close
+        <Modal.Footer className="daily-modal-footer">
+          <Button
+            variant="secondary"
+            className="daily-close-button"
+            onClick={closeModal}
+          >
+            닫기
           </Button>
         </Modal.Footer>
       </Modal>

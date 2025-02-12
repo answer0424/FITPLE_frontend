@@ -14,239 +14,254 @@ import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { createChat } from "../../mainpage/apis/chat";
 
 function TrainerDetailPage() {
-    const { trainerId } = useParams();
-    const navigate = useNavigate();
-    const [trainer, setTrainer] = useState(null); // 트레이너 상세 정보
-    const [reviews, setReviews] = useState([]); // 원본 리뷰 목록
-    const [matchedTrainingId, setMatchedTrainingId] = useState(null); // 현재 유저와 매칭된 트레이닝 ID
-    const [activeTab, setActiveTab] = useState("home"); // 현재 활성화된 탭
-    const [error, setError] = useState(null); // 에러 상태
-    const [user, setUser] = useState(null); // 현재 로그인한 유저 정보
-    const {isLogin, userInfo} = useContext(LoginContext);
+  const { trainerId } = useParams();
+  const navigate = useNavigate();
+  const [trainer, setTrainer] = useState(null); // 트레이너 상세 정보
+  const [reviews, setReviews] = useState([]); // 원본 리뷰 목록
+  const [matchedTrainingId, setMatchedTrainingId] = useState(null); // 현재 유저와 매칭된 트레이닝 ID
+  const [activeTab, setActiveTab] = useState("home"); // 현재 활성화된 탭
+  const [error, setError] = useState(null); // 에러 상태
+  const [user, setUser] = useState(null); // 현재 로그인한 유저 정보
+  const { isLogin, userInfo } = useContext(LoginContext);
 
-    const BASE_URL = import.meta.env.VITE_Server;
+  const BASE_URL = import.meta.env.VITE_Server;
 
-    const handleChatClick = async () => {
-        const token = await validateAndRefreshToken(); // 🔄 토큰 검증 및 갱신
-        if (!token) return;
-    
-        try {
-            const response = await createChat(userInfo.id, trainerId);
-    
-            
-            console.log("채팅방 생성 성공:");
-            alert('채팅방 생성 성공!!');
-        } catch (err) {
-            console.error("채팅방 생성 실패:", err);
-            alert("채팅방을 생성하는 데 실패했습니다.");
-        }
-    };
-    
+  const handleChatClick = async () => {
+    const token = await validateAndRefreshToken(); // 🔄 토큰 검증 및 갱신
+    if (!token) return;
 
-    // ✅ 토큰 유효성 검증 후 재발급 처리 함수 추가
-const validateAndRefreshToken = async () => {
+    try {
+      const response = await createChat(userInfo.id, trainerId);
+
+      console.log("채팅방 생성 성공:");
+      alert("채팅방 생성 성공!!");
+    } catch (err) {
+      console.error("채팅방 생성 실패:", err);
+      alert("채팅방을 생성하는 데 실패했습니다.");
+    }
+  };
+
+  // ✅ 토큰 유효성 검증 후 재발급 처리 함수 추가
+  const validateAndRefreshToken = async () => {
     let token = Cookies.get("accessToken");
 
     if (!token) {
-        console.warn("토큰이 없습니다. 로그인 페이지로 이동합니다.");
-        navigate("/login");
-        return null;
+      console.warn("토큰이 없습니다. 로그인 페이지로 이동합니다.");
+      navigate("/login");
+      return null;
     }
 
-    const tokenValidationResponse = await fetch(`${BASE_URL}/auth/validate-token`, {
+    const tokenValidationResponse = await fetch(
+      `${BASE_URL}/auth/validate-token`,
+      {
         headers: { Authorization: `Bearer ${token}` },
-    });
+      }
+    );
 
     if (tokenValidationResponse.status === 401) {
-        console.warn("토큰이 만료되었습니다. 새 토큰을 요청합니다.");
-        const refreshResponse = await fetch(`${BASE_URL}/auth/refresh-token`, {
-            method: "POST",
-            credentials: "include",
-        });
+      console.warn("토큰이 만료되었습니다. 새 토큰을 요청합니다.");
+      const refreshResponse = await fetch(`${BASE_URL}/auth/refresh-token`, {
+        method: "POST",
+        credentials: "include",
+      });
 
-        if (refreshResponse.ok) {
-            const { accessToken } = await refreshResponse.json();
-            Cookies.set("accessToken", accessToken, { expires: 1 });
-            console.log("새로운 accessToken 발급 완료:", accessToken);
-            return accessToken;
-        } else {
-            console.error("토큰 갱신 실패. 다시 로그인해야 합니다.");
-            navigate("/login");
-            return null;
-        }
+      if (refreshResponse.ok) {
+        const { accessToken } = await refreshResponse.json();
+        Cookies.set("accessToken", accessToken, { expires: 1 });
+        console.log("새로운 accessToken 발급 완료:", accessToken);
+        return accessToken;
+      } else {
+        console.error("토큰 갱신 실패. 다시 로그인해야 합니다.");
+        navigate("/login");
+        return null;
+      }
     }
 
     return token;
-};
+  };
 
-    
-    
+  // ✅ 초기 데이터 fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let token = Cookies.get("accessToken");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
 
-    // ✅ 초기 데이터 fetch
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let token = Cookies.get("accessToken");
-                if (!token) {
-                    navigate("/login");
-                    return;
-                }
+        console.log("사용하는 JWT 토큰", token);
 
-                console.log("사용하는 JWT 토큰", token);
+        // ✅ 사용자 정보 가져오기
+        const userResponse = await fetch(`${BASE_URL}/register/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-                // ✅ 사용자 정보 가져오기
-                const userResponse = await fetch(`${BASE_URL}/register/user`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setUser(userData);
+          console.log("로그인한 사용자 데이터:", userData);
 
-                if (userResponse.ok) {
-                    const userData = await userResponse.json();
-                    setUser(userData);
-                    console.log("로그인한 사용자 데이터:", userData);
+          // ✅ 트레이너 및 리뷰 데이터 가져오기
+          await fetchTrainerDetails(token, userData);
+        } else {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.");
+          navigate("/login");
+          return;
+        }
 
-                    // ✅ 트레이너 및 리뷰 데이터 가져오기
-                    await fetchTrainerDetails(token, userData);
-                } else {
-                    console.error("사용자 정보를 가져오는 데 실패했습니다.");
-                    navigate("/login");
-                    return;
-                }
+        // ✅ 토큰 유효성 검사 및 갱신
+        const tokenValidationResponse = await fetch(
+          `${BASE_URL}/auth/validate-token`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-                // ✅ 토큰 유효성 검사 및 갱신
-                const tokenValidationResponse = await fetch(`${BASE_URL}/auth/validate-token`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
-                if (tokenValidationResponse.status === 401) {
-                    const refreshResponse = await fetch(`${BASE_URL}/auth/refresh-token`, {
-                        method: "POST",
-                        credentials: "include",
-                    });
-
-                    if (refreshResponse.ok) {
-                        const { accessToken } = await refreshResponse.json();
-                        Cookies.set("accessToken", accessToken, { expires: 1 });
-                        token = accessToken;
-                    } else {
-                        navigate("/login");
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                navigate("/login");
+        if (tokenValidationResponse.status === 401) {
+          const refreshResponse = await fetch(
+            `${BASE_URL}/auth/refresh-token`,
+            {
+              method: "POST",
+              credentials: "include",
             }
-        };
+          );
 
-        fetchData();
-    }, [trainerId, navigate]);
+          if (refreshResponse.ok) {
+            const { accessToken } = await refreshResponse.json();
+            Cookies.set("accessToken", accessToken, { expires: 1 });
+            token = accessToken;
+          } else {
+            navigate("/login");
+            return;
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        navigate("/login");
+      }
+    };
 
-    // ✅ 트레이너 정보 및 리뷰 목록을 가져오는 함수
-    const fetchTrainerDetails = async (token, userData) => {
-        try {
-            // 트레이너 상세 정보 가져오기
-            const trainerResponse = await fetch(`${BASE_URL}/quiz/trainers/${trainerId}/detail`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
+    fetchData();
+  }, [trainerId, navigate]);
 
-            if (!trainerResponse.ok) throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
+  // ✅ 트레이너 정보 및 리뷰 목록을 가져오는 함수
+  const fetchTrainerDetails = async (token, userData) => {
+    try {
+      // 트레이너 상세 정보 가져오기
+      const trainerResponse = await fetch(
+        `${BASE_URL}/quiz/trainers/${trainerId}/detail`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!trainerResponse.ok)
+        throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
 
             const trainerData = await trainerResponse.json();
             console.log("트레이너의 받아온 정보", trainerData);
             setTrainer(trainerData);
             console.log("트레이너의 아이디", trainerData.trainerId)
 
-            // 리뷰 데이터 가져오기
-            const reviewsResponse = await fetch(`${BASE_URL}/api/reviews/training/${trainerId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (reviewsResponse.status === 404) {
-                console.warn("리뷰 없음: 빈 배열로 설정");
-                setReviews([]);
-            } else if (!reviewsResponse.ok) {
-                throw new Error("리뷰 데이터를 불러오는 데 실패했습니다");
-            } else {
-                const reviewsData = await reviewsResponse.json();
-                console.log("리뷰 데이터:", reviewsData);
-                setReviews(reviewsData);
-
-                // 현재 로그인한 유저와 매칭된 트레이닝 ID 찾기
-                const matchingTraining = reviewsData.find(
-                    (review) => review.userId === userData.id
-                );
-
-                if (matchingTraining) {
-                    setMatchedTrainingId(matchingTraining.trainingId);
-                    console.log("매칭된 트레이닝 ID:", matchingTraining.trainingId);
-                } else {
-                    console.warn("현재 로그인한 유저와 매칭된 트레이닝 ID가 없습니다.");
-                    setMatchedTrainingId(null);
-                }
-            }
-        } catch (err) {
-            console.error(err);
-            setError(err.message);
+      // 리뷰 데이터 가져오기
+      const reviewsResponse = await fetch(
+        `${BASE_URL}/api/reviews/training/${trainerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-    };
+      );
 
-    // ✅ 평균 평점 계산
-    const calculateAverageRating = (reviews) => {
-        if (!reviews.length) return 0;
-        const total = reviews.reduce((acc, review) => acc + review.rating, 0);
-        return (total / reviews.length).toFixed(1);
-    };
+      if (reviewsResponse.status === 404) {
+        console.warn("리뷰 없음: 빈 배열로 설정");
+        setReviews([]);
+      } else if (!reviewsResponse.ok) {
+        throw new Error("리뷰 데이터를 불러오는 데 실패했습니다");
+      } else {
+        const reviewsData = await reviewsResponse.json();
+        console.log("리뷰 데이터:", reviewsData);
+        setReviews(reviewsData);
 
-    // ✅ 유효한 리뷰만 필터링
-    const filteredReviews = useMemo(() => {
-        return reviews.filter((review) => review.rating && review.content);
-    }, [reviews]);
-
-    // ✅ 트레이너 경력 연차 계산
-    const calculateYears = (careerStartDate) => {
-        if (!careerStartDate) return "정보 없음";
-        const startYear = new Date(careerStartDate).getFullYear();
-        const currentYear = new Date().getFullYear();
-        return `${currentYear - startYear}년`;
-    };
-
-    // ✅ 평점 별 아이콘 렌더링
-    const renderStars = (averageRating) => {
-        const fullStars = Math.floor(averageRating);
-        const decimalPart = averageRating - fullStars;
-        const halfStar = decimalPart >= 0.5 ? 1 : 0;
-        const emptyStars = 5 - fullStars - halfStar;
-
-        return (
-            <div className="rating">
-                {Array(fullStars)
-                    .fill(null)
-                    .map((_, i) => (
-                        <span key={`full-${i}`} className="full-star">★</span>
-                    ))}
-                {halfStar === 1 && <span className="half-star">★</span>}
-                {Array(emptyStars)
-                    .fill(null)
-                    .map((_, i) => (
-                        <span key={`empty-${i}`} className="empty-star">☆</span>
-                    ))}
-            </div>
+        // 현재 로그인한 유저와 매칭된 트레이닝 ID 찾기
+        const matchingTraining = reviewsData.find(
+          (review) => review.userId === userData.id
         );
-    };
 
-    if (error) return <p className="text-center text-danger">{error}</p>;
-    if (!trainer) return <p className="text-center">로딩 중...</p>;
+        if (matchingTraining) {
+          setMatchedTrainingId(matchingTraining.trainingId);
+          console.log("매칭된 트레이닝 ID:", matchingTraining.trainingId);
+        } else {
+          console.warn("현재 로그인한 유저와 매칭된 트레이닝 ID가 없습니다.");
+          setMatchedTrainingId(null);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
 
-    const averageRating = calculateAverageRating(filteredReviews);
-    const handleEditClick = () => {
-        navigate(`/trainer/${trainerId}/edit`);
-    };
+  // ✅ 평균 평점 계산
+  const calculateAverageRating = (reviews) => {
+    if (!reviews.length) return 0;
+    const total = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return (total / reviews.length).toFixed(1);
+  };
+
+  // ✅ 유효한 리뷰만 필터링
+  const filteredReviews = useMemo(() => {
+    return reviews.filter((review) => review.rating && review.content);
+  }, [reviews]);
+
+  // ✅ 트레이너 경력 연차 계산
+  const calculateYears = (careerStartDate) => {
+    if (!careerStartDate) return "정보 없음";
+    const startYear = new Date(careerStartDate).getFullYear();
+    const currentYear = new Date().getFullYear();
+    return `${currentYear - startYear}년`;
+  };
+
+  // ✅ 평점 별 아이콘 렌더링
+  const renderStars = (averageRating) => {
+    const fullStars = Math.floor(averageRating);
+    const decimalPart = averageRating - fullStars;
+    const halfStar = decimalPart >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStar;
+
+    return (
+      <div className="rating">
+        {Array(fullStars)
+          .fill(null)
+          .map((_, i) => (
+            <span key={`full-${i}`} className="full-star">
+              ★
+            </span>
+          ))}
+        {halfStar === 1 && <span className="half-star">★</span>}
+        {Array(emptyStars)
+          .fill(null)
+          .map((_, i) => (
+            <span key={`empty-${i}`} className="empty-star">
+              ☆
+            </span>
+          ))}
+      </div>
+    );
+  };
+
+  if (error) return <p className="text-center text-danger">{error}</p>;
+  if (!trainer) return <p className="text-center">로딩 중...</p>;
+
+  const averageRating = calculateAverageRating(filteredReviews);
+  const handleEditClick = () => {
+    navigate(`/member/detail/write`);
+  };
 
     return (
         <>
@@ -299,7 +314,7 @@ const validateAndRefreshToken = async () => {
                             </div>
                         </div>
                         {/* 수정하기 버튼 (조건부 렌더링) */}
-                        {user && user.id === trainer.trainerId && (
+                        {user && user.id === trainer.id && (
                             <button
                                 className="btn btn-warning edit-button"
                                 onClick={handleEditClick}
