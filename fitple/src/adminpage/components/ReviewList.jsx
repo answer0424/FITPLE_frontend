@@ -116,7 +116,7 @@ const ReviewList = () => {
           <div className="card-body">
             <table className="table table-dark">
               <thead className="admin-table-header">
-                <tr>
+                <tr  className='text-align-center'>
                   <th className="admin-table-th">#</th>
                   <th className="admin-table-th">작성자</th>
                   <th className="admin-table-th">트레이너</th>
@@ -124,7 +124,7 @@ const ReviewList = () => {
                   <th className="admin-table-th">관리</th>
                 </tr>
               </thead>
-              <tbody className="admin-table-body">
+              <tbody className="admin-table-body text-align-center">
                 {reviews.content.map((review) => (
                   <tr key={review.id}>
                     <td className="admin-table-td">{review.id}</td>
@@ -138,9 +138,9 @@ const ReviewList = () => {
                         상세보기
                       </button>
                     </td>
-                    <td className="admin-table-td">
+                    <td className="admin-table-td delete-button-center" >
                       <button
-                        className="btn btn-danger btn-sm d-flex align-items-center kr-font"
+                        className="btn btn-danger btn-sm d-flex align-items-center kr-font col-2"
                         onClick={() => handleDeleteReview(review.id)}
                       >
                         <UserX className="h-4 w-4 me-1" />

@@ -184,6 +184,7 @@ const LoginContextProvider = ({ children }) => {
     // 인증 성공 로그인 정보 세팅
     const currentUsername =
       localStorage.getItem("username") || userInfo.username;
+      console.log('???????????????????//',currentUsername)
     loginSetting(data, accessToken, currentUsername);
   };
 
@@ -355,10 +356,7 @@ const LoginContextProvider = ({ children }) => {
     // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
     // navigate('/');
     localStorage.setItem("isLogin", "true");
-    localStorage.setItem(
-      "userInfo",
-      JSON.stringify(userData)
-    );
+    localStorage.setItem("userInfo", JSON.stringify(userData));
   };
 
   // 로그아웃 세팅

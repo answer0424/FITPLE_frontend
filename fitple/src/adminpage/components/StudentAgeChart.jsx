@@ -51,11 +51,11 @@ const StudentAgeChart = ({ chatUsers }) => {
         {
           data: Object.values(ageRanges),
           backgroundColor: [
-            "#FFB6C1",
-            "#FF69B4",
-            "#FF6347",
-            "#FF4500",
-            "#8B0000",
+            "#A1D0FC", // 밝은 파랑
+            "#8BB9E6", // 조금 어두운 파랑
+            "#6D9DCE", // 중간 파랑
+            "#4F81B6", // 어두운 파랑
+            "#33669E", // 가장 어두운 파랑
           ],
         },
       ],
@@ -73,9 +73,11 @@ const StudentAgeChart = ({ chatUsers }) => {
       ) : chatUsers.length === 0 ? (
         <p>데이터가 없습니다.</p>
       ) : (
+        <div style={{width: '60%', height: '60%'}}>
         <Pie 
         data={chartData}
          />
+        </div>
       )}
     </div>
   );

@@ -15,7 +15,10 @@ const TrainerSearchList = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const accessToken = localStorage.getItem("token");
+        const accessToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          ?.split("=")[1];
         const response = await axios.get(
           "http://localhost:8081/api/quiz/search",
           {

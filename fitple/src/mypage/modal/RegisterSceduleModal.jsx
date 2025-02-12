@@ -124,7 +124,6 @@ const RegisterScheduleModal = ({
       );
 
       if (response.status === 200) {
-
         console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
         updateEvents(response.data);
