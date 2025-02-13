@@ -98,11 +98,6 @@ const ProfileEditComponent = () => {
       return;
     }
 
-    const accessToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("accessToken="))
-      ?.split("=")[1];
-
     const formData = new FormData();
     formData.append("userId", userInfo.id);
     formData.append("profileImage", selectedImage);
@@ -128,7 +123,35 @@ const ProfileEditComponent = () => {
   };
 
   //회원삭제 핸들러
-  //   const userDelete =
+  const userDelete = async () => {
+    // if (!window.confirm("정말로 삭제하시겠습니까?")) return;
+    // e.preventDefault();
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+    console.log("userId", userInfo.id);
+    try {
+      const response = await api.delete(`/member/${userInfo.id}`, {
+        withCredentials: true,
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("삭제 요청 ID:", userInfo.id);
+      console.log("삭제 응답:", response);
+      if (response.status === 200) {
+        confirm("탈퇴하시겠습니까");
+        console.log("삭제 요청 ID:", userInfo.id);
+
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container className="profileEditComponent-container col col-md-4">
@@ -226,6 +249,9 @@ const ProfileEditComponent = () => {
           </Form>
         </Col>
       </Row>
+      <Button type="button" onClick={userDelete}>
+        탈퇴
+      </Button>
     </Container>
   );
 };
