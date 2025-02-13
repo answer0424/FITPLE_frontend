@@ -35,7 +35,7 @@ const AdminPage = () => {
   }, [chatUsers, chatTrainers]); // users 상태가 변경될 때마다 실행
 
   return (
-    <div className="admin-wrapper">
+    <div className="admin-wrapper h-100 mb-5">
       <div className="admin-container">
         <h1 className="admin-title en-font">Admin Page</h1>
 

@@ -140,7 +140,7 @@ const ReviewList = () => {
                     </td>
                     <td className="admin-table-td delete-button-center" >
                       <button
-                        className="btn btn-danger btn-sm d-flex align-items-center kr-font col-2"
+                        className="btn btn-danger btn-sm d-flex align-items-center kr-font col-3"
                         onClick={() => handleDeleteReview(review.id)}
                       >
                         <UserX className="h-4 w-4 me-1" />
