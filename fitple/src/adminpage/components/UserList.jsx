@@ -136,7 +136,7 @@ const UserList = ({ setChatUsers }) => {
                                         </button>
                                     </td>
                                     <td className='delete-button-center'>
-                                        <button className="btn btn-danger btn-sm d-flex align-items-center kr-font col-4" onClick={() => handleDeleteUser(user.id)}>
+                                        <button className="btn btn-danger btn-sm d-flex align-items-center kr-font col-6" onClick={() => handleDeleteUser(user.id)}>
                                             <UserX className="h-4 w-4 me-1" />
                                             삭제하기
                                         </button>
