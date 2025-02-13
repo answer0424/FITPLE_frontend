@@ -184,7 +184,7 @@ const LoginContextProvider = ({ children }) => {
     // 인증 성공 로그인 정보 세팅
     const currentUsername =
       localStorage.getItem("username") || userInfo.username;
-      console.log('???????????????????//',currentUsername)
+    console.log("???????????????????//", currentUsername);
     loginSetting(data, accessToken, currentUsername);
   };
 
@@ -230,22 +230,20 @@ const LoginContextProvider = ({ children }) => {
 
   // 로그아웃
   const logout = (force = false) => {
-    // confirm 없이 강제 로그아웃
     console.log("로그아웃");
 
-    // confirm 받아서 로그아웃
-    if (confirm("로그아웃 하시겠습니까?")) {
+    // ✅ 강제 로그아웃 (confirm 없이 실행)
+    if (force) {
       logoutSetting();
       navigate("/");
-    } else {
       return;
     }
 
-    if (force) {
-      // 로그아웃 세팅
+    // ✅ 일반 로그아웃 (confirm 창 띄움)
+    const isConfirmed = window.confirm("로그아웃 하시겠습니까?");
+    if (isConfirmed) {
       logoutSetting();
       navigate("/");
-      return;
     }
   };
 
