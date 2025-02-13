@@ -43,7 +43,7 @@ const TrainerProfilePage = () => {
         setUser(res.data), console.log("현재 사용자 : ", res.data);
         if (res.data.authority === "ROLE_STUDENT") {
           alert("접근권한이 없습니다");
-          return;
+          navigate("/member");
         }
         setGymName(res.data?.gym?.name ?? "정보 없음");
         console.log(res.data.gym.name ?? "정보 없음");
@@ -70,7 +70,7 @@ const TrainerProfilePage = () => {
         const isNewProfile =
           !res.data.perPrice && !res.data.career && !res.data.content;
 
-        if (isNewProfile) {
+        if (res.data.authority === "ROLE_TRAINER" && isNewProfile) {
           alert("신규프로필을 작성해주세요");
         } else {
           alert("기존 프로필 내용이 존재합니다. 내용을 확인 후 수정하세요!");
