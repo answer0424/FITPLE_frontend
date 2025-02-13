@@ -7,6 +7,7 @@ import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 �
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import "../static/css/ProfileComponent.css";
 import pimg from "../../assets/userProfileBasic.png"
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const ProfileComponent = ({ user, onClick }) => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -66,7 +67,7 @@ const ProfileComponent = ({ user, onClick }) => {
                   onClick={() => handleClick("c")}
                   className="settings-icon"
                 >
-                  <GearFill className="settings-icon" />
+                  <i className="bi bi-gear"></i>
                 </button>
               </div>
 
