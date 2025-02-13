@@ -8,6 +8,7 @@ import "../static/css/DailyItem.css"; // CSS 파일 추가
 
 const DailyItem = ({ event, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // 리렌더링을 하기위한 가짜 useState를 만든다.
   const { authority } = useContext(LoginContext);
 
   const accessToken = document.cookie
@@ -71,6 +72,8 @@ const DailyItem = ({ event, onDelete }) => {
       )
       .then((response) => {
         alert("운동이 완료되셨습니다 stamp가 1 증가합니다.");
+        // useState값을 1 -> null 을 왔다갔다하면 서  리랜더링을 강제로 시킨다.
+        // 운동완료 버튼 disable처리
         console.log("팝업 정해지면 수정");
         console.log(response.status);
       });

@@ -70,12 +70,12 @@ const MatchPage = () => {
   useEffect(() => {
     if (!isLoading && latestUserInfo) {
       const userAuthority = latestUserInfo.authority;
-  
+
       // ✅ 관리자(ROLE_ADMIN)는 제한 없이 접근 가능
       if (userAuthority.includes("ROLE_ADMIN")) {
         return; // 아무 제한 없이 그대로 진행
       }
-  
+
       // ✅ 트레이너(ROLE_TRAINER) 접근 제한
       if (userAuthority.includes("ROLE_TRAINER")) {
         showAlertAndRedirect(
@@ -85,7 +85,7 @@ const MatchPage = () => {
         );
         return;
       }
-  
+
       // ✅ HBTI 정보가 없으면 퀴즈 페이지로 이동
       if (!latestUserInfo.hbti) {
         showAlertAndRedirect(
@@ -104,7 +104,7 @@ const MatchPage = () => {
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       <Header />
-      {/* <TrainerSearchList /> */}
+      <TrainerSearchList />
       <TrainerMatchList userId={userId} />
     </div>
   );
