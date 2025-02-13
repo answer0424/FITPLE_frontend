@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../mainpage/apis/api";
 import { Button } from "react-bootstrap";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from "react-bootstrap";
 import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 아이콘
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import "../static/css/ProfileComponent.css";
@@ -33,7 +33,6 @@ const ProfileComponent = ({ user, onClick }) => {
   //     });
   // }, [user]);
 
-
   //프로필 변경으로 이동
   const handleClick = (type) => {
     setActive(type);
@@ -45,6 +44,10 @@ const ProfileComponent = ({ user, onClick }) => {
     navigate(`/trainer/${user.id}/detail`); // 이동할 경로 설정
   };
 
+  const goToHbtiTest = () => {
+    navigate("/quiz");
+  };
+
   return (
     <div className="profile-container d-flex justify-content-center align-items-center">
       {userInfo ? (
@@ -54,27 +57,39 @@ const ProfileComponent = ({ user, onClick }) => {
               {/* 프로필 이미지와 설정 아이콘 */}
               <div className="profile-image-container position-relative">
                 <img
-                  src={`${import.meta.env.VITE_Server}/${userInfo.profileImage}`}
+                  src={`${import.meta.env.VITE_Server}/${
+                    userInfo.profileImage
+                  }`}
                   alt="Profile"
                   className="profile-image"
                 />
-                <button onClick={() => handleClick("c")} className="settings-icon">
+                <button
+                  onClick={() => handleClick("c")}
+                  className="settings-icon"
+                >
                   <GearFill className="settings-icon" />
                 </button>
               </div>
-  
+
               {/* 닉네임과 집 아이콘 */}
               <div className="nickname-container text-center mt-3">
                 <h2 className="nickname">{userInfo.nickname}</h2>
                 {authority.isTrainer && (
-                  <HouseFill
-                    className="home-icon"
-                    onClick={goToTrainerHome}
-                  />
+                  <HouseFill className="home-icon" onClick={goToTrainerHome} />
                 )}
               </div>
-  
-              <p className="hbti mt-2">{userInfo.hbti.hbti}</p>
+
+              {userInfo.hbti ? (
+                <p className="hbti mt-2">{userInfo.hbti.hbti}</p>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "white", color: "black" }}
+                  className="mt-2"
+                  onClick={goToHbtiTest}
+                >
+                  HBTI테스트
+                </Button>
+              )}
             </Col>
           </Row>
         </>
