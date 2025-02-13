@@ -20,7 +20,7 @@ const TrainerProfilePage = () => {
   const navigate = useNavigate();
 
   const gotoDetail = () => {
-    navigate(`/trainer/${user.id}/detail`);
+    navigate(`/member`);
   };
 
   useEffect(() => {

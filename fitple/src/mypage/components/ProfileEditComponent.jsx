@@ -188,14 +188,15 @@ const ProfileEditComponent = () => {
             </Form.Group>
 
             <Form.Group className="profileEditComponent-formGroup">
-              <Form.Label>이메일</Form.Label>
-              <Form.Control
-                type="email"
-                className="profileEditComponent-formControl"
-                value={editedInfo.email}
-                onChange={handleChange}
-              />
-            </Form.Group>
+  <Form.Label>이메일</Form.Label>
+  <Form.Control
+    type="email"
+    name="email" // ✅ 추가: name을 명확히 지정 (handleChange에서 인식 필요)
+    className="profileEditComponent-formControl"
+    value={editedInfo.email} // ✅ 기존 상태 값을 유지
+    onChange={handleChange} // ✅ 변경 사항을 반영하도록 설정
+  />
+</Form.Group>
 
             <Form.Group className="profileEditComponent-formGroup">
               <Form.Label>주소</Form.Label>
