@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button, Card } from "react-bootstrap";
 import api from "../../mainpage/apis/api";
+import { Trash } from "react-bootstrap-icons";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import TrainerButtonItem from "../items/TrainerButtonItem";
 import "../static/css/DailyItem.css"; // CSS 파일 추가
 
-const DailyItem = ({ event }) => {
+const DailyItem = ({ event, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { authority } = useContext(LoginContext);
 
@@ -16,6 +17,44 @@ const DailyItem = ({ event }) => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    if (event) {
+      console.log("현재 일정 정보:", {
+        reservationId: event.reservationId,
+        전체_이벤트_데이터: event,
+      });
+    }
+  }, [event]);
+
+  // ✅ 일정 삭제 함수 추가
+  const handleDelete = async (reservationId) => {
+    if (!window.confirm("정말로 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await api.delete(
+        `/member/calendar/delete-schedule/${reservationId}`,
+        {
+          withCredentials: true,
+          data: reservationId, // Long 값 전송
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("삭제 요청 ID:", reservationId);
+      console.log("삭제 응답:", response);
+      if (response.status === 200) {
+        alert("일정이 삭제되었습니다.");
+        console.log("삭제 요청 ID:", reservationId);
+
+        onDelete(reservationId); // 삭제 후 리스트 업데이트
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const changeStatus = (reservationId, status) => {
     api
@@ -63,6 +102,18 @@ const DailyItem = ({ event }) => {
             <span className="daily-time">
               {new Date(event.date).toLocaleTimeString()}
             </span>
+
+            {/* 🗑 트레이너만 삭제 버튼 표시 */}
+            {authority.isTrainer && (
+              <Trash
+                className="delete-icon"
+                onClick={(e) => {
+                  e.stopPropagation(); // 모달 열리는 이벤트 방지
+                  handleDelete(event.reservationId);
+                }}
+                style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
+              />
+            )}
           </div>
         </Card.Body>
       </Card>
