@@ -71,7 +71,7 @@ const hbtiCounts = allUsers.reduce((acc, user) => {
     <div>
       <h3>HBTI 분포도</h3>
       {chartData ? 
-      <div style={{width: '60%', height: '60%'}}>
+      <div style={{width: '600px', height: '600px'}}>
         <Pie 
         data={chartData} 
         options={{responsive: true}}

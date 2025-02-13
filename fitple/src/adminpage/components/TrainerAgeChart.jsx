@@ -68,13 +68,13 @@ const TrainerAgeChart = ({ chatTrainers }) => {
    
      return (
        <div>
-         <h3>연령대별 회원 분포</h3>
+         <h3>연령대별 트레이너 분포</h3>
          {isLoading ? (
            <p>Loading chart...</p>
          ) : chatTrainers.length === 0 ? (
            <p>데이터가 없습니다.</p>
          ) : (
-            <div style={{width: '60%', height: '60%'}}>
+            <div style={{width: '600px', height: '600px'}}>
             <Pie 
             data={chartData} 
             options={{
