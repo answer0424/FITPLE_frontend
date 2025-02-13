@@ -29,7 +29,7 @@ const TrainerMatchList = ({ userId }) => {
           }
         );
 
-        console.log("여기여기여기다아아아아앙")
+        
         console.log(response)
 
         if (response.status === 204) {
