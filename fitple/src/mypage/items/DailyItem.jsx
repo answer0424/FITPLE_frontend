@@ -10,6 +10,7 @@ const DailyItem = ({ event, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 리렌더링을 하기위한 가짜 useState를 만든다.
   const { authority } = useContext(LoginContext);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const accessToken = document.cookie
     .split("; ")
@@ -48,6 +49,7 @@ const DailyItem = ({ event, onDelete }) => {
       console.log("삭제 응답:", response);
       if (response.status === 200) {
         alert("일정이 삭제되었습니다.");
+        setIsCompleted(true);
         console.log("삭제 요청 ID:", reservationId);
 
         onDelete(reservationId); // 삭제 후 리스트 업데이트
@@ -74,6 +76,7 @@ const DailyItem = ({ event, onDelete }) => {
         alert("운동이 완료되셨습니다 stamp가 1 증가합니다.");
         // useState값을 1 -> null 을 왔다갔다하면 서  리랜더링을 강제로 시킨다.
         // 운동완료 버튼 disable처리
+        setIsCompleted(true);
         console.log("팝업 정해지면 수정");
         console.log(response.status);
       });
@@ -151,7 +154,7 @@ const DailyItem = ({ event, onDelete }) => {
                     }
                     changeStatus(event.reservationId, "운동완료");
                   }}
-                  disabled={event.status === "운동완료"}
+                  disabled={isCompleted}
                 >
                   운동완료
                 </Button>
