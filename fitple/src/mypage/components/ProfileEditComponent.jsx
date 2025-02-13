@@ -10,7 +10,8 @@ import "../static/css/ProfileEditComponent.css";
 import img from "../../assets/userProfileBasic.png";
 
 const ProfileEditComponent = () => {
-  const { userInfo, authority, loginCheck } = useContext(LoginContext);
+  const { userInfo, authority, loginCheck, logout, logoutSetting } =
+    useContext(LoginContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const [editedInfo, setEditedInfo] = useState({
     nickname: userInfo.nickname || "",
@@ -23,6 +24,8 @@ const ProfileEditComponent = () => {
     profileImage: userInfo.profileImage,
     HBTI: userInfo.hbti,
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(userInfo);
@@ -98,11 +101,6 @@ const ProfileEditComponent = () => {
       return;
     }
 
-    const accessToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("accessToken="))
-      ?.split("=")[1];
-
     const formData = new FormData();
     formData.append("userId", userInfo.id);
     formData.append("profileImage", selectedImage);
@@ -128,10 +126,48 @@ const ProfileEditComponent = () => {
   };
 
   //회원삭제 핸들러
-  //   const userDelete =
+  const userDelete = async (e) => {
+    if (!window.confirm("정말로 삭제하시겠습니까?")) return;
+    e.preventDefault();
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+    console.log("userId", userInfo.id);
+    try {
+      const response = await api.delete(`/member/${userInfo.id}`, {
+        withCredentials: true,
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("삭제 요청 ID:", userInfo.id);
+      console.log("삭제 응답:", response);
+      if (response.status === 200) {
+        console.log("회원 탈퇴 완료:", userInfo.id);
+        logout(true); // ✅ `confirm` 없이 강제 로그아웃
+
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container className="profileEditComponent-container col col-md-4">
+      <div className="d-flex">
+        <Button
+          type="button"
+          onClick={userDelete}
+          className="deleteBtn"
+          style={{ backgroundColor: "cdcecec7" }}
+        >
+          탈퇴
+        </Button>
+      </div>
       <h2 className="profileEditComponent-title">프로필 수정</h2>
 
       <Row className="profileEditComponent-row">

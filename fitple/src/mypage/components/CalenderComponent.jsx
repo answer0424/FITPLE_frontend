@@ -84,7 +84,7 @@ const CalenderComponent = () => {
           >
             <span className="event-nickname">
               {event.nickname}
-              {event.authority === "ROLE_TRAINER" ? " 회원" : " 트레이너"}
+              {event.authority === "ROLE_TRAINER" ? " 트레이너" : " 회원"}
             </span>
           </div>
         ))}
