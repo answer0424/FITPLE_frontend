@@ -47,13 +47,11 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
   };
 
   return (
-    <div>
+    <div className="forgot-password-wrapper">
       <Header />
       <Container className="forgot-password-container">
         <div className="forgot-password-box">
-          <h3 className="text-center mb-4 fw-bold text-white">
-            비밀번호 재설정
-          </h3>
+          <h3 className="text-center mb-4 fw-bold text-white">비밀번호 재설정</h3>
 
           {message && (
             <Alert variant="success" className="text-white border-0">
