@@ -6,6 +6,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { GearFill, HouseFill } from "react-bootstrap-icons"; // 설정 및 집 아이콘
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import "../static/css/ProfileComponent.css";
+import pimg from "../../assets/userProfileBasic.png"
 
 const ProfileComponent = ({ user, onClick }) => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -56,13 +57,11 @@ const ProfileComponent = ({ user, onClick }) => {
             <Col className="d-flex flex-column align-items-center">
               {/* 프로필 이미지와 설정 아이콘 */}
               <div className="profile-image-container position-relative">
-                <img
-                  src={`${import.meta.env.VITE_Server}/${
-                    userInfo.profileImage
-                  }`}
-                  alt="Profile"
-                  className="profile-image"
-                />
+              <img
+                src={userInfo.profileImage ? `${import.meta.env.VITE_Server}/${userInfo.profileImage}` : pimg}
+                alt="Profile"
+                className="profile-image"
+              />
                 <button
                   onClick={() => handleClick("c")}
                   className="settings-icon"
