@@ -49,7 +49,8 @@ const DailyItem = ({ event }) => {
             <div className="daily-profile-placeholder"></div>
             <div>
               <Card.Title className="daily-nickname" style={{ color: "black" }}>
-                {event.nickname} 회원
+                {event.nickname}{" "}
+                {event.authority === "ROLE_TRAINER" ? " 회원" : " 트레이너"}
               </Card.Title>
             </div>
           </div>
@@ -80,8 +81,6 @@ const DailyItem = ({ event }) => {
             })}
             )
           </p>
-
-          <strong>{event.nickname} 회원님</strong>
 
           {authority.isTrainer ? (
             <TrainerButtonItem event={event} />

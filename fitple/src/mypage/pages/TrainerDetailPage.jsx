@@ -6,6 +6,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Headers from "../../common/component/Header";
 import "../static/css/TrainerDetailWrite.css";
+import "quill-emoji/dist/quill-emoji.css";
 const TrainerProfilePage = () => {
   const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
@@ -403,7 +404,7 @@ const TrainerProfilePage = () => {
                   const fullSkillImageUrl = `${
                     import.meta.env.VITE_Server
                   }${skillImageUrl}`;
-                  console.log("보내는 url",fullSkillImageUrl);
+                  console.log("보내는 url", fullSkillImageUrl);
 
                   return (
                     <li
