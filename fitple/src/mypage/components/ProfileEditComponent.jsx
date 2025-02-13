@@ -6,9 +6,10 @@ import api from "../../mainpage/apis/api";
 import KakaoSearch from "../../mainpage/components/KakaoSearch";
 import axios from "axios";
 import "../static/css/ProfileEditComponent.css";
+import img from "../../assets/userProfileBasic.png"
 
 const ProfileEditComponent = () => {
-    const { userInfo, authority, setUserInfo } = useContext(LoginContext);
+    const { userInfo, authority, loginCheck } = useContext(LoginContext);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editedInfo, setEditedInfo] = useState({
         nickname: userInfo.nickname || "",
@@ -72,7 +73,7 @@ const ProfileEditComponent = () => {
                 withCredentials: true,
                 headers: { Authorization: `Bearer ${accessToken}` },
             });
-            setUserInfo({ ...userInfo, ...editedInfo });
+            loginCheck();
             alert("프로필이 업데이트되었습니다.");
         } catch (error) {
             console.error(error);
@@ -139,7 +140,7 @@ const ProfileEditComponent = () => {
                                     ? URL.createObjectURL(selectedImage)
                                     : userInfo.profileImage
                                     ? `${import.meta.env.VITE_Server}/${userInfo.profileImage}`
-                                    : "/default-profile.png"
+                                    : img
                             }
                             className="profileEditComponent-profileImage"
                             alt="Profile Preview"
@@ -203,7 +204,7 @@ const ProfileEditComponent = () => {
                                 type="date"
                                 name="birth"
                                 className="profileEditComponent-formControl"
-                                value={editedInfo.birth}
+                                value={editedInfo.birth ? new Date(editedInfo.birth).toISOString().split('T')[0] : ''}  // null 체크 추가
                                 onChange={handleChange}
                             />
                         </Form.Group>

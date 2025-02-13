@@ -11,7 +11,7 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isLogin } = useContext(LoginContext);
+  const { isLogin, loginCheck } = useContext(LoginContext);
 
   useEffect(() => {
     const fetchHbtiData = async () => {
@@ -71,7 +71,8 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
       if (!saveResponse.ok) {
         throw new Error("결과 저장 실패");
       }
-
+      // 저장 성공 후 업데이트
+      loginCheck();
       // 저장 성공 후 이동
       navigate(`/quiz/${userId}/result`, {
         state: { fromQuiz: true },
