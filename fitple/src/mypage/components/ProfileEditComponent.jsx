@@ -107,7 +107,7 @@ const ProfileEditComponent = () => {
         formData.append("profileImage", selectedImage);
 
         try {
-            await axios.post(
+            await axios.patch(
                 `${import.meta.env.VITE_Server}/member/profile-img`,
                 formData,
                 {
@@ -118,7 +118,7 @@ const ProfileEditComponent = () => {
                     },
                 }
             );
-            setUserInfo((prev) => ({ ...prev, profileImage: selectedImage }));
+            loginCheck();
             alert("프로필 이미지가 업로드되었습니다.");
         } catch (error) {
             console.error("오류:", error.response || error);
