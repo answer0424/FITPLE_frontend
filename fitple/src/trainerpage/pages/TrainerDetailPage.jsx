@@ -12,6 +12,8 @@ import { FaCommentDots } from "react-icons/fa"; // FontAwesome 채팅 아이콘
 import ChatIcon from "../../common/component/ChatIcon";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { createChat } from "../../mainpage/apis/chat";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function TrainerDetailPage() {
   const { trainerId } = useParams();
@@ -145,10 +147,10 @@ function TrainerDetailPage() {
     fetchData();
   }, [trainerId, navigate]);
 
-  // ✅ 트레이너 정보 및 리뷰 목록을 가져오는 함수
+  const MySwal = withReactContent(Swal);
   const fetchTrainerDetails = async (token, userData) => {
     try {
-      // 트레이너 상세 정보 가져오기
+      // ✅ 트레이너 상세 정보 가져오기
       const trainerResponse = await fetch(
         `${BASE_URL}/quiz/trainers/${trainerId}/detail`,
         {
@@ -158,16 +160,16 @@ function TrainerDetailPage() {
           },
         }
       );
-
-      if (!trainerResponse.ok)
+  
+      if (!trainerResponse.ok) {
         throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
-
+      }
+  
       const trainerData = await trainerResponse.json();
       console.log("트레이너의 받아온 정보", trainerData);
       setTrainer(trainerData);
-      console.log("트레이너의 아이디", trainerData.trainerId);
-
-      // 리뷰 데이터 가져오기
+  
+      // ✅ 리뷰 데이터 가져오기
       const reviewsResponse = await fetch(
         `${BASE_URL}/api/reviews/training/${trainerId}`,
         {
@@ -177,7 +179,7 @@ function TrainerDetailPage() {
           },
         }
       );
-
+  
       if (reviewsResponse.status === 404) {
         console.warn("리뷰 없음: 빈 배열로 설정");
         setReviews([]);
@@ -187,12 +189,12 @@ function TrainerDetailPage() {
         const reviewsData = await reviewsResponse.json();
         console.log("리뷰 데이터:", reviewsData);
         setReviews(reviewsData);
-
-        // 현재 로그인한 유저와 매칭된 트레이닝 ID 찾기
+  
+        // ✅ 현재 로그인한 유저와 매칭된 트레이닝 ID 찾기
         const matchingTraining = reviewsData.find(
           (review) => review.userId === userData.id
         );
-
+  
         if (matchingTraining) {
           setMatchedTrainingId(matchingTraining.trainingId);
           console.log("매칭된 트레이닝 ID:", matchingTraining.trainingId);
@@ -204,8 +206,20 @@ function TrainerDetailPage() {
     } catch (err) {
       console.error(err);
       setError(err.message);
+      MySwal.fire({
+        title: "트레이너 정보 없음",
+        text: "해당 트레이너의 정보를 불러올 수 없습니다. 작성부터 해주세요",
+        icon: "warning",
+        confirmButtonText: "확인", // ✅ 사용자가 '확인'을 누르면 실행됨
+        allowOutsideClick: false, // 사용자가 모달 바깥을 클릭해도 닫히지 않도록 설정
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/member/detail/write"); // ✅ SweetAlert2 확인 버튼 클릭 후 이동
+        }
+      });
     }
   };
+  
 
   // ✅ 평균 평점 계산
   const calculateAverageRating = (reviews) => {
@@ -267,12 +281,9 @@ function TrainerDetailPage() {
     <>
       <Header />
       {/* 상태가 대기나 거절일 경우 모달 표시 */}
-      {trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
-        <TrainerStatusModal
-          isAccess={trainer.isAccess}
-          trainerId={trainer.id}
-        />
-      ) : (
+      {!trainer || trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
+  <TrainerStatusModal trainer={trainer} />
+) : (
         <div className="trainer-container">
           <div className="trainer-card">
             <div className="trainer-header">
