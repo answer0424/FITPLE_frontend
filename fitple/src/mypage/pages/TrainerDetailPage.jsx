@@ -85,46 +85,79 @@ const TrainerProfilePage = () => {
               try {
                 if (!cert.skills) return [];
 
+                // If skills is already an array, use it directly
+                if (Array.isArray(cert.skills)) {
+                  return cert.skills.map((skill) => ({
+                    certificationId: cert.certificationId,
+                    name: typeof skill === "string" ? skill : skill.name,
+                    imageUrl: cert.imageUrl || "",
+                  }));
+                }
+
+                // Handle string input
                 let cleanedSkills = cert.skills;
 
+                // If it's a simple string (like "경력"), wrap it in an array
+                if (
+                  typeof cleanedSkills === "string" &&
+                  !cleanedSkills.includes("[")
+                ) {
+                  return [
+                    {
+                      certificationId: cert.certificationId,
+                      name: cleanedSkills,
+                      imageUrl: cert.imageUrl || "",
+                    },
+                  ];
+                }
+
+                // Process JSON-like string
                 if (typeof cleanedSkills === "string") {
                   cleanedSkills = cleanedSkills
-                    .replace(/'/g, '"') // 작은 따옴표 → 큰 따옴표 변환
-                    .replace(/\[\[/g, "[") // 중첩된 대괄호 수정
-                    .replace(/\]\]/g, "]") // 중첩된 대괄호 수정
-                    .replace(/\]+$/, "]") // 마지막 닫는 대괄호 정리
-                    .replace(/,$/, ""); // 마지막 쉼표 제거
+                    .replace(/'/g, '"') // Replace single quotes with double quotes
+                    .replace(/\[\[/g, "[") // Fix nested brackets
+                    .replace(/\]\]/g, "]") // Fix nested brackets
+                    .replace(/\]+$/, "]") // Clean up trailing brackets
+                    .replace(/,$/, "") // Remove trailing comma
+                    .trim(); // Remove whitespace
+
+                  // Ensure proper JSON array structure
+                  if (!cleanedSkills.startsWith("[")) {
+                    cleanedSkills = "[" + cleanedSkills;
+                  }
+                  if (!cleanedSkills.endsWith("]")) {
+                    cleanedSkills += "]";
+                  }
+
+                  // Parse the JSON string
+                  const parsedSkillsArray = JSON.parse(cleanedSkills);
+
+                  return parsedSkillsArray.map((skill) => ({
+                    certificationId: cert.certificationId,
+                    name: typeof skill === "string" ? skill : skill.name,
+                    imageUrl: cert.imageUrl || "",
+                  }));
                 }
 
-                // ✅ JSON 배열이 제대로 닫혀 있는지 확인
-                if (!cleanedSkills.endsWith("]")) {
-                  cleanedSkills += "]"; // 닫는 대괄호 추가
-                }
-
-                // ✅ JSON이 제대로 시작하는지 확인
-                if (!cleanedSkills.startsWith("[")) {
-                  cleanedSkills = "[" + cleanedSkills; // 여는 대괄호 추가
-                }
-
-                const parsedSkillsArray =
-                  typeof cleanedSkills === "string"
-                    ? JSON.parse(cleanedSkills)
-                    : cleanedSkills;
-
-                return parsedSkillsArray.map((skill) => ({
-                  certificationId: cert.certificationId,
-                  name: skill.name,
-                  imageUrl: cert.imageUrl || "",
-                }));
+                // If we reach here, return default structure
+                return [
+                  {
+                    certificationId: cert.certificationId,
+                    name: String(cert.skills),
+                    imageUrl: cert.imageUrl || "",
+                  },
+                ];
               } catch (error) {
                 console.error("스킬 데이터 파싱 오류:", {
                   원본데이터: cert.skills,
                   에러메시지: error.message,
                 });
+
+                // Return single skill entry with original data
                 return [
                   {
                     certificationId: cert.certificationId,
-                    name: "",
+                    name: String(cert.skills), // Convert to string to ensure safe display
                     imageUrl: cert.imageUrl || "",
                   },
                 ];
@@ -259,7 +292,7 @@ const TrainerProfilePage = () => {
         {user && (
           <div className="trainer-profile__header">
             <img
-              src={`${import.meta.env.VITE_Server}/${user.profileImage}`}
+              src={`${import.meta.env.VITE_Server}${user.imageUrl}`}
               alt="프로필"
               className="trainer-profile__avatar"
             />
@@ -357,37 +390,47 @@ const TrainerProfilePage = () => {
                 보유 스킬:
               </label>
               <ul className="list-group">
-                {skills.map((skill, index) => (
-                  <li
-                    key={index}
-                    className="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    <div
-                      className="d-flex align-items-center"
-                      style={{ color: "black" }}
+                {skills.map((skill, index) => {
+                  // 개별 스킬의 이미지 URL을 변환
+                  const skillImageUrl = skill.imageUrl.startsWith("./")
+                    ? skill.imageUrl.replace("./", "/") // 점 제거
+                    : skill.imageUrl;
+
+                  // 백엔드 서버 주소와 결합하여 최종 이미지 URL 생성
+                  const fullSkillImageUrl = `${
+                    import.meta.env.VITE_Server
+                  }${skillImageUrl}`;
+
+                  return (
+                    <li
+                      key={index}
+                      className="list-group-item d-flex justify-content-between align-items-center"
                     >
-                      {skill.imageUrl && (
-                        <img
-                          src={`${import.meta.env.VITE_Server}${
-                            skill.imageUrl
-                          }`}
-                          alt={skill.name}
-                          className="me-2"
-                          style={{ width: "30px", height: "30px" }}
-                        />
-                      )}
-                      {skill.name}
-                    </div>
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteSkill(index)}
-                      style={{ width: "50px" }}
-                    >
-                      삭제
-                    </button>
-                  </li>
-                ))}
+                      <div
+                        className="d-flex align-items-center"
+                        style={{ color: "black" }}
+                      >
+                        {skill.imageUrl && (
+                          <img
+                            src={fullSkillImageUrl} // 개별 스킬 이미지 URL 적용
+                            alt={skill.name}
+                            className="me-2"
+                            style={{ width: "30px", height: "30px" }}
+                          />
+                        )}
+                        {skill.name}
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteSkill(index)}
+                        style={{ width: "50px" }}
+                      >
+                        삭제
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
