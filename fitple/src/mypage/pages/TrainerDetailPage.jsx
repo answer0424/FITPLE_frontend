@@ -41,10 +41,14 @@ const TrainerProfilePage = () => {
       })
       .then((res) => {
         setUser(res.data), console.log("현재 사용자 : ", res.data);
-        setGymName(res.data?.gym?.name || "정보 없음");
-        console.log(res.data.gym.name);
-        setHbti(res.data?.hbti?.hbti || "정보 없음");
-        console.log(res.data.hbti.hbti);
+        if (res.data.authority === "ROLE_STUDENT") {
+          alert("접근권한이 없습니다");
+          return;
+        }
+        setGymName(res.data?.gym?.name ?? "정보 없음");
+        console.log(res.data.gym.name ?? "정보 없음");
+        setHbti(res.data?.hbti?.hbti ?? "정보 없음");
+        console.log(res.data.hbti.hbti ?? "정보 없음");
         console.log(res.data);
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
