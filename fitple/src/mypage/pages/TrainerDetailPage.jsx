@@ -392,9 +392,12 @@ const TrainerProfilePage = () => {
               <ul className="list-group">
                 {skills.map((skill, index) => {
                   // 개별 스킬의 이미지 URL을 변환
-                  const skillImageUrl = skill.imageUrl.startsWith("./")
-                    ? skill.imageUrl.replace("./", "/") // 점 제거
-                    : skill.imageUrl;
+                  const skillImageUrl =
+                    skill?.imageUrl && typeof skill.imageUrl === "string"
+                      ? skill.imageUrl.startsWith("./")
+                        ? skill.imageUrl.replace("./", "/") // 점 제거
+                        : skill.imageUrl
+                      : ""; // 기본값 설정
 
                   // 백엔드 서버 주소와 결합하여 최종 이미지 URL 생성
                   const fullSkillImageUrl = `${
