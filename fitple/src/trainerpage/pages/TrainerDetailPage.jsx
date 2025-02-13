@@ -214,7 +214,7 @@ function TrainerDetailPage() {
         allowOutsideClick: false, // 사용자가 모달 바깥을 클릭해도 닫히지 않도록 설정
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/member/detail/write"); // ✅ SweetAlert2 확인 버튼 클릭 후 이동
+          navigate("/member/detail/write");
         }
       });
     }

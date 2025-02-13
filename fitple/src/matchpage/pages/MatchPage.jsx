@@ -104,7 +104,7 @@ const MatchPage = () => {
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       <Header />
-      <TrainerSearchList />
+      {/* <TrainerSearchList /> */}
       <TrainerMatchList userId={userId} />
     </div>
   );

@@ -98,7 +98,7 @@ const TrainerMatchList = ({ userId }) => {
               alt={trainer.trainerName}
             />
             <div className="trainer-info-overlay">
-              <h5 className="kr-font">{trainer.trainerName}</h5>
+              <h5 className="kr-font">{trainer.nickname}</h5>
               <p className="kr-font">
                 <strong>HBTI:</strong> {trainer.hbti}
               </p>
