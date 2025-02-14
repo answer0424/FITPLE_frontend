@@ -108,23 +108,23 @@ const RegisterForm = ({ questions = [], userType }) => {
 
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
-      newAnswers[6] = JSON.stringify(placeInfo);
+      // newAnswers[6] = JSON.stringify(placeInfo);
       return newAnswers;
     });
   };
 
   const handleSubmit = async () => {
-    const placeInfo = JSON.parse(answers[6]);
+    // const placeInfo = JSON.parse(answers[6]);
     const userData = {
       email: answers[0],
       username: answers[1],
       password: answers[2],
       nickname: answers[4],
       birth: answers[5],
-      address: placeInfo.address,
-      gymName: placeInfo.gymName,
-      latitude: placeInfo.lat,
-      longitude: placeInfo.lng,
+      // address: placeInfo.address,
+      // gymName: placeInfo.gymName,
+      // latitude: placeInfo.lat,
+      // longitude: placeInfo.lng,
     };
 
     try {
