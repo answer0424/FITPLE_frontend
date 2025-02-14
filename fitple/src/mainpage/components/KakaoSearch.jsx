@@ -8,7 +8,9 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
   const [page, setPage] = useState(1); // 페이지 상태 관리
 
   useEffect(() => {
+    console.log("일단 돌아가나?")
     const loadKakaoMapScript = () => {
+      console.log("다운로드 중")
       const script = document.createElement("script");
       script.async = true;
       script.src =
@@ -25,6 +27,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
 
     if (!window.kakao || !window.kakao.maps) {
       loadKakaoMapScript();
+      console.log(window.kakao);
     }
   }, []);
 
