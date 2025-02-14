@@ -93,10 +93,11 @@ const TrainerMatchList = ({ userId }) => {
             }}
             transition={{ duration: 0.5 }}
           >
-            <img
-              src={`${import.meta.env.VITE_Server}${trainer.profileImage}`}
-              alt={trainer.trainerName}
+           <img
+    src={`${import.meta.env.VITE_Server}${trainer.profileImage.replace(/^\./, "")}`} 
+    alt={trainer.trainerName}
             />
+
             <div className="trainer-info-overlay">
               <h5 className="kr-font">{trainer.nickname}</h5>
               <p className="kr-font">

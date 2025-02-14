@@ -223,11 +223,12 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     {getSortedReviews().map((review) => (
       <li key={review.id} className="review-item">
        <img
-                            src={`${BASE_URL}${review.userProfileImage}`}
-                            alt={`${review.username} 프로필`}
-                            className="review-profile-image"
-                            onError={(e) => (e.target.src = "/src/assets/logo.png")}
-                        />
+    src={`${BASE_URL}${review.userProfileImage.replace(/^\./, "")}`} 
+    alt={`${review.username} 프로필`}
+    className="review-profile-image"
+    onError={(e) => (e.target.src = "/src/assets/logo.png")}
+/>
+
         <div className="review-content">
           <p>
             {review.username}
