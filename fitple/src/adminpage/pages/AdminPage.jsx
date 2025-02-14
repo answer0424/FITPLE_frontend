@@ -6,7 +6,7 @@ import "./admin.css";
 import { useNavigate } from "react-router-dom";
 import StudentAgeChart from "../components/StudentAgeChart";
 import TrainerAgeChart from "../components/TrainerAgeChart";
-import HbtiTypeChart from "../components/hbtiTypeChart";
+import HbtiTypeChart from "../components/HbtiTypeChart";
 import RegisterUserLine from "../components/RegisterUserLine";
 
 const AdminPage = () => {
