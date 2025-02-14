@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/member/reset-password",
+        `${import.meta.env.VITE_Server}/member/reset-password`,
         {
           method: "POST",
           withCredentials: true,

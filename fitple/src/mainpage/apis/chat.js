@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const CHAT_BASE_URL = 'http://localhost:8081/api';
+const CHAT_BASE_URL = `${import.meta.env.VITE_Server}/api`;
 
 // 채팅방 생성 url
 export const createChat = async (userId, trainerId) => {

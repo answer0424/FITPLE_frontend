@@ -20,7 +20,7 @@ const TrainerSearchList = () => {
           .find((row) => row.startsWith("accessToken="))
           ?.split("=")[1];
         const response = await axios.get(
-          "http://localhost:8081/api/quiz/search",
+          `${import.meta.env.VITE_Server}/api/quiz/search`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
             params: { searchQuery },
