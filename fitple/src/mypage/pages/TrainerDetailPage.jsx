@@ -214,10 +214,6 @@ const TrainerProfilePage = () => {
     const formDatas = new FormData(e.target); // 폼 데이터 가져오기
     const entries = Object.fromEntries(formDatas.entries()); // 객체로 변환
     console.log("entries : ", entries);
-    if (!perPrice.trim()) {
-      alert("1회 가격을 입력해주세요.");
-      return;
-    }
 
     if (!career.trim()) {
       alert("경력 시작 날짜를 입력해주세요.");

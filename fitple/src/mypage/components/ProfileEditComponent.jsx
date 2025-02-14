@@ -101,6 +101,11 @@ const ProfileEditComponent = () => {
       return;
     }
 
+    const accessToken = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("accessToken="))
+            ?.split("=")[1];
+
     const formData = new FormData();
     formData.append("userId", userInfo.id);
     formData.append("profileImage", selectedImage);
@@ -112,8 +117,8 @@ const ProfileEditComponent = () => {
         {
           withCredentials: true,
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
