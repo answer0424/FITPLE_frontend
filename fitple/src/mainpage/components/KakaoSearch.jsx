@@ -30,7 +30,6 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
 
   //수정 시 기존 값이 있다면 기존 값 출력
   useEffect(() => {
-    console.log(initialAddress);
     initialAddress && setKeyword(initialAddress);
   }, [])
 

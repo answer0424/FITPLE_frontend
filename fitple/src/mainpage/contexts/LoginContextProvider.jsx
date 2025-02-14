@@ -45,7 +45,7 @@ const LoginContextProvider = ({ children }) => {
     if (stompClient.current) return; // 이미 연결되어 있을 경우를 방지
 
     const client = new Client({
-      brokerURL: "ws://localhost:8081/ws-chat",
+      brokerURL: `ws://${import.meta.env.VITE_Server}/ws-chat`,
       reconnectDelay: 5000,
       debug: (str) => console.log(str),
       onConnect: () => {

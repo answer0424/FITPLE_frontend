@@ -20,7 +20,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
   const fetchStudents = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/member/${user.id}/register/search`,
+        `${import.meta.env.VITE_Server}/member/${user.id}/register/search`,
         {
           params: { searchQuery }, // 검색어 추가
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -67,7 +67,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
 
     try {
       await axios.post(
-        `http://localhost:8081/member/register/add-member`,
+        `${import.meta.env.VITE_Server}/member/register/add-member`,
         { trainerId: user.id, studentId: selectedStudent.id, times },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

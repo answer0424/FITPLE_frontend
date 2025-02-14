@@ -37,7 +37,7 @@ const StudentsList = ({ user }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8081/member/${user.id}/register`,
+        `${import.meta.env.VITE_Server}/member/${user.id}/register`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -98,7 +98,7 @@ const StudentsList = ({ user }) => {
 
     try {
       await axios.patch(
-        "http://localhost:8081/member/pt-count",
+        `${import.meta.env.VITE_Server}/member/pt-count`,
         {
           studentId: selectedStudent.userId,
           trainerId: user.id,

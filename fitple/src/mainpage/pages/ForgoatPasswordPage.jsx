@@ -18,7 +18,7 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/member/send-reset-email",
+        `${import.meta.env.VITE_Server}/member/send-reset-email`,
         { to: email },
         {
           headers: { "Content-Type": "application/json" },

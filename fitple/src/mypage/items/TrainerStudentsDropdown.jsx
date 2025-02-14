@@ -34,7 +34,7 @@ const TrainerStudentsDropdown = ({
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/member/${trainerId}/register`,
+          `${import.meta.env.VITE_Server}/member/${trainerId}/register`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${getAccessToken()}` },
@@ -85,7 +85,7 @@ const TrainerStudentsDropdown = ({
       const selectedMonth = month || new Date().getMonth() + 1;
 
       const response = await axios.get(
-        `http://localhost:8081/member/${trainerId}/calendar/student/${studentId}`,
+        `${import.meta.env.VITE_Server}/member/${trainerId}/calendar/student/${studentId}`,
         {
           params: { year: selectedYear, month: selectedMonth },
           withCredentials: true,
