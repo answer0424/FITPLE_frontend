@@ -12,7 +12,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
       const script = document.createElement("script");
       script.async = true;
       script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?appkey=234840c11186dc21ac264802aa3bb9c9&libraries=services&autoload=false";
+        `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KakaoMap_Key}&libraries=services&autoload=false`;
 
       script.onload = () => {
         window.kakao.maps.load(() => {
