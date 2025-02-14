@@ -331,7 +331,7 @@ const TrainerList = ({ setChatTrainers }) => {
                 </td>
                 <td className="admin-table-td delete-button-center">
                   <button
-                    className="btn btn-danger btn-sm d-flex align-items-center kr-font col-5"
+                    className="btn btn-danger btn-sm d-flex align-items-center kr-font col-7"
                     onClick={() => handleDeleteTrainer(trainer.id)}
                   >
                     <UserX className="h-4 w-4 mr-1" />

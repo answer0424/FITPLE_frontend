@@ -21,7 +21,6 @@ const MyPage = () => {
   const navigate = useNavigate();
   console.log("authority : ", authority);
 
-
   //로그인 안 한 놈 쫒아내기
   useEffect(() => {
     if (!isLogin) {
@@ -78,7 +77,17 @@ const MyPage = () => {
     <EventProvider>
       {user ? (
         <>
-          <Container fluid className="vh-100 d-flex flex-column col-12">
+          <Container
+            fluid
+            className="vh-100 d-flex flex-column col-12"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "100px",
+              marginBottom: "100px",
+            }}
+          >
             <Row className="col-12">
               {/* 왼쪽 프로필 영역 */}
               <Col
@@ -95,7 +104,6 @@ const MyPage = () => {
                 </div>
               </Col>
 
-  
               {/* 오른쪽 메인 콘텐츠 영역 */}
               <Col
                 md={8}
@@ -114,22 +122,20 @@ const MyPage = () => {
                         />
                       }
                     />
+                  ) : // 학생일 경우
+                  authority.isStudent ? (
+                    <Route
+                      index
+                      element={
+                        <StudentComponent
+                          user={user}
+                          currentPage={currentPage}
+                        />
+                      }
+                    />
                   ) : (
-                    // 학생일 경우
-                    authority.isStudent ? (
-                      <Route
-                        index
-                        element={
-                          <StudentComponent
-                            user={user}
-                            currentPage={currentPage}
-                          />
-                        }
-                      />
-                    ) : (
-                      // 권한이 없을 경우
-                      <Route index element={handleNoPermission()} />
-                    )
+                    // 권한이 없을 경우
+                    <Route index element={handleNoPermission()} />
                   )}
                 </Routes>
               </Col>
@@ -143,7 +149,6 @@ const MyPage = () => {
       )}
     </EventProvider>
   );
-  
 };
 
 export default MyPage;

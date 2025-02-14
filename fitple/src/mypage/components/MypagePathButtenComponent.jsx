@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
-import "../static/css/MyPagePathButtonStyle.css";
+import "../static/css/MypagePathButtonStyle.css";
 import { Link } from "react-router-dom";
 
 const MypagePathButtenComponent = ({ onClick }) => {
@@ -30,10 +30,11 @@ const MypagePathButtenComponent = ({ onClick }) => {
       </ButtonGroup>
 
       {/* Add margin to separate the "Home" link from the button group */}
-      <Link to={"/"} className="btn mypage-button mt-3">HOME</Link>
+      <Link to={"/"} className="btn mypage-button mt-3">
+        HOME
+      </Link>
     </div>
   );
-  
 };
 
 export default MypagePathButtenComponent;

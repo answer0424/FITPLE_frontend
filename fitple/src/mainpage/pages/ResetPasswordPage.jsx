@@ -42,6 +42,7 @@ const ResetPasswordPage = () => {
         "http://localhost:8081/member/reset-password",
         {
           method: "POST",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
@@ -74,8 +75,16 @@ const ResetPasswordPage = () => {
         <div className="reset-password-box">
           <h3 className="text-center mb-4 fw-bold text-white">비밀번호 변경</h3>
 
-          {message && <Alert variant="success" className="text-white border-0">{message}</Alert>}
-          {error && <Alert variant="danger" className="text-white border-0">{error}</Alert>}
+          {message && (
+            <Alert variant="success" className="text-white border-0">
+              {message}
+            </Alert>
+          )}
+          {error && (
+            <Alert variant="danger" className="text-white border-0">
+              {error}
+            </Alert>
+          )}
 
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -104,7 +113,12 @@ const ResetPasswordPage = () => {
               />
             </Form.Group>
 
-            <Button variant="outline-light" type="submit" className="mt-3 w-100" disabled={isLoading}>
+            <Button
+              variant="outline-light"
+              type="submit"
+              className="mt-3 w-100"
+              disabled={isLoading}
+            >
               {isLoading ? "변경 중..." : "비밀번호 변경"}
             </Button>
           </Form>

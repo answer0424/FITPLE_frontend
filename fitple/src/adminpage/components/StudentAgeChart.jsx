@@ -73,7 +73,7 @@ const StudentAgeChart = ({ chatUsers }) => {
       ) : chatUsers.length === 0 ? (
         <p>데이터가 없습니다.</p>
       ) : (
-        <div style={{width: '60%', height: '60%'}}>
+        <div style={{width: '600px', height: '600px'}}>
         <Pie 
         data={chartData}
          />
