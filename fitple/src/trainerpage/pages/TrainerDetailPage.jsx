@@ -288,14 +288,13 @@ function TrainerDetailPage() {
           <div className="trainer-card">
             <div className="trainer-header">
               <div className="profile-section">
-                <img
-                  src={`${BASE_URL}${trainer.trainerProfileImage}`}
-                  alt={`${trainer.trainerName} 프로필`}
-                  className="profile-image1"
-                  onError={(e) =>
-                    (e.target.src = "/icons/certificate-icon.png")
-                  }
-                />
+              <img
+                src={`${BASE_URL}${trainer.trainerProfileImage.replace(/^\./, "")}`} 
+                alt={`${trainer.trainerName} 프로필`}
+                className="profile-image1"
+                onError={(e) => (e.target.src = "/icons/certificate-icon.png")}
+                  />
+
               </div>
               <div className="info-section">
                 <h1 className="trainer-name kr-font">{trainer.trainerName}</h1>
