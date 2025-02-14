@@ -20,9 +20,9 @@ const TrainerProfilePage = () => {
   const quillRef = useRef(null);
   const navigate = useNavigate();
 
-  const gotoDetail = () => {
-    navigate(`/member`);
-  };
+  // const gotoDetail = () => {
+  //   navigate(`/member`);
+  // };
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -46,10 +46,10 @@ const TrainerProfilePage = () => {
           alert("접근권한이 없습니다");
           navigate("/member");
         }
-        setGymName(res.data?.gym?.name ?? "정보 없음");
-        console.log(res.data.gym.name ?? "정보 없음");
-        setHbti(res.data?.hbti?.hbti ?? "정보 없음");
-        console.log(res.data.hbti.hbti ?? "정보 없음");
+        setGymName(res.data?.gym?.name || "정보 없음");
+        console.log(res.data.gym.name || "정보 없음");
+        setHbti(res.data?.hbti?.hbti || "정보 없음");
+        console.log(res.data.hbti.hbti || "정보 없음");
         console.log(res.data);
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
@@ -71,9 +71,9 @@ const TrainerProfilePage = () => {
         const isNewProfile =
           !res.data.perPrice && !res.data.career && !res.data.content;
 
-        if (res.data.authority === "ROLE_TRAINER" && isNewProfile) {
+        if (res.data.authority === "ROLE_TRAINER" || isNewProfile) {
           alert("신규프로필을 작성해주세요");
-        } else {
+        } else if (!isNewProfile) {
           alert("기존 프로필 내용이 존재합니다. 내용을 확인 후 수정하세요!");
         }
         setPerPrice(res.data.perPrice || "");
@@ -214,18 +214,34 @@ const TrainerProfilePage = () => {
     const formDatas = new FormData(e.target); // 폼 데이터 가져오기
     const entries = Object.fromEntries(formDatas.entries()); // 객체로 변환
     console.log("entries : ", entries);
-    if (!user) {
-      alert("사용자 정보를 가져오는 중입니다. 잠시 후 다시 시도해 주세요.");
+    if (!perPrice.trim()) {
+      alert("1회 가격을 입력해주세요.");
       return;
     }
-    if (!perPrice || !career) {
-      alert("가격과 경력을 입력해주세요.");
+
+    if (!career.trim()) {
+      alert("경력 시작 날짜를 입력해주세요.");
+      return;
+    }
+
+    if (!hbti || hbti === "정보 없음") {
+      alert("HBTI가 존재하지 않습니다. HBTI 테스트를 진행해주세요.");
+      return;
+    }
+
+    if (!gymName || gymName === "정보 없음") {
+      alert("체육관 이름을 입력해주세요.");
       return;
     }
 
     const editorContent = quillRef.current
       ? quillRef.current.getEditor().root.innerHTML
       : content;
+
+    if (!editorContent.trim()) {
+      alert("상세 내용을 작성해주세요.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("trainerId", user.id);
@@ -278,11 +294,14 @@ const TrainerProfilePage = () => {
       // }
 
       alert("트레이너 프로필이 등록되었습니다.");
+      navigate("/member");
     } catch (error) {
       console.error("트레이너 프로필 등록 오류:", error.response || error);
       // alert(
       //   error.response?.data?.message || "프로필 등록 중 오류가 발생했습니다."
       // );
+      alert("모든 값을 다 작성해주세요");
+      return;
     }
   };
 
@@ -309,6 +328,7 @@ const TrainerProfilePage = () => {
             <input
               style={{ color: "black" }}
               type="number"
+              placeholder="1회 pt가격을 입력해주세요."
               className="detail-input"
               value={perPrice}
               onChange={(e) => setPerPrice(e.target.value)}
@@ -330,13 +350,34 @@ const TrainerProfilePage = () => {
 
           <div className="trainer-profile__form-group">
             <label style={{ color: "black" }}>HBTI:</label>
-            <div
-              className="detail-input"
-              style={{ color: "black", fontSize: "1.2rem" }}
-              required
-            >
-              {hbti}
-            </div>
+
+            {hbti ? (
+              // ✅ HBTI 값이 존재하면 표시
+              <div
+                className="detail-input"
+                style={{ color: "black", fontSize: "1.2rem" }}
+              >
+                {hbti}
+              </div>
+            ) : (
+              // ✅ HBTI 값이 없으면 버튼 표시
+              <button
+                onClick={() => navigate("/quiz")}
+                style={{
+                  backgroundColor: "#4c4d4e",
+                  color: "white",
+                  fontSize: "1rem",
+                  padding: "10px 15px",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  marginTop: "10px",
+                  marginLeft: "50px",
+                }}
+              >
+                HBTI 테스트 진행하기
+              </button>
+            )}
           </div>
 
           <div className="trainer-profile__form-group">
@@ -350,6 +391,7 @@ const TrainerProfilePage = () => {
             <label style={{ color: "black" }}>상세 내용 작성:</label>
             <ReactQuill
               className="detail-input"
+              placeholder="상세 내용을 작성해주세요"
               style={{ color: "black", height: "500px" }}
               ref={quillRef}
               theme="snow"
@@ -440,11 +482,7 @@ const TrainerProfilePage = () => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="trainer-profile__btn-submit"
-            onClick={gotoDetail}
-          >
+          <button type="submit" className="trainer-profile__btn-submit">
             등록하기
           </button>
         </form>
