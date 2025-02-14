@@ -46,7 +46,7 @@ const TrainerStudentsDropdown = ({
           setStudentList(response.data || []);
         } else {
           setStudentList([]);
-          setError("학생 목록을 불러올 수 없습니다.");
+          // setError("학생 목록을 불러올 수 없습니다.");
         }
       } catch (error) {
         console.error("학생 목록 불러오기 실패:", error);

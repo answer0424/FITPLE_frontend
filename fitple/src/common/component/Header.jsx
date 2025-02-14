@@ -29,7 +29,7 @@ const Header = () => {
           </Link>
         )}
         {isLogin ? (
-          <Link onClick={logout}>
+          <Link onClick={logout(false)}>
             <i className="bi bi-box-arrow-right logout"></i>
           </Link>
         ) : (

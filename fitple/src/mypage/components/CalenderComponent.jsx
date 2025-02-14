@@ -125,7 +125,7 @@ const CalenderComponent = () => {
         );
         //일정이 없을 경우
         if (response.data.length === 0) {
-          alert("일정이 없네용");
+          console.log("일정이 없슺니다");
         }
         // Context의 updateEvents 함수 사용
         if (events) updateEvents(response.data);
