@@ -1,30 +1,77 @@
+/* ✅ 전체 레이아웃 */
 .trainer-home {
     padding: 20px;
 }
 
-.trainer-intro h4,
+/* 🔹 트레이너 소개 부분 */
+.soga-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #ff9800;
+}
 
-.trainer-location h4 {
-    margin-bottom: 10px;
+.soga-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* 🔹 위치 정보 부분 */
+.location-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
     color: #ffc107;
 }
 
-.trainer-intro p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #fff;
+/* ✅ 헬스장 & 주소 정보를 묶어서 스타일링 */
+.location-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #ffc107;
+    margin-bottom: 20px;
 }
 
-
-
-.trainer-location p {
-    font-size: 16px;
-    color: #fff;
+/* ✅ 헬스장과 주소의 스타일 구분 */
+.gym-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 10px;
 }
 
+.gym-address {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* ✅ 헬스장과 주소의 '라벨' 스타일 */
+.label {
+    font-weight: bold;
+    color: #ffcc00;
+    font-size: 17px;
+    margin-right: 8px;
+}
+
+/* 🔹 지도 컨테이너 */
 .map-container {
     margin-top: 10px;
     border: 1px solid #444;
     border-radius: 8px;
     overflow: hidden;
+    background-color: #222;
+    padding: 5px;
+}
+
+.no-location {
+    font-size: 14px;
+    color: #bbbbbb;
+    text-align: center;
 }
