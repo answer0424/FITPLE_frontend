@@ -11,6 +11,7 @@ const DailyItem = ({ event, onDelete }) => {
   // 리렌더링을 하기위한 가짜 useState를 만든다.
   const { authority } = useContext(LoginContext);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [deleteTrigger, setDeleteTrigger] = useState(false);
 
   const accessToken = document.cookie
     .split("; ")
@@ -50,6 +51,7 @@ const DailyItem = ({ event, onDelete }) => {
       if (response.status === 200) {
         alert("일정이 삭제되었습니다.");
         setIsCompleted(true);
+        setDeleteTrigger((prev) => !prev);
         console.log("삭제 요청 ID:", reservationId);
 
         onDelete(reservationId); // 삭제 후 리스트 업데이트
@@ -59,6 +61,11 @@ const DailyItem = ({ event, onDelete }) => {
     }
   };
 
+  useEffect(() => {
+    if (deleteTrigger) {
+      window.location.reload(); // ✅ 삭제 후 새로고침
+    }
+  }, [deleteTrigger]);
   const changeStatus = (reservationId, status) => {
     api
       .patch(
