@@ -22,6 +22,7 @@ const StudentsList = ({ user }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [newTimes, setNewTimes] = useState(0);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [updateUser, setUpdateUser] = useState(0);
   const observer = useRef();
 
   const accessToken = document.cookie
@@ -63,7 +64,7 @@ const StudentsList = ({ user }) => {
   // ✅ fetchStudents를 useEffect 바깥으로 이동하여 handleUpdateTimes에서도 호출 가능
   useEffect(() => {
     fetchStudents();
-  }, [user]);
+  }, [user, updateUser]);
 
   const lastStudentRef = useCallback(
     (node) => {
@@ -114,6 +115,7 @@ const StudentsList = ({ user }) => {
         )
       );
       alert("횟수 변경이 완료되었습니다.");
+      setUpdateUser((prev) => prev + 1);
       fetchStudents();
       setShowModal(false);
     } catch (error) {
@@ -128,6 +130,7 @@ const StudentsList = ({ user }) => {
       return;
     }
     const newStudent = { userId: studentId, nickname, times };
+    setUpdateUser((prev) => prev + 1);
     setStudentList((prev) => [...prev, newStudent]);
     setDisplayList((prev) => [...prev, newStudent]);
   };
