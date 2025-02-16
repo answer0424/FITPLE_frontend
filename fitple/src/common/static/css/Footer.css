@@ -79,7 +79,7 @@ a:hover {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.row {
+.row1 {
     display: flex;
     width: 150%; /* 너비를 100%로 조정 */
 }
