@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
-import "../assets/styles/App.css";
+import "../static/css/App.css";
 import { LoginContext } from "../contexts/LoginContextProvider";
 import Cookies from "js-cookie";
 
@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     const success = await login(username, password);
     if (success) {
-      navigate("/"); 
+      navigate("/");
     }
   };
 

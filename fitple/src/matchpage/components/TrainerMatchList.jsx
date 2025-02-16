@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { motion } from "framer-motion";
 import { Spinner, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import "../css/TrainerMatch.css";
+import "../static/css/TrainerMatch.css";
 
 const TrainerMatchList = ({ userId }) => {
   const [trainers, setTrainers] = useState([]);
@@ -29,8 +29,7 @@ const TrainerMatchList = ({ userId }) => {
           }
         );
 
-        
-        console.log(response)
+        console.log(response);
 
         if (response.status === 204) {
           setTrainers([]);
@@ -63,7 +62,6 @@ const TrainerMatchList = ({ userId }) => {
     }
   };
 
-
   if (error) return <Alert variant="danger">Error: {error}</Alert>;
   if (!trainers.length)
     return <Spinner animation="border" className="d-block mx-auto mt-4" />;
@@ -93,9 +91,11 @@ const TrainerMatchList = ({ userId }) => {
             }}
             transition={{ duration: 0.5 }}
           >
-           <img
-    src={`${import.meta.env.VITE_Server}${trainer.profileImage.replace(/^\./, "")}`} 
-    alt={trainer.trainerName}
+            <img
+              src={`${
+                import.meta.env.VITE_Server
+              }${trainer.profileImage.replace(/^\./, "")}`}
+              alt={trainer.trainerName}
             />
 
             <div className="trainer-info-overlay">

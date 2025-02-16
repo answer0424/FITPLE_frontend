@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import '../assets/styles/KakaoSearch.css';
+import "../static/css/KakaoSearch.css";
 
 const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
   const [keyword, setKeyword] = useState("");
   const [places, setPlaces] = useState([]);
   const [displayedPlaces, setDisplayedPlaces] = useState([]);
-  const [page, setPage] = useState(1); 
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     console.log("일단 useEffect");
     const loadKakaoMapScript = () => {
       const script = document.createElement("script");
       script.async = true;
-      script.src =
-        `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KakaoMap_Key}&libraries=services&autoload=false`;
-        console.log(src);
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
+        import.meta.env.VITE_KakaoMap_Key
+      }&libraries=services&autoload=false`;
+      console.log(src);
       script.onload = () => {
         window.kakao.maps.load(() => {
           console.log("Kakao Maps SDK loaded");
@@ -30,10 +31,9 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     }
   }, []);
 
-  
   useEffect(() => {
     initialAddress && setKeyword(initialAddress);
-  }, [])
+  }, []);
 
   // 주소에 해당하는 위도와 경도를 가져오는 함수
   const getLatLngByAddress = (address) => {
@@ -42,7 +42,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
       geocoder.addressSearch(address, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const lat = result[0].y;
-          const lng = result[0].x; 
+          const lng = result[0].x;
           resolve({ lat, lng });
         } else {
           reject("주소를 찾을 수 없습니다.");
@@ -61,7 +61,6 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
 
     ps.keywordSearch(keyword, async (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-      
         const placesWithLatLng = await Promise.all(
           data.map(async (place) => {
             try {
@@ -88,7 +87,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
 
         setPlaces(placesWithLatLng);
         setDisplayedPlaces(placesWithLatLng.slice(0, 5));
-        setPage(2); 
+        setPage(2);
       } else {
         alert("검색 결과가 없습니다.");
         setPlaces([]);
@@ -102,11 +101,11 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     const startIndex = (page - 1) * 5;
     const nextPlaces = places.slice(startIndex, startIndex + 5);
     setDisplayedPlaces([...displayedPlaces, ...nextPlaces]);
-    setPage(page + 1); 
+    setPage(page + 1);
   };
 
   const handlePlaceClick = (place) => {
-    setKeyword(place.address); 
+    setKeyword(place.address);
     if (onPlaceSelect) {
       onPlaceSelect(place);
     }
@@ -132,8 +131,10 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
         }}
         placeholder="검색어를 입력하세요"
       />
-      <button onClick={searchPlaces} className="kakao-search-button">검색</button>
-  
+      <button onClick={searchPlaces} className="kakao-search-button">
+        검색
+      </button>
+
       <div className="kakao-search-results">
         <h3>검색 결과</h3>
         {displayedPlaces.length === 0 ? (
@@ -150,11 +151,13 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
           </ul>
         )}
         {places.length > displayedPlaces.length && (
-          <button onClick={loadMorePlaces} className="kakao-load-more">더보기</button>
+          <button onClick={loadMorePlaces} className="kakao-load-more">
+            더보기
+          </button>
         )}
       </div>
     </div>
   );
-}  
+};
 
 export default KakaoSearch;

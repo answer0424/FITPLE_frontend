@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import HBTIResultDisplay from "../components/quiz_common/HbtiResultDisplay";
 import PanelNavigation from "../components/ui/PanelNavigation";
-import "./QuizResult.css";
+import "../static/css/QuizResult.css";
 import Header from "../../common/component/Header";
 
 // Progress Bar Component

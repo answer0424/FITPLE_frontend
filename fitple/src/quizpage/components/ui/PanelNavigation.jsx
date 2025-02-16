@@ -1,5 +1,5 @@
 import React from "react";
-import "./PanelNavigation.css";
+import "../static/css/PanelNavigation.css";
 
 const PanelNavigation = ({
   currentPanel,

@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../assets/styles/App.css";
+import "../static/css/App.css";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import KakaoSearch from "./KakaoSearch";
 import { registerStudent, registerTrainer } from "../apis/auth";
-
 
 const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -39,8 +38,9 @@ const RegisterForm = ({ questions = [], userType }) => {
         break;
       case 2:
         if (value.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-          error = "비밀번호는 8자 이상이며, 특수문자를 하나 이상 포함해야 합니다.";
-      }  
+          error =
+            "비밀번호는 8자 이상이며, 특수문자를 하나 이상 포함해야 합니다.";
+        }
         break;
       default:
         break;
@@ -58,7 +58,7 @@ const RegisterForm = ({ questions = [], userType }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleNextQuestion(); 
+      handleNextQuestion();
     }
   };
 
@@ -75,7 +75,7 @@ const RegisterForm = ({ questions = [], userType }) => {
     }
 
     if (currentQuestionIndex === questions.length - 1) {
-      handleSubmit(); 
+      handleSubmit();
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -114,14 +114,12 @@ const RegisterForm = ({ questions = [], userType }) => {
   };
 
   const handleSubmit = async () => {
-
     const userData = {
       email: answers[0],
       username: answers[1],
       password: answers[2],
       nickname: answers[4],
       birth: answers[5],
-
     };
 
     try {
@@ -216,7 +214,7 @@ const RegisterForm = ({ questions = [], userType }) => {
                 dateFormat="yyyy/MM/dd"
                 placeholderText="Select your birth date"
                 className="date-picker-input"
-                onKeyPress={handleKeyPress} 
+                onKeyPress={handleKeyPress}
               />
             ) : currentQuestionIndex === 6 ? (
               <KakaoSearch onPlaceSelect={handlePlaceSelect} />
@@ -230,8 +228,8 @@ const RegisterForm = ({ questions = [], userType }) => {
                 placeholder="Type your answer here..."
                 value={answers[currentQuestionIndex]}
                 onChange={(e) => handleAnswerChange(e, currentQuestionIndex)}
-                onKeyPress={handleKeyPress} 
-                ref={(el) => (inputRefs.current[currentQuestionIndex] = el)} 
+                onKeyPress={handleKeyPress}
+                ref={(el) => (inputRefs.current[currentQuestionIndex] = el)}
               />
             )}
             {errors[currentQuestionIndex] && (

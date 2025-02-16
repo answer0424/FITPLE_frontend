@@ -3,8 +3,7 @@ import axios from "axios";
 
 import Header from "../../common/component/Header";
 import { useNavigate } from "react-router-dom";
-import "../component/css/HBTIListpage.css";
-
+import "../static/css/HBTIListpage.css";
 
 // HBTI 유형에 따른 그룹 분류 함수
 const getGroup = (hbti) => {
@@ -14,7 +13,6 @@ const getGroup = (hbti) => {
   if (["MING", "MENG", "BING", "BENG"].includes(hbti)) return "group";
   return "default";
 };
-
 
 // 데이터를 그룹화하는 함수
 const groupByType = (data) => {
@@ -51,9 +49,9 @@ function HBTIListPage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
- const goHBTI = () => {
-  navigate('/quiz');
-}
+  const goHBTI = () => {
+    navigate("/quiz");
+  };
 
   // API 데이터를 가져오는 useEffect
   useEffect(() => {
@@ -79,17 +77,12 @@ function HBTIListPage() {
     return <div className="text-center mt-5">데이터를 불러오는 중...</div>;
   }
 
-
   const groupedData = groupByType(hbtiData);
-
 
   const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
-  
   const handleCardClick = (hbtiType) => {
-
-    navigate(`/hbti/detail?type=${hbtiType}`); 
-
+    navigate(`/hbti/detail?type=${hbtiType}`);
   };
 
   return (
@@ -98,7 +91,9 @@ function HBTIListPage() {
       <div className="container1 my-5">
         {/* 페이지 제목 */}
         <h1 className="hbti-header en-font">HBTI</h1>
-        <h2 className="hbti-subtitle en-font">(HEALTH BEHAVIOR TYPE INDICATOR)</h2>
+        <h2 className="hbti-subtitle en-font">
+          (HEALTH BEHAVIOR TYPE INDICATOR)
+        </h2>
         <h3 className="hbti-description kr-font">성격유형</h3>
 
         {/* 그룹별 섹션 */}
@@ -132,20 +127,21 @@ function HBTIListPage() {
                       <div className="card-hbti en-font">
                         <ColorfulText text={item.hbti} colors={hbtiColors} />
                       </div>
-                      <p className="card-text kr-font">{item.shortDescription}</p>
+                      <p className="card-text kr-font">
+                        {item.shortDescription}
+                      </p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          
         ))}
-     <div className="center-container">
-  <button onClick={goHBTI} className="center-button kr-font">
-    테스트 하러가기
-  </button>
-</div>
+        <div className="center-container">
+          <button onClick={goHBTI} className="center-button kr-font">
+            테스트 하러가기
+          </button>
+        </div>
       </div>
     </>
   );

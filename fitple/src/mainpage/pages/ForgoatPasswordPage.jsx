@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
 import Header from "../../common/component/Header";
-import "../assets/styles/ForgotPassword.css"; 
+import "../static/css/ForgotPassword.css";
 
 const ForgotPasswordPage = ({ onResetRequested }) => {
   const [email, setEmail] = useState("");
@@ -51,7 +51,9 @@ const ForgotPasswordPage = ({ onResetRequested }) => {
       <Header />
       <Container className="forgot-password-container">
         <div className="forgot-password-box">
-          <h3 className="text-center mb-4 fw-bold text-white">비밀번호 재설정</h3>
+          <h3 className="text-center mb-4 fw-bold text-white">
+            비밀번호 재설정
+          </h3>
 
           {message && (
             <Alert variant="success" className="text-white border-0">

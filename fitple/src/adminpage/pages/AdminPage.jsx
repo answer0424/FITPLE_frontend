@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserList from "../components/UserList";
 import TrainerList from "../components/TrainerList";
 import ReviewList from "../components/ReviewList";
-import "./admin.css";
+import "../static/css/admin.css";
 import { useNavigate } from "react-router-dom";
 import StudentAgeChart from "../components/StudentAgeChart";
 import TrainerAgeChart from "../components/TrainerAgeChart";

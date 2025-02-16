@@ -1,320 +1,339 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import "../components/css/TrainerReviews.css";
+import "../static/css/TrainerReviews.css";
 
 function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
-    const [reviews, setReviews] = useState([]);
-    const [reviewContent, setReviewContent] = useState(""); 
-    const [rating, setRating] = useState(5); 
-    const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [error, setError] = useState("");
-    const [sortOption, setSortOption] = useState("latest"); 
-    const token = Cookies.get("accessToken"); 
+  const [reviews, setReviews] = useState([]);
+  const [reviewContent, setReviewContent] = useState("");
+  const [rating, setRating] = useState(5);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [sortOption, setSortOption] = useState("latest");
+  const token = Cookies.get("accessToken");
 
-   
-    const filteredReviews = useMemo(() => {
-        return reviews.filter((review) => review.rating && review.content);
-    }, [reviews]);
+  const filteredReviews = useMemo(() => {
+    return reviews.filter((review) => review.rating && review.content);
+  }, [reviews]);
 
-   
-    const fetchReviews = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/api/reviews/training/${trainerId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            if (!response.ok) throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
-            const data = await response.json();
-            setReviews(data);
-            console.log("리뷰 데이터:", data);
-        } catch (err) {
-            console.error("리뷰 불러오기 에러:", err.message);
+  const fetchReviews = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/reviews/training/${trainerId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
-    };
+      );
+      if (!response.ok)
+        throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
+      const data = await response.json();
+      setReviews(data);
+      console.log("리뷰 데이터:", data);
+    } catch (err) {
+      console.error("리뷰 불러오기 에러:", err.message);
+    }
+  };
 
-    // ✅ 리뷰 정렬 함수
-    const getSortedReviews = () => {
-        const sortedReviews = [...filteredReviews];
-        if (sortOption === "latest") {
-            sortedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
-        } else if (sortOption === "highest") {
-            sortedReviews.sort((a, b) => b.rating - a.rating); 
-        } else if (sortOption === "lowest") {
-            sortedReviews.sort((a, b) => a.rating - b.rating);
+  // ✅ 리뷰 정렬 함수
+  const getSortedReviews = () => {
+    const sortedReviews = [...filteredReviews];
+    if (sortOption === "latest") {
+      sortedReviews.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    } else if (sortOption === "highest") {
+      sortedReviews.sort((a, b) => b.rating - a.rating);
+    } else if (sortOption === "lowest") {
+      sortedReviews.sort((a, b) => a.rating - b.rating);
+    }
+    return sortedReviews;
+  };
+
+  const handleSubmitReview = async () => {
+    if (!reviewContent.trim()) {
+      setError("리뷰 내용을 입력해주세요.");
+      return;
+    }
+
+    if (!trainingId) {
+      setError("트레이닝 ID가 없습니다. 리뷰를 작성할 수 없습니다.");
+      return;
+    }
+
+    try {
+      const result = await Swal.fire({
+        title: "리뷰를 제출하시겠습니까?",
+        text: "제출 이후에는 수정할 수 없습니다.",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "제출",
+        cancelButtonText: "취소",
+      });
+
+      if (result.isConfirmed) {
+        const response = await fetch(
+          `${BASE_URL}/api/reviews/training/${trainingId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ rating, content: reviewContent }),
+          }
+        );
+
+        if (!response.ok) throw new Error("리뷰 작성에 실패했습니다.");
+
+        const newReview = await response.json();
+
+        // ✅ `reviews`에서 매칭된 `trainingId` 찾기
+        console.log("현재 trainingId:", trainingId);
+        console.log("현재 reviews 데이터:", reviews);
+
+        const matchingReview = reviews.find(
+          (review) => Number(review.trainingId) === Number(trainingId)
+        );
+
+        if (matchingReview) {
+          newReview.userId = matchingReview.userId;
+          newReview.username = matchingReview.username;
+          newReview.userProfileImage = matchingReview.userProfileImage;
+
+          console.log(
+            "매칭된 트레이닝 ID로 가져온 username:",
+            matchingReview.username
+          );
+          console.log(
+            "매칭된 트레이닝 ID로 가져온 userProfileImage:",
+            matchingReview.userProfileImage
+          );
+        } else {
+          // 기본값 설정 (로그인된 유저 정보 사용)
+          newReview.userId = user.id;
+          newReview.username = user.username;
+          newReview.userProfileImage = user.profileImage;
+
+          console.warn("매칭된 트레이닝 ID가 없어서 기본값으로 설정");
+          console.log("기본값 username:", user.username);
+          console.log("기본값 userProfileImage:", user.profileImage);
         }
-        return sortedReviews;
-    };
 
-    const handleSubmitReview = async () => {
-        if (!reviewContent.trim()) {
-            setError("리뷰 내용을 입력해주세요.");
-            return;
-        }
-    
-        if (!trainingId) {
-            setError("트레이닝 ID가 없습니다. 리뷰를 작성할 수 없습니다.");
-            return;
-        }
-    
-        try {
-            const result = await Swal.fire({
-                title: "리뷰를 제출하시겠습니까?",
-                text: "제출 이후에는 수정할 수 없습니다.",
-                icon: "info",
-                showCancelButton: true,
-                confirmButtonText: "제출",
-                cancelButtonText: "취소",
-            });
-    
-            if (result.isConfirmed) {
-                const response = await fetch(`${BASE_URL}/api/reviews/training/${trainingId}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({ rating, content: reviewContent }),
-                });
-    
-                if (!response.ok) throw new Error("리뷰 작성에 실패했습니다.");
-    
-                const newReview = await response.json();
-    
-                // ✅ `reviews`에서 매칭된 `trainingId` 찾기
-                console.log("현재 trainingId:", trainingId);
-                console.log("현재 reviews 데이터:", reviews);
-    
-                const matchingReview = reviews.find(
-                    (review) => Number(review.trainingId) === Number(trainingId)
-                );
-    
-                if (matchingReview) {
-                    newReview.userId = matchingReview.userId;
-                    newReview.username = matchingReview.username;
-                    newReview.userProfileImage = matchingReview.userProfileImage;
-    
-                    console.log("매칭된 트레이닝 ID로 가져온 username:", matchingReview.username);
-                    console.log("매칭된 트레이닝 ID로 가져온 userProfileImage:", matchingReview.userProfileImage);
-                } else {
-                    // 기본값 설정 (로그인된 유저 정보 사용)
-                    newReview.userId = user.id;
-                    newReview.username = user.username;
-                    newReview.userProfileImage = user.profileImage;
-    
-                    console.warn("매칭된 트레이닝 ID가 없어서 기본값으로 설정");
-                    console.log("기본값 username:", user.username);
-                    console.log("기본값 userProfileImage:", user.profileImage);
-                }
-    
-                // ✅ 상태 업데이트 (새 리뷰 추가)
-                setReviews((prevReviews) => [newReview, ...prevReviews]);
-    
-                console.log("업데이트된 리뷰 목록:", [newReview, ...reviews]);
-    
-                // ✅ 입력 필드 초기화
-            
-                setReviewContent("");
-                setRating(5);
-                setIsModalOpen(false);
-    
-                await Swal.fire({
-                    title: "리뷰 작성 완료!",
-                    text: "리뷰가 성공적으로 제출되었습니다.",
-                    icon: "success",
-                });
-            }
-        } catch (err) {
-            console.error("리뷰 작성 에러:", err.message);
-            await Swal.fire({
-                title: "리뷰 작성 불가",
-                text: "리뷰는 한 개만 작성할 수 있습니다.",
-                icon: "error",
-            });
-    
-            setError("리뷰는 한 개만 작성할 수 없습니다.");
-        }
-    };
-    
-    
-    
-    
-    
-    
+        // ✅ 상태 업데이트 (새 리뷰 추가)
+        setReviews((prevReviews) => [newReview, ...prevReviews]);
 
+        console.log("업데이트된 리뷰 목록:", [newReview, ...reviews]);
 
-    // ✅ 리뷰 삭제 (SweetAlert2 추가)
-    const handleDeleteReview = async (reviewId) => {
-        Swal.fire({
-            title: "정말 삭제하시겠습니까?",
-            text: "삭제 후에는 복구할 수 없습니다.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}`, {
-                        method: "DELETE",
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
+        // ✅ 입력 필드 초기화
 
-                    if (!response.ok) throw new Error("리뷰 삭제에 실패했습니다.");
+        setReviewContent("");
+        setRating(5);
+        setIsModalOpen(false);
 
-                       // 부모 상태 업데이트
-                setReviews((prevReviews) =>
-                    prevReviews.filter((review) => review.id !== reviewId)
-                );
-
-               
-
-                    Swal.fire("삭제 완료", "리뷰가 삭제되었습니다.", "success");
-                } catch (err) {
-                    console.error("리뷰 삭제 에러:", err.message);
-                    setError("리뷰 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
-                }
-            }
+        await Swal.fire({
+          title: "리뷰 작성 완료!",
+          text: "리뷰가 성공적으로 제출되었습니다.",
+          icon: "success",
         });
-    };
+      }
+    } catch (err) {
+      console.error("리뷰 작성 에러:", err.message);
+      await Swal.fire({
+        title: "리뷰 작성 불가",
+        text: "리뷰는 한 개만 작성할 수 있습니다.",
+        icon: "error",
+      });
 
-    // ✅ 별점 렌더링 함수
-    const renderStars = (rating) => {
-        return Array(5)
-            .fill(null)
-            .map((_, index) => (
-                <span key={index} style={{ color: index < rating ? "#FFD700" : "#ccc" }}>
+      setError("리뷰는 한 개만 작성할 수 없습니다.");
+    }
+  };
+
+  // ✅ 리뷰 삭제 (SweetAlert2 추가)
+  const handleDeleteReview = async (reviewId) => {
+    Swal.fire({
+      title: "정말 삭제하시겠습니까?",
+      text: "삭제 후에는 복구할 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!response.ok) throw new Error("리뷰 삭제에 실패했습니다.");
+
+          // 부모 상태 업데이트
+          setReviews((prevReviews) =>
+            prevReviews.filter((review) => review.id !== reviewId)
+          );
+
+          Swal.fire("삭제 완료", "리뷰가 삭제되었습니다.", "success");
+        } catch (err) {
+          console.error("리뷰 삭제 에러:", err.message);
+          setError("리뷰 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
+        }
+      }
+    });
+  };
+
+  // ✅ 별점 렌더링 함수
+  const renderStars = (rating) => {
+    return Array(5)
+      .fill(null)
+      .map((_, index) => (
+        <span
+          key={index}
+          style={{ color: index < rating ? "#FFD700" : "#ccc" }}
+        >
+          ★
+        </span>
+      ));
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, [trainerId]);
+
+  return (
+    <div>
+      <h3>리뷰 목록</h3>
+
+      {/* 상단 컨트롤 섹션 */}
+      <div className="controls-container">
+        <button
+          className="review-submit-button col-3 kr-font"
+          onClick={() => setIsModalOpen(true)}
+          disabled={!trainingId} // 트레이닝 ID가 없으면 버튼 비활성화
+        >
+          리뷰 작성
+        </button>
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          className="form-select kr-font"
+        >
+          <option value="latest">최신순</option>
+          <option value="highest">별점 높은 순</option>
+          <option value="lowest">별점 낮은 순</option>
+        </select>
+      </div>
+
+      {filteredReviews.length > 0 ? (
+        <ul>
+          {getSortedReviews().map((review) => (
+            <li key={review.id} className="review-item">
+              <img
+                src={`${BASE_URL}${review.userProfileImage.replace(/^\./, "")}`}
+                alt={`${review.username} 프로필`}
+                className="review-profile-image"
+                onError={(e) => (e.target.src = "/src/assets/logo.png")}
+              />
+
+              <div className="review-content">
+                <p>
+                  {review.username}
+                  <span className="review-stars">
+                    {"★".repeat(review.rating)}
+                    {"☆".repeat(5 - review.rating)}
+                  </span>
+                </p>
+                <p>{review.content}</p>
+                <p className="review-date">
+                  {new Date(review.createdAt).toLocaleString()}
+                </p>
+              </div>
+              {user && review.userId === user.id && (
+                <button
+                  className="delete-btn col-3 kr-font"
+                  onClick={() => handleDeleteReview(review.id)}
+                >
+                  삭제
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>리뷰가 없습니다.</p>
+      )}
+
+      {isModalOpen && (
+        <div className="modal1">
+          <div className="modal-content1">
+            <button
+              className="close-modal"
+              onClick={() => setIsModalOpen(false)}
+            >
+              X
+            </button>
+            <h3 className="modal-title kr-font">솔직한 후기를 남겨주세요!</h3>
+            <p className="modal-description kr-font">
+              일반 이용 후기 작성 요령
+            </p>
+            <div className="modal-guidelines ">
+              <ul className="kr-font">
+                <li className="kr-font">
+                  • 솔직하고 구체적인 피드백을 작성해주세요.
+                </li>
+                <li className="kr-font">
+                  • 경험하신 트레이닝의 장점과 개선점을 적어주시면 더욱 도움이
+                  됩니다.
+                </li>
+                <li className="kr-font">
+                  • 다른 사용자들에게 도움이 될 만한 팁이나 조언을 포함해주세요.
+                </li>
+                <li className="kr-font">
+                  • 비속어나 부적절한 표현은 삼가주세요.
+                </li>
+              </ul>
+            </div>
+
+            <div className="rating-section">
+              <label>별점을 선택해주세요</label>
+              <div className="stars">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`star ${rating >= star ? "selected" : ""}`}
+                    onClick={() => setRating(star)}
+                  >
                     ★
-                </span>
-            ));
-    };
+                  </span>
+                ))}
+              </div>
+            </div>
 
-    useEffect(() => {
-        fetchReviews();
-    }, [trainerId]);
+            <div className="textarea-section">
+              <label>내용을 작성해주세요</label>
+              <textarea
+                value={reviewContent}
+                onChange={(e) => setReviewContent(e.target.value)}
+                placeholder="내용을 입력해주세요"
+                maxLength={400}
+              />
+              <p className="char-count">{reviewContent.length}/400</p>
+            </div>
+            {error && <p className="error-message">{error}</p>}
 
-    return (
-        <div>
-        <h3>리뷰 목록</h3>
-    
-{/* 상단 컨트롤 섹션 */}
-<div className="controls-container">
-    <button
-        className="review-submit-button col-3 kr-font"
-        onClick={() => setIsModalOpen(true)}
-        disabled={!trainingId} // 트레이닝 ID가 없으면 버튼 비활성화
-    >
-        리뷰 작성
-    </button>
-    <select
-        value={sortOption}
-        onChange={(e) => setSortOption(e.target.value)}
-        className="form-select kr-font"
-    >
-        <option value="latest">최신순</option>
-        <option value="highest">별점 높은 순</option>
-        <option value="lowest">별점 낮은 순</option>
-    </select>
-</div>
-    
-        {filteredReviews.length > 0 ? (
-   <ul>
-    {getSortedReviews().map((review) => (
-      <li key={review.id} className="review-item">
-       <img
-    src={`${BASE_URL}${review.userProfileImage.replace(/^\./, "")}`} 
-    alt={`${review.username} 프로필`}
-    className="review-profile-image"
-    onError={(e) => (e.target.src = "/src/assets/logo.png")}
-/>
-
-        <div className="review-content">
-          <p>
-            {review.username}
-            <span className="review-stars">
-              {"★".repeat(review.rating)}
-              {"☆".repeat(5 - review.rating)}
-            </span>
-          </p>
-          <p>{review.content}</p>
-          <p className="review-date">
-            {new Date(review.createdAt).toLocaleString()}
-          </p>
+            <button
+              className="submit-button kr-font"
+              onClick={handleSubmitReview}
+              disabled={reviewContent.trim() === ""}
+            >
+              리뷰 작성 완료
+            </button>
+          </div>
         </div>
-        {user && review.userId === user.id && (
-          <button className="delete-btn col-3 kr-font" onClick={() => handleDeleteReview(review.id)}>
-            삭제
-          </button>
-        )}
-      </li>
-    ))}
-  </ul>
-        ) : (
-            <p>리뷰가 없습니다.</p>
-        )}
- 
-
-                {isModalOpen && (
-                    <div className="modal1">
-                        <div className="modal-content1">
-                            <button className="close-modal" onClick={() => setIsModalOpen(false)}>X</button>
-                            <h3 className="modal-title kr-font">솔직한 후기를 남겨주세요!</h3>
-                            <p className="modal-description kr-font">
-                                일반 이용 후기 작성 요령
-                            </p>
-                            <div className="modal-guidelines ">
-                    <ul className="kr-font">
-                        <li className="kr-font">• 솔직하고 구체적인 피드백을 작성해주세요.</li>
-                        <li className="kr-font">• 경험하신 트레이닝의 장점과 개선점을 적어주시면 더욱 도움이 됩니다.</li>
-                        <li className="kr-font">• 다른 사용자들에게 도움이 될 만한 팁이나 조언을 포함해주세요.</li>
-                        <li className="kr-font">• 비속어나 부적절한 표현은 삼가주세요.</li>
-                    </ul>
-                </div>
-
-                    
-                            <div className="rating-section">
-                                <label >별점을 선택해주세요</label>
-                                <div className="stars">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <span
-                                            key={star}
-                                            className={`star ${rating >= star ? "selected" : ""}`}
-                                            onClick={() => setRating(star)}
-                                        >
-                                            ★
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            
-                            <div className="textarea-section">
-                                <label>내용을 작성해주세요</label>
-                                <textarea
-                                    value={reviewContent}
-                                    onChange={(e) => setReviewContent(e.target.value)}
-                                    placeholder="내용을 입력해주세요"
-                                    maxLength={400}
-                                />
-                                <p className="char-count">{reviewContent.length}/400</p>
-                            </div>
-                            {error && <p className="error-message">{error}</p>}
-
-                          
-                            <button
-                                className="submit-button kr-font"
-                                onClick={handleSubmitReview}
-                                disabled={reviewContent.trim() === ""}
-                            >
-                                리뷰 작성 완료
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-        </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default TrainerReviews;
