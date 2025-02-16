@@ -11,6 +11,7 @@ import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { EventProvider } from "../context/EventContext";
 import Headers from "../../common/component/Header";
 import "../../mypage/static/css/Reset.css";
+import ChatIcon from "../../common/component/ChatIcon";
 
 const MyPage = () => {
   // const role = authInfo();
@@ -19,7 +20,6 @@ const MyPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState("a");
   const navigate = useNavigate();
-
 
   //로그인 안 한 놈 쫒아내기
   useEffect(() => {
@@ -144,6 +144,8 @@ const MyPage = () => {
       ) : (
         <p>사용자 정보를 불러오는 중...</p>
       )}
+    <ChatIcon />
+
     </EventProvider>
   );
 };

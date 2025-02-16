@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="footer-circle"></div>
         </div>
         <div className="footer-text">FITPLE</div>
-        <div className="row">
+        <div className="row1">
           <div className="footer-menu">
             <Link to={"/"}>HBTI TEST</Link>
             <Link to={"/"}>About HBTI</Link>

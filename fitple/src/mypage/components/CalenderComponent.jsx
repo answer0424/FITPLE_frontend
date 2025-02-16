@@ -35,6 +35,7 @@ const CalenderComponent = () => {
     let filteredReservations = [];
 
     if (selectedUser === "all") {
+      console.log("handleDayClick 진입");
       // events가 배열인지 확인 후 필터링
       filteredReservations = Array.isArray(matchingReservations)
         ? events.filter((event) => event.date?.startsWith(formattedDate))
@@ -104,9 +105,10 @@ const CalenderComponent = () => {
 
   // 📌 일정 데이터 가져오기
   useEffect(() => {
-
+    console.log(userInfo.id);
     if (!userInfo.id) return;
 
+    console.log("일정 가져오기" + userInfo.id);
     const fetchSchedules = async () => {
       try {
         const response = await api.get(`/member/${userInfo.id}/calendar`, {
@@ -117,9 +119,13 @@ const CalenderComponent = () => {
           withCredentials: true,
         });
 
+        console.log(
+          `${currentYear}년 ${currentMonth}월 일정 로드: `,
+          response.data
+        );
         //일정이 없을 경우
         if (response.data.length === 0) {
-          console.log("일정이 없습니다");
+          console.log("일정이 없슺니다");
         }
         // Context의 updateEvents 함수 사용
         if (events) updateEvents(response.data);
@@ -139,6 +145,20 @@ const CalenderComponent = () => {
       setMatchingReservations(events);
     }
   }, [selectedStudent]);
+
+  //불러온 이벤트 매칭예약에 옮기기
+  useEffect(() => {
+    console.log(events);
+    setMatchingReservations(events);
+  }, [events]);
+
+  useEffect(() => {
+    console.log(currentMonth);
+  }, [currentMonth]);
+
+  // useEffect(() => {
+  //   console.log(matchingReservations);
+  // }, [matchingReservations])
 
   return (
     <>

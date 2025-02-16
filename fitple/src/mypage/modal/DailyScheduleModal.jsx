@@ -41,9 +41,7 @@ const DailyScheduleModal = ({
   }, [dailyEvents, selectedUser]);
 
   // 디버깅을 위한 콘솔 로그
-  useEffect(() => {
-
-  }, [selectedUser, dailyEvents, filteredEvents]);
+  useEffect(() => {}, [selectedUser, dailyEvents, filteredEvents]);
 
   return (
     <Modal show={isModalOpen} onHide={closeModal} centered>
@@ -77,6 +75,7 @@ const DailyScheduleModal = ({
             timeInput={timeInput}
             setTimeInput={setTimeInput}
             setDailyEvents={setDailyEvents}
+            selectedUser={selectedUser}
           />
         )}
       </Modal.Body>
