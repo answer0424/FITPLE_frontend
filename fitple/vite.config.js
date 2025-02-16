@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   publicDir: "public",
   build: {
-    cssCodeSplit: false, // CSS 파일을 분할하지 않음
+    cssCodeSplit: false,
   },
 });
