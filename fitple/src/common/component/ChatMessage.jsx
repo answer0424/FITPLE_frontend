@@ -70,7 +70,6 @@ const ChatMessage = ({ chatId, onBack, rooms }) => {
     const subscription = stompClient.subscribe(
       `/topic/chat/${chatId}`,
       (message) => {
-        console.log(message.body);
         const receivedMessage = JSON.parse(message.body);
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
@@ -108,39 +107,6 @@ const ChatMessage = ({ chatId, onBack, rooms }) => {
     };
   }, [chatId, stompClient, userInfo.id]);
 
-  // useEffect(() => {
-  //   if (!stompClient) return;
-
-  //   const checkConnection = setInterval(() => {
-  //     if (stompClient.connected) {
-  //       clearInterval(checkConnection); // 연결되면 대기 중지
-
-  //       const subscription = stompClient.subscribe(`/topic/chat/${chatId}`, (message) => {
-  //         console.log('구독하고 있는 채팅방이라는데 한번 보자', message.body);
-  //         const receivedMessage = JSON.parse(message.body);
-  //         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-
-  //         // 현재 보고 있는 채팅방이면 읽음 처리, 아니면 알림 표시
-  //         if (receivedMessage.userId !== userInfo.id) {
-  //           if (chatId === receivedMessage.chatId) {
-  //             console.log('여기로 왔으면 실시간으로 읽었다는 거임');
-  //             readMessage(receivedMessage.messageId);
-  //           } else {
-  //             console.log('여기로 왔으면 새로운 메시지가 도착했다는 거임', receivedMessage.chatId);
-  //             handleNewMessage(receivedMessage.chatId, receivedMessage);
-  //           }
-  //         }
-  //       });
-
-  //       return () => {
-  //         subscription.unsubscribe();
-  //       };
-  //     }
-  //   }, 500); // 500ms마다 체크
-
-  //   return () => clearInterval(checkConnection);
-  // }, [chatId, stompClient, userInfo.id]);
-
   const readMessage = (messageId) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
@@ -152,12 +118,10 @@ const ChatMessage = ({ chatId, onBack, rooms }) => {
         }),
       });
 
-      // 서버로부터 읽은 메시지 응답을 처리하여 unreadMessage 카운트를 0으로 설정
-      // 예시에서는 chatId에 해당하는 unreadMessage 값을 0으로 업데이트하는 방식으로 처리
       setUnreadMessage((prev) => {
         return {
           ...prev,
-          [chatId]: 0, // 현재 채팅방의 unreadMessage 카운트를 0으로 초기화
+          [chatId]: 0,
         };
       });
     }
@@ -188,7 +152,7 @@ const ChatMessage = ({ chatId, onBack, rooms }) => {
 
   const handleNewMessage = (roomId, message) => {
     // 현재 보고 있는 채팅방이라면 unreadMessage를 업데이트하지 않음
-    console.log("여기 보세요~~~~", roomId, chatId);
+
     if (roomId === chatId) return;
 
     setUnreadMessage((prev) => {

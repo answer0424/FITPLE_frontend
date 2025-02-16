@@ -186,11 +186,11 @@ const QuizResult = () => {
     const fetchDetailedResults = async () => {
       try {
         const token = Cookies.get("accessToken");
-        console.log("🔑 Access Token:", token); // 토큰이 정상적으로 존재하는지 확인
+
         if (!token) {
           throw new Error("Authentication required. Please log in.");
         }
-        console.log("✅ Fetching HBTI results for user:", userId);
+
 
         const response = await fetch(
           `${import.meta.env.VITE_Server}/api/hbti/${userId}/result`,

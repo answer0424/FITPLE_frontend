@@ -14,7 +14,7 @@ const ResetPasswordPage = () => {
   const { userId: id } = useParams();
   const navigate = useNavigate();
 
-  console.log("User ID parameter:", id);
+
 
   // 비밀번호 변경 핸들러
   const handleSubmit = async (e) => {

@@ -23,11 +23,11 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    console.log("LoginContextProvider 마운트 됨");
+
 
     // 쿠키에 저장된 아이디 가져오기
     const rememberId = Cookies.get("rememberId");
-    console.log(`쿠키 rememberId : ${rememberId}`);
+
     setRememberUserId(rememberId);
   }, []);
 

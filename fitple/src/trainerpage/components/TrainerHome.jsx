@@ -3,7 +3,6 @@ import "../static/css/TrainerHome.css";
 
 function TrainerHome({
   content,
-  galleryImages,
   gymName,
   gymAddress,
   gymLatitude,

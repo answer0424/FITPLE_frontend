@@ -25,7 +25,6 @@ const ChatModal = ({
   const handleLeaveChat = async (chatId) => {
     if (window.confirm("정말로 이 채팅방을 나가시겠습니까?")) {
       try {
-        console.log(`Leaving chat: ${chatId}, userId: ${userId}`);
         await leaveChat(chatId, userId);
         // 나간 채팅방을 목록에서 제거
         const updatedRooms = rooms.filter((room) => room.chatId !== chatId);

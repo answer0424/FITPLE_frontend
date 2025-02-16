@@ -66,20 +66,16 @@ const LoginContextProvider = ({ children }) => {
 
     try {
       const response = await getUserChats(userInfo.id);
-      console.log("채팅방 구독 유저 id", userInfo.id);
+
       const chatRooms = response;
 
-      console.log("📌 구독할 채팅방 목록:", chatRooms);
+
 
       chatRooms.forEach((room) => {
         stompClient.current.subscribe(
           `/topic/chat/${room.chatId}`,
           (message) => {
-            console.log(
-              `💬 [${room.chatId}] 새 메시지 도착:`,
-              JSON.parse(message.body)
-            );
-            console.log(JSON.parse(message.body).userId);
+
 
             if (JSON.parse(message.body).userId === userInfo.id) {
               console.log(
@@ -121,7 +117,7 @@ const LoginContextProvider = ({ children }) => {
     if (stompClient.current) {
       stompClient.current.deactivate();
       stompClient.current = null;
-      console.log("🛑 WebSocket Disconnected");
+
     }
   };
 
@@ -137,7 +133,7 @@ const LoginContextProvider = ({ children }) => {
   const loginCheck = async (isAuthPage = false) => {
     const accessToken = Cookies.get("accessToken");
 
-    console.log(`accessToken: ${accessToken}`);
+
     let response;
     let data;
 
@@ -159,7 +155,7 @@ const LoginContextProvider = ({ children }) => {
 
     try {
       response = await auth.userInfo();
-      console.log("response 뭐임??", response);
+
     } catch (error) {
       console.log(`error: ${error}`);
       return;
@@ -172,8 +168,7 @@ const LoginContextProvider = ({ children }) => {
     console.log("JWT(accessToken)으로 사용자 인증 정보 요청 성공");
 
     data = response.data;
-    console.log(`data: ${data}`);
-    console.log("🔍 userData (JSON 변환):", JSON.stringify(data, null, 2));
+
 
     // 인증 실패
     if (data === "UNAUTHORIZED" || response.status === 401) {
@@ -194,9 +189,7 @@ const LoginContextProvider = ({ children }) => {
 
   // 로그인 요청
   const login = async (username, password) => {
-    console.log(
-      `로그인 요청 login(username:${username}, password:${password});`
-    );
+
 
     try {
       const response = await auth.login(username, password);
@@ -205,12 +198,7 @@ const LoginContextProvider = ({ children }) => {
 
       const accessToken = authorization.replace("Bearer ", ""); 
 
-      console.log(`-- login 요청응답 --
-                data : ${data}
-                status : ${status}
-                headers : ${headers}
-                jwt : ${accessToken}
-            `);
+
 
       if (status === 200) {
         Cookies.set("accessToken", accessToken);
@@ -254,8 +242,7 @@ const LoginContextProvider = ({ children }) => {
     provider,
     providerId
   ) => {
-    console.log("📌 loginSetting() params:", username, provider, providerId);
-    console.log("📝 userData:", userData);
+
 
     if (!userData) {
       console.error("🚨 userData가 비어있음!");
@@ -273,7 +260,6 @@ const LoginContextProvider = ({ children }) => {
 
     const normalizedUsername = userData.username;
 
-    console.log("✅ 최종 username:", normalizedUsername);
 
     const normalizedUserDataUsername = userData.username
       ? userData.username.trim().toUpperCase()
@@ -296,11 +282,7 @@ const LoginContextProvider = ({ children }) => {
     setAuthority(newAuthority);
     localStorage.setItem("authority", JSON.stringify(newAuthority));
 
-    console.log(`✅ 로그인 성공!
-            ID: ${id}
-            Username: ${finalUsername}
-            Authority: ${authority}
-        `);
+
 
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     setIsLogin(true);
@@ -308,7 +290,7 @@ const LoginContextProvider = ({ children }) => {
 
  
     const storedAnswers = localStorage.getItem("hbtiAnswers");
-    console.log("hbtiAnswers", storedAnswers);
+
 
     if (storedAnswers) {
       console.log("📢 저장된 HBTI 데이터가 있습니다. 서버에 저장 중...");
@@ -321,7 +303,7 @@ const LoginContextProvider = ({ children }) => {
         answers: answerArray, 
       });
 
-      console.log("📝 변환된 데이터:", requestBody);
+    
 
       try {
         const response = await fetch(

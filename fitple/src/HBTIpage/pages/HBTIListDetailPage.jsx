@@ -16,8 +16,6 @@ function HBTIListDetailPage() {
       .then((response) => {
         setHbtiDetail(response.data);
         setLoading(false);
-        console.log("데이터 로드 성공");
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("데이터 로드 실패:", error);

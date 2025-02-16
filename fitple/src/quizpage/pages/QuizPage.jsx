@@ -48,7 +48,7 @@ function QuizPage() {
     useEffect(() => {
         if (userInfo && userInfo.id) {
             setUserId(userInfo.id);
-            console.log('User ID set from context:', userInfo.id);
+
         }
     }, [userInfo]);
 
@@ -113,14 +113,14 @@ function QuizPage() {
     };
 
     const handleFinish = async () => {
-        console.log("handleFinish called");
+ 
         if (Object.keys(answers).length < quizData.length) {
             alert('모든 문제를 해결 후, 결과보기 버튼을 클릭해주세요');
             return;
         }
     
         const answersArray = Object.values(answers);
-        console.log('Sending answers:', answersArray);
+   
     
         try {
             const response = await fetch(`${import.meta.env.VITE_Server}/api/hbti/calculate`, {
@@ -130,7 +130,7 @@ function QuizPage() {
                 },
                 body: JSON.stringify(answersArray)
             });
-            console.log(response.headers.get('content-type'));
+    
     
             if (!response.ok) {
                 const errorText = await response.text();
@@ -139,7 +139,7 @@ function QuizPage() {
             }
     
             const result = await response.json();
-            console.log('Received result:', result);
+    
             setHbtiType(result.hbtiType);
             setGameState('finished');
             setShowResultModal(true);
@@ -164,13 +164,13 @@ function QuizPage() {
                 <color attach="background" args={["#000000"]} />
                 <fog attach="fog" args={["#000000", 30, 90]} />
                 <Stars 
-                    radius={100} // 별들이 분포할 구의 반지름
-                    depth={70} // 별들의 깊이 감
-                    count={6000} // 별의 개수
-                    factor={19} // 별들의 크기 factor
-                    saturation={0.7} // 채도 (0: 흰색, 1: 컬러풀)
-                    fade // 별들이 카메라 움직임에 따라 페이드 효과
-                    speed={1.4} // 별들의 움직임 속도
+                    radius={100} 
+                    depth={70} 
+                    count={6000} 
+                    factor={19} 
+                    saturation={0.7} 
+                    fade 
+                    speed={1.4} 
                 />
                 <ambientLight intensity={0.8} />
                 <pointLight position={[10, 10, 10]} intensity={1} />
