@@ -20,7 +20,6 @@ const MyPage = () => {
   const [currentPage, setCurrentPage] = useState("a");
   const navigate = useNavigate();
 
-
   //로그인 안 한 놈 쫒아내기
   useEffect(() => {
     if (!isLogin) {
