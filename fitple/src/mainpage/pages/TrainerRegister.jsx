@@ -15,7 +15,7 @@ const trainerQuestions = [
 const TrainerRegister = () => {
   const handleTrainerSubmit = (answers) => {
     alert("Trainer registration submitted successfully!");
-    console.log("Trainer Data:", answers);
+
   };
 
   return (

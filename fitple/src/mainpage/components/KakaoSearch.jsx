@@ -8,25 +8,25 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
   const [page, setPage] = useState(1); 
 
   useEffect(() => {
-    console.log("일단 useEffect");
+
     const loadKakaoMapScript = () => {
       const script = document.createElement("script");
       script.async = true;
       script.src =
         `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KakaoMap_Key}&libraries=services&autoload=false`;
-        console.log(src);
+
       script.onload = () => {
         window.kakao.maps.load(() => {
-          console.log("Kakao Maps SDK loaded");
+
         });
       };
-      console.log(window.kakao);
+
       document.head.appendChild(script);
     };
 
     if (!window.kakao || !window.kakao.maps) {
       loadKakaoMapScript();
-      console.log(window.kakao);
+
     }
   }, []);
 
@@ -115,7 +115,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     const placeInfo = [place.address, place.lat, place.lng];
 
     // 해당 장소 정보를 저장하려면 여기에 저장 로직을 추가 (예: 서버에 전송)
-    console.log("저장된 장소 정보:", placeInfo);
+
   };
 
   return (

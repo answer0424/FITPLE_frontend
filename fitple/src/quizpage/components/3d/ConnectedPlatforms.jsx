@@ -21,7 +21,7 @@ function ConnectedPlatforms({
         return lines;
     }, [platformPositions]);
 
-    console.log('ConnectedPlatforms render, platform:', currentPlatform);
+
 
     return (
         <group name="connected-platforms">

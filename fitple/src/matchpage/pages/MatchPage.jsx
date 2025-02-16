@@ -16,7 +16,7 @@ const MatchPage = () => {
   const [latestUserInfo, setLatestUserInfo] = useState(null);
   const SwalWithReact = withReactContent(Swal);
 
-  // SweetAlert를 공통으로 처리하는 함수
+
   const showAlertAndRedirect = async (title, text, redirectPath) => {
     await SwalWithReact.fire({
       icon: "error",
@@ -28,7 +28,7 @@ const MatchPage = () => {
     navigate(redirectPath);
   };
 
-  // ✅ 로그인한 유저의 최신 정보를 가져와서 업데이트하는 함수
+
   const fetchLatestUserInfo = async () => {
     try {
       const token = Cookies.get("accessToken");
@@ -52,7 +52,7 @@ const MatchPage = () => {
       }
 
       const userData = await response.json();
-      console.log("✅ 최신 사용자 정보 가져옴:", userData);
+
       setLatestUserInfo(userData);
     } catch (error) {
       console.error("❌ 사용자 정보 불러오기 실패:", error);

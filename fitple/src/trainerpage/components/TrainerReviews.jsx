@@ -26,7 +26,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
             if (!response.ok) throw new Error("리뷰 데이터를 불러오는 데 실패했습니다.");
             const data = await response.json();
             setReviews(data);
-            console.log("리뷰 데이터:", data);
+
         } catch (err) {
             console.error("리뷰 불러오기 에러:", err.message);
         }
@@ -80,9 +80,8 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     
                 const newReview = await response.json();
     
-                // ✅ `reviews`에서 매칭된 `trainingId` 찾기
-                console.log("현재 trainingId:", trainingId);
-                console.log("현재 reviews 데이터:", reviews);
+               
+
     
                 const matchingReview = reviews.find(
                     (review) => Number(review.trainingId) === Number(trainingId)
@@ -92,9 +91,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                     newReview.userId = matchingReview.userId;
                     newReview.username = matchingReview.username;
                     newReview.userProfileImage = matchingReview.userProfileImage;
-    
-                    console.log("매칭된 트레이닝 ID로 가져온 username:", matchingReview.username);
-                    console.log("매칭된 트레이닝 ID로 가져온 userProfileImage:", matchingReview.userProfileImage);
+
                 } else {
                     // 기본값 설정 (로그인된 유저 정보 사용)
                     newReview.userId = user.id;
@@ -102,16 +99,15 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                     newReview.userProfileImage = user.profileImage;
     
                     console.warn("매칭된 트레이닝 ID가 없어서 기본값으로 설정");
-                    console.log("기본값 username:", user.username);
-                    console.log("기본값 userProfileImage:", user.profileImage);
+
                 }
     
                 // ✅ 상태 업데이트 (새 리뷰 추가)
                 setReviews((prevReviews) => [newReview, ...prevReviews]);
     
-                console.log("업데이트된 리뷰 목록:", [newReview, ...reviews]);
+
     
-                // ✅ 입력 필드 초기화
+
             
                 setReviewContent("");
                 setRating(5);
@@ -203,7 +199,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     <button
         className="review-submit-button col-3 kr-font"
         onClick={() => setIsModalOpen(true)}
-        disabled={!trainingId} // 트레이닝 ID가 없으면 버튼 비활성화
+        disabled={!trainingId} 
     >
         리뷰 작성
     </button>

@@ -8,12 +8,12 @@ const TrainerSearchList = () => {
   const [trainers, setTrainers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTrainer, setSelectedTrainer] = useState(null);
-  const [visibleTrainers, setVisibleTrainers] = useState(5); // 🔹 초기값 5로 변경
-  const [hasMore, setHasMore] = useState(true); // 🔹 더 불러올 데이터가 있는지 여부
+  const [visibleTrainers, setVisibleTrainers] = useState(5); // 
+  const [hasMore, setHasMore] = useState(true); 
   const navigate = useNavigate();
   const observer = useRef(null);
 
-  // ✅ 트레이너 목록 가져오기
+
   const fetchTrainers = async (query) => {
     try {
       const accessToken = document.cookie
@@ -29,7 +29,7 @@ const TrainerSearchList = () => {
         }
       );
 
-      console.log(response.data);
+
       setTrainers(response.data);
       setHasMore(response.data.length > 5); // 🔹 5개보다 많으면 더 불러올 데이터가 있음
     } catch (error) {
@@ -39,30 +39,16 @@ const TrainerSearchList = () => {
 
   // ✅ 검색어 변경 시 트레이너 목록 가져오기
   useEffect(() => {
-    setVisibleTrainers(5); // 🔹 검색할 때마다 초기화 (5개부터 시작)
+    setVisibleTrainers(5); 
     fetchTrainers(searchQuery);
   }, [searchQuery]);
 
-  // ✅ 검색 입력 핸들러
+
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // // ✅ 트레이너 선택 핸들러
-  // const handleTrainerClick = (trainer) => {
-  //   setSelectedTrainer(trainer);
-  //   new bootstrap.Modal(document.getElementById("trainerModal")).show();
-  // };
 
-  // ✅ 상세 페이지 이동
-  // const goToDetail = () => {
-  //   if (selectedTrainer) {
-  //     navigate(`/trainer/${selectedTrainer.id}/detail`);
-  //     if (modalInstance) {
-  //       modalInstance.hide();
-  //     }
-  //   }
-  // };
 
   // ✅ 상세 페이지 이동
   const closeModal = () => {
@@ -81,12 +67,12 @@ const TrainerSearchList = () => {
   // ✅ 무한 스크롤 감지 (마지막 요소를 감지하면 더 불러옴)
   const lastTrainerElementRef = useCallback(
     (node) => {
-      if (!hasMore) return; // 🔹 더 불러올 데이터가 없으면 실행하지 않음
+      if (!hasMore) return;
 
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          setVisibleTrainers((prev) => prev + 5); // 🔹 5개씩 추가 로딩
+          setVisibleTrainers((prev) => prev + 5); 
         }
       });
       if (node) observer.current.observe(node);

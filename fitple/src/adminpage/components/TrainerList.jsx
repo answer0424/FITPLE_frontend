@@ -241,8 +241,7 @@ const TrainerList = ({ setChatTrainers }) => {
         alert('승인 상태 업데이트에 실패했습니다.');
       }
     } else {
-      // 사용자가 취소를 클릭한 경우
-      console.log('승인 상태 업데이트가 취소되었습니다.');
+
     }
   };
   

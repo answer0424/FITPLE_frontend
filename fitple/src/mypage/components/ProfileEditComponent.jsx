@@ -134,7 +134,7 @@ const ProfileEditComponent = () => {
       .split("; ")
       .find((row) => row.startsWith("accessToken="))
       ?.split("=")[1];
-    console.log("userId", userInfo.id);
+
     try {
       const response = await api.delete(`/member/${userInfo.id}`, {
         withCredentials: true,
@@ -144,14 +144,13 @@ const ProfileEditComponent = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("삭제 요청 ID:", userInfo.id);
-      console.log("삭제 응답:", response);
+
       if (response.status === 200) {
         logout(true); // ✅ `confirm` 없이 강제 로그아웃
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+
     }
   };
 

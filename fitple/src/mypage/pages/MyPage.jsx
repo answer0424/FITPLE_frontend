@@ -19,7 +19,7 @@ const MyPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState("a");
   const navigate = useNavigate();
-  console.log("authority : ", authority);
+
 
   //로그인 안 한 놈 쫒아내기
   useEffect(() => {
@@ -44,9 +44,7 @@ const MyPage = () => {
     if (!accessToken) {
       return;
     }
-    // console.log(`${import.meta.env.VITE_Server}/register/user`);
 
-    //TODO 유저 정보 읽어오기. useContext 정상화 시 삭제
     api
       .get("/register/user", {
         withCredentials: true,

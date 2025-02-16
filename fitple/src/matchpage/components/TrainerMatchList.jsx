@@ -30,7 +30,7 @@ const TrainerMatchList = ({ userId }) => {
         );
 
         
-        console.log(response)
+
 
         if (response.status === 204) {
           setTrainers([]);
@@ -44,7 +44,6 @@ const TrainerMatchList = ({ userId }) => {
 
         const data = await response.json();
         setTrainers(data);
-        console.log(data);
       } catch (err) {
         setError(err.message);
       }

@@ -35,7 +35,7 @@ function TrainerDetailPage() {
     try {
       const response = await createChat(userInfo.id, trainerId);
 
-      console.log("채팅방 생성 성공:");
+  
       alert("채팅방 생성 성공!!");
     } catch (err) {
       console.error("채팅방 생성 실패:", err);
@@ -70,7 +70,7 @@ function TrainerDetailPage() {
       if (refreshResponse.ok) {
         const { accessToken } = await refreshResponse.json();
         Cookies.set("accessToken", accessToken, { expires: 1 });
-        console.log("새로운 accessToken 발급 완료:", accessToken);
+
         return accessToken;
       } else {
         console.error("토큰 갱신 실패. 다시 로그인해야 합니다.");
@@ -92,7 +92,7 @@ function TrainerDetailPage() {
           return;
         }
 
-        console.log("사용하는 JWT 토큰", token);
+
 
         // ✅ 사용자 정보 가져오기
         const userResponse = await fetch(`${BASE_URL}/register/user`, {
@@ -102,7 +102,7 @@ function TrainerDetailPage() {
         if (userResponse.ok) {
           const userData = await userResponse.json();
           setUser(userData);
-          console.log("로그인한 사용자 데이터:", userData);
+
 
           // ✅ 트레이너 및 리뷰 데이터 가져오기
           await fetchTrainerDetails(token, userData);
@@ -166,10 +166,10 @@ function TrainerDetailPage() {
       }
   
       const trainerData = await trainerResponse.json();
-      console.log("트레이너의 받아온 정보", trainerData);
+
       setTrainer(trainerData);
   
-      // ✅ 리뷰 데이터 가져오기
+
       const reviewsResponse = await fetch(
         `${BASE_URL}/api/reviews/training/${trainerId}`,
         {
@@ -181,23 +181,23 @@ function TrainerDetailPage() {
       );
   
       if (reviewsResponse.status === 404) {
-        console.warn("리뷰 없음: 빈 배열로 설정");
+
         setReviews([]);
       } else if (!reviewsResponse.ok) {
         throw new Error("리뷰 데이터를 불러오는 데 실패했습니다");
       } else {
         const reviewsData = await reviewsResponse.json();
-        console.log("리뷰 데이터:", reviewsData);
+
         setReviews(reviewsData);
   
-        // ✅ 현재 로그인한 유저와 매칭된 트레이닝 ID 찾기
+
         const matchingTraining = reviewsData.find(
           (review) => review.userId === userData.id
         );
   
         if (matchingTraining) {
           setMatchedTrainingId(matchingTraining.trainingId);
-          console.log("매칭된 트레이닝 ID:", matchingTraining.trainingId);
+
         } else {
           console.warn("현재 로그인한 유저와 매칭된 트레이닝 ID가 없습니다.");
           setMatchedTrainingId(null);

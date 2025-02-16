@@ -51,7 +51,7 @@ const TrainerProfilePage = () => {
         console.log(res.data.gym.name || "정보 없음");
         setHbti(res.data?.hbti?.hbti || "정보 없음");
         console.log(res.data.hbti.hbti || "정보 없음");
-        console.log(res.data);
+  
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
 
@@ -180,7 +180,7 @@ const TrainerProfilePage = () => {
         skillToDelete.certificationId,
       ];
       setDeletedSkillsId(newDeletedSkillsId);
-      console.log("삭제될 certificationId:", skillToDelete.certificationId);
+
     } else {
       console.error("새로 추가된 스킬이라 certificationId가 없습니다.");
     }
@@ -201,14 +201,14 @@ const TrainerProfilePage = () => {
     setSkills([...skills, { ...newSkill }]);
 
     setNewSkill({ name: "", imageFile: null });
-    console.log("newSkill : ", newSkill.name, newSkill.imageFile);
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDatas = new FormData(e.target); // 폼 데이터 가져오기
     const entries = Object.fromEntries(formDatas.entries()); // 객체로 변환
-    console.log("entries : ", entries);
+
 
     if (!career.trim()) {
       alert("경력 시작 날짜를 입력해주세요.");
@@ -274,15 +274,7 @@ const TrainerProfilePage = () => {
           },
         }
       );
-      console.log("전송 전 deletedSkillsId:", deletedSkillsId);
 
-      // if (deletedSkillsId.length > 0) {
-      //   if (deletedSkillsId.length > 0) {
-      //     deletedSkillsId.forEach((id) => {
-      //       formData.append("deletedSkillsId", id);
-      //     });
-      //   }
-      // }
 
       alert("트레이너 프로필이 등록되었습니다.");
       navigate("/member");
@@ -437,7 +429,7 @@ const TrainerProfilePage = () => {
                   const fullSkillImageUrl = `${
                     import.meta.env.VITE_Server
                   }${skillImageUrl}`;
-                  console.log("보내는 url", fullSkillImageUrl);
+       
 
                   return (
                     <li

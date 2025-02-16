@@ -18,7 +18,7 @@ const CouponComponent = () => {
       .split("; ")
       .find((row) => row.startsWith("accessToken="))
       ?.split("=")[1];
-    console.log(userInfo.id);
+
 
     api
       .get(`/member/${userInfo.id}/stamp`, {
@@ -58,7 +58,7 @@ const CouponComponent = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
+
         confirm("쿠폰을 정말 사용하시겠습니다.");
         setSelectedTrainer((prevState) => ({
           ...prevState,

@@ -1,7 +1,7 @@
 import React from "react";
 import "../components/css/TrainerHome.css";
 
-function TrainerHome({ content, galleryImages, gymName, gymAddress, gymLatitude, gymLongitude }) {
+function TrainerHome({ content, gymName, gymAddress, gymLatitude, gymLongitude }) {
     const stripHtmlTags = (html) => {
         if (!html) return "트레이너 소개가 없습니다.";
         return html.replace(/<\/?[\w\s="/.':;#-\/\?]+>/gi, "").trim();

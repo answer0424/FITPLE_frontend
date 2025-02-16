@@ -104,7 +104,7 @@ const CalenderComponent = () => {
 
   // 📌 일정 데이터 가져오기
   useEffect(() => {
-    console.log(userInfo.id);
+
     if (!userInfo.id) return;
 
     const fetchSchedules = async () => {

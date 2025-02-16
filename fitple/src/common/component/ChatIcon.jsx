@@ -33,9 +33,9 @@ const ChatIcon = () => {
 
     const fetchChatRooms = async () => {
         try {
-            console.log('현재 로그인한 유저', userId);
+
             const data = await getUserChats(userId);
-            console.log('Fetched chat rooms:', data);
+
             setChatRooms(data);
         } catch (error) {
             console.error('Error fetching chat rooms:', error);
@@ -58,7 +58,7 @@ const ChatIcon = () => {
     // 🔹 모든 채팅방의 읽지 않은 메시지가 0인지 확인
     const hasUnreadMessage = Object.values(unreadMessage || {}).some(count => count > 0);
 
-    console.log('hasUnreadMessage래' ,hasUnreadMessage, unreadMessage);
+
 
     return (
         <div className="relative">

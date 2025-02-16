@@ -42,9 +42,7 @@ const DailyScheduleModal = ({
 
   // 디버깅을 위한 콘솔 로그
   useEffect(() => {
-    console.log("Selected User:", selectedUser);
-    console.log("Daily Events:", dailyEvents);
-    console.log("Filtered Events:", filteredEvents);
+
   }, [selectedUser, dailyEvents, filteredEvents]);
 
   return (

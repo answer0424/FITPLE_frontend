@@ -37,8 +37,7 @@ const DailyItem = ({ event, onDelete }) => {
           },
         }
       );
-      console.log("삭제 요청 ID:", reservationId);
-      console.log("삭제 응답:", response);
+
       if (response.status === 200) {
         alert("일정이 삭제되었습니다.");
         setIsCompleted(true);
@@ -77,7 +76,7 @@ const DailyItem = ({ event, onDelete }) => {
   };
 
   useEffect(() => {
-    console.log(api.defaults.baseURL + "/member/schedule");
+
   }, [changeStatus]);
 
   return (

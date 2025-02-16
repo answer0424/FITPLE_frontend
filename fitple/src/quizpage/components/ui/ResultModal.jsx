@@ -16,12 +16,12 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
   useEffect(() => {
     const fetchHbtiData = async () => {
       if (!hbtiType) {
-        console.log("No hbtiType available");
+
         return;
       }
 
       try {
-        console.log("Fetching HBTI data for type:", hbtiType);
+  
         const response = await axios.get(
           `${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`
         );
