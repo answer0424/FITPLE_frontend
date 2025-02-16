@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
-import "../static/css/ResultModal.css";
+import "../../static/css/ResultModal.css";
 import HBTIResultDisplay from "../quiz_common/HbtiResultDisplay";
 import { LoginContext } from "../../../mainpage/contexts/LoginContextProvider";
 
@@ -16,12 +16,10 @@ const ResultModal = ({ isOpen, onClose, userId, hbtiType, answers }) => {
   useEffect(() => {
     const fetchHbtiData = async () => {
       if (!hbtiType) {
-
         return;
       }
 
       try {
-  
         const response = await axios.get(
           `${import.meta.env.VITE_Server}/api/hbti/type/${hbtiType}`
         );

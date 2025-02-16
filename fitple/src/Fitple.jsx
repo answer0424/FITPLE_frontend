@@ -1,4 +1,3 @@
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoginPage from "./mainpage/pages/LoginPage";
 import UserRegister from "./mainpage/pages/UserRegister";
@@ -38,46 +37,17 @@ function Fitple() {
               path="/oauth/callback/:provider"
               element={<OAuthCallback />}
             />
-            <Route
-              path="/quiz/:userId/result"
-              element={
-             
-                <QuizResult />
-               
-              }
-            />
-            <Route
-              path="/member/*"
-              element={
-            
-                <MyPage />
-            
-              }
-            />
+            <Route path="/quiz/:userId/result" element={<QuizResult />} />
+            <Route path="/member/*" element={<MyPage />} />
             <Route
               path="/member/detail/write"
-              element={
-                
-                <TrainerDetailPageWrite />
-            
-              }
+              element={<TrainerDetailPageWrite />}
             />
             <Route
               path="/trainer/:trainerId/detail"
-              element={
-                
-                <TrainerDetailPage />
-                
-              }
+              element={<TrainerDetailPage />}
             />
-            <Route
-              path="/quiz/:userId/result/match"
-              element={
-              
-                <MatchPage />
-                
-              }
-            />
+            <Route path="/quiz/:userId/result/match" element={<MatchPage />} />
             <Route path="/hbti" element={<HBTIListpage />} />
             <Route path="/hbti/detail" element={<HBTIListDetailPage />} />
             <Route

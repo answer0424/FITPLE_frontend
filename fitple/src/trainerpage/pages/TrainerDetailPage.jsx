@@ -4,11 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TrainerCertifications from "../components/TrainerCertifications";
 import TrainerReviews from "../components/TrainerReviews";
 import TrainerHome from "../components/TrainerHome";
-import TrainerStatusModal from "../components/TrainerStatusModal"; 
-import "../components/css/TrainerDetailPage.css";
+import TrainerStatusModal from "../components/TrainerStatusModal";
+import "../static/css/TrainerDetailPage.css";
 import Header from "../../common/component/Header";
 import Cookies from "js-cookie";
-import { FaCommentDots } from "react-icons/fa"; 
+import { FaCommentDots } from "react-icons/fa";
 import ChatIcon from "../../common/component/ChatIcon";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { createChat } from "../../mainpage/apis/chat";
@@ -18,24 +18,23 @@ import withReactContent from "sweetalert2-react-content";
 function TrainerDetailPage() {
   const { trainerId } = useParams();
   const navigate = useNavigate();
-  const [trainer, setTrainer] = useState(null); 
+  const [trainer, setTrainer] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [matchedTrainingId, setMatchedTrainingId] = useState(null); 
-  const [activeTab, setActiveTab] = useState("home"); 
-  const [error, setError] = useState(null); 
-  const [user, setUser] = useState(null); 
+  const [matchedTrainingId, setMatchedTrainingId] = useState(null);
+  const [activeTab, setActiveTab] = useState("home");
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
   const { isLogin, userInfo } = useContext(LoginContext);
 
   const BASE_URL = import.meta.env.VITE_Server;
 
   const handleChatClick = async () => {
-    const token = await validateAndRefreshToken(); 
+    const token = await validateAndRefreshToken();
     if (!token) return;
 
     try {
       const response = await createChat(userInfo.id, trainerId);
 
-  
       alert("채팅방 생성 성공!!");
     } catch (err) {
       console.error("채팅방 생성 실패:", err);
@@ -92,8 +91,6 @@ function TrainerDetailPage() {
           return;
         }
 
-
-
         // ✅ 사용자 정보 가져오기
         const userResponse = await fetch(`${BASE_URL}/register/user`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -102,7 +99,6 @@ function TrainerDetailPage() {
         if (userResponse.ok) {
           const userData = await userResponse.json();
           setUser(userData);
-
 
           // ✅ 트레이너 및 리뷰 데이터 가져오기
           await fetchTrainerDetails(token, userData);
@@ -160,15 +156,14 @@ function TrainerDetailPage() {
           },
         }
       );
-  
+
       if (!trainerResponse.ok) {
         throw new Error("트레이너 정보를 불러오는 데 실패했습니다.");
       }
-  
+
       const trainerData = await trainerResponse.json();
 
       setTrainer(trainerData);
-  
 
       const reviewsResponse = await fetch(
         `${BASE_URL}/api/reviews/training/${trainerId}`,
@@ -179,9 +174,8 @@ function TrainerDetailPage() {
           },
         }
       );
-  
-      if (reviewsResponse.status === 404) {
 
+      if (reviewsResponse.status === 404) {
         setReviews([]);
       } else if (!reviewsResponse.ok) {
         throw new Error("리뷰 데이터를 불러오는 데 실패했습니다");
@@ -189,15 +183,13 @@ function TrainerDetailPage() {
         const reviewsData = await reviewsResponse.json();
 
         setReviews(reviewsData);
-  
 
         const matchingTraining = reviewsData.find(
           (review) => review.userId === userData.id
         );
-  
+
         if (matchingTraining) {
           setMatchedTrainingId(matchingTraining.trainingId);
-
         } else {
           console.warn("현재 로그인한 유저와 매칭된 트레이닝 ID가 없습니다.");
           setMatchedTrainingId(null);
@@ -210,7 +202,7 @@ function TrainerDetailPage() {
         title: "트레이너 정보 없음",
         text: "해당 트레이너의 정보를 불러올 수 없습니다. 작성부터 해주세요",
         icon: "warning",
-        confirmButtonText: "확인", 
+        confirmButtonText: "확인",
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
@@ -219,7 +211,6 @@ function TrainerDetailPage() {
       });
     }
   };
-  
 
   // ✅ 평균 평점 계산
   const calculateAverageRating = (reviews) => {
@@ -280,21 +271,27 @@ function TrainerDetailPage() {
   return (
     <>
       <Header />
-     
-      {!trainer || trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
-  <TrainerStatusModal trainer={trainer} />
-) : (
+
+      {!trainer ||
+      trainer.isAccess === "대기" ||
+      trainer.isAccess === "거절" ? (
+        <TrainerStatusModal trainer={trainer} />
+      ) : (
         <div className="trainer-container">
           <div className="trainer-card">
             <div className="trainer-header">
               <div className="profile-section">
-              <img
-                src={`${BASE_URL}${trainer.trainerProfileImage.replace(/^\./, "")}`} 
-                alt={`${trainer.trainerName} 프로필`}
-                className="profile-image1"
-                onError={(e) => (e.target.src = "/icons/certificate-icon.png")}
-                  />
-
+                <img
+                  src={`${BASE_URL}${trainer.trainerProfileImage.replace(
+                    /^\./,
+                    ""
+                  )}`}
+                  alt={`${trainer.trainerName} 프로필`}
+                  className="profile-image1"
+                  onError={(e) =>
+                    (e.target.src = "/icons/certificate-icon.png")
+                  }
+                />
               </div>
               <div className="info-section">
                 <h1 className="trainer-name kr-font">{trainer.trainerName}</h1>
@@ -386,10 +383,10 @@ function TrainerDetailPage() {
               )}
               {activeTab === "review" && (
                 <TrainerReviews
-                  reviews={reviews} 
-                  setReviews={setReviews} 
+                  reviews={reviews}
+                  setReviews={setReviews}
                   BASE_URL={BASE_URL}
-                  user={user} 
+                  user={user}
                   trainerId={trainerId}
                   trainingId={matchedTrainingId}
                 />

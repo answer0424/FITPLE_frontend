@@ -1,5 +1,5 @@
 import React from "react";
-import "../static/css/OverlayButton.css";
+import "../../static/css/OverlayButton.css";
 
 function UIOverlay({
   currentPlatform,

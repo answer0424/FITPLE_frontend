@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../staitc/css/ChatModal.css";
+import "../static/css/ChatModal.css";
 import { leaveChat } from "../../mainpage/apis/chat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
