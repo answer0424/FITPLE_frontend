@@ -27,10 +27,6 @@ const ProfileEditComponent = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
   // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,9 +98,9 @@ const ProfileEditComponent = () => {
     }
 
     const accessToken = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("accessToken="))
-            ?.split("=")[1];
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
 
     const formData = new FormData();
     formData.append("userId", userInfo.id);
@@ -151,9 +147,7 @@ const ProfileEditComponent = () => {
       console.log("삭제 요청 ID:", userInfo.id);
       console.log("삭제 응답:", response);
       if (response.status === 200) {
-        console.log("회원 탈퇴 완료:", userInfo.id);
         logout(true); // ✅ `confirm` 없이 강제 로그아웃
-
         navigate("/");
       }
     } catch (error) {
@@ -229,15 +223,15 @@ const ProfileEditComponent = () => {
             </Form.Group>
 
             <Form.Group className="profileEditComponent-formGroup">
-  <Form.Label>이메일</Form.Label>
-  <Form.Control
-    type="email"
-    name="email" // ✅ 추가: name을 명확히 지정 (handleChange에서 인식 필요)
-    className="profileEditComponent-formControl"
-    value={editedInfo.email} // ✅ 기존 상태 값을 유지
-    onChange={handleChange} // ✅ 변경 사항을 반영하도록 설정
-  />
-</Form.Group>
+              <Form.Label>이메일</Form.Label>
+              <Form.Control
+                type="email"
+                name="email" // ✅ 추가: name을 명확히 지정 (handleChange에서 인식 필요)
+                className="profileEditComponent-formControl"
+                value={editedInfo.email} // ✅ 기존 상태 값을 유지
+                onChange={handleChange} // ✅ 변경 사항을 반영하도록 설정
+              />
+            </Form.Group>
 
             <Form.Group className="profileEditComponent-formGroup">
               <Form.Label>주소</Form.Label>

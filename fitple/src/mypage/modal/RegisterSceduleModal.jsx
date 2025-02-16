@@ -51,7 +51,6 @@ const RegisterScheduleModal = ({
           }
         );
         if (response.status === 200 && response.data) {
-          console.log("가져온 트레이닝 목록:", response.data);
           setStudentList(response.data);
           // Training 정보도 함께 저장
           if (Array.isArray(response.data)) {
@@ -63,8 +62,6 @@ const RegisterScheduleModal = ({
               trainingId: userInfo.trainingId,
             }));
 
-            console.log("tranings : ", trainings);
-            console.log("dd", trainings.studentId);
             setTrainingList(trainings);
           }
         } else {
@@ -119,8 +116,6 @@ const RegisterScheduleModal = ({
         trainingId: selectedTraining.trainingId,
       };
 
-      console.log("전송할 일정 데이터:", scheduleData);
-
       const response = await axios.post(
         `http://localhost:8081/member/register/add-schedule/${selectedStudent}`,
         scheduleData,
@@ -131,7 +126,6 @@ const RegisterScheduleModal = ({
       );
 
       if (response.status === 200) {
-        console.log("일정 등록 성공:", response.data);
         alert("일정이 등록되었습니다");
         updateEvents(response.data);
         if (onScheduleUpdate) {

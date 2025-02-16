@@ -50,7 +50,7 @@ const StudentsList = ({ user }) => {
       } else {
         setStudentList([]);
         setDisplayList([]);
-        setError("학생 목록을 불러올 수 없습니다.");
+        // setError("학생 목록을 불러올 수 없습니다.");
       }
     } catch (error) {
       console.error("학생 목록 요청 중 오류 발생:", error);
@@ -117,6 +117,7 @@ const StudentsList = ({ user }) => {
       fetchStudents();
       setShowModal(false);
     } catch (error) {
+      console.error(error.response.data);
       alert("횟수 변경 중 오류 발생");
     }
   };

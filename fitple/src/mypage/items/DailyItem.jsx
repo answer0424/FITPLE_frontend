@@ -21,15 +21,6 @@ const DailyItem = ({ event, onDelete }) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  useEffect(() => {
-    if (event) {
-      console.log("현재 일정 정보:", {
-        reservationId: event.reservationId,
-        전체_이벤트_데이터: event,
-      });
-    }
-  }, [event]);
-
   // ✅ 일정 삭제 함수 추가
   const handleDelete = async (reservationId) => {
     if (!window.confirm("정말로 삭제하시겠습니까?")) return;
@@ -52,12 +43,11 @@ const DailyItem = ({ event, onDelete }) => {
         alert("일정이 삭제되었습니다.");
         setIsCompleted(true);
         setDeleteTrigger((prev) => !prev);
-        console.log("삭제 요청 ID:", reservationId);
 
         onDelete(reservationId); // 삭제 후 리스트 업데이트
       }
     } catch (error) {
-      console.log(error);
+      console.error(error.response.data);
     }
   };
 
@@ -81,11 +71,8 @@ const DailyItem = ({ event, onDelete }) => {
       )
       .then((response) => {
         alert("운동이 완료되셨습니다 stamp가 1 증가합니다.");
-        // useState값을 1 -> null 을 왔다갔다하면 서  리랜더링을 강제로 시킨다.
-        // 운동완료 버튼 disable처리
+
         setIsCompleted(true);
-        console.log("팝업 정해지면 수정");
-        console.log(response.status);
       });
   };
 

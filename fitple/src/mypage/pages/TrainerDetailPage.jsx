@@ -41,7 +41,8 @@ const TrainerProfilePage = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
-        setUser(res.data), console.log("현재 사용자 : ", res.data);
+        setUser(res.data);
+
         if (res.data.authority === "ROLE_STUDENT") {
           alert("접근권한이 없습니다");
           navigate("/member");
@@ -60,9 +61,6 @@ const TrainerProfilePage = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
-        console.log("데이터 : ", res.data);
-        console.log("certification : ", res.data.certificationId);
-
         if (res.data.isAccess === "대기 ") {
           alert("프로필이 승인 대기중입니다, 수정이 불가능합니다");
           navigate("/member");
@@ -166,7 +164,6 @@ const TrainerProfilePage = () => {
             })
             .flat() || [];
 
-        console.log("최종 파싱된 전체 스킬:", parsedSkills);
         setSkills(parsedSkills);
       })
       .catch((error) =>
@@ -176,7 +173,6 @@ const TrainerProfilePage = () => {
 
   const handleDeleteSkill = (index) => {
     const skillToDelete = skills[index];
-    console.log("삭제하려는 스킬 정보:", skillToDelete);
 
     if (skillToDelete?.certificationId) {
       const newDeletedSkillsId = [
@@ -185,9 +181,8 @@ const TrainerProfilePage = () => {
       ];
       setDeletedSkillsId(newDeletedSkillsId);
       console.log("삭제될 certificationId:", skillToDelete.certificationId);
-      console.log("현재까지 삭제될 certificationId 목록:", newDeletedSkillsId);
     } else {
-      console.log("새로 추가된 스킬이라 certificationId가 없습니다.");
+      console.error("새로 추가된 스킬이라 certificationId가 없습니다.");
     }
 
     setSkills(skills.filter((_, i) => i !== index));

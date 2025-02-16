@@ -42,7 +42,6 @@ const TrainerStudentsDropdown = ({
         );
 
         if (response.status === 200) {
-          console.log("드롭다운 , 전체 회원 리스트:", response.data);
           setStudentList(response.data || []);
         } else {
           setStudentList([]);
@@ -63,7 +62,6 @@ const TrainerStudentsDropdown = ({
   // Handle student selection
   const handleMemberSelect = async (event) => {
     const studentId = event.target.value;
-    console.log("선택한 studentId : ", studentId);
     setSelectedStudentId(studentId);
 
     try {
@@ -85,7 +83,9 @@ const TrainerStudentsDropdown = ({
       const selectedMonth = month || new Date().getMonth() + 1;
 
       const response = await axios.get(
-        `${import.meta.env.VITE_Server}/member/${trainerId}/calendar/student/${studentId}`,
+        `${
+          import.meta.env.VITE_Server
+        }/member/${trainerId}/calendar/student/${studentId}`,
         {
           params: { year: selectedYear, month: selectedMonth },
           withCredentials: true,
@@ -95,7 +95,7 @@ const TrainerStudentsDropdown = ({
 
       if (response.status === 200) {
         const scheduleData = response.data || [];
-        console.log(`${studentId} 회원 일정:`, scheduleData);
+
         setSelectedStudent(scheduleData);
         updateEvents(scheduleData);
       } else {

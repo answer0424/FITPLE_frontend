@@ -28,12 +28,6 @@ const AdminPage = () => {
     setChatTrainers(trainers);
   };
 
-  // users 상태가 변경될 때마다 로그 출력
-  useEffect(() => {
-    console.log("유저 리스트에서 받아온 값:", chatUsers);
-    console.log("트레이너 리스트에서 받아온 값: ",chatTrainers)
-  }, [chatUsers, chatTrainers]); // users 상태가 변경될 때마다 실행
-
   return (
     <div className="admin-wrapper h-100 mb-5">
       <div className="admin-container">
@@ -115,19 +109,24 @@ const AdminPage = () => {
 
         <div className="mt-4">
           {activeTab === "users" && <UserList setChatUsers={handleUserData} />}
-          {activeTab === "trainers" && <TrainerList setChatTrainers={handleTrainerData}/>}
+          {activeTab === "trainers" && (
+            <TrainerList setChatTrainers={handleTrainerData} />
+          )}
           {activeTab === "reviews" && <ReviewList />}
           {activeTab === "studentAgeChart" && (
             <StudentAgeChart chatUsers={chatUsers} />
           )}
           {activeTab === "trainerAgeChart" && (
-            <TrainerAgeChart chatTrainers={chatTrainers}/>
+            <TrainerAgeChart chatTrainers={chatTrainers} />
           )}
           {activeTab === "hbtiTypeChart" && (
-            <HbtiTypeChart chatUsers={chatUsers} chatTrainers={chatTrainers}/>
+            <HbtiTypeChart chatUsers={chatUsers} chatTrainers={chatTrainers} />
           )}
           {activeTab === "registerUserLine" && (
-            <RegisterUserLine chatUsers={chatUsers} chatTrainers={chatTrainers}/>
+            <RegisterUserLine
+              chatUsers={chatUsers}
+              chatTrainers={chatTrainers}
+            />
           )}
         </div>
       </div>

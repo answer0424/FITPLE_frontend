@@ -15,26 +15,6 @@ const ProfileComponent = ({ user, onClick }) => {
   const navigate = useNavigate();
   const [active, setActive] = useState(null);
 
-  // useEffect(() => {
-  //   const accessToken = document.cookie
-  //     .split("; ")
-  //     .find((row) => row.startsWith("accessToken="))
-  //     ?.split("=")[1];
-
-  //   api
-  //     .get(`/member/${user.id}/info`, {
-  //       withCredentials: true,
-  //       headers: { Authorization: `Bearer ${accessToken}` },
-  //     })
-  //     .then((response) => {
-  //       setUserInfo(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("사용자 정보 가져오기 실패:", error);
-  //       navigate("/");
-  //     });
-  // }, [user]);
-
   //프로필 변경으로 이동
   const handleClick = (type) => {
     setActive(type);

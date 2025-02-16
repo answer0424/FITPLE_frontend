@@ -53,7 +53,6 @@ const MyPage = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
-        // console.log(response.data.id);
         setUser(response.data);
       });
   }, []);

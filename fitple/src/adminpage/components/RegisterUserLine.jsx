@@ -12,7 +12,15 @@ import {
 } from "chart.js";
 
 // Chart.js 요소 등록
-ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend);
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  Tooltip,
+  Legend
+);
 
 const RegisterUserLine = ({ chatUsers, chatTrainers }) => {
   const [chartData, setChartData] = useState(null);
@@ -21,11 +29,9 @@ const RegisterUserLine = ({ chatUsers, chatTrainers }) => {
 
   useEffect(() => {
     if (chatUsers.length === 0 && chatTrainers.length === 0) {
-      console.log("데이터 없음");
       return;
     }
 
-    console.log("데이터 있음");
     const allUsers = [...chatUsers, ...chatTrainers];
 
     // 해당 월의 전체 날짜 생성 (1일부터 말일까지)
@@ -33,7 +39,10 @@ const RegisterUserLine = ({ chatUsers, chatTrainers }) => {
     const dateCounts = {};
 
     for (let i = 1; i <= daysInMonth; i++) {
-      const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
+      const formattedDate = `${currentYear}-${String(currentMonth).padStart(
+        2,
+        "0"
+      )}-${String(i).padStart(2, "0")}`;
       dateCounts[formattedDate] = 0;
     }
 
@@ -85,12 +94,18 @@ const RegisterUserLine = ({ chatUsers, chatTrainers }) => {
   // 현재 월 이후로 이동 불가
   const isNextDisabled = () => {
     const today = new Date();
-    return currentYear > today.getFullYear() || (currentYear === today.getFullYear() && currentMonth >= today.getMonth() + 1);
+    return (
+      currentYear > today.getFullYear() ||
+      (currentYear === today.getFullYear() &&
+        currentMonth >= today.getMonth() + 1)
+    );
   };
 
   return (
     <div>
-      <h3>일별 회원가입 수 ({currentYear}년 {currentMonth}월)</h3>
+      <h3>
+        일별 회원가입 수 ({currentYear}년 {currentMonth}월)
+      </h3>
       <div>
         <button onClick={handlePrevMonth}>{"< 이전 달"}</button>
         <button onClick={handleNextMonth} disabled={isNextDisabled()}>
@@ -98,8 +113,8 @@ const RegisterUserLine = ({ chatUsers, chatTrainers }) => {
         </button>
       </div>
       {chartData ? (
-        <Line 
-          data={chartData} 
+        <Line
+          data={chartData}
           options={{
             scales: {
               y: {

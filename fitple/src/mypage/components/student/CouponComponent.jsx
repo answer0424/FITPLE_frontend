@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 // import { error } from "jquery";
 import "../../static/css/Coupon.css";
 import { MenuButtonWide } from "react-bootstrap-icons";
+//error 완
 
 const CouponComponent = () => {
   const [trainers, setTrainers] = useState(null);
@@ -25,7 +26,6 @@ const CouponComponent = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
-        console.log("response.data : ", response.data);
         if (!trainers) setTrainers(response.data.trainerIds);
         // stamp 10개 있어야만 coupons 1개
         setSelectedTrainer({
@@ -44,9 +44,7 @@ const CouponComponent = () => {
       .split("; ")
       .find((row) => row.startsWith("accessToken="))
       ?.split("=")[1];
-    //쿠폰 사용
-    console.log("작동은 함");
-    console.log(userInfo.id, selectedTrainer.trainerId);
+
     api
       .patch(
         `/member/use-coupons`,
@@ -73,7 +71,7 @@ const CouponComponent = () => {
       })
       .catch((error) => {
         alert("쿠폰개수를 확인해주세요");
-        console.log(error.response.data);
+        console.error(error.response.data);
       });
   };
 
@@ -94,7 +92,6 @@ const CouponComponent = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
-        console.log(response.data);
         setSelectedTrainer({
           stamp: response.data.stamp,
           coupons: response.data.coupons,

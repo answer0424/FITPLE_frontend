@@ -76,6 +76,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
       onRegister(user.id, selectedStudent.id, times);
       onClose();
     } catch (error) {
+      console.error(error);
       alert("이미 존재하는 회원입니다.");
     }
   };
