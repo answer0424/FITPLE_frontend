@@ -10,7 +10,7 @@ const RegisterScheduleModal = ({
   selectedDate,
   timeInput,
   setTimeInput,
-
+  selectedUser,
   onScheduleUpdate,
 }) => {
   const [studentList, setStudentList] = useState([]);
@@ -44,7 +44,7 @@ const RegisterScheduleModal = ({
       try {
         // 트레이너의 트레이닝 목록을 가져오는 API 호출
         const response = await axios.get(
-          `${import.meta.env.VITE_Server}/member/${userInfo.id}/register`,
+          `http://localhost:8081/member/${userInfo.id}/register`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -83,6 +83,13 @@ const RegisterScheduleModal = ({
     fetchStudents();
   }, [isModalOpen, userInfo]);
 
+  // ✅ selectedUser가 변경될 때 자동 선택되도록 설정
+  useEffect(() => {
+    if (selectedUser && selectedUser.userId) {
+      setSelectedStudent(String(selectedUser.userId)); // 선택된 회원을 자동으로 설정
+    }
+  }, [selectedUser]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -115,7 +122,7 @@ const RegisterScheduleModal = ({
       console.log("전송할 일정 데이터:", scheduleData);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_Server}/member/register/add-schedule/${selectedStudent}`,
+        `http://localhost:8081/member/register/add-schedule/${selectedStudent}`,
         scheduleData,
         {
           withCredentials: true,
@@ -155,11 +162,8 @@ const RegisterScheduleModal = ({
             <Form.Label>회원 선택</Form.Label>
             <Form.Select
               value={selectedStudent}
-              onChange={(e) => {
-                const selectedId = e.target.value;
-                console.log("선택된 학생 ID:", selectedId);
-                setSelectedStudent(selectedId);
-              }}
+              // value={selectedStudent}
+              onChange={(e) => setSelectedStudent(e.target.value)}
               disabled={isLoading}
             >
               <option value="">회원 선택</option>

@@ -203,7 +203,7 @@ const CalenderComponent = () => {
         setSelectedUser={setSelectedUser}
         selectedDate={selectedDate}
         dailyEvents={dailyEvents}
-        selectedUser={selectedUser}
+        selectedUser={selectedUser} // 선택된 회원
       />
     </>
   );
