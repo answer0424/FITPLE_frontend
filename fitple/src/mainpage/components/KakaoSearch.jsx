@@ -5,7 +5,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
   const [keyword, setKeyword] = useState("");
   const [places, setPlaces] = useState([]);
   const [displayedPlaces, setDisplayedPlaces] = useState([]);
-  const [page, setPage] = useState(1); // 페이지 상태 관리
+  const [page, setPage] = useState(1); 
 
   useEffect(() => {
     console.log("일단 useEffect");
@@ -30,7 +30,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     }
   }, []);
 
-  //수정 시 기존 값이 있다면 기존 값 출력
+  
   useEffect(() => {
     initialAddress && setKeyword(initialAddress);
   }, [])
@@ -41,8 +41,8 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     return new Promise((resolve, reject) => {
       geocoder.addressSearch(address, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          const lat = result[0].y; // 위도
-          const lng = result[0].x; // 경도
+          const lat = result[0].y;
+          const lng = result[0].x; 
           resolve({ lat, lng });
         } else {
           reject("주소를 찾을 수 없습니다.");
@@ -61,7 +61,7 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
 
     ps.keywordSearch(keyword, async (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        // 각 장소에 대해 위도와 경도를 추가하고 저장할 형식으로 가공
+      
         const placesWithLatLng = await Promise.all(
           data.map(async (place) => {
             try {
@@ -87,8 +87,8 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
         );
 
         setPlaces(placesWithLatLng);
-        setDisplayedPlaces(placesWithLatLng.slice(0, 5)); // 처음 5개만 표시
-        setPage(2); // 페이지 초기화 (다음 5개부터 시작)
+        setDisplayedPlaces(placesWithLatLng.slice(0, 5));
+        setPage(2); 
       } else {
         alert("검색 결과가 없습니다.");
         setPlaces([]);
@@ -102,11 +102,11 @@ const KakaoSearch = ({ onPlaceSelect, initialAddress }) => {
     const startIndex = (page - 1) * 5;
     const nextPlaces = places.slice(startIndex, startIndex + 5);
     setDisplayedPlaces([...displayedPlaces, ...nextPlaces]);
-    setPage(page + 1); // 페이지 증가
+    setPage(page + 1); 
   };
 
   const handlePlaceClick = (place) => {
-    setKeyword(place.address); // 클릭한 장소의 주소를 검색창에 설정
+    setKeyword(place.address); 
     if (onPlaceSelect) {
       onPlaceSelect(place);
     }

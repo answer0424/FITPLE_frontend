@@ -73,7 +73,7 @@ const MatchPage = () => {
 
       // ✅ 관리자(ROLE_ADMIN)는 제한 없이 접근 가능
       if (userAuthority.includes("ROLE_ADMIN")) {
-        return; // 아무 제한 없이 그대로 진행
+        return; 
       }
 
       // ✅ 트레이너(ROLE_TRAINER) 접근 제한

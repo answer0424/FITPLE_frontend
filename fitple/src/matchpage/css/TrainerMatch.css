@@ -1,13 +1,13 @@
 
 .trainer-list-wrapper {
-    position: absolute; /* 화면에서 고정 */
-    top: 60%; /* 수직 중앙 */
-    left: 50%; /* 수평 중앙 */
-    transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
+    position: absolute;
+    top: 60%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; /* 화면 전체 너비 */
+    width: 100%; 
     margin: 0 auto;
     overflow: hidden;
     padding: 60px;
@@ -30,29 +30,29 @@
 /* 전체 카드 스타일 */
 .trainer-card1 {
     flex-shrink: 0;
-    width: 400px; /* 카드 너비 */
-    height: 500px; /* 카드 높이 */
-    position: relative; /* 오버레이를 위한 상대 위치 */
-    border-radius: 15px; /* 둥근 모서리 */
+    width: 400px; 
+    height: 500px; 
+    position: relative; 
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* 그림자 */
-    transition: transform 0.3s, box-shadow 0.3s; /* 부드러운 확대 효과 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); 
+    transition: transform 0.3s, box-shadow 0.3s; 
   }
   
   .trainer-card1:hover {
-    transform: scale(1.05); /* 호버 시 확대 */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8); /* 더 강한 그림자 */
+    transform: scale(1.05); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8); 
   }
   
   /* 이미지 배경 */
   .trainer-card1 img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 이미지가 카드에 꽉 차도록 */
+    object-fit: cover; 
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; /* 이미지가 가장 아래 */
+    z-index: 1; 
   }
   
   /* 정보 섹션 */
@@ -60,10 +60,10 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.7); /* 어두운 반투명 배경 */
+    background: rgba(0, 0, 0, 0.7); 
     color: white;
     padding: 15px;
-    z-index: 2; /* 이미지 위에 위치 */
+    z-index: 2; 
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -108,10 +108,10 @@
 
 /* 버튼 호버 효과 */
 .trainer-info-overlay button:hover {
-    background-color: #ffc400; /* 약간 더 진한 노란색 */
-    transform: translateY(-3px); /* 살짝 위로 이동 효과 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 더 강한 그림자 */
-    color: #1e1e1e; /* 텍스트 색상 강조 */
+    background-color: #ffc400;
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: #1e1e1e; 
 }
 
   
@@ -120,7 +120,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: linear-gradient(135deg, #222, #444); /* 그라데이션 배경 */
+    background: linear-gradient(135deg, #222, #444);
     color: white;
     border: none;
     border-radius: 50%;
@@ -163,6 +163,6 @@
 }
 
 .arrow-button:hover {
-    transform: scale(1.2); /* 호버 시 버튼 크기 확대 */
-    background: linear-gradient(135deg, #333, #555); /* 더 밝은 배경 */
+    transform: scale(1.2); 
+    background: linear-gradient(135deg, #333, #555); 
 }

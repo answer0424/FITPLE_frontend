@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
 import Header from "../../common/component/Header";
-import "../assets/styles/ForgotPassword.css"; // 📌 CSS 파일 추가
+import "../assets/styles/ForgotPassword.css"; 
 
 const ForgotPasswordPage = ({ onResetRequested }) => {
   const [email, setEmail] = useState("");

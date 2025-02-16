@@ -1,4 +1,4 @@
-// UserSignUp.js
+
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
 
@@ -21,7 +21,7 @@ const UserRegister = () => {
   return (
     <RegisterForm 
       questions={userQuestions} 
-      userType="student" // userType을 전달
+      userType="student" 
       onSubmit={handleUserSubmit} 
     />
   );

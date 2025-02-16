@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     const success = await login(username, password);
     if (success) {
-      navigate("/"); // 로그인 성공 시 메인 페이지로 이동
+      navigate("/"); 
     }
   };
 

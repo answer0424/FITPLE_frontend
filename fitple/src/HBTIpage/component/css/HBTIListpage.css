@@ -124,19 +124,19 @@ body {
 
 /* 그룹별 카드 제목 색상 */
 .card-solo .card-title {
-  color: #0044cc; /* 솔로형 제목 색상 */
+  color: #0044cc; 
 }
 
 .card-active .card-title {
-  color: #9f4102; /* 산소형 제목 색상 */
+  color: #9f4102; 
 }
 
 .card-strength .card-title {
-  color: #027d08; /* 근육형 제목 색상 */
+  color: #027d08; 
 }
 
 .card-group .card-title {
-  color: #8c6201; /* 그룹형 제목 색상 */
+  color: #8c6201; 
 }
 
 /* 카드 제목 스타일 */
@@ -149,79 +149,63 @@ body {
 
 /* 카드 텍스트 스타일 */
 .card-text {
-  font-size: 1.5rem; /* 폰트 크기 약간 키움 */
-  font-weight: bold; /* 글씨 강조 */
-  line-height: 1.7; /* 줄 간격 더 넓게 */
-  color: #333333; /* 너무 강한 검정 대신 부드러운 색 */
-  padding: 0 1.5rem; /* 좌우 여백 조금 더 추가 */
-  margin: 2rem 0 0; /* 위쪽 여백 좀 더 추가 */
-  text-align: center; /* 중앙 정렬 */
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  line-height: 1.7;
+  color: #333333; 
+  padding: 0 1.5rem; 
+  margin: 2rem 0 0; 
+  text-align: center; 
 }
 
-/* 카드 배경색 */
-/* .card-solo {
-  background: linear-gradient(to bottom, #e3f2fd, #64b5f6);
-}
-
-.card-active {
-  background: linear-gradient(to bottom, #fff3e0, #ffa726);
-}
-
-.card-strength {
-  background: linear-gradient(to bottom, #e8f5e9, #81c784);
-}
-
-.card-group {
-  background: linear-gradient(to bottom, #fffde7, #ffd54f);
-} */
 
 /* 그룹 내부 카드 간격 제거 */
 .hbti-row {
   display: flex;
  
-  justify-content: center; /* 중앙 정렬 */
-  gap: 1.5rem; /* 카드 간격 */
+  justify-content: center; 
+  gap: 1.5rem; 
 }
 
 
 .group-section + .group-section {
-  margin-top: 0; /* 그룹 섹션 간 간격 제거 */
+  margin-top: 0; 
 }
 
 .card-hbti {
-  margin-top: 1rem; /* 기존 간격에서 1rem 추가 */
-  font-size: 2rem; /* 폰트 크기 유지 */
-  font-weight: bold; /* 굵기 유지 */
-  text-align: center; /* 중앙 정렬 */
-  line-height: 1.2; /* 줄 간격 */
-  color: inherit; /* 부모 요소 색상 유지 */
+  margin-top: 1rem; 
+  font-size: 2rem; 
+  font-weight: bold; 
+  text-align: center; 
+  line-height: 1.2; 
+  color: inherit; 
 }
 /* 버튼 중앙 정렬을 위한 컨테이너 */
 .center-container {
  
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  text-align: center; /* 텍스트 중앙 정렬 */
+  justify-content: center; 
+  align-items: center; 
+  text-align: center; 
   z-index: 80;
-  position: relative; /* z-index를 활성화하기 위해 추가 */
+  position: relative; 
 
 }
 
 /* 버튼 스타일 */
 .center-button {
-  background-color: #87cefa; /* 버튼 배경색 */
-  color: white; /* 텍스트 색상 */
-  font-size: 1.5rem; /* 글자 크기 */
-  font-weight: bold; /* 글자 굵기 */
-  padding: 10px 20px; /* 버튼 안쪽 여백 */
-  border: none; /* 테두리 제거 */
-  border-radius: 8px; /* 둥근 모서리 */
-  cursor: pointer; /* 포인터 표시 */
+  background-color: #87cefa; 
+  color: white; 
+  font-size: 1.5rem; 
+  font-weight: bold;
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 8px;
+  cursor: pointer; 
   transition: background-color 0.3s ease, transform 0.2s ease;
 
 }
 
 /* 버튼 클릭 효과 */
 .center-button:active {
-  transform: scale(0.95); /* 클릭 시 약간 축소 */
+  transform: scale(0.95); 
 }

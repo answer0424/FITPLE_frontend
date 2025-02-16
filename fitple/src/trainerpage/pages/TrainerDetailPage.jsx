@@ -4,11 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TrainerCertifications from "../components/TrainerCertifications";
 import TrainerReviews from "../components/TrainerReviews";
 import TrainerHome from "../components/TrainerHome";
-import TrainerStatusModal from "../components/TrainerStatusModal"; // 모달 컴포넌트 추가
+import TrainerStatusModal from "../components/TrainerStatusModal"; 
 import "../components/css/TrainerDetailPage.css";
 import Header from "../../common/component/Header";
 import Cookies from "js-cookie";
-import { FaCommentDots } from "react-icons/fa"; // FontAwesome 채팅 아이콘
+import { FaCommentDots } from "react-icons/fa"; 
 import ChatIcon from "../../common/component/ChatIcon";
 import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { createChat } from "../../mainpage/apis/chat";
@@ -18,18 +18,18 @@ import withReactContent from "sweetalert2-react-content";
 function TrainerDetailPage() {
   const { trainerId } = useParams();
   const navigate = useNavigate();
-  const [trainer, setTrainer] = useState(null); // 트레이너 상세 정보
-  const [reviews, setReviews] = useState([]); // 원본 리뷰 목록
-  const [matchedTrainingId, setMatchedTrainingId] = useState(null); // 현재 유저와 매칭된 트레이닝 ID
-  const [activeTab, setActiveTab] = useState("home"); // 현재 활성화된 탭
-  const [error, setError] = useState(null); // 에러 상태
-  const [user, setUser] = useState(null); // 현재 로그인한 유저 정보
+  const [trainer, setTrainer] = useState(null); 
+  const [reviews, setReviews] = useState([]);
+  const [matchedTrainingId, setMatchedTrainingId] = useState(null); 
+  const [activeTab, setActiveTab] = useState("home"); 
+  const [error, setError] = useState(null); 
+  const [user, setUser] = useState(null); 
   const { isLogin, userInfo } = useContext(LoginContext);
 
   const BASE_URL = import.meta.env.VITE_Server;
 
   const handleChatClick = async () => {
-    const token = await validateAndRefreshToken(); // 🔄 토큰 검증 및 갱신
+    const token = await validateAndRefreshToken(); 
     if (!token) return;
 
     try {
@@ -210,8 +210,8 @@ function TrainerDetailPage() {
         title: "트레이너 정보 없음",
         text: "해당 트레이너의 정보를 불러올 수 없습니다. 작성부터 해주세요",
         icon: "warning",
-        confirmButtonText: "확인", // ✅ 사용자가 '확인'을 누르면 실행됨
-        allowOutsideClick: false, // 사용자가 모달 바깥을 클릭해도 닫히지 않도록 설정
+        confirmButtonText: "확인", 
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           navigate("/member/detail/write");
@@ -280,7 +280,7 @@ function TrainerDetailPage() {
   return (
     <>
       <Header />
-      {/* 상태가 대기나 거절일 경우 모달 표시 */}
+     
       {!trainer || trainer.isAccess === "대기" || trainer.isAccess === "거절" ? (
   <TrainerStatusModal trainer={trainer} />
 ) : (
@@ -386,10 +386,10 @@ function TrainerDetailPage() {
               )}
               {activeTab === "review" && (
                 <TrainerReviews
-                  reviews={reviews} // 현재 리뷰 목록 전달
-                  setReviews={setReviews} // 부모의 상태 업데이트 함수 전달
+                  reviews={reviews} 
+                  setReviews={setReviews} 
                   BASE_URL={BASE_URL}
-                  user={user} // 현재 로그인한 유저 정보 전달
+                  user={user} 
                   trainerId={trainerId}
                   trainingId={matchedTrainingId}
                 />

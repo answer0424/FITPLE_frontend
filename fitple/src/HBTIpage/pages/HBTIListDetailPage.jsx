@@ -47,7 +47,6 @@ function HBTIListDetailPage() {
       <div className="quiz-result-container min-h-screen py-12 px-4">
         <div className="result-content-box max-w-7xl mx-auto rounded-2xl overflow-hidden">
           <div className="panel-layout flex relative min-h-[600px]">
-            {/* Background overlay */}
             <div className="absolute inset-0 bg-[#FAFAFA] opacity-20"></div>
             
             <div className="left-panel">

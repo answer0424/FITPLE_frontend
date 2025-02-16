@@ -41,41 +41,41 @@ function Fitple() {
             <Route
               path="/quiz/:userId/result"
               element={
-                // <ProtectedRoute>
+             
                 <QuizResult />
-                // </ProtectedRoute>
+               
               }
             />
             <Route
               path="/member/*"
               element={
-                // <ProtectedRoute>
+            
                 <MyPage />
-                // </ProtectedRoute>
+            
               }
             />
             <Route
               path="/member/detail/write"
               element={
-                // <ProtectedRoute>
+                
                 <TrainerDetailPageWrite />
-                // </ProtectedRoute>
+            
               }
             />
             <Route
               path="/trainer/:trainerId/detail"
               element={
-                // <ProtectedRoute>
+                
                 <TrainerDetailPage />
-                // </ProtectedRoute>
+                
               }
             />
             <Route
               path="/quiz/:userId/result/match"
               element={
-                // <ProtectedRoute>
+              
                 <MatchPage />
-                // </ProtectedRoute>
+                
               }
             />
             <Route path="/hbti" element={<HBTIListpage />} />

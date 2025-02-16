@@ -18,7 +18,7 @@ const DogBone = (props) => {
                 material={materials.lambert1}
                 position={[-0.2, -0.28, -0.15]}
                 rotation={[0, 0, -2.016]}
-                scale={0.15} // Reduced scale to fit inside the orb
+                scale={0.15} 
             />
         </group>
     );
