@@ -50,7 +50,7 @@ function HBTIListPage() {
   const [hbtiData, setHbtiData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
- // HBTI detail로 이동
+
  const goHBTI = () => {
   navigate('/quiz');
 }
@@ -79,13 +79,13 @@ function HBTIListPage() {
     return <div className="text-center mt-5">데이터를 불러오는 중...</div>;
   }
 
-  // 그룹화된 데이터
+
   const groupedData = groupByType(hbtiData);
 
-  // HBTI 색상 배열
+
   const hbtiColors = ["#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8", "#ed17f8"];
 
-  // 카드 클릭 시 상세 페이지로 이동
+  
   const handleCardClick = (hbtiType) => {
 
     navigate(`/hbti/detail?type=${hbtiType}`); 

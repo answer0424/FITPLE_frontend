@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import Header from "../../common/component/Header";
-import "../assets/styles/ResetPassword.css"; // 📌 CSS 파일 추가
+import "../assets/styles/ResetPassword.css"; 
 
 const ResetPasswordPage = () => {
-  // 상태 변수 설정
+
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // URL 파라미터에서 값 추출
+
   const { userId: id } = useParams();
   const navigate = useNavigate();
 
-  console.log("User ID parameter:", id); // 디버깅 로그 추가
+  console.log("User ID parameter:", id);
 
   // 비밀번호 변경 핸들러
   const handleSubmit = async (e) => {
@@ -55,7 +55,7 @@ const ResetPasswordPage = () => {
       if (response.ok) {
         setMessage("비밀번호가 성공적으로 변경되었습니다.");
         setTimeout(() => {
-          navigate("/login"); // 3초 후 로그인 페이지로 이동
+          navigate("/login"); 
         }, 3000);
       } else {
         setError(result || "비밀번호 변경에 실패했습니다.");

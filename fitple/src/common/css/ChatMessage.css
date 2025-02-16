@@ -211,22 +211,22 @@
     color: #000;
     border: none;
     padding: 12px;
-    border-radius: 50%; /* 버튼 모양을 원으로 만들기 */
+    border-radius: 50%; 
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    width: 50px; /* 너비와 높이를 동일하게 설정 */
+    width: 50px;
     height: 50px;
-    display: flex; /* Flexbox를 사용하여 내용 정렬 */
-    align-items: center; /* 수직 정렬 */
-    justify-content: center; /* 수평 정렬 */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
     max-width: 50px;
 }
 
 .message-send-button i {
-    font-size: 1rem; /* 아이콘 크기 조정 */
+    font-size: 1rem;
     color: #000;
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 */
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3); 
 }
 
 

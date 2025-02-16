@@ -65,7 +65,7 @@ const ChatIcon = () => {
             <div className="chat-icon-container" onClick={handleIconClick}>
                 <img src={chatIcon} alt="Chat Icon" className="chat-icon" />
             </div>
-            {/* 🔴 빨간 점 표시 */}
+  
             {hasUnreadMessage && (
                 <span style={{
                     position: "fixed",

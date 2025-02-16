@@ -4,20 +4,20 @@ import Swal from "sweetalert2";
 import "../components/css/TrainerReviews.css";
 
 function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
-    const [reviews, setReviews] = useState([]); // 리뷰 목록
-    const [reviewContent, setReviewContent] = useState(""); // 작성 중인 리뷰 내용
-    const [rating, setRating] = useState(5); // 작성 중인 평점
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-    const [error, setError] = useState(""); // 에러 메시지
-    const [sortOption, setSortOption] = useState("latest"); // 정렬 옵션
-    const token = Cookies.get("accessToken"); // JWT 토큰
+    const [reviews, setReviews] = useState([]);
+    const [reviewContent, setReviewContent] = useState(""); 
+    const [rating, setRating] = useState(5); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [error, setError] = useState("");
+    const [sortOption, setSortOption] = useState("latest"); 
+    const token = Cookies.get("accessToken"); 
 
-    // ✅ 유효한 리뷰만 필터링
+   
     const filteredReviews = useMemo(() => {
         return reviews.filter((review) => review.rating && review.content);
     }, [reviews]);
 
-    // ✅ 리뷰 목록 불러오기
+   
     const fetchReviews = async () => {
         try {
             const response = await fetch(`${BASE_URL}/api/reviews/training/${trainerId}`, {
@@ -36,11 +36,11 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
     const getSortedReviews = () => {
         const sortedReviews = [...filteredReviews];
         if (sortOption === "latest") {
-            sortedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // 최신순
+            sortedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
         } else if (sortOption === "highest") {
-            sortedReviews.sort((a, b) => b.rating - a.rating); // 별점 높은 순
+            sortedReviews.sort((a, b) => b.rating - a.rating); 
         } else if (sortOption === "lowest") {
-            sortedReviews.sort((a, b) => a.rating - b.rating); // 별점 낮은 순
+            sortedReviews.sort((a, b) => a.rating - b.rating);
         }
         return sortedReviews;
     };
@@ -272,7 +272,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                     </ul>
                 </div>
 
-                            {/* 별점 선택 */}
+                    
                             <div className="rating-section">
                                 <label >별점을 선택해주세요</label>
                                 <div className="stars">
@@ -288,7 +288,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                                 </div>
                             </div>
 
-                            {/* 리뷰 내용 입력 */}
+                            
                             <div className="textarea-section">
                                 <label>내용을 작성해주세요</label>
                                 <textarea
@@ -301,7 +301,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                             </div>
                             {error && <p className="error-message">{error}</p>}
 
-                            {/* 제출 버튼 */}
+                          
                             <button
                                 className="submit-button kr-font"
                                 onClick={handleSubmitReview}

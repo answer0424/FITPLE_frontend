@@ -2,12 +2,12 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { getChatMessages, readMessage } from '../../mainpage/apis/chat';
 import '../css/ChatMessage.css';
 import { LoginContext } from '../../mainpage/contexts/LoginContextProvider';
-import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
+import 'bootstrap-icons/font/bootstrap-icons.css'; 
 
 const ChatMessage = ({ chatId, onBack, rooms }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const { userInfo, stompClient, setUnreadMessage } = useContext(LoginContext); // LoginContext에서 웹소켓 클라이언트 가져오기
+  const { userInfo, stompClient, setUnreadMessage } = useContext(LoginContext); 
   const messageEndRef = useRef(null);
   const [room, setRoom] = useState(null);
 

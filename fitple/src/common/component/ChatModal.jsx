@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../css/ChatModal.css';
-import { leaveChat } from '../../mainpage/apis/chat'; // chat.js에서 함수 가져옴
+import { leaveChat } from '../../mainpage/apis/chat'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import ChatMessage from './ChatMessage'; // ChatMessage 컴포넌트 추가
+import ChatMessage from './ChatMessage';
 
 const ChatModal = ({ isOpen, onClose, chatRooms = [], userId, unreadMessage, setUnreadMessage }) => {
     const [rooms, setRooms] = useState(chatRooms);

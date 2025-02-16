@@ -49,11 +49,11 @@
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    overflow-y: hidden; /* 내부 스크롤을 숨깁니다 */
+    overflow-y: hidden; 
     max-height: 50%;
     text-align: center;
     position: relative;
-    overflow-y: auto; /* 외부에서 스크롤을 제어합니다 */
+    overflow-y: auto; 
     
 }
 
@@ -98,7 +98,7 @@ input,
   width: 100%;
   max-width: 700px;
   transition: border-color 0.3s ease;
-  font-size: 24px; /* 크기를 30텍스트로 통일 */
+  font-size: 24px; 
   
 }
 
@@ -176,11 +176,11 @@ button:disabled {
 }
 
 .back-to-login {
-    background-color: #FFC107; /* 새로운 버튼 색상 */
+    background-color: #FFC107; 
 }
 
 .back-to-login:hover {
-    background-color: #FFA000; /* 새로운 버튼 색상 */
+    background-color: #FFA000; 
 }
 html * {
     font-family: 'Montserrat', sans-serif;
@@ -216,7 +216,7 @@ body {
 .social-button {
     display: flex;
     align-items: center;
-    justify-content: center; /* If you also want to center the text horizontally */
+    justify-content: center; 
     background-position: 25px 0px;
     box-sizing: border-box;
     color: rgb(255, 255, 255);

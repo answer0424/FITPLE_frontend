@@ -1,4 +1,4 @@
-/* 전체 컨테이너 */
+
 
 
 /* 제목 스타일 */
@@ -36,31 +36,31 @@ button.review-submit-button:hover {
 }
 /* 비활성화된 버튼 스타일 */
 button.review-submit-button:disabled {
-  background-color: #cccccc; /* 비활성화 색상 */
-  color: #666666; /* 텍스트 색상 */
-  cursor: not-allowed; /* 비활성화 상태의 커서 */
-  pointer-events: none; /* 호버 효과 완전히 제거 */
+  background-color: #cccccc; 
+  color: #666666;
+  cursor: not-allowed; 
+  pointer-events: none; 
 }
 
 /* 정렬 셀렉션 */
 select.form-select {
-  padding: 10px 15px; /* 여백을 늘려 사용자 친화적 */
-  font-size: 1rem; /* 텍스트 크기 */
-  border: 2px solid #007bff; /* 테두리 색상 */
-  border-radius: 8px; /* 둥근 테두리 */
-  background-color: #ffffff; /* 흰색 배경 */
-  color: #333; /* 텍스트 색상 */
-  cursor: pointer; /* 클릭 가능 표시 */
-  width: 160px; /* 약간 넓게 조정 */
-  text-align: center; /* 텍스트 정렬 */
-  transition: all 0.3s ease; /* 부드러운 효과 추가 */
+  padding: 10px 15px; 
+  font-size: 1rem; 
+  border: 2px solid #007bff; 
+  border-radius: 8px; 
+  background-color: #ffffff; 
+  color: #333; 
+  cursor: pointer; 
+  width: 160px; 
+  text-align: center; 
+  transition: all 0.3s ease; 
 }
 
 /* 드롭다운 선택 시 */
 select.form-select:focus {
-  outline: none; /* 기본 아웃라인 제거 */
-  border-color: #0056b3; /* 포커스 상태에서 테두리 색 변경 */
-  box-shadow: 0 0 5px rgba(0, 91, 187, 0.5); /* 부드러운 그림자 효과 */
+  outline: none;
+  border-color: #0056b3; 
+  box-shadow: 0 0 5px rgba(0, 91, 187, 0.5); 
 }
 /* 리뷰 목록 */
 ul {
@@ -90,7 +90,7 @@ ul {
 
 /* 리뷰 본문 */
 .review-content {
-  flex: 1; /* 본문이 남은 공간 차지 */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -117,7 +117,7 @@ ul {
   margin-left: 10px;
   color: #FFD700;
   display: inline-block;
-  white-space: nowrap; /* 텍스트와 별점이 한 줄 유지 */
+  white-space: nowrap; 
 }
 
 /* 삭제 버튼 */
@@ -130,7 +130,7 @@ button.delete-btn {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: 80px; /* 고정 너비 */
+  width: 80px;
 
 }
 
@@ -147,7 +147,7 @@ button.delete-btn:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -210,7 +210,7 @@ button.delete-btn:hover {
   color: #555;
   margin-bottom: 20px;
   line-height: 1.6;
-  text-align: left; /* 왼쪽 정렬 */
+  text-align: left; 
 }
 
 /* 별점 선택 섹션 */
@@ -236,7 +236,7 @@ button.delete-btn:hover {
 }
 
 .stars .star.selected {
-  color: #FFD700; /* 황금색 */
+  color: #FFD700;
 }
 
 /* 리뷰 내용 입력 섹션 */

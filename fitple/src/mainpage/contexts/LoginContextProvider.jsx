@@ -42,7 +42,7 @@ const LoginContextProvider = ({ children }) => {
 
   // 웹소켓 연결 함수
   const connectWebSocket = () => {
-    if (stompClient.current) return; // 이미 연결되어 있을 경우를 방지
+    if (stompClient.current) return; 
 
     const client = new Client({
       brokerURL: `ws://${import.meta.env.VITE_Server}/ws-chat`,
@@ -90,7 +90,7 @@ const LoginContextProvider = ({ children }) => {
               return;
             }
 
-            // ✅ 새로운 메시지를 상태에 반영하거나 UI에 알림 표시
+
             handleNewMessage(room.chatId, JSON.parse(message.body));
           }
         );
@@ -127,9 +127,9 @@ const LoginContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLogin) {
-      connectWebSocket(); // 로그인 시 웹소켓 연결
+      connectWebSocket(); 
     } else {
-      disconnectWebSocket(); // 로그 아웃 시 웹소켓 해제
+      disconnectWebSocket(); 
     }
   }, [isLogin]);
 
@@ -141,19 +141,19 @@ const LoginContextProvider = ({ children }) => {
     let response;
     let data;
 
-    // 1-1. JWT(accessToken) 이 없고 인증이 필요 없다면
+ 
     if (!accessToken) {
       console.log("쿠키에 accessToken이 없습니다.");
       logoutSetting();
       return;
     }
 
-    // 1-2. 인증이 필요한 페이지라면 로그인 페이지로 이동
+
     if (!accessToken && isAuthPage) {
       navigate("/login");
     }
 
-    // 2. accessToken이 있다면
+
     console.log("쿠키에 accessToken이 있습니다.");
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -165,10 +165,10 @@ const LoginContextProvider = ({ children }) => {
       return;
     }
 
-    // 응답 실패 시
+
     if (!response) return;
 
-    // user 정보 획득 성공
+
     console.log("JWT(accessToken)으로 사용자 인증 정보 요청 성공");
 
     data = response.data;
@@ -184,7 +184,7 @@ const LoginContextProvider = ({ children }) => {
     // 인증 성공 로그인 정보 세팅
     const currentUsername =
       localStorage.getItem("username") || userInfo.username;
-    console.log("???????????????????//", currentUsername);
+
     loginSetting(data, accessToken, currentUsername);
   };
 
@@ -201,9 +201,9 @@ const LoginContextProvider = ({ children }) => {
     try {
       const response = await auth.login(username, password);
       const { data, status, headers } = response;
-      const { authorization } = headers; // 여기서 authorization 변수명을 제대로 입력
+      const { authorization } = headers; 
 
-      const accessToken = authorization.replace("Bearer ", ""); // JWT 추출
+      const accessToken = authorization.replace("Bearer ", ""); 
 
       console.log(`-- login 요청응답 --
                 data : ${data}
@@ -215,11 +215,11 @@ const LoginContextProvider = ({ children }) => {
       if (status === 200) {
         Cookies.set("accessToken", accessToken);
 
-        // 로그인 세팅
+ 
         localStorage.setItem("username", username.toUpperCase());
-        loginCheck(false); // username도 함께 전달
+        loginCheck(false);
 
-        // 시작 페이지 이동
+ 
         navigate("/");
       }
     } catch (error) {
@@ -262,7 +262,7 @@ const LoginContextProvider = ({ children }) => {
       return;
     }
 
-    // OAuth 로그인 시 username이 없을 수도 있으므로 provider 기반으로 찾기
+
     if (
       !username &&
       userData.provider === provider &&
@@ -304,24 +304,24 @@ const LoginContextProvider = ({ children }) => {
 
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     setIsLogin(true);
-    setUserInfo(userData); //= > userAuthority
+    setUserInfo(userData); 
 
-    // 🟢 1️⃣ 로컬스토리지에 HBTI 데이터가 있는지 확인
+ 
     const storedAnswers = localStorage.getItem("hbtiAnswers");
     console.log("hbtiAnswers", storedAnswers);
 
     if (storedAnswers) {
       console.log("📢 저장된 HBTI 데이터가 있습니다. 서버에 저장 중...");
 
-      const parsedAnswers = JSON.parse(storedAnswers); // 객체 형태로 저장된 JSON 파싱
-      const answerArray = Object.values(parsedAnswers); // 🔥 배열로 변환
+      const parsedAnswers = JSON.parse(storedAnswers); 
+      const answerArray = Object.values(parsedAnswers); 
 
       const requestBody = JSON.stringify({
         userId: id,
-        answers: answerArray, // ✅ 객체 → 배열 변환 후 전송
+        answers: answerArray, 
       });
 
-      console.log("📝 변환된 데이터:", requestBody); // 🔥 변환된 데이터 확인
+      console.log("📝 변환된 데이터:", requestBody);
 
       try {
         const response = await fetch(
@@ -338,11 +338,11 @@ const LoginContextProvider = ({ children }) => {
 
         if (response.ok) {
           console.log("✅ HBTI 데이터가 성공적으로 저장되었습니다.");
-          localStorage.removeItem("hbtiAnswers"); // 🟢 저장 성공 시 로컬스토리지에서 삭제
+          localStorage.removeItem("hbtiAnswers"); 
           navigate(`/quiz/${id}/result`, { state: { fromLogin: true } });
           return;
         } else {
-          console.error("❌ HBTI 데이터 저장 실패:", await response.text()); // 🔥 서버 응답 확인
+          console.error("❌ HBTI 데이터 저장 실패:", await response.text()); 
         }
       } catch (error) {
         console.error("❌ 서버에 HBTI 데이터 저장 중 오류 발생:", error);
@@ -351,30 +351,30 @@ const LoginContextProvider = ({ children }) => {
       console.log("⚠ 저장된 HBTI 데이터가 없습니다.");
     }
 
-    // 🟢 4️⃣ 저장할 데이터가 없으면 메인 페이지로 이동 (중복 실행 방지)
-    // navigate('/');
+
+
     localStorage.setItem("isLogin", "true");
     localStorage.setItem("userInfo", JSON.stringify(userData));
   };
 
   // 로그아웃 세팅
   const logoutSetting = () => {
-    // 상태 비우기
+
     setIsLogin(false);
     setUserInfo(null);
     setAuthority(null);
 
-    // 쿠키 지우기
+
     Cookies.remove("accessToken");
     api.defaults.headers.common.Authorization = undefined;
 
-    // 새로고침 시 localStorage 지우기
+
     localStorage.removeItem("isLogin");
     localStorage.removeItem("userInfo");
     localStorage.removeItem("authority");
     localStorage.removeItem("username");
 
-    //navigate("/"); // 비밀번호 재설정 링크 안들어가지는 이슈로 잠시 주석합니다.
+
   };
 
   return (

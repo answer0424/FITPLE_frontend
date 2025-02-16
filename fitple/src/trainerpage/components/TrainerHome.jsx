@@ -9,13 +9,13 @@ function TrainerHome({ content, galleryImages, gymName, gymAddress, gymLatitude,
 
     return (
         <div className="trainer-home">
-            {/* 🔹 트레이너 소개 부분 */}
+       
             <div className="trainer-intro">
                 <h4 className="soga-title kr-font">소개</h4>
                 <p className="soga-content kr-font" dangerouslySetInnerHTML={{ __html: content }} />
             </div>
 
-            {/* 🔹 트레이너 위치 정보 */}
+          
             <div className="trainer-location">
                 <h4 className="location-title kr-font">위치</h4>
                 

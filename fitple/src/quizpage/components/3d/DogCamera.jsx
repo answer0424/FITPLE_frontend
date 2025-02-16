@@ -15,10 +15,7 @@ const CAMERA_SETTINGS = {
     cameraLerpSpeed: 0.1
 };
 
-/**
- * DogCamera - 3D 공간에서 강아지 모델과 카메라 움직임을 제어하는 컴포넌트
- * {Array} currentPath - 현재 이동 경로의 시작점과 끝점 좌표
- */
+
 
 function DogCamera({ currentPath, onArrival }) {
     const dogRef = useRef();

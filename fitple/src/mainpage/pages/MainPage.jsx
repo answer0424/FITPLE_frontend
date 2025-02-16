@@ -12,7 +12,7 @@ import '../../common/css/Font.css';
 const MainPage = () => {
     const navigate = useNavigate();
 
-    const { isLogin, userInfo } = useContext(LoginContext); // userInfo 추가
+    const { isLogin, userInfo } = useContext(LoginContext); 
 
 
 
@@ -28,7 +28,7 @@ const MainPage = () => {
 
     // matchPage로 이동
     const goMatching = () => {
-        if (!isLogin) {  // matchPage도 로그인 필요하다면 이렇게 추가
+        if (!isLogin) {  
             alert('로그인이 필요한 서비스입니다.');
             navigate('/login');
             return;
@@ -36,7 +36,7 @@ const MainPage = () => {
 
 
         if (userInfo?.id) {
-            navigate(`/quiz/${userInfo.id}/result/match`); // userInfo.id를 URL에 동적으로 추가
+            navigate(`/quiz/${userInfo.id}/result/match`); 
         } else {
             alert('로그인 정보를 확인할 수 없습니다.');
         }

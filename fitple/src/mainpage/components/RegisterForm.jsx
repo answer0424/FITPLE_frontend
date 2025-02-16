@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from "../../common/component/Header";
 import KakaoSearch from "./KakaoSearch";
 import { registerStudent, registerTrainer } from "../apis/auth";
-// import '../../common/css/Font.css';
+
 
 const RegisterForm = ({ questions = [], userType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -58,7 +58,7 @@ const RegisterForm = ({ questions = [], userType }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleNextQuestion(); // 엔터 키를 눌렀을 때 다음 질문으로 넘어감
+      handleNextQuestion(); 
     }
   };
 
@@ -75,7 +75,7 @@ const RegisterForm = ({ questions = [], userType }) => {
     }
 
     if (currentQuestionIndex === questions.length - 1) {
-      handleSubmit(); // 마지막 질문이면 submit
+      handleSubmit(); 
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -108,23 +108,20 @@ const RegisterForm = ({ questions = [], userType }) => {
 
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
-      // newAnswers[6] = JSON.stringify(placeInfo);
+
       return newAnswers;
     });
   };
 
   const handleSubmit = async () => {
-    // const placeInfo = JSON.parse(answers[6]);
+
     const userData = {
       email: answers[0],
       username: answers[1],
       password: answers[2],
       nickname: answers[4],
       birth: answers[5],
-      // address: placeInfo.address,
-      // gymName: placeInfo.gymName,
-      // latitude: placeInfo.lat,
-      // longitude: placeInfo.lng,
+
     };
 
     try {
@@ -219,7 +216,7 @@ const RegisterForm = ({ questions = [], userType }) => {
                 dateFormat="yyyy/MM/dd"
                 placeholderText="Select your birth date"
                 className="date-picker-input"
-                onKeyPress={handleKeyPress} // 키 입력 처리 추가
+                onKeyPress={handleKeyPress} 
               />
             ) : currentQuestionIndex === 6 ? (
               <KakaoSearch onPlaceSelect={handlePlaceSelect} />
@@ -233,8 +230,8 @@ const RegisterForm = ({ questions = [], userType }) => {
                 placeholder="Type your answer here..."
                 value={answers[currentQuestionIndex]}
                 onChange={(e) => handleAnswerChange(e, currentQuestionIndex)}
-                onKeyPress={handleKeyPress} // 키 입력 처리 추가
-                ref={(el) => (inputRefs.current[currentQuestionIndex] = el)} // 현재 질문에 맞는 ref 연결
+                onKeyPress={handleKeyPress} 
+                ref={(el) => (inputRefs.current[currentQuestionIndex] = el)} 
               />
             )}
             {errors[currentQuestionIndex] && (

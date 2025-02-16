@@ -13,21 +13,21 @@ function TrainerCertifications({ certifications, BASE_URL }) {
         setSelectedImage(null);
     };
 
-    const fixedIconPath = "/icons/certificate-icon.png"; // 고정된 아이콘 경로
+    const fixedIconPath = "/icons/certificate-icon.png"; 
 
     return (
         <div className="certifications-container">
             <h3 className="text-center mb-4 kr-font">검증된 자격 사항</h3>
             <ul className="certifications-list">
                 {certifications.map((cert, index) => {
-                    // 🔹 skills 데이터를 JSON 객체로 변환
+                  
                     const parsedSkills = JSON.parse(cert.skills || "[]");
 
                     return (
                         <li
                             key={index}
                             className="certification-item"
-                            onClick={() => handleItemClick(cert.imageUrl)} // 리스트 아이템 클릭 핸들러
+                            onClick={() => handleItemClick(cert.imageUrl)} 
                         >
                             <img
                                 src={fixedIconPath}
@@ -48,16 +48,16 @@ function TrainerCertifications({ certifications, BASE_URL }) {
                 <div className="modal-overlay" onClick={closeModal}>
                     <div
                         className="modal-contents"
-                        onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 닫히지 않도록 방지
+                        onClick={(e) => e.stopPropagation()} 
                     >
-                        {/* 이미지 */}
+                       
                         <img
                             src={`${BASE_URL}${selectedImage.replace(/^\./, "")}`}
                             alt="자격증 사진"
                             className="modal-images"
                         />
 
-                        {/* 닫기 버튼 */}
+                        
                         <button
                             className="close-button kr-font"
                             onClick={closeModal}
