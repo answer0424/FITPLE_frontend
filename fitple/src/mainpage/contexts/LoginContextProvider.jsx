@@ -45,7 +45,7 @@ const LoginContextProvider = ({ children }) => {
     if (stompClient.current) return; 
 
     const client = new Client({
-      brokerURL: `ws://${import.meta.env.VITE_Server}/ws-chat`,
+      brokerURL: `ws://${import.meta.env.VITE_WebSoket_Server}/ws-chat`,
       reconnectDelay: 5000,
       debug: (str) => console.log(str),
       onConnect: () => {
