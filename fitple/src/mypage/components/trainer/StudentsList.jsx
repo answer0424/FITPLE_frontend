@@ -146,7 +146,7 @@ const StudentsList = ({ user }) => {
             >
               <div className="student-info">
                 <img
-                  src={`${import.meta.env.VITE_Server}${student.profileImage}`}
+                  src={`${import.meta.env.VITE_Server}/${student.profileImage}`}
                   alt="profile"
                   className="profile-img"
                 />
