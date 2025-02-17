@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
 
 const HBTIResultDisplay = ({ hbtiData }) => {
   return (
     <>
-      <h2 className="modal-text">나의 <span>HBTI</span>는</h2>
+      <h2 className="modal-text">
+        나의 <span>HBTI</span>는
+      </h2>
       <h1 className="modal-title">
-        {hbtiData?.hbtiType?.split('').map((letter, index) => (
+        {hbtiData?.hbtiType?.split("").map((letter, index) => (
           <span key={index}>{letter}</span>
         ))}
       </h1>
