@@ -19,8 +19,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
     <div className="certifications-container">
       <h3 className="text-center mb-4 kr-font">검증된 자격 사항</h3>
       <ul className="certifications-list">
-        {certifications.map((cert, index) => {
-          const parsedSkills = cert.skills;
+        {certifications.map((cert, index) => { 
 
           return (
             <li
@@ -34,8 +33,8 @@ function TrainerCertifications({ certifications, BASE_URL }) {
                 className="certification-icon"
               />
               <span className="certification-skill kr-font">
-                {parsedSkills.length > 0
-                  ? parsedSkills.map((skill) => skill).join(", ")
+                {cert.skills.length > 0
+                  ? cert.skills
                   : "자격 사항 없음"}
               </span>
             </li>
