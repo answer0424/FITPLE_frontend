@@ -47,7 +47,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-contents" onClick={(e) => e.stopPropagation()}>
             <img
-              src={`${BASE_URL}${selectedImage.replace(/^\./, "")}`}
+              src={`${BASE_URL}/${selectedImage}`}
               alt="자격증 사진"
               className="modal-images"
             />
