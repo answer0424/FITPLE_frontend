@@ -102,7 +102,7 @@ const DailyItem = ({ event, onDelete }) => {
             <div>
               <Card.Title className="daily-nickname" style={{ color: "black" }}>
                 {event.nickname}{" "}
-                {authority === "ROLE_TRAINER" ? " 회원" : " 트레이너"}
+                {event.authority === "ROLE_TRAINER" ? " 회원" : " 트레이너"}
               </Card.Title>
             </div>
           </div>
