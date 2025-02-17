@@ -14,6 +14,7 @@ import { LoginContext } from "../../mainpage/contexts/LoginContextProvider";
 import { createChat } from "../../mainpage/apis/chat";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import deImg from "../../assets/userProfileBasic.png"
 
 function TrainerDetailPage() {
   const { trainerId } = useParams();
@@ -286,7 +287,7 @@ function TrainerDetailPage() {
                   alt={`${trainer.trainerName} 프로필`}
                   className="profile-image1"
                   onError={(e) =>
-                    (e.target.src = "/icons/certificate-icon.png")
+                    (e.target.src = deImg)
                   }
                 />
               </div>

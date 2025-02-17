@@ -32,7 +32,7 @@ const RegisterForm = ({ questions = [], userType }) => {
         }
         break;
       case 1:
-        if (!/^[a-zA-Z1-9]{5,20}$/.test(value)) {
+        if (!/^[a-zA-Z0-9]{5,20}$/.test(value)) {
           error = "아이디는 5~20자의 영어 또는 숫자로 입력해야 합니다.";
         }
         break;
