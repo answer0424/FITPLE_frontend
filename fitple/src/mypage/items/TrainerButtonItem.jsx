@@ -44,7 +44,7 @@ const TrainerButtonItem = ({ event }) => {
         const elapsedSeconds = Math.floor(
           (new Date() - new Date(exerciseStartTime)) / 1000
         );
-        setCanComplete(elapsedSeconds >= 30);
+        setCanComplete(elapsedSeconds >= 5);
       }, 1000);
 
       return () => clearInterval(interval);

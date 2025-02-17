@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import "../../static/css/StudentsList.css";
 import SearchStudentItem from "../../items/SerchStudentItem";
+import pimg from "../../../assets/userProfileBasic.png";
 
 const StudentsList = ({ user }) => {
   const [studentList, setStudentList] = useState([]);
@@ -150,7 +151,13 @@ const StudentsList = ({ user }) => {
             >
               <div className="student-info">
                 <img
-                  src={`${import.meta.env.VITE_Server}/${student.profileImage}`}
+                  src={
+                    student.profileImage
+                      ? `${import.meta.env.VITE_Server}/${
+                        student.profileImage
+                        }`
+                      : pimg
+                  }
                   alt="profile"
                   className="profile-img"
                 />

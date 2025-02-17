@@ -71,7 +71,9 @@ const ChatModal = ({
                 className="list-group-item chat-room-item"
                 onClick={() => handleChatClick(room.chatId)}
               >
-                {room.otherNickname}
+                {room.otherNickname.length > 20
+                  ? room.otherNickname.slice(0, 20) + "..."
+                  : room.otherNickname}
                 {/* 읽지 않은 메시지가 있으면 빨간 점 표시 */}
                 {unreadMessage[room.chatId] > 0 && (
                   <span className="unread-indicator">🔴</span>
