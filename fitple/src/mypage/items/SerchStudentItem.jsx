@@ -113,7 +113,9 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
                   className="search-student-item"
                 >
                   <span className="search-student-name">
-                    {student.nickname}
+                    {student.nickname.length > 20
+                      ? student.nickname.slice(0, 20) + "..."
+                      : student.nickname}
                   </span>
                   <Button
                     className="search-student-add-btn"
@@ -154,7 +156,7 @@ const SearchStudentItem = ({ showModal, onClose, user, onRegister }) => {
           variant="primary"
           onClick={handleRegisterStudent}
           disabled={!selectedStudent}
-          className="search-student-register-btn"
+          className="search-student-register-btn col-6"
         >
           등록
         </Button>
