@@ -90,6 +90,10 @@ const StudentsList = ({ user }) => {
 
   const handleCardClick = (student) => {
     setSelectedStudent(student);
+
+
+
+
     setNewTimes(student.times);
     setShowModal(true);
   };

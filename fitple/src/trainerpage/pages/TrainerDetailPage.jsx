@@ -282,10 +282,7 @@ function TrainerDetailPage() {
             <div className="trainer-header">
               <div className="profile-section">
                 <img
-                  src={`${BASE_URL}${trainer.trainerProfileImage.replace(
-                    /^\./,
-                    ""
-                  )}`}
+                  src={`${BASE_URL}/${trainer.trainerProfileImage}`}
                   alt={`${trainer.trainerName} 프로필`}
                   className="profile-image1"
                   onError={(e) =>

@@ -20,7 +20,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
       <h3 className="text-center mb-4 kr-font">검증된 자격 사항</h3>
       <ul className="certifications-list">
         {certifications.map((cert, index) => {
-          const parsedSkills = JSON.parse(cert.skills || "[]");
+          const parsedSkills = cert.skills;
 
           return (
             <li
@@ -47,7 +47,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-contents" onClick={(e) => e.stopPropagation()}>
             <img
-              src={`${BASE_URL}${selectedImage.replace(/^\./, "")}`}
+              src={`${BASE_URL}/${selectedImage}`}
               alt="자격증 사진"
               className="modal-images"
             />

@@ -44,7 +44,7 @@ const RegisterScheduleModal = ({
       try {
         // 트레이너의 트레이닝 목록을 가져오는 API 호출
         const response = await axios.get(
-          `http://localhost:8081/member/${userInfo.id}/register`,
+          `${import.meta.env.VITE_Server}/member/${userInfo.id}/register`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -117,7 +117,7 @@ const RegisterScheduleModal = ({
       };
 
       const response = await axios.post(
-        `http://localhost:8081/member/register/add-schedule/${selectedStudent}`,
+        `${import.meta.env.VITE_Server}/member/register/add-schedule/${selectedStudent}`,
         scheduleData,
         {
           withCredentials: true,
