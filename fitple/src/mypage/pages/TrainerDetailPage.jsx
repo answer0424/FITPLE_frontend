@@ -211,15 +211,15 @@ const TrainerProfilePage = () => {
       return;
     }
 
-    if (!hbti || hbti === "정보 없음") {
-      alert("HBTI가 존재하지 않습니다. HBTI 테스트를 진행해주세요.");
-      return;
-    }
+    // if (!hbti || hbti === "정보 없음") {
+    //   alert("HBTI가 존재하지 않습니다. HBTI 테스트를 진행해주세요.");
+    //   return;
+    // }
 
-    if (!gymName || gymName === "정보 없음") {
-      alert("체육관 이름을 입력해주세요.");
-      return;
-    }
+    // if (!gymName || gymName === "정보 없음") {
+    //   alert("체육관 이름을 입력해주세요.");
+    //   return;
+    // }
 
     const editorContent = quillRef.current
       ? quillRef.current.getEditor().root.innerHTML
@@ -244,7 +244,7 @@ const TrainerProfilePage = () => {
       });
     }
     const newSkills = skills.filter((skill) => !skill.certificationId);
-    const skillData = newSkills.map((skill) => (skill.name));
+    const skillData = newSkills.map((skill) => skill.name);
     formData.append("skills", JSON.stringify(skillData));
 
     newSkills.forEach((skill) => {
