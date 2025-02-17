@@ -295,7 +295,7 @@ const TrainerProfilePage = () => {
         {user && (
           <div className="trainer-profile__header">
             <img
-              src={`${import.meta.env.VITE_Server}${user.imageUrl}`}
+              src={`${import.meta.env.VITE_Server}/${user.imageUrl}`}
               alt="프로필"
               className="trainer-profile__avatar"
             />

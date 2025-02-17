@@ -105,14 +105,14 @@ const RegisterForm = ({ questions = [], userType }) => {
       lng: place.lng,
       gymName: place.name,
     };
-
+  
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
-
+      newAnswers[6] = placeInfo;
       return newAnswers;
     });
   };
-
+  
   const handleSubmit = async () => {
     const userData = {
       email: answers[0],
@@ -120,6 +120,7 @@ const RegisterForm = ({ questions = [], userType }) => {
       password: answers[2],
       nickname: answers[4],
       birth: answers[5],
+      gym: answers[6],
     };
 
     try {
