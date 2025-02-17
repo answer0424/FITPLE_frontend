@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Headers from "../../common/component/Header";
 import "../static/css/TrainerDetailWrite.css";
 import "quill-emoji/dist/quill-emoji.css";
+import api from "../../mainpage/apis/api";
 const TrainerProfilePage = () => {
   const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
@@ -35,12 +36,13 @@ const TrainerProfilePage = () => {
       return;
     }
 
-    axios
-      .get(`${import.meta.env.VITE_Server}/member/detail`, {
+    api
+      .get(`/member/detail`, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
+        console.log(res.data);
         setUser(res.data);
 
         if (res.data.authority === "ROLE_STUDENT") {
@@ -55,8 +57,8 @@ const TrainerProfilePage = () => {
       })
       .catch((error) => console.error("사용자 정보 가져오기 오류:", error));
 
-    axios
-      .get(`${import.meta.env.VITE_Server}/member/update-detail`, {
+    api
+      .get(`/member/update-detail`, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${accessToken}` },
       })
@@ -263,8 +265,8 @@ const TrainerProfilePage = () => {
         .find((row) => row.startsWith("accessToken="))
         ?.split("=")[1];
 
-      await axios.post(
-        `${import.meta.env.VITE_Server}/member/detail`,
+      await api.post(
+        `/member/detail`,
         formData,
         {
           withCredentials: true,
@@ -334,13 +336,13 @@ const TrainerProfilePage = () => {
           <div className="trainer-profile__form-group">
             <label style={{ color: "black" }}>HBTI:</label>
 
-            {hbti ? (
+            {user.hbti.hbti ? (
               // ✅ HBTI 값이 존재하면 표시
               <div
                 className="detail-input"
                 style={{ color: "black", fontSize: "1.2rem" }}
               >
-                {hbti}
+                {user.hbti.hbti}
               </div>
             ) : (
               // ✅ HBTI 값이 없으면 버튼 표시
@@ -428,7 +430,7 @@ const TrainerProfilePage = () => {
                   // 백엔드 서버 주소와 결합하여 최종 이미지 URL 생성
                   const fullSkillImageUrl = `${
                     import.meta.env.VITE_Server
-                  }${skillImageUrl}`;
+                  }/${skillImageUrl}`;
        
 
                   return (
