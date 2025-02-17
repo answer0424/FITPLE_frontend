@@ -91,9 +91,6 @@ const StudentsList = ({ user }) => {
   const handleCardClick = (student) => {
     setSelectedStudent(student);
 
-
-
-
     setNewTimes(student.times);
     setShowModal(true);
   };
@@ -158,7 +155,7 @@ const StudentsList = ({ user }) => {
                   className="profile-img"
                 />
                 <div>
-                  <h5>{student.nickname} 회원님</h5>
+                  <h5 style={{ color: "white" }}>{student.nickname} 회원님</h5>
                   <p className="description"> 남은 횟수 : {student.times}</p>
                 </div>
               </div>
