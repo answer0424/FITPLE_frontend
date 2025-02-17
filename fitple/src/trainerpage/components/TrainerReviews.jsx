@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import defaultImg from "../../assets/userProfileBasic.png"
 import "../static/css/TrainerReviews.css";
 
 function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
@@ -213,7 +214,7 @@ function TrainerReviews({ trainerId, BASE_URL, trainingId, user }) {
                 src={`${BASE_URL}/${review.userProfileImage}`}
                 alt={`${review.username} 프로필`}
                 className="review-profile-image"
-                onError={(e) => (e.target.src = "/src/assets/logo.png")}
+                onError={(e) => (e.target.src = defaultImg)}
               />
 
               <div className="review-content">

@@ -245,7 +245,7 @@ const TrainerProfilePage = () => {
     }
     const newSkills = skills.filter((skill) => !skill.certificationId);
     const skillData = newSkills.map((skill) => skill.name);
-    formData.append("skills", JSON.stringify(skillData));
+    formData.append("skills", skillData);
 
     newSkills.forEach((skill) => {
       if (skill.imageFile) {

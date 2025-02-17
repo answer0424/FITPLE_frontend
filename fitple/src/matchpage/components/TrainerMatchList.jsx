@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Spinner, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../static/css/TrainerMatch.css";
+import defaultImg from "../../assets/userProfileBasic.png"
 
 const TrainerMatchList = ({ userId }) => {
   const [trainers, setTrainers] = useState([]);
@@ -88,12 +89,18 @@ const TrainerMatchList = ({ userId }) => {
             }}
             transition={{ duration: 0.5 }}
           >
-            <img
+            { trainer.profileImage ?
+              <img
               src={`${
                 import.meta.env.VITE_Server
-              }${trainer.profileImage.replace(/^\./, "")}`}
+              }/${trainer.profileImage}`}
+              alt={trainer.trainerName}
+            />:
+            <img
+              src={defaultImg}
               alt={trainer.trainerName}
             />
+            }
 
             <div className="trainer-info-overlay">
               <h5 className="kr-font">{trainer.nickname}</h5>
