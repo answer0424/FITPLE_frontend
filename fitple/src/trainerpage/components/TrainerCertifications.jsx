@@ -20,7 +20,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
       <h3 className="text-center mb-4 kr-font">검증된 자격 사항</h3>
       <ul className="certifications-list">
         {certifications.map((cert, index) => {
-          const parsedSkills = JSON.parse(cert.skills || "[]");
+          const parsedSkills = cert.skills;
 
           return (
             <li

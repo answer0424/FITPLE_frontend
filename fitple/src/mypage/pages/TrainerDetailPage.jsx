@@ -248,7 +248,7 @@ const TrainerProfilePage = () => {
       });
     }
     const newSkills = skills.filter((skill) => !skill.certificationId);
-    const skillData = newSkills.map((skill) => ({ name: skill.name }));
+    const skillData = newSkills.map((skill) => (skill.name));
     formData.append("skills", JSON.stringify(skillData));
 
     newSkills.forEach((skill) => {
