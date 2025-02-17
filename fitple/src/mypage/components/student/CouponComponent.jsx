@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 // import { error } from "jquery";
 import "../../static/css/Coupon.css";
 import { MenuButtonWide } from "react-bootstrap-icons";
+import stampImg from "../../../common/img/stamp.png"
 //error 완
 
 const CouponComponent = () => {
@@ -152,7 +153,7 @@ const CouponComponent = () => {
               {[...Array(selectedTrainer.stamp)].map((_, index) => (
                 <img
                   key={index}
-                  src="../../src/common/img/stamp.png"
+                  src={stampImg}
                   alt="Stamp"
                   className="stamp-icon"
                   style={{ width: "15vh" }}
