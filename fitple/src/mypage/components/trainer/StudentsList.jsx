@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import "../../static/css/StudentsList.css";
 import SearchStudentItem from "../../items/SerchStudentItem";
-import pimg from "../../assets/userProfileBasic.png";
+import pimg from "../../../assets/userProfileBasic.png";
 
 const StudentsList = ({ user }) => {
   const [studentList, setStudentList] = useState([]);
