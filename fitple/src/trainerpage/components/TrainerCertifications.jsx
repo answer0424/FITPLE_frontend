@@ -35,7 +35,7 @@ function TrainerCertifications({ certifications, BASE_URL }) {
               />
               <span className="certification-skill kr-font">
                 {parsedSkills.length > 0
-                  ? parsedSkills.map((skill) => skill.name).join(", ")
+                  ? parsedSkills.map((skill) => skill).join(", ")
                   : "자격 사항 없음"}
               </span>
             </li>
