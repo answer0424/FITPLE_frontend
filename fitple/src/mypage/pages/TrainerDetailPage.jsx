@@ -425,7 +425,7 @@ const TrainerProfilePage = () => {
                   // 백엔드 서버 주소와 결합하여 최종 이미지 URL 생성
                   const fullSkillImageUrl = `${
                     import.meta.env.VITE_Server
-                  }${skillImageUrl}`;
+                  }/${skillImageUrl}`;
 
                   return (
                     <li
