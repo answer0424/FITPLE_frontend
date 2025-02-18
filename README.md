@@ -16,7 +16,10 @@
    - React-bootstrap을 이용한 My page 컴포넌트 배치
    - My page 컴포넌트 구조 설계
  - 이동희
-   
+   - Admin page AJAX
+   - HBTI(헬스 MBTI AJAX
+   - Matching page AJAX
+   - three.js 활용 퀴즈 페이지 프런트 구현
  - 현지윤
    - 채팅 관계 회원 조회 
    - 회원별 달력 변경 구현
