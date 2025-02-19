@@ -66,3 +66,6 @@
 
 ## 사용 기술
 > Bootstrap, WebSocket, AJAX, DatePicker, Thymeleaf, Validator, Redis, Stomp, ThreeJs, pubhub, Quill
+
+## 유튜브 링크
+https://www.youtube.com/watch?v=CnNcrq3vPEg&list=PLedGoSru794_aMnL_7ufmlhuhJSxzFoxh&index=1&t=1s
