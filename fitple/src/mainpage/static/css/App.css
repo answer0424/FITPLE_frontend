@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Notable&display=swap');
 
 .App {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif; 
     position: relative;
     overflow: hidden;
     height: auto;
